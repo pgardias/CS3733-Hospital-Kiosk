@@ -1,0 +1,31 @@
+.background {
+    -fx-background-color:  #979fa3;
+}
+
+.blue-button {
+    -jfx-button-type: RAISED;
+    -fx-background-color: #0b2f5b;
+    -fx-text-fill: #e6e6e6;
+}
+
+.mobile {
+    -fx-background-color: WHITE;
+    -fx-background-image: url(../img/icons/mobile.png) no-repeat center center fixed;
+    -fx-background-size: cover;
+    background-size: cover;
+}
+
+.envelope {
+    -fx-background-color: WHITE;
+    -fx-background-image: url(../img/icons/envelope.png) no-repeat center center fixed;
+    -fx-background-size: cover;
+    background-size: cover;
+}
+
+.back-button {
+    -jfx-button-type: RAISED;
+    -fx-background-radius: 50px;
+    -fx-background-image: url(/img/icons/back-button.png) no-repeat center center fixed;
+    -fx-background-size: cover;
+    background-size: cover;
+}

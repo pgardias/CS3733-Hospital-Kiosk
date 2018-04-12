@@ -1,0 +1,23 @@
+.background {
+    /*-fx-background-image: url(img/texture.png) no-repeat 100% 100%;*/
+    -fx-background-color: green;
+}
+
+.map-button {
+    -fx-font-family: "Abyssinica SIL";
+    -fx-font-size: 140px;
+    -jfx-button-type: RAISED;
+    -fx-background-image: url(/img/maps/3d/1-NO-ICONS.png) no-repeat center center fixed 100% 100%;
+    -fx-background-size: cover;
+    background-size: cover;
+}
+
+.service-button {
+    -fx-font-family: "Abyssinica SIL";
+    -jfx-button-type: RAISED;
+}
+
+.admin-button {
+    -fx-font-family: "Abyssinica SIL";
+    -jfx-button-type: RAISED;
+}

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1500.0" stylesheets="@css/home.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.Controller">
+   <bottom>
+      <GridPane prefHeight="150.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <JFXButton id="service-button" fx:id="serviceButton" buttonType="RAISED" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#loginButtonOp" ripplerFill="WHITE" style="-fx-background-color: #0B2F5B;" text="Service Requests" textFill="#e6e6e6" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <GridPane.margin>
+                  <Insets right="10.0" top="20.0" />
+               </GridPane.margin>
+               <font>
+                  <Font size="40.0" />
+               </font>
+            </JFXButton>
+            <JFXButton id="admin-button" fx:id="adminButton" buttonType="RAISED" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#loginButtonOp" ripplerFill="WHITE" style="-fx-background-color: #0B2F5B; -fx-effect: dropshadow( one-pass-box, black, 8, 0.0, 2, 0 )" text="Admin Login" textFill="#e6e6e6" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <GridPane.margin>
+                  <Insets left="10.0" top="20.0" />
+               </GridPane.margin>
+               <font>
+                  <Font size="40.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </GridPane>
+   </bottom>
+   <padding>
+      <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+   </padding>
+   <center>
+      <JFXButton fx:id="mapButton" alignment="TOP_CENTER" contentDisplay="CENTER" defaultButton="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#mapButtonOp" ripplerFill="WHITE" style="-fx-padding: 100;" styleClass="map-button" text="Hospital Map" textAlignment="CENTER" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="60.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin></JFXButton>
+   </center>
+   <top>
+      <ImageView fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" translateY="-25.0" BorderPane.alignment="TOP_LEFT">
+         <image>
+            <Image url="@img/icons/BrighamWomensHospitalLogo.png" />
+         </image>
+      </ImageView>
+   </top>
+</BorderPane>

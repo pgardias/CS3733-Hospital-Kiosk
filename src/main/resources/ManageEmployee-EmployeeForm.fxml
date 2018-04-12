@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1080.0" prefWidth="1000.0" styleClass="background" stylesheets="@css/common.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.EmployeePopUpController">
+   <columnConstraints>
+      <ColumnConstraints minWidth="10.0" prefWidth="960.0" />
+      <ColumnConstraints minWidth="10.0" prefWidth="960.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="10.0" prefHeight="540.0" />
+      <RowConstraints minHeight="10.0" prefHeight="540.0" />
+      <RowConstraints minHeight="10.0" prefHeight="540.0" />
+      <RowConstraints minHeight="10.0" prefHeight="540.0" />
+      <RowConstraints minHeight="10.0" prefHeight="540.0" />
+      <RowConstraints minHeight="10.0" prefHeight="540.0" />
+      <RowConstraints minHeight="10.0" prefHeight="540.0" />
+   </rowConstraints>
+   <children>
+      <Label fx:id="employeeFormLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="135.0" prefWidth="408.0" textAlignment="CENTER" wrapText="true" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+         <font>
+            <Font size="40.0" />
+         </font>
+      </Label>
+      <Label fx:id="firstNameLabel" alignment="CENTER" contentDisplay="CENTER" nodeOrientation="LEFT_TO_RIGHT" text="First Name:" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP">
+         <font>
+            <Font size="30.0" />
+         </font>
+         <GridPane.margin>
+            <Insets right="20.0" top="30.0" />
+         </GridPane.margin>
+      </Label>
+      <Label fx:id="lastNameLabel" alignment="BOTTOM_CENTER" contentDisplay="BOTTOM" text="Last Name:" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+         <font>
+            <Font size="30.0" />
+         </font>
+         <padding>
+            <Insets bottom="30.0" />
+         </padding>
+         <GridPane.margin>
+            <Insets right="20.0" />
+         </GridPane.margin>
+      </Label>
+      <Label fx:id="passwordLabel" alignment="CENTER" text="Password:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="TOP">
+         <font>
+            <Font size="30.0" />
+         </font>
+         <GridPane.margin>
+            <Insets right="20.0" top="30.0" />
+         </GridPane.margin>
+      </Label>
+      <Label fx:id="reEnterPasswordLabel" alignment="CENTER" text="Re-enter Password:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+         <font>
+            <Font size="30.0" />
+         </font>
+         <GridPane.margin>
+            <Insets bottom="30.0" right="20.0" />
+         </GridPane.margin>
+      </Label>
+      <Label fx:id="jobLabel" alignment="CENTER" text="Job:" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+         <GridPane.margin>
+            <Insets right="20.0" />
+         </GridPane.margin>
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Label fx:id="specialtyLabel" alignment="CENTER" prefHeight="0.0" prefWidth="163.0" text="" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="TOP">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="45.0" prefWidth="300.0" textFill="RED" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
+      <JFXButton fx:id="cancelButton" buttonType="RAISED" cancelButton="true" onAction="#cancelButtonOp" style="-fx-background-color: WHITE;" text="Cancel" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <GridPane.margin>
+            <Insets right="40.0" />
+         </GridPane.margin>
+      </JFXButton>
+      <JFXButton fx:id="submitButton" buttonType="RAISED" defaultButton="true" onAction="#submitButtonOp" ripplerFill="WHITE" style="-fx-background-color: LIGHTBLUE;" text="Submit" GridPane.columnIndex="1" GridPane.rowIndex="6">
+         <font>
+            <Font size="24.0" />
+         </font>
+         <GridPane.margin>
+            <Insets left="40.0" />
+         </GridPane.margin>
+      </JFXButton>
+      <JFXComboBox fx:id="employeeSubTypeComboBox" focusColor="#f5bc3a" prefWidth="250.0" promptText="Select a specialty" style="-fx-font-size: 18;" unFocusColor="BLACK" GridPane.columnIndex="1" GridPane.rowIndex="4">
+         <GridPane.margin>
+            <Insets left="20.0" />
+         </GridPane.margin>
+      </JFXComboBox>
+      <JFXComboBox fx:id="employeeTypeComboBox" onAction="#setSubTypeComboBox" prefWidth="250.0" promptText="Select a job" style="-fx-font-size: 18;" GridPane.columnIndex="1" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets left="20.0" />
+         </GridPane.margin>
+      </JFXComboBox>
+      <JFXTextField fx:id="firstNameTextField" focusColor="#f5bc3a" maxWidth="300.0" prefWidth="300.0" unFocusColor="BLACK" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets left="20.0" top="30.0" />
+         </GridPane.margin>
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="lastNameTextField" focusColor="#f5bc3a" maxWidth="300.0" onAction="#generateUsername" prefWidth="300.0" unFocusColor="BLACK" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <GridPane.margin>
+            <Insets bottom="30.0" left="20.0" />
+         </GridPane.margin>
+      </JFXTextField>
+      <JFXPasswordField fx:id="passwordPasswordField" focusColor="#f5bc3a" maxWidth="300.0" unFocusColor="BLACK" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets left="20.0" top="30.0" />
+         </GridPane.margin>
+      </JFXPasswordField>
+      <JFXPasswordField fx:id="reEnterPasswordPasswordField" focusColor="#f5bc3a" maxWidth="300.0" unFocusColor="BLACK" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+         <GridPane.margin>
+            <Insets bottom="30.0" left="20.0" />
+         </GridPane.margin>
+      </JFXPasswordField>
+      <Label fx:id="specialtyLabel" alignment="CENTER" text="Specialty:" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
+         <font>
+            <Font size="30.0" />
+         </font>
+         <GridPane.margin>
+            <Insets right="20.0" />
+         </GridPane.margin>
+      </Label>
+      <JFXCheckBox fx:id="adminCheckBox" checkedColor="#f5bc3a" minHeight="100.0" prefWidth="300.0" text="Check if the user is an admin. Otherwise, leave unchecked." unCheckedColor="BLACK" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="5">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <GridPane.margin>
+            <Insets left="20.0" />
+         </GridPane.margin>
+      </JFXCheckBox>
+      <Label fx:id="jobLabel11" alignment="CENTER" text="Admin Status:" GridPane.halignment="RIGHT" GridPane.rowIndex="5">
+         <font>
+            <Font size="30.0" />
+         </font>
+         <GridPane.margin>
+            <Insets right="20.0" />
+         </GridPane.margin>
+      </Label>
+   </children>
+</GridPane>

@@ -1,0 +1,13 @@
+.table-row-cell:even {
+    -fx-background-color: WHITE;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f2f2f2;
+}
+
+.table-row-cell:selected {
+    -fx-selection-bar: LIGHTBLUE;
+    -fx-background-color: LIGHTBLUE;
+    -fx-selection-bar-non-focused: LIGHTBLUE;
+}

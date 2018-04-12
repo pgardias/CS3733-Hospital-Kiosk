@@ -1,0 +1,16 @@
+.gradle/
+.idea/
+classes/
+build/
+out/
+KioskDB/
+mockups/
+gradle/
+gradlew
+gradlew.bat
+settings.gradle
+screenshot.png
+*.log
+*.class
+*.jar
+*.lock

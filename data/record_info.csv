@@ -1,0 +1,7 @@
+recordID,requestType,subType,totalOfType,totalTime,avgTime
+1,language interpreter,French,7,5,0
+2,language interpreter,Portuguese,3,6,2
+3,language interpreter,Japanese,1,2,2
+4,language interpreter,Spanish,2,3,1
+5,religion handler,Buddhism,1,0,0
+6,religion handler,Christianity,4,1,0

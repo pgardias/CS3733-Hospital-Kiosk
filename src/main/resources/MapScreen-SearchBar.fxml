@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<GridPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="200.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.MapScreenSearchBarController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Rectangle arcHeight="40.0" arcWidth="40.0" fill="#0b2f5b" height="200.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" GridPane.halignment="CENTER" GridPane.valignment="TOP" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#0b2f5b" height="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" GridPane.halignment="CENTER" GridPane.valignment="TOP" />
+      <GridPane alignment="TOP_CENTER" maxWidth="1000.0" prefHeight="200.0" prefWidth="1000.0" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="TOP" GridPane.vgrow="NEVER">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="700.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <JFXButton fx:id="goButton" buttonType="RAISED" onAction="#searchButtonOp" prefHeight="66.0" prefWidth="179.0" ripplerFill="WHITE" style="-fx-background-color: #F5BC3A;" text="Find Path" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+               <font>
+                  <Font size="25.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="25.0" />
+               </GridPane.margin>
+            </JFXButton>
+            <JFXTextField fx:id="sourceSearchBar" focusColor="#e6e6e6" maxWidth="700.0" promptText="SOURCE" style="-fx-text-fill: #F5BC3A; -fx-prompt-text-fill: #e6e6e6;" unFocusColor="#f5bc3a">
+               <effect>
+                  <DropShadow color="BLACK" offsetX="2.0" offsetY="2.0" />
+               </effect>
+               <GridPane.margin>
+                  <Insets left="50.0" />
+               </GridPane.margin>
+               <font>
+                  <Font size="25.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </JFXTextField>
+            <JFXTextField fx:id="destinationSearchBar" focusColor="#e6e6e6" maxWidth="700.0" onAction="#searchButtonOp" promptText="DESTINATION" style="-fx-text-fill: #F5BC3A; -fx-prompt-text-fill: #e6e6e6;" unFocusColor="#f5bc3a" GridPane.rowIndex="1">
+               <effect>
+                  <DropShadow color="BLACK" offsetX="2.0" offsetY="2.0" />
+               </effect>
+               <font>
+                  <Font size="25.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="25.0" left="50.0" />
+               </GridPane.margin>
+            </JFXTextField>
+            <JFXToggleButton fx:id="mapToggleButton" maxHeight="54.0" onAction="#toggleButtonOp" prefHeight="66.0" prefWidth="179.0" style="-fx-background-color: #F5BC3A;" text="3D Map" toggleColor="#eeda20" toggleLineColor="#0b2f5b" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </JFXToggleButton>
+         </children>
+      </GridPane>
+      <GridPane maxWidth="450.0" prefWidth="450.0" GridPane.halignment="RIGHT">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <JFXButton fx:id="directionsButton" buttonType="RAISED" onAction="#directionsButtonOp" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: WHITE;" stylesheets="@css/common.css" text="Directions" GridPane.halignment="CENTER">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </JFXButton>
+            <JFXButton fx:id="phoneButton" buttonType="RAISED" onAction="#phoneButtonOp" prefHeight="100.0" prefWidth="100.0" styleClass="mobile" stylesheets="@css/common.css" text=" " GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+            <JFXButton fx:id="emailButton" buttonType="RAISED" onAction="#emailButtonOp" prefHeight="100.0" prefWidth="100.0" styleClass="envelope" stylesheets="@css/common.css" text=" " GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+         </children>
+      </GridPane>
+      <Rectangle fx:id="directionsRectangle" arcHeight="5.0" arcWidth="5.0" fill="#bbc3c9" height="780.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="280.0">
+         <GridPane.margin>
+            <Insets left="30.0" top="900.0" />
+         </GridPane.margin>
+      </Rectangle>
+      <Label fx:id="directionsLabel" alignment="TOP_LEFT" maxHeight="780.0" maxWidth="280.0" minHeight="780.0" pickOnBounds="false" prefHeight="780.0" prefWidth="280.0">
+         <GridPane.margin>
+            <Insets left="30.0" top="900.0" />
+         </GridPane.margin>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+         <font>
+            <Font name="Arial" size="24.0" />
+         </font>
+      </Label>
+   </children>
+</GridPane>

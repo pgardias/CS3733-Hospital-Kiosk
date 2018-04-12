@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #979fa3;" stylesheets="@css/common.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.ServiceRequestScreen">
+    <top>
+        <GridPane prefHeight="100.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="150.0" prefHeight="150.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+         <children>
+            <Label fx:id="noRequestsFoundLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
+            <JFXButton fx:id="backButton" onAction="#backButtonOp" prefHeight="100.0" prefWidth="100.0" styleClass="back-button" text=" ">
+               <GridPane.margin>
+                  <Insets left="50.0" top="50.0" />
+               </GridPane.margin>
+            </JFXButton>
+            <JFXButton fx:id="recordsButton" buttonType="RAISED" onAction="#recordsButtonOp" styleClass="blue-button" text="Records" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+               <font>
+                  <Font size="25.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets right="400.0" top="50.0" />
+               </GridPane.margin>
+            </JFXButton>
+            <JFXButton fx:id="newRequestButton" onAction="#newRequestButtonOp" styleClass="blue-button" text="Create New Request" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+               <font>
+                  <Font size="25.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets right="50.0" top="50.0" />
+               </GridPane.margin>
+            </JFXButton>
+            <Label fx:id="incorrectPermissionsLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="20.0" />
+               </font></Label>
+         </children>
+        </GridPane>
+    </top>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <center>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="600.0" minWidth="10.0" prefWidth="550.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="374.0" minWidth="10.0" prefWidth="140.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="600.0" minWidth="10.0" prefWidth="550.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="278.0" minWidth="9.0" prefWidth="140.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="600.0" minWidth="10.0" prefWidth="550.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="900.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="888.6666259765625" minHeight="10.0" prefHeight="648.6666870117188" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+         <children>
+            <Label text="New Requests" GridPane.halignment="CENTER">
+               <font>
+                  <Font size="30.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="In-Progress Requests" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+               <font>
+                  <Font size="30.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="10.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Completed Requests" GridPane.columnIndex="4" GridPane.halignment="CENTER">
+               <font>
+                  <Font size="30.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets bottom="10.0" />
+               </GridPane.margin>
+            </Label>
+            <TableView fx:id="newRequestTable" editable="true" onMouseClicked="#onNewRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@css/tableview.css" tableMenuButtonVisible="true" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+               <columns>
+                  <TableColumn fx:id="rID1" prefWidth="100.0" text="Request ID" />
+                  <TableColumn fx:id="rType1" prefWidth="312.0" text="Request Type" />
+               </columns>
+            </TableView>
+            <TableView fx:id="inProgRequestTable" onMouseClicked="#onInProgRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@css/tableview.css" GridPane.columnIndex="2" GridPane.rowIndex="1">
+              <columns>
+                <TableColumn fx:id="rID2" prefWidth="100.0" text="Request ID" />
+                <TableColumn fx:id="rType2" prefWidth="312.0" text="Request Type" />
+              </columns>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </TableView>
+            <TableView fx:id="completedRequestTable" onMouseClicked="#onCompletedRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@css/tableview.css" GridPane.columnIndex="4" GridPane.rowIndex="1">
+              <columns>
+                <TableColumn fx:id="rID3" prefWidth="100.0" text="Request ID" />
+                <TableColumn fx:id="rType3" prefWidth="312.0" text="Request Type" />
+              </columns>
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </TableView>
+            <JFXButton fx:id="claimRequestButton" buttonType="RAISED" onAction="#claimRequestButtonOp" styleClass="blue-button" text="Claim Service Request" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXButton>
+            <JFXButton fx:id="completeRequestButton" buttonType="RAISED" onAction="#completeRequestButtonOp" styleClass="blue-button" text="Complete Service Request" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </GridPane>
+   </center>
+   <bottom>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#a8c5e3" height="169.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1900.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+            <GridPane gridLinesVisible="true" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="200.0" prefWidth="110.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="200.0" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="200.0" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="200.0" prefWidth="200.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="200.0" prefWidth="200.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="80.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="133.0" minHeight="10.0" prefHeight="135.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Time Requested" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                  <Label text="Request Type" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
+                  <Label text="Additional Info" GridPane.columnIndex="7" GridPane.halignment="CENTER" />
+                  <Label text="Assigned To" GridPane.columnIndex="6" GridPane.halignment="CENTER" />
+                  <Label text="Created By" GridPane.columnIndex="5" GridPane.halignment="CENTER" />
+                  <Label text="Location" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
+                  <Label text="Information" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label text="Request" GridPane.halignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="timeCreatedLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="requestTypeLabel" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="locationLabel" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="createdByLabel" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="assignedToLabel" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="additionalInfoLabel" GridPane.columnIndex="7" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                     <GridPane.margin>
+                        <Insets left="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label text="Time Completed" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                  <Label fx:id="timeCompletedLabel" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+      </AnchorPane>
+   </bottom>
+</BorderPane>
