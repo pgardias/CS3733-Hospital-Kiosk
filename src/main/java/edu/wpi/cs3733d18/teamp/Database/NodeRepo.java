@@ -261,13 +261,14 @@ public class NodeRepo {
             ResultSet results = pstmt.executeQuery();
 
             // Modify edges that contain this node to have the new ID
+            String oldNodeID = node.getID();
             if (!results.next()) {
                 //node is connected to no ID's
                 return false;
             } do {
-                if (results.getString("startNode").equals(node.getID())) {
+                if (results.getString("startNode").equals(oldNodeID)) {
                     Edge e = new Edge();
-                    e.setID(node.getID() + "_" + results.getString("endNode"));
+                    e.setID(oldNodeID + "_" + results.getString("endNode"));
                     node.setID(newID);
                     e.setStart(node);
                     Node otherNode = new Node();
@@ -276,9 +277,9 @@ public class NodeRepo {
                     e.setActive(true);
                     edgeRepo.modifyEdge(e);
                 }
-                else if (results.getString("endNode").equals(node.getID())) {
+                else if (results.getString("endNode").equals(oldNodeID)) {
                     Edge e = new Edge();
-                    e.setID(results.getString("startNode") + "_" + node.getID());
+                    e.setID(results.getString("startNode") + "_" + oldNodeID);
                     node.setID(newID);
                     e.setEnd(node);
                     Node otherNode = new Node();
