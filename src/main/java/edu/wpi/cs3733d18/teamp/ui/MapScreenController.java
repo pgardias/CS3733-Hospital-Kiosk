@@ -501,6 +501,7 @@ public class MapScreenController {
                         }
                     }
                 } else if (!firstSelected){
+                    clearStartNode();
                     HashMap<String, Node> nodeSet;
                     nodeSet = db.getAllNodes();
                     for (String string : nodeDispSet.keySet()) {
@@ -513,7 +514,7 @@ public class MapScreenController {
                     firstSelected = true;
                 } else {
                     HashMap<String, Node> nodeSet;
-
+                    clearEndNode();
                     nodeSet = db.getAllNodes();
                     System.out.println("clear all nodes");
                     for (String string : nodeDispSet.keySet()) {
@@ -683,5 +684,21 @@ public class MapScreenController {
     public void setToggleOn(Boolean toggleOn){
         this.toggleOn = toggleOn;
         spinnerOp();
+    }
+
+    public void clearStartNode(){
+        for (Circle c: nodeDispSet.values()){
+            if(c.getFill().equals(Color.GREEN)) {
+                c.setFill(Color.DODGERBLUE);
+            }
+        }
+    }
+
+    public void clearEndNode(){
+        for (Circle c: nodeDispSet.values()){
+            if(c.getFill().equals(Color.RED)) {
+                c.setFill(Color.DODGERBLUE);
+            }
+        }
     }
 }

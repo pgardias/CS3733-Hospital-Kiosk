@@ -958,7 +958,7 @@ public class AdminMapViewController implements Initializable {
     }
 
     /**
-     * resets the anchor pane of all nodes and edges
+     * resets any nodes or edges clicked on the anchor pane
      */
     public void clearCircles(){
         if(pathDrawn) resetPath();
