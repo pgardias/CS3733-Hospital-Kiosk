@@ -1,4 +1,1 @@
 requestID,requestType,subType,location,additionalInfo,madeBy,completedBy,timeMade,timeCompleted,completed
-1,language interpreter,Spanish,Current Kiosk,Language: Spanish; Additional Info: Test1,admin,admin,2018-04-09 19:04:58.807,2018-04-09 19:05:34.173,2
-2,language interpreter,Spanish,Elevator A2,Language: Spanish; Additional Info: spanish1,admin,admin,2018-04-09 19:26:29.1,2018-04-09 19:29:22.883,2
-3,religion handler,Christianity,Current Kiosk,Religion: Christianity Additional Info: testreq,kylesavell,kylesavell,2018-04-10 22:27:34.018,null,2
