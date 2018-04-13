@@ -1,4 +1,4 @@
-package edu.wpi.cs3733d18.teamp.ui;
+package edu.wpi.cs3733d18.teamp.ui.admin;
 
 import com.jfoenix.controls.*;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
@@ -8,11 +8,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
-import java.util.Observable;
 
 
 public class EmployeePopUpController {

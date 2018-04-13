@@ -1,11 +1,7 @@
-package edu.wpi.cs3733d18.teamp.ui;
+package edu.wpi.cs3733d18.teamp.ui.service;
 
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
-import edu.wpi.cs3733d18.teamp.Main;
-import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
-import edu.wpi.cs3733d18.teamp.Request;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import edu.wpi.cs3733d18.teamp.ui.home.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

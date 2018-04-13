@@ -1,19 +1,14 @@
-package edu.wpi.cs3733d18.teamp.ui;
+package edu.wpi.cs3733d18.teamp.ui.home;
 
 import com.jfoenix.controls.JFXButton;
-import edu.wpi.cs3733d18.teamp.*;
-import edu.wpi.cs3733d18.teamp.Database.EmployeeRepo;
-import edu.wpi.cs3733d18.teamp.Exceptions.AccessNotAllowedException;
-import edu.wpi.cs3733d18.teamp.Exceptions.LoginInvalidException;
+import edu.wpi.cs3733d18.teamp.ui.map.LoginPopUpController;
+import edu.wpi.cs3733d18.teamp.ui.map.MapScreenController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 

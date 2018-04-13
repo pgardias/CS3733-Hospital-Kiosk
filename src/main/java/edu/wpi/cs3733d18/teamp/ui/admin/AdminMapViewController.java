@@ -1,15 +1,16 @@
-package edu.wpi.cs3733d18.teamp.ui;
+package edu.wpi.cs3733d18.teamp.ui.admin;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733d18.teamp.*;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
-import edu.wpi.cs3733d18.teamp.Exceptions.EdgeNotFoundException;
-import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.Pathfinding.PathfindingContext;
+import edu.wpi.cs3733d18.teamp.ui.admin.overlays.MapBuilderAddOverlayViewController;
+import edu.wpi.cs3733d18.teamp.ui.admin.overlays.MapBuilderEdgeFormViewController;
+import edu.wpi.cs3733d18.teamp.ui.admin.overlays.MapBuilderNodeFormViewController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -29,7 +30,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -807,7 +807,7 @@ public class AdminMapViewController implements Initializable {
     };
 
     /**
-     * this brings the basic leftbar overlay back in and resets some values
+     * this brings the basic leftbar overlays back in and resets some values
      */
     public void addOverlay(){
         Parent root;
@@ -946,7 +946,7 @@ public class AdminMapViewController implements Initializable {
 
     /**
      * this clears the anchor pane, draws the edges and the nodes and loads in the new map
-     * this also brings in the basic overlay
+     * this also brings in the basic overlays
      */
     public void updateMap(){
         nodesEdgesPane.getChildren().clear();

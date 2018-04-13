@@ -1,6 +1,6 @@
-package edu.wpi.cs3733d18.teamp.ui;
+package edu.wpi.cs3733d18.teamp.ui.admin.overlays;
 
-import edu.wpi.cs3733d18.teamp.Main;
+import edu.wpi.cs3733d18.teamp.ui.admin.AdminMapViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
