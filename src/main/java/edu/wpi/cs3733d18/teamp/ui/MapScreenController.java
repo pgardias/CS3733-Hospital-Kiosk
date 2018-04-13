@@ -476,10 +476,10 @@ public class MapScreenController {
         @Override
         public void handle(MouseEvent event) {
             if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
+                HashMap<String, Node> nodeSet;
+                nodeSet = db.getAllNodes();
                 if (mapScreenSearchBarController.isSourceFocused()) {
-
-                    HashMap<String, Node> nodeSet;
-                    nodeSet = db.getAllNodes();
+                    clearStartNode();
                     for (String string : nodeDispSet.keySet()) {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
@@ -488,22 +488,16 @@ public class MapScreenController {
                         }
                     }
                 } else if (mapScreenSearchBarController.isDestinationFocused()) {
-                    HashMap<String, Node> nodeSet;
-
-                    nodeSet = db.getAllNodes();
-                    System.out.println("clear all nodes");
+                    clearEndNode();
                     for (String string : nodeDispSet.keySet()) {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setFill(Color.RED);
-
                             mapScreenSearchBarController.setDestinationSearchBar(node.getShortName());
                         }
                     }
                 } else if (!firstSelected){
                     clearStartNode();
-                    HashMap<String, Node> nodeSet;
-                    nodeSet = db.getAllNodes();
                     for (String string : nodeDispSet.keySet()) {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
@@ -513,10 +507,7 @@ public class MapScreenController {
                     }
                     firstSelected = true;
                 } else {
-                    HashMap<String, Node> nodeSet;
                     clearEndNode();
-                    nodeSet = db.getAllNodes();
-                    System.out.println("clear all nodes");
                     for (String string : nodeDispSet.keySet()) {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
@@ -592,6 +583,7 @@ public class MapScreenController {
      * this also brings in the basic overlay
      */
     public void updateMap(){
+        nodeDispSet.clear();
         nodesEdgesPane.getChildren().clear();
         floorSpinner.setValueFactory(floors);
         getMap();
@@ -687,18 +679,22 @@ public class MapScreenController {
     }
 
     public void clearStartNode(){
+        if (pathDrawn) resetPath();
         for (Circle c: nodeDispSet.values()){
             if(c.getFill().equals(Color.GREEN)) {
                 c.setFill(Color.DODGERBLUE);
             }
+
         }
     }
 
     public void clearEndNode(){
+        if (pathDrawn) resetPath();
         for (Circle c: nodeDispSet.values()){
             if(c.getFill().equals(Color.RED)) {
                 c.setFill(Color.DODGERBLUE);
             }
+
         }
     }
 }
