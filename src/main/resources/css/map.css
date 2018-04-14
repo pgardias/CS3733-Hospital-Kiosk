@@ -1,0 +1,6 @@
+.floor-buttons{
+    -jfx-button-type: RAISED;
+    -fx-background-color: #0b2f5b;
+    -fx-text-fill: WHITE;
+    -fx-background-radius: 20;
+}
