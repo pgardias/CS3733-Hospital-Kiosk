@@ -152,7 +152,7 @@ public class MapBuilderController implements Initializable {
 
         int i = 0;
         for (Node node : nodeSet.values()) {
-            sourceWords.add(node.getShortName());
+            sourceWords.add(node.getLongName());
         }
         destinationWords.addAll(sourceWords);
         destinationWords.add("NEAREST HALLWAY");
@@ -577,7 +577,7 @@ public class MapBuilderController implements Initializable {
                         for (String string : nodeDispSet.keySet()) {
                             if (nodeDispSet.get(string) == event.getSource()) {
                                 Node node = nodeSet.get(string);
-                                sourceSearchBar.setText(node.getShortName());
+                                sourceSearchBar.setText(node.getLongName());
                             }
                         }
                     }else if (getDestinationFocus()){
@@ -590,7 +590,7 @@ public class MapBuilderController implements Initializable {
                         for (String string : nodeDispSet.keySet()) {
                             if (nodeDispSet.get(string) == event.getSource()) {
                                 Node node = nodeSet.get(string);
-                                destinationSearchBar.setText(node.getShortName());
+                                destinationSearchBar.setText(node.getLongName());
                             }
                         }
                     } else if (!edgeSelected) {
@@ -604,7 +604,7 @@ public class MapBuilderController implements Initializable {
                                 Node node = nodeSet.get(string);
                                 endNode = node;
                                 nodeDispSet.get(node.getID()).setFill(Color.rgb(205, 35, 0, 0.99));
-                                nodeID = endNode.getShortName();
+                                nodeID = endNode.getLongName();
 
 
                                 System.out.println(endNode.getID());
@@ -630,10 +630,10 @@ public class MapBuilderController implements Initializable {
                                         Node node = nodeSet.get(string);
                                         firstSelect = node;
                                         nodeDispSet.get(node.getID()).setFill(Color.rgb(205, 35, 0, 0.99));
-                                        nodeID = firstSelect.getShortName();
+                                        nodeID = firstSelect.getLongName();
 
                                         mapBuilderEdgeFormController.setStartNodeTxt(firstSelect.getID());
-                                        System.out.println("First Node: " + firstSelect.getShortName());
+                                        System.out.println("First Node: " + firstSelect.getLongName());
                                         firstChoice = false;
                                         break;
                                     }
@@ -650,10 +650,10 @@ public class MapBuilderController implements Initializable {
                                         Node node = nodeSet.get(string);
                                         secondSelect = node;
                                         nodeDispSet.get(node.getID()).setFill(Color.rgb(100, 215, 0, 0.99));
-                                        nodeID = secondSelect.getShortName();
+                                        nodeID = secondSelect.getLongName();
 
                                         mapBuilderEdgeFormController.setEndNodeTxt(secondSelect.getID());
-                                        System.out.println("Second Node: " + secondSelect.getShortName());
+                                        System.out.println("Second Node: " + secondSelect.getLongName());
                                         firstChoice = true;
                                         break;
                                     }
@@ -1055,7 +1055,7 @@ public class MapBuilderController implements Initializable {
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
         for (Node node : nodeSet.values()) {
-            if (node.getShortName().compareTo(string) == 0) {
+            if (node.getLongName().compareTo(string) == 0) {
                 aNode = node;
             }
         }
@@ -1123,7 +1123,7 @@ public class MapBuilderController implements Initializable {
                 HashMap<String, Node> nodeSet = db.getAllNodes();
 
                 for (Node node : nodeSet.values()) {
-                    if (node.getShortName().compareTo(string) == 0) {
+                    if (node.getLongName().compareTo(string) == 0) {
                         aNode = node;
                     }
                 }

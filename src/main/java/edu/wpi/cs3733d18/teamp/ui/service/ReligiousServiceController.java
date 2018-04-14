@@ -67,7 +67,7 @@ public class ReligiousServiceController implements Initializable {
         HashMap<String, Node> nodeSet;
         nodeSet = db.getAllNodes();
         for (Node node : nodeSet.values()) {
-            locationWords.add(node.getShortName());
+            locationWords.add(node.getLongName());
         }
 
     }
@@ -160,7 +160,7 @@ public class ReligiousServiceController implements Initializable {
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
         for (Node node : nodeSet.values()) {
-            if (node.getShortName().compareTo(string) == 0) {
+            if (node.getLongName().compareTo(string) == 0) {
                 aNode = node;
             }
         }
