@@ -46,6 +46,6 @@ public class PathfindingContext {
     }
 
     public ArrayList<Node> findPath(Node srcNode, Node destNode) {
-        return this.pathfinder.findPath(srcNode, destNode);
+        return pathfinder.runPathfinder(srcNode, destNode);
     }
 }
