@@ -271,6 +271,10 @@ public class RequestRepo {
                 reqtype = Request.requesttype.EMERGENCY;
                 break;
 
+            case "maintenance":
+                reqtype = Request.requesttype.MAINTENANCE;
+                break;
+
             case "security":
                 reqtype = Request.requesttype.SECURITY;
                 break;
@@ -300,6 +304,10 @@ public class RequestRepo {
         switch (type) {
             case EMERGENCY:
                 reqtype = "emergency";
+                break;
+
+            case MAINTENANCE:
+                reqtype = "maintenance";
                 break;
 
             case SECURITY:

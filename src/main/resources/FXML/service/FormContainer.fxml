@@ -31,6 +31,7 @@
                   <MenuItem fx:id="religiousPeople" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Religious Request" />
                   <MenuItem fx:id="computerService" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Computer Service Request" />
                   <MenuItem fx:id="securityIssue" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Security Request" />
+                  <MenuItem fx:id="maintenanceProblem" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Maintenance Request" />
               </items>
             </MenuButton>
          </children>

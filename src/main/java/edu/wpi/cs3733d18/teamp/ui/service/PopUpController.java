@@ -16,7 +16,9 @@ public class PopUpController {
     LanguageInterpreterController languageInterpreterController;
     ReligiousServiceController religiousServiceController;
     ComputerServiceController computerServiceController;
+    MaintenanceController maintenanceController;
     SecurityController securityController;
+
     ServiceRequestScreen serviceRequestScreen;
     DBSystem db = DBSystem.getInstance();
     Controller controller = null;
@@ -37,6 +39,9 @@ public class PopUpController {
 
     @FXML
     MenuItem securityIssue;
+
+    @FXML
+    MenuItem maintenanceProblem;
 
     @FXML
     MenuButton serviceRequestMenu;
@@ -80,26 +85,24 @@ public class PopUpController {
             return false;
         }
 
-        if (requestType.equals("LanguageInterpreter")) {
-            languageInterpreterController = loader.getController();
-            languageInterpreterController.StartUp(serviceRequestScreen, this);
-            serviceRequestPopup.setCenter(root);
+        switch(requestType) {
+            case "LanguageInterpreter":
+                languageInterpreterController = loader.getController();
+                languageInterpreterController.StartUp(serviceRequestScreen, this);
+            case "Religious":
+                religiousServiceController = loader.getController();
+                religiousServiceController.StartUp(serviceRequestScreen, this);
+            case "ComputerService":
+                computerServiceController = loader.getController();
+                computerServiceController.StartUp(serviceRequestScreen, this);
+            case "Security":
+                securityController = loader.getController();
+                securityController.StartUp(serviceRequestScreen, this);
+            case "Maintenance":
+                maintenanceController = loader.getController();
+                maintenanceController.StartUp(serviceRequestScreen,this);
         }
-        if (requestType.equals("Religious")) {
-            religiousServiceController = loader.getController();
-            religiousServiceController.StartUp(serviceRequestScreen, this);
-            serviceRequestPopup.setCenter(root);
-        }
-        if (requestType.equals("ComputerService")) {
-            computerServiceController = loader.getController();
-            computerServiceController.StartUp(serviceRequestScreen, this);
-            serviceRequestPopup.setCenter(root);
-        }
-        if (requestType.equals("Security")) {
-            securityController = loader.getController();
-            securityController.StartUp(serviceRequestScreen, this);
-            serviceRequestPopup.setCenter(root);
-        }
+        serviceRequestPopup.setCenter(root);
 
         return true;
     }
