@@ -720,6 +720,12 @@ public class MapScreenController {
 
     public void setToggleOn(Boolean toggleOn){
         this.toggleOn = toggleOn;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(pathMade);
+        }
+
     }
 
     public void clearStartNode(){
