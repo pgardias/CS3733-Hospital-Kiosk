@@ -16,6 +16,7 @@ public class PopUpController {
     LanguageInterpreterController languageInterpreterController;
     ReligiousServiceController religiousServiceController;
     ComputerServiceController computerServiceController;
+    SecurityController securityController;
     ServiceRequestScreen serviceRequestScreen;
     DBSystem db = DBSystem.getInstance();
     Controller controller = null;
@@ -33,6 +34,9 @@ public class PopUpController {
 
     @FXML
     MenuItem computerService;
+
+    @FXML
+    MenuItem securityIssue;
 
     @FXML
     MenuButton serviceRequestMenu;
@@ -89,6 +93,11 @@ public class PopUpController {
         if (requestType.equals("ComputerService")) {
             computerServiceController = loader.getController();
             computerServiceController.StartUp(serviceRequestScreen, this);
+            serviceRequestPopup.setCenter(root);
+        }
+        if (requestType.equals("Security")) {
+            securityController = loader.getController();
+            securityController.StartUp(serviceRequestScreen, this);
             serviceRequestPopup.setCenter(root);
         }
 

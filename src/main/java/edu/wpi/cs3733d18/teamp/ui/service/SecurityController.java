@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class ComputerServiceController implements Initializable {
+public class SecurityController implements Initializable {
 
     ArrayList<String> locationWords = new ArrayList<String>();
     DBSystem db = DBSystem.getInstance();
@@ -40,26 +40,27 @@ public class ComputerServiceController implements Initializable {
     JFXButton submitFormButton;
 
     @FXML
-    Label computerServiceErrorLabel;
+    Label securityErrorLabel;
 
     @FXML
-    JFXTextField computerServiceLocationTxt = new JFXTextField();
+    JFXTextField securityLocationTxt = new JFXTextField();
 
     @FXML
-    JFXComboBox computerServiceComboBox;
+    JFXComboBox securityComboBox;
 
     @FXML
-    JFXTextArea computerServiceInfoTxtArea;
+    JFXTextArea securityInfoTxtArea;
 
-    ObservableList<String> devices = FXCollections.observableArrayList(
-            "Desktop Computer",
-            "Laptop",
-            "Projector",
-            "Podium",
-            "TV",
-            "Printer",
-            "Fax Machine",
-            "Pager"
+    ObservableList<String> situations = FXCollections.observableArrayList(
+            "Patient Disrespecting Hospital Employees",
+            "Patient Injuring Hospital Employees",
+            "Patient Injuring Fellow Patients",
+            "Visitor Refusing To Be Identified",
+            "Visitor Disrespecting Hospital Employees",
+            "Visitor Injuring Patients",
+            "Visitor Injuring Hospital Employees",
+            "Visitor Injuring Other Visitors",
+            "Rouge Employee"
     );
 
     /**
@@ -84,12 +85,12 @@ public class ComputerServiceController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setLocationArray();
 
-        AutoCompletionBinding<String> destBinding = TextFields.bindAutoCompletion(computerServiceLocationTxt, locationWords);
+        AutoCompletionBinding<String> destBinding = TextFields.bindAutoCompletion(securityLocationTxt, locationWords);
 
-        destBinding.setPrefWidth(computerServiceLocationTxt.getPrefWidth());
+        destBinding.setPrefWidth(securityLocationTxt.getPrefWidth());
 
-        computerServiceComboBox.setValue("Choose a device");
-        computerServiceComboBox.setItems(devices);
+        securityComboBox.setValue("Choose a situation");
+        securityComboBox.setItems(situations);
     }
 
     /**
@@ -121,38 +122,38 @@ public class ComputerServiceController implements Initializable {
      */
     @FXML
     public void submitFormButtonOp(ActionEvent e) {
-        String device = null;
+        String situation = null;
         String nodeID = null;
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
-        Request.requesttype type = Request.requesttype.COMPUTER;
+        Request.requesttype type = Request.requesttype.SECURITY;
         try {
-            nodeID = computerServiceLocationTxt.getText();
-            String deviceID = parseSourceInput(nodeID).getID();
-            Node locationNode = nodeSet.get(deviceID);
+            nodeID = securityLocationTxt.getText();
+            String situationID = parseSourceInput(nodeID).getID();
+            Node locationNode = nodeSet.get(situationID);
             if (locationNode == null) {
-                throw new NodeNotFoundException(deviceID);
+                throw new NodeNotFoundException(situationID);
             }
         } catch (NodeNotFoundException nnfe) {
-            computerServiceErrorLabel.setText("Please insert a valid location.");
-            computerServiceErrorLabel.setVisible(true);
+            securityErrorLabel.setText("Please insert a valid location.");
+            securityErrorLabel.setVisible(true);
             return;
         }
         try {
-            device = computerServiceComboBox.getValue().toString();
-            if (device.equals("Choose a device")) {
+            situation = securityComboBox.getValue().toString();
+            if (situation.equals("Choose a situation")) {
                 throw new NothingSelectedException();
             }
         } catch (NothingSelectedException nse) {
-            computerServiceErrorLabel.setText("Please select a device.");
-            computerServiceErrorLabel.setVisible(true);
+            securityErrorLabel.setText("Please select a situation.");
+            securityErrorLabel.setVisible(true);
             return;
         }
-        String additionalInfo = computerServiceInfoTxtArea.getText().replaceAll("\n", System.getProperty("line.separator"));
+        String additionalInfo = securityInfoTxtArea.getText().replaceAll("\n", System.getProperty("line.separator"));
         String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
-        String totalInfo = "Device: " + device + " Additional Info: " + additionalInfo;
+        String totalInfo = "Situation: " + situation + " Additional Info: " + additionalInfo;
         Timestamp timeMade = new Timestamp(System.currentTimeMillis());
-        Request newRequest = new Request(type, device, nodeID, totalInfo, firstAndLastName, " ", timeMade, null, 0);
+        Request newRequest = new Request(type, situation, nodeID, totalInfo, firstAndLastName, " ", timeMade, null, 0);
         db.createRequest(newRequest);
         serviceRequestScreen.refresh();
         Stage stage = (Stage) submitFormButton.getScene().getWindow();

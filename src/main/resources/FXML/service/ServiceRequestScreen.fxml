@@ -25,7 +25,6 @@
                 <RowConstraints minHeight="150.0" prefHeight="150.0" vgrow="SOMETIMES" />
             </rowConstraints>
          <children>
-            <Label fx:id="noRequestsFoundLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
             <JFXButton fx:id="backButton" onAction="#backButtonOp" prefHeight="100.0" prefWidth="100.0" styleClass="back-button" text=" ">
                <GridPane.margin>
                   <Insets left="50.0" top="50.0" />
@@ -47,7 +46,7 @@
                   <Insets right="50.0" top="50.0" />
                </GridPane.margin>
             </JFXButton>
-            <Label fx:id="incorrectPermissionsLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Label fx:id="serviceRequestErrorLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
                   <Font size="20.0" />
                </font></Label>

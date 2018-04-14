@@ -45,7 +45,7 @@ public class ServiceRequestScreen implements Initializable{
     JFXButton completeRequestButton;
 
     @FXML
-    Label incorrectPermissionsLabel;
+    Label serviceRequestErrorLabel;
 
     @FXML
     Label timeCreatedLabel;
@@ -67,9 +67,6 @@ public class ServiceRequestScreen implements Initializable{
 
     @FXML
     Label additionalInfoLabel;
-
-    @FXML
-    Label noRequestsFoundLabel;
 
     @FXML
     TableView<ServiceRequestTable> newRequestTable;
@@ -107,7 +104,7 @@ public class ServiceRequestScreen implements Initializable{
      */
     public void populateTableViews() {
         try {
-            noRequestsFoundLabel.setText("");
+            serviceRequestErrorLabel.setText("");
             requests = db.getAllRequests();
             requestSize = requests.size();
 
@@ -123,7 +120,7 @@ public class ServiceRequestScreen implements Initializable{
                 }
             }
         } catch (RequestNotFoundException rnfe) {
-            noRequestsFoundLabel.setText("There are currently no service requests.");
+            serviceRequestErrorLabel.setText("There are currently no service requests.");
         }
 
         newRequestTable.setItems(newRequests);
@@ -214,7 +211,7 @@ public class ServiceRequestScreen implements Initializable{
      */
     @FXML
     public void claimRequestButtonOp(ActionEvent e) {
-        incorrectPermissionsLabel.setText("");
+        serviceRequestErrorLabel.setText("");
         int requestID = newRequestTable.getSelectionModel().getSelectedItem().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
@@ -227,7 +224,7 @@ public class ServiceRequestScreen implements Initializable{
                     r.setCompletedBy(firstAndLastName);
                     db.modifyRequest(r);
                 } else {
-                    incorrectPermissionsLabel.setText("You are not authorized to claim this service request");
+                    serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
                 }
             }
             else {
@@ -237,7 +234,7 @@ public class ServiceRequestScreen implements Initializable{
                     r.setCompletedBy(firstAndLastName);
                     db.modifyRequest(r);
                 } else {
-                    incorrectPermissionsLabel.setText("You are not authorized to claim this service request");
+                    serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
                 }
             }
 
@@ -254,7 +251,7 @@ public class ServiceRequestScreen implements Initializable{
      */
     @FXML
     public void completeRequestButtonOp(ActionEvent e) {
-        incorrectPermissionsLabel.setText("");
+        serviceRequestErrorLabel.setText("");
         int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
@@ -267,7 +264,7 @@ public class ServiceRequestScreen implements Initializable{
 
             }
             else {
-                incorrectPermissionsLabel.setText("You are not authorized to claim this service request");
+                serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
             }
         }
         catch (RequestNotFoundException re) {
