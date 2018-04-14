@@ -33,6 +33,7 @@
                   <MenuItem fx:id="securityIssue" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Security Request" />
                   <MenuItem fx:id="maintenanceProblem" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Maintenance Request" />
                   <MenuItem fx:id="sanitationMess" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Sanitation Request" />
+                  <MenuItem fx:id="audioVisualHelp" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Audio or Visual Help Request" />
               </items>
             </MenuButton>
          </children>

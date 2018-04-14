@@ -159,7 +159,7 @@
                <children>
                   <Label text="Time Requested" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                   <Label text="Request Type" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
-                  <Label text="Additional Info" GridPane.columnIndex="7" GridPane.halignment="CENTER" />
+                  <Label text="Specfic Request Type and Additional Info" GridPane.columnIndex="7" GridPane.halignment="CENTER" />
                   <Label text="Assigned To" GridPane.columnIndex="6" GridPane.halignment="CENTER" />
                   <Label text="Created By" GridPane.columnIndex="5" GridPane.halignment="CENTER" />
                   <Label text="Location" GridPane.columnIndex="4" GridPane.halignment="CENTER" />

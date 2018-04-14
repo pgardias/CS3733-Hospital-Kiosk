@@ -17,6 +17,7 @@ public class PopUpController {
     ReligiousServiceController religiousServiceController;
     ComputerServiceController computerServiceController;
     MaintenanceController maintenanceController;
+    AudioVisualController audioVisualController;
     SanitationController sanitationController;
     SecurityController securityController;
 
@@ -46,6 +47,9 @@ public class PopUpController {
 
     @FXML
     MenuItem sanitationMess;
+
+    @FXML
+    MenuItem audioVisualHelp;
 
     @FXML
     MenuButton serviceRequestMenu;
@@ -108,6 +112,9 @@ public class PopUpController {
             case "Sanitation":
                 sanitationController = loader.getController();
                 sanitationController.StartUp(serviceRequestScreen, this);
+            case "AudioorVisualHelp":
+                audioVisualController = loader.getController();
+                audioVisualController.StartUp(serviceRequestScreen,this);
         }
         serviceRequestPopup.setCenter(root);
 

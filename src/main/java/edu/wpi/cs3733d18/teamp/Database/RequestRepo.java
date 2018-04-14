@@ -271,6 +271,10 @@ public class RequestRepo {
                 reqtype = Request.requesttype.EMERGENCY;
                 break;
 
+            case "audio+visual":
+                reqtype = Request.requesttype.AV;
+                break;
+
             case "sanitation":
                 reqtype = Request.requesttype.SANITATION;
                 break;
@@ -308,6 +312,10 @@ public class RequestRepo {
         switch (type) {
             case EMERGENCY:
                 reqtype = "emergency";
+                break;
+
+            case AV:
+                reqtype = "audio+visual";
                 break;
 
             case SANITATION:
