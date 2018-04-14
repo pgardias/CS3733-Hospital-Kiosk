@@ -4,12 +4,15 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733d18.teamp.ui.map.MapScreenController;
+import edu.wpi.cs3733d18.teamp.ui.map.MapViewerBuilder;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -25,6 +28,9 @@ public class Controller {
 
     @FXML
     JFXButton mapButton;
+
+    @FXML
+    Button threeDMap;
 
     @FXML
     JFXTextField usernameTxt;
@@ -144,6 +150,30 @@ public class Controller {
         stage = (Stage) adminButton.getScene().getWindow();
         stage.setFullScreen(false);
         stage.setScene(new Scene(root, 1920, 1080));
+        stage.setFullScreen(true);
+        stage.show();
+    }
+
+    @FXML
+    public void threeDMapOp(){
+        FXMLLoader loader;
+        Stage stage;
+        Parent root;
+        PerspectiveCamera perspectiveCamera = new PerspectiveCamera();
+
+        loader = new FXMLLoader(getClass().getResource("/FXML/map/ThreeDMapTest.fxml"));
+        try {
+            root = loader.load();
+        } catch (IOException ie) {
+            ie.printStackTrace();
+            return;
+        }
+        stage = (Stage) threeDMap.getScene().getWindow();
+        stage.setFullScreen(false);
+        Scene scene = new Scene(root, 1920, 1080);
+        scene.setCamera(perspectiveCamera);
+        stage.setScene(scene);
+        //stage.setScene(new Scene(root, 1920, 1080));
         stage.setFullScreen(true);
         stage.show();
     }
