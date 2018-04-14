@@ -164,7 +164,7 @@ public class MapScreenController {
 
     @FXML
     public void floorL2ButtonOp(ActionEvent e){
-        floorState = floorL1Button.getText();
+        floorState = floorL2Button.getText();
         currentFloor = Node.floorType.LEVEL_L2;
 
         updateMap();
@@ -720,6 +720,12 @@ public class MapScreenController {
 
     public void setToggleOn(Boolean toggleOn){
         this.toggleOn = toggleOn;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(pathMade);
+        }
+
     }
 
     public void clearStartNode(){
