@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733d18.teamp.*;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.RequestNotFoundException;
-import edu.wpi.cs3733d18.teamp.ui.admin.RecordScreenController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,19 +22,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-
-
 public class ServiceRequestScreen implements Initializable{
     PopUpController popUpController;
     DBSystem db = DBSystem.getInstance();
     ArrayList<Request> requests;
     int requestSize;
-    private String requestType;
-    private int editedRequestID = 0;
-    private Boolean editFlag = false;
 
 
-    //Elements for main screen
     @FXML
     JFXButton backButton;
 
