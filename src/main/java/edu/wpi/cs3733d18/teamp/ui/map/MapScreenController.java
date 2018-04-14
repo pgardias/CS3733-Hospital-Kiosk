@@ -164,7 +164,7 @@ public class MapScreenController {
 
     @FXML
     public void floorL2ButtonOp(ActionEvent e){
-        floorState = floorL1Button.getText();
+        floorState = floorL2Button.getText();
         currentFloor = Node.floorType.LEVEL_L2;
 
         updateMap();
