@@ -118,18 +118,26 @@ public class MapBuilderController implements Initializable {
     Slider zoomSlider;
 
     @FXML
-    Spinner<String> floorSpinner;
+    JFXButton floorL2Button;
 
-    ObservableList<String> floorsList = FXCollections.observableArrayList(
-            Node.floorType.LEVEL_3.toString(),
-            Node.floorType.LEVEL_2.toString(),
-            Node.floorType.LEVEL_1.toString(),
-            Node.floorType.LEVEL_G.toString(),
-            Node.floorType.LEVEL_L1.toString(),
-            Node.floorType.LEVEL_L2.toString()
-    );
+    @FXML
+    JFXButton floorL1Button;
 
-    SpinnerValueFactory<String> floors = new SpinnerValueFactory.ListSpinnerValueFactory<String>(floorsList);
+
+    @FXML
+    JFXButton floorGButton;
+
+
+    @FXML
+    JFXButton floor1Button;
+
+
+    @FXML
+    JFXButton floor2Button;
+
+
+    @FXML
+    JFXButton floor3Button;
 
 
     MapBuilderController mapBuilderController = null;
@@ -194,9 +202,8 @@ public class MapBuilderController implements Initializable {
     @FXML
     public void startUp(){
         mapBuilderController = this;
-        floors.setValue("2");
+        floorState = "2";
         currentFloor = Node.floorType.LEVEL_2;
-        floorSpinner.setValueFactory(floors);
         zoomSlider.setValue(1);
         Image newImage = new Image("/img/maps/2d/02_thesecondfloor.png");
         mapImage.setImage(newImage);
@@ -215,6 +222,8 @@ public class MapBuilderController implements Initializable {
         addOverlay();
 
     }
+
+
 
 
     @FXML
@@ -240,7 +249,6 @@ public class MapBuilderController implements Initializable {
      */
     public void getMap(){
         Image image;
-        floorState = floorSpinner.getValue();
         switch (floorState) {
             case "3":
                 image = new Image("/img/maps/2d/03_thethirdfloor.png");
@@ -482,7 +490,7 @@ public class MapBuilderController implements Initializable {
 
                 double nodex2Coord = newCenterX/X_SCALE + X_OFFSET;
                 double nodey2Coord = newCenterY/Y_SCALE + Y_OFFSET;
-                mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord,floorState);
 
                 //System.out.println("New Center X: " + newCenterX + " New Center Y: " + newCenterY + "\n");
                 //TODO drag bounds
@@ -561,7 +569,7 @@ public class MapBuilderController implements Initializable {
                     newNodeForm(dragNodeOrg.getID(), dragNodeOrg.getLongName(), dragNodeOrg.getX(), dragNodeOrg.getY(),
                             dragNodeOrg.getxDisplay(), dragNodeOrg.getyDisplay(), dragNodeOrg.getFloor().toString(),
                             dragNodeOrg.getBuilding().toString(), dragNodeOrg.getType().toString(), dragNodeOrg.getActive());
-                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorState);
 
                 }
             }
@@ -674,28 +682,65 @@ public class MapBuilderController implements Initializable {
      * this just updates the map if the spinner is clicked
      */
     @FXML
-    public void spinnerOp(){
-        floorState = floorSpinner.getValue();
-        switch (floorState) {
-            case "3":
-                currentFloor = Node.floorType.LEVEL_3;
-                break;
-            case "2":
-                currentFloor = Node.floorType.LEVEL_2;
-                break;
-            case "1":
-                currentFloor = Node.floorType.LEVEL_1;
-                break;
-            case "G":
-                currentFloor = Node.floorType.LEVEL_G;
-                break;
-            case "L1":
-                currentFloor = Node.floorType.LEVEL_L1;
-                break;
-            case "L2":
-                currentFloor = Node.floorType.LEVEL_L2;
-                break;
+    public void floorL2ButtonOp(ActionEvent e){
+        floorState = floorL2Button.getText();
+        currentFloor = Node.floorType.LEVEL_L2;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(path);
         }
+    }
+
+    @FXML
+    public void floorL1ButtonOp(ActionEvent e){
+        floorState = floorL1Button.getText();
+        currentFloor = Node.floorType.LEVEL_L1;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(path);
+        }
+    }
+
+    @FXML
+    public void floorGButtonOp(ActionEvent e){
+        floorState = floorGButton.getText();
+        currentFloor = Node.floorType.LEVEL_G;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(path);
+        }
+    }
+
+    @FXML
+    public void floor1ButtonOp(ActionEvent e){
+        floorState = floor1Button.getText();
+        currentFloor = Node.floorType.LEVEL_1;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(path);
+        }
+    }
+
+    @FXML
+    public void floor2ButtonOp(ActionEvent e){
+        floorState = floor2Button.getText();
+        currentFloor = Node.floorType.LEVEL_2;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(path);
+        }
+    }
+
+    @FXML
+    public void floor3ButtonOp(ActionEvent e){
+        floorState = floor2Button.getText();
+        currentFloor = Node.floorType.LEVEL_2;
+
         updateMap();
         if (pathDrawn){
             drawPath(path);
@@ -795,7 +840,7 @@ public class MapBuilderController implements Initializable {
                     double nodex2Coord = scaledx2Coord/X_SCALE + X_OFFSET;
                     double nodey2Coord = scaledy2Coord/Y_SCALE + Y_OFFSET;
                     newNodeForm();
-                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorState);
                     mapBuilderNodeFormController.setFloor(currentFloor.toString());
 
                 }
