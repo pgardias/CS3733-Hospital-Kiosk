@@ -294,9 +294,7 @@ public class ServiceRequestScreen implements Initializable{
         }
 
         Main.logoutCurrentUser();
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setFullScreen(true);
-        stage.show();
+        backButton.getScene().setRoot(root);
         return true;
     }
 

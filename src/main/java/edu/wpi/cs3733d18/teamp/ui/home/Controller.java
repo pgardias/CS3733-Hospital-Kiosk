@@ -120,10 +120,7 @@ public class Controller {
             return;
         }
         stage = (Stage) serviceButton.getScene().getWindow();
-        stage.setFullScreen(false);
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.show();
-        stage.setFullScreen(true);
+        serviceButton.getScene().setRoot(root);
     }
 
     @FXML
@@ -140,10 +137,7 @@ public class Controller {
             return;
         }
         stage = (Stage) adminButton.getScene().getWindow();
-        stage.setFullScreen(false);
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setFullScreen(true);
-        stage.show();
+        adminButton.getScene().setRoot(root);
     }
 
     @FXML
