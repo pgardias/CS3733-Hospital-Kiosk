@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class MapBuilderNodeFormViewController implements Initializable{
+public class MapBuilderNodeFormController implements Initializable{
 
     public static final int FULL_WIDTH = 5000;
     public static final int FULL_HEIGHT = 3400;

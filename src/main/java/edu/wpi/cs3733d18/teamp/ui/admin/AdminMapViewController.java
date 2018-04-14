@@ -8,9 +8,9 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.Pathfinding.PathfindingContext;
-import edu.wpi.cs3733d18.teamp.ui.admin.overlays.MapBuilderAddOverlayViewController;
-import edu.wpi.cs3733d18.teamp.ui.admin.overlays.MapBuilderEdgeFormViewController;
-import edu.wpi.cs3733d18.teamp.ui.admin.overlays.MapBuilderNodeFormViewController;
+import edu.wpi.cs3733d18.teamp.ui.admin.overlays.MapBuilderOverlayController;
+import edu.wpi.cs3733d18.teamp.ui.admin.overlays.MapBuilderEdgeFormController;
+import edu.wpi.cs3733d18.teamp.ui.admin.overlays.MapBuilderNodeFormController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -136,7 +136,7 @@ public class AdminMapViewController implements Initializable {
 
 
     AdminMapViewController adminMapViewController = null;
-    MapBuilderAddOverlayViewController mapBuilderAddOverlayViewController = null;
+    MapBuilderOverlayController mapBuilderOverlayController = null;
 
 
     ArrayList<String> destinationWords = new ArrayList<>();
@@ -485,7 +485,7 @@ public class AdminMapViewController implements Initializable {
 
                 double nodex2Coord = newCenterX/X_SCALE + X_OFFSET;
                 double nodey2Coord = newCenterY/Y_SCALE + Y_OFFSET;
-                mapBuilderNodeFormViewController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
 
                 //System.out.println("New Center X: " + newCenterX + " New Center Y: " + newCenterY + "\n");
                 //TODO drag bounds
@@ -564,7 +564,7 @@ public class AdminMapViewController implements Initializable {
                     newNodeForm(dragNodeOrg.getID(), dragNodeOrg.getLongName(), dragNodeOrg.getX(), dragNodeOrg.getY(),
                             dragNodeOrg.getxDisplay(), dragNodeOrg.getyDisplay(), dragNodeOrg.getFloor().toString(),
                             dragNodeOrg.getBuilding().toString(), dragNodeOrg.getType().toString(), dragNodeOrg.getActive());
-                    mapBuilderNodeFormViewController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
 
                 }
             }
@@ -619,8 +619,8 @@ public class AdminMapViewController implements Initializable {
                     }else {
                         HashMap<String, Node> nodeSet;
                         nodeSet = db.getAllNodes();
-                        if (mapBuilderEdgeFormViewController.checkEndNodeBar()) nodeState = 1;
-                        if (mapBuilderEdgeFormViewController.checkStartNodeBar()) nodeState = 0;
+                        if (mapBuilderEdgeFormController.checkEndNodeBar()) nodeState = 1;
+                        if (mapBuilderEdgeFormController.checkStartNodeBar()) nodeState = 0;
                         Circle c;
                         switch (nodeState) {
                             case 0:
@@ -635,7 +635,7 @@ public class AdminMapViewController implements Initializable {
                                         nodeDispSet.get(node.getID()).setFill(Color.rgb(205, 35, 0, 0.99));
                                         nodeID = firstSelect.getShortName();
 
-                                        mapBuilderEdgeFormViewController.setStartNodeTxt(firstSelect.getID());
+                                        mapBuilderEdgeFormController.setStartNodeTxt(firstSelect.getID());
                                         System.out.println("First Node: " + firstSelect.getShortName());
                                         firstChoice = false;
                                         break;
@@ -655,7 +655,7 @@ public class AdminMapViewController implements Initializable {
                                         nodeDispSet.get(node.getID()).setFill(Color.rgb(100, 215, 0, 0.99));
                                         nodeID = secondSelect.getShortName();
 
-                                        mapBuilderEdgeFormViewController.setEndNodeTxt(secondSelect.getID());
+                                        mapBuilderEdgeFormController.setEndNodeTxt(secondSelect.getID());
                                         System.out.println("Second Node: " + secondSelect.getShortName());
                                         firstChoice = true;
                                         break;
@@ -715,7 +715,7 @@ public class AdminMapViewController implements Initializable {
             Parent root;
             Stage stage;
             FXMLLoader loader;
-            MapBuilderEdgeFormViewController mapBuilderEdgeFormViewController;
+            MapBuilderEdgeFormController mapBuilderEdgeFormController;
 
             HashMap<String, Edge> edgeSet;
             edgeSet = db.getAllEdges();
@@ -798,8 +798,8 @@ public class AdminMapViewController implements Initializable {
                     double nodex2Coord = scaledx2Coord/X_SCALE + X_OFFSET;
                     double nodey2Coord = scaledy2Coord/Y_SCALE + Y_OFFSET;
                     newNodeForm();
-                    mapBuilderNodeFormViewController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
-                    mapBuilderNodeFormViewController.setFloor(currentFloor.toString());
+                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                    mapBuilderNodeFormController.setFloor(currentFloor.toString());
 
                 }
             }
@@ -824,14 +824,14 @@ public class AdminMapViewController implements Initializable {
         clearCircles();
         firstSelect = null;
         secondSelect = null;
-        mapBuilderAddOverlayViewController = loader.getController();
-        mapBuilderAddOverlayViewController.startUp(adminMapViewController);
+        mapBuilderOverlayController = loader.getController();
+        mapBuilderOverlayController.startUp(adminMapViewController);
         edgeSelected = false;
         nodeState = 0;
         formOverlayPane.setLeft(root);
     }
 
-    MapBuilderNodeFormViewController mapBuilderNodeFormViewController;
+    MapBuilderNodeFormController mapBuilderNodeFormController;
 
     /**
      * brings in a fresh new node form to create a new node
@@ -849,8 +849,8 @@ public class AdminMapViewController implements Initializable {
             ie.printStackTrace();
             return;
         }
-        mapBuilderNodeFormViewController = loader.getController();
-        mapBuilderNodeFormViewController.startUp(adminMapViewController);
+        mapBuilderNodeFormController = loader.getController();
+        mapBuilderNodeFormController.startUp(adminMapViewController);
         formOverlayPane.setLeft(root);
     }
 
@@ -882,13 +882,13 @@ public class AdminMapViewController implements Initializable {
             ie.printStackTrace();
             return;
         }
-        mapBuilderNodeFormViewController = loader.getController();
-        mapBuilderNodeFormViewController.startUp(adminMapViewController, nodeID, nodeLongName, x2d, y2d, x3d, y3d, nodeFloor,
+        mapBuilderNodeFormController = loader.getController();
+        mapBuilderNodeFormController.startUp(adminMapViewController, nodeID, nodeLongName, x2d, y2d, x3d, y3d, nodeFloor,
                 nodeBuilding, nodeType, isActive);
         formOverlayPane.setLeft(root);
     }
 
-    MapBuilderEdgeFormViewController mapBuilderEdgeFormViewController;
+    MapBuilderEdgeFormController mapBuilderEdgeFormController;
 
     /**
      * brings in a blank edge form to be filled in to create a new edge
@@ -909,8 +909,8 @@ public class AdminMapViewController implements Initializable {
         }
         edgeSelected = true;
         nodeState = 0;
-        mapBuilderEdgeFormViewController = loader.getController();
-        mapBuilderEdgeFormViewController.startUp(adminMapViewController);
+        mapBuilderEdgeFormController = loader.getController();
+        mapBuilderEdgeFormController.startUp(adminMapViewController);
         formOverlayPane.setLeft(root);
     }
 
@@ -938,8 +938,8 @@ public class AdminMapViewController implements Initializable {
         }
         edgeSelected = true;
         nodeState = 0;
-        mapBuilderEdgeFormViewController = loader.getController();
-        mapBuilderEdgeFormViewController.startUp(adminMapViewController, edgeID, startNode,
+        mapBuilderEdgeFormController = loader.getController();
+        mapBuilderEdgeFormController.startUp(adminMapViewController, edgeID, startNode,
                 endNode, isActive);
         formOverlayPane.setLeft(root);
     }

@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class ReligiousController implements Initializable {
+public class ReligiousServiceController implements Initializable {
 
     ArrayList<String> locationWords = new ArrayList<String>();
     DBSystem db = DBSystem.getInstance();

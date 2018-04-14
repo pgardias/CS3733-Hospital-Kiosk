@@ -17,7 +17,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
-public class MapBuilderEdgeFormViewController {
+public class MapBuilderEdgeFormController {
     DBSystem db = DBSystem.getInstance();
 
     Boolean editFlag = false;

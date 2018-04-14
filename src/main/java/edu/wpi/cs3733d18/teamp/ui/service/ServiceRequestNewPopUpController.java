@@ -14,7 +14,7 @@ import java.io.IOException;
 public class ServiceRequestNewPopUpController {
 
     LanguageInterpreterController languageInterpreterController;
-    ReligiousController religiousController;
+    ReligiousServiceController religiousServiceController;
     ServiceRequestScreen serviceRequestScreen;
     DBSystem db = DBSystem.getInstance();
     Controller controller = null;
@@ -76,8 +76,8 @@ public class ServiceRequestNewPopUpController {
             serviceRequestPopup.setCenter(root);
         }
         if (requestType.equals("Religious")) {
-            religiousController = loader.getController();
-            religiousController.StartUp(serviceRequestScreen, this);
+            religiousServiceController = loader.getController();
+            religiousServiceController.StartUp(serviceRequestScreen, this);
             serviceRequestPopup.setCenter(root);
         }
 
