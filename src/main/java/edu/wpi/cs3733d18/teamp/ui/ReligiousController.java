@@ -6,6 +6,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
+import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
+import edu.wpi.cs3733d18.teamp.Exceptions.NothingSelectedException;
 import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.Request;
@@ -112,9 +114,34 @@ public class ReligiousController implements Initializable {
      */
     @FXML
     public void submitFormButtonOp(ActionEvent e) {
+        String religion = null;
+        String nodeID = null;
+        HashMap<String, Node> nodeSet = db.getAllNodes();
+
+
         Request.requesttype type = Request.requesttype.HOLYPERSON;
-        String nodeID = religiousRequestLocationTxt.getText();
-        String religion = religiousRequestComboBox.getValue().toString();
+        try {
+            nodeID = religiousRequestLocationTxt.getText();
+            String religiousID = parseSourceInput(nodeID).getID();
+            Node locationNode = nodeSet.get(religiousID);
+            if (locationNode == null) {
+                throw new NodeNotFoundException(religiousID);
+            }
+        } catch(NodeNotFoundException nnfe) {
+            religiousRequestErrorLabel.setText("Please insert a valid location.");
+            religiousRequestErrorLabel.setVisible(true);
+            return;
+        }
+        try {
+            religion = religiousRequestComboBox.getValue().toString();
+            if(religion.equals("Choose a religion")) {
+                throw new NothingSelectedException();
+            }
+        } catch(NothingSelectedException nse) {
+            religiousRequestErrorLabel.setText("Please select a religion.");
+            religiousRequestErrorLabel.setVisible(true);
+            return;
+        }
         String additionalInfo = religiousRequestInfoTxtArea.getText().replaceAll("\n", System.getProperty("line.separator"));
         String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
         String totalInfo = "Religion: " + religion + " Additional Info: " + additionalInfo;
@@ -124,5 +151,20 @@ public class ReligiousController implements Initializable {
         serviceRequestScreen.refresh();
         Stage stage = (Stage) submitFormButton.getScene().getWindow();
         stage.close();
+    }
+
+    public Node parseSourceInput(String string) {
+        Node aNode = new Node();
+//        System.out.println("Input string: " + string);
+
+        HashMap<String, Node> nodeSet = db.getAllNodes();
+
+        for (Node node : nodeSet.values()) {
+            if (node.getShortName().compareTo(string) == 0) {
+                aNode = node;
+            }
+        }
+
+        return aNode;
     }
 }

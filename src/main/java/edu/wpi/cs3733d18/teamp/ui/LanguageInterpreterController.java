@@ -5,6 +5,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
+import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
+import edu.wpi.cs3733d18.teamp.Exceptions.NothingSelectedException;
 import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
@@ -75,6 +77,7 @@ public class LanguageInterpreterController implements Initializable {
 
     /**
      * Initializes the drop down menu
+     *
      * @param location
      * @param resources
      */
@@ -92,6 +95,7 @@ public class LanguageInterpreterController implements Initializable {
 
     /**
      * Calls startup
+     *
      * @param serviceRequestNewPopUpController
      */
     public void StartUp(ServiceRequestScreen serviceRequestScreen, ServiceRequestNewPopUpController serviceRequestNewPopUpController) {
@@ -101,23 +105,49 @@ public class LanguageInterpreterController implements Initializable {
 
     /**
      * Cancels the form if the user decides they don't need to make a service request
+     *
      * @param e the action of clicking the button
      */
     @FXML
-    public void cancelButtonOp(ActionEvent e){
+    public void cancelButtonOp(ActionEvent e) {
         Stage stage = (Stage) cancelFormButton.getScene().getWindow();
         stage.close();
     }
 
     /**
      * Submits the form for a new service request
+     *
      * @param e Action event
      */
     @FXML
     public void submitFormButtonOp(ActionEvent e) {
+        String language = null;
+        String nodeID = null;
+        HashMap<String, Node> nodeSet = db.getAllNodes();
+
         Request.requesttype type = Request.requesttype.LANGUAGEINTERP;
-        String nodeID = languageInterpreterLocationTxt.getText();
-        String language = languageInterpreterComboBox.getValue().toString();
+        try {
+            nodeID = languageInterpreterLocationTxt.getText();
+            String interpreterID = parseSourceInput(nodeID).getID();
+            Node locationNode = nodeSet.get(interpreterID);
+            if (locationNode == null) {
+                throw new NodeNotFoundException(interpreterID);
+            }
+        } catch (NodeNotFoundException nnfe) {
+            languageInterpreterErrorLabel.setText("Please insert a valid location.");
+            languageInterpreterErrorLabel.setVisible(true);
+            return;
+        }
+        try {
+            language = languageInterpreterComboBox.getValue().toString();
+            if (language.equals("Choose a language")) {
+                throw new NothingSelectedException();
+            }
+        } catch (NothingSelectedException nse) {
+            languageInterpreterErrorLabel.setText("Please select a language.");
+            languageInterpreterErrorLabel.setVisible(true);
+            return;
+        }
         String additionalInfo = languageInterpreterInfoTxtArea.getText().replaceAll("\n", System.getProperty("line.separator"));
         String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
         String totalInfo = "Language: " + language + " Additional Info: " + additionalInfo;
@@ -128,4 +158,20 @@ public class LanguageInterpreterController implements Initializable {
         Stage stage = (Stage) submitFormButton.getScene().getWindow();
         stage.close();
     }
+
+
+    public Node parseSourceInput(String string) {
+        Node aNode = new Node();
+
+        HashMap<String, Node> nodeSet = db.getAllNodes();
+
+        for (Node node : nodeSet.values()) {
+            if (node.getShortName().compareTo(string) == 0) {
+                aNode = node;
+            }
+        }
+
+        return aNode;
+    }
+
 }
