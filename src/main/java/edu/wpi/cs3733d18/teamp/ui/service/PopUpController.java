@@ -1,7 +1,7 @@
 package edu.wpi.cs3733d18.teamp.ui.service;
 
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
-import edu.wpi.cs3733d18.teamp.ui.home.Controller;
+import edu.wpi.cs3733d18.teamp.ui.home.MainController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +17,7 @@ public class PopUpController {
     ReligiousServiceController religiousServiceController;
     ServiceRequestScreen serviceRequestScreen;
     DBSystem db = DBSystem.getInstance();
-    Controller controller = null;
+    MainController mainController = null;
     private String requestType;
 
     // Elements for popup Screen
