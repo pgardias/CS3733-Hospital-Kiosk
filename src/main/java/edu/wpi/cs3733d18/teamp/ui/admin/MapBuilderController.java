@@ -64,6 +64,7 @@ public class MapBuilderController implements Initializable {
 
     private Boolean edgeSelected = false;
     private Boolean pathDrawn = false;
+    private Boolean isNewNode = false;
 
     private static HashMap<String, Circle> nodeDispSet = new HashMap<>();
     private static HashMap<String, Line> edgeDispSet = new HashMap<>();
@@ -567,36 +568,42 @@ public class MapBuilderController implements Initializable {
             }
             else if(event.getEventType() == MouseEvent.MOUSE_CLICKED) {
                 if(!isDragging) {
+                    HashMap<String, Node> nodeSet;
+                    nodeSet = db.getAllNodes();
                     if (getSourceFocus()){
-
-                        HashMap<String, Node> nodeSet;
+                        // if the start search bar is clicked the node gets put in there
                         removeFocus();
-                        nodeSet = db.getAllNodes();
                         clearCircles();
                         System.out.println("clear all nodes");
                         for (String string : nodeDispSet.keySet()) {
                             if (nodeDispSet.get(string) == event.getSource()) {
                                 Node node = nodeSet.get(string);
+                                nodeDispSet.get(node.getID()).setFill(Color.GREEN);
                                 sourceSearchBar.setText(node.getShortName());
                             }
                         }
                     }else if (getDestinationFocus()){
+                        // if the destination bar is clicked, the clicked node gets put in there
                         removeFocus();
-                        HashMap<String, Node> nodeSet;
-
-                        nodeSet = db.getAllNodes();
                         clearCircles();
                         System.out.println("clear all nodes");
                         for (String string : nodeDispSet.keySet()) {
                             if (nodeDispSet.get(string) == event.getSource()) {
                                 Node node = nodeSet.get(string);
+                                nodeDispSet.get(node.getID()).setFill(Color.RED);
                                 destinationSearchBar.setText(node.getShortName());
                             }
                         }
+                    } else if (isNewNode){
+                        for (String string : nodeDispSet.keySet()) {
+                            if (nodeDispSet.get(string) == event.getSource()) {
+                                Node node = nodeSet.get(string);
+                                nodeDispSet.get(node.getID()).setFill(Color.GREEN);
+                                mapBuilderNodeFormController.setConnectingNodeTextBox(node.getLongName());
+                            }
+                        }
                     } else if (!edgeSelected) {
-                        HashMap<String, Node> nodeSet;
-
-                        nodeSet = db.getAllNodes();
+                        // if an edge was not selected, clicking a node opens up the modify node form
                         clearCircles();
                         System.out.println("clear all nodes");
                         for (String string : nodeDispSet.keySet()) {
@@ -613,16 +620,14 @@ public class MapBuilderController implements Initializable {
                                         endNode.getBuilding().toString(), endNode.getType().toString(), endNode.getActive());
                             }
                         }
-                    }else {
-                        HashMap<String, Node> nodeSet;
-                        nodeSet = db.getAllNodes();
+                    } else {
+                        //This modifies the edge by replacing the start and end node in the edge
+                        //when clicking on new nodes
                         if (mapBuilderEdgeFormController.checkEndNodeBar()) nodeState = 1;
                         if (mapBuilderEdgeFormController.checkStartNodeBar()) nodeState = 0;
-                        Circle c;
                         switch (nodeState) {
                             case 0:
                                 if (firstSelect != null) {
-                                    c = nodeDispSet.get(firstSelect.getID());
                                     nodeDispSet.get(firstSelect.getID()).setFill(Color.DODGERBLUE);
                                 }
                                 for (String string : nodeDispSet.keySet()) {
@@ -642,7 +647,6 @@ public class MapBuilderController implements Initializable {
                                 break;
                             case 1:
                                 if (secondSelect != null) {
-                                    c = nodeDispSet.get(secondSelect.getID());
                                     nodeDispSet.get(secondSelect.getID()).setFill(Color.DODGERBLUE);
                                 }
                                 for (String string : nodeDispSet.keySet()) {
@@ -777,6 +781,7 @@ public class MapBuilderController implements Initializable {
             else if (event.getEventType() == MouseEvent.MOUSE_CLICKED){
                 System.out.println("ready to click");
                 if(!isDragging) {
+                    isNewNode = true;
                     System.out.println("Mouse Clicked");
                     clearCircles();
                     double x2Coord = event.getSceneX();
@@ -824,6 +829,7 @@ public class MapBuilderController implements Initializable {
         mapBuilderOverlayController = loader.getController();
         mapBuilderOverlayController.startUp(mapBuilderController);
         edgeSelected = false;
+        isNewNode = false;
         nodeState = 0;
         formOverlayPane.setLeft(root);
     }

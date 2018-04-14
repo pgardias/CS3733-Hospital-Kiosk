@@ -129,7 +129,7 @@ public class MapBuilderNodeFormController implements Initializable{
 
         int i = 0;
         for (Node node : nodeSet.values()) {
-            sourceWords.add(node.getID());
+            sourceWords.add(node.getLongName());
         }
     }
 
@@ -248,7 +248,7 @@ public class MapBuilderNodeFormController implements Initializable{
         Node connectingNode = null;
         if (!editFlag) {
             try {
-                connectingNode = db.getOneNode(connectingNodeTextBox.getText());
+                connectingNode = db.getOneNode(getNodeID(connectingNodeTextBox.getText()));
             } catch (NodeNotFoundException nnfe) {
                 nnfe.printStackTrace();
                 System.out.println(nnfe.getNodeID());
@@ -348,6 +348,20 @@ public class MapBuilderNodeFormController implements Initializable{
 
         mapBuilderController.updateMap();
         mapBuilderController.addOverlay();
+    }
+
+    public void setConnectingNodeTextBox(String nodeLongName){
+        connectingNodeTextBox.setText(nodeLongName);
+    }
+
+    public String getNodeID(String nodeLongName){
+        HashMap<String, Node> nodeSet = db.getAllNodes();
+        for(Node node: nodeSet.values()){
+            if (node.getLongName().equals(nodeLongName)){
+                return node.getID();
+            }
+        }
+        return null;
     }
 
 
