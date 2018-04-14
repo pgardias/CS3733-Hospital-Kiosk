@@ -738,8 +738,8 @@ public class MapBuilderController implements Initializable {
 
     @FXML
     public void floor3ButtonOp(ActionEvent e){
-        floorState = floor2Button.getText();
-        currentFloor = Node.floorType.LEVEL_2;
+        floorState = floor3Button.getText();
+        currentFloor = Node.floorType.LEVEL_3;
 
         updateMap();
         if (pathDrawn){
