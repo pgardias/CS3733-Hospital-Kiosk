@@ -118,18 +118,26 @@ public class MapBuilderController implements Initializable {
     Slider zoomSlider;
 
     @FXML
-    Spinner<String> floorSpinner;
+    JFXButton floorL2Button;
 
-    ObservableList<String> floorsList = FXCollections.observableArrayList(
-            Node.floorType.LEVEL_3.toString(),
-            Node.floorType.LEVEL_2.toString(),
-            Node.floorType.LEVEL_1.toString(),
-            Node.floorType.LEVEL_G.toString(),
-            Node.floorType.LEVEL_L1.toString(),
-            Node.floorType.LEVEL_L2.toString()
-    );
+    @FXML
+    JFXButton floorL1Button;
 
-    SpinnerValueFactory<String> floors = new SpinnerValueFactory.ListSpinnerValueFactory<String>(floorsList);
+
+    @FXML
+    JFXButton floorGButton;
+
+
+    @FXML
+    JFXButton floor1Button;
+
+
+    @FXML
+    JFXButton floor2Button;
+
+
+    @FXML
+    JFXButton floor3Button;
 
 
     MapBuilderController mapBuilderController = null;
@@ -152,7 +160,7 @@ public class MapBuilderController implements Initializable {
 
         int i = 0;
         for (Node node : nodeSet.values()) {
-            sourceWords.add(node.getShortName());
+            sourceWords.add(node.getLongName());
         }
         destinationWords.addAll(sourceWords);
         destinationWords.add("NEAREST HALLWAY");
@@ -194,9 +202,8 @@ public class MapBuilderController implements Initializable {
     @FXML
     public void startUp(){
         mapBuilderController = this;
-        floors.setValue("2");
+        floorState = "2";
         currentFloor = Node.floorType.LEVEL_2;
-        floorSpinner.setValueFactory(floors);
         zoomSlider.setValue(1);
         Image newImage = new Image("/img/maps/2d/02_thesecondfloor.png");
         mapImage.setImage(newImage);
@@ -215,6 +222,8 @@ public class MapBuilderController implements Initializable {
         addOverlay();
 
     }
+
+
 
 
     @FXML
@@ -240,7 +249,6 @@ public class MapBuilderController implements Initializable {
      */
     public void getMap(){
         Image image;
-        floorState = floorSpinner.getValue();
         switch (floorState) {
             case "3":
                 image = new Image("/img/maps/2d/03_thethirdfloor.png");
@@ -482,7 +490,7 @@ public class MapBuilderController implements Initializable {
 
                 double nodex2Coord = newCenterX/X_SCALE + X_OFFSET;
                 double nodey2Coord = newCenterY/Y_SCALE + Y_OFFSET;
-                mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord,floorState);
 
                 //System.out.println("New Center X: " + newCenterX + " New Center Y: " + newCenterY + "\n");
                 //TODO drag bounds
@@ -561,7 +569,7 @@ public class MapBuilderController implements Initializable {
                     newNodeForm(dragNodeOrg.getID(), dragNodeOrg.getLongName(), dragNodeOrg.getX(), dragNodeOrg.getY(),
                             dragNodeOrg.getxDisplay(), dragNodeOrg.getyDisplay(), dragNodeOrg.getFloor().toString(),
                             dragNodeOrg.getBuilding().toString(), dragNodeOrg.getType().toString(), dragNodeOrg.getActive());
-                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorState);
 
                 }
             }
@@ -577,7 +585,7 @@ public class MapBuilderController implements Initializable {
                         for (String string : nodeDispSet.keySet()) {
                             if (nodeDispSet.get(string) == event.getSource()) {
                                 Node node = nodeSet.get(string);
-                                sourceSearchBar.setText(node.getShortName());
+                                sourceSearchBar.setText(node.getLongName());
                             }
                         }
                     }else if (getDestinationFocus()){
@@ -590,7 +598,7 @@ public class MapBuilderController implements Initializable {
                         for (String string : nodeDispSet.keySet()) {
                             if (nodeDispSet.get(string) == event.getSource()) {
                                 Node node = nodeSet.get(string);
-                                destinationSearchBar.setText(node.getShortName());
+                                destinationSearchBar.setText(node.getLongName());
                             }
                         }
                     } else if (!edgeSelected) {
@@ -604,7 +612,7 @@ public class MapBuilderController implements Initializable {
                                 Node node = nodeSet.get(string);
                                 endNode = node;
                                 nodeDispSet.get(node.getID()).setFill(Color.rgb(205, 35, 0, 0.99));
-                                nodeID = endNode.getShortName();
+                                nodeID = endNode.getLongName();
 
 
                                 System.out.println(endNode.getID());
@@ -630,10 +638,10 @@ public class MapBuilderController implements Initializable {
                                         Node node = nodeSet.get(string);
                                         firstSelect = node;
                                         nodeDispSet.get(node.getID()).setFill(Color.rgb(205, 35, 0, 0.99));
-                                        nodeID = firstSelect.getShortName();
+                                        nodeID = firstSelect.getLongName();
 
                                         mapBuilderEdgeFormController.setStartNodeTxt(firstSelect.getID());
-                                        System.out.println("First Node: " + firstSelect.getShortName());
+                                        System.out.println("First Node: " + firstSelect.getLongName());
                                         firstChoice = false;
                                         break;
                                     }
@@ -650,10 +658,10 @@ public class MapBuilderController implements Initializable {
                                         Node node = nodeSet.get(string);
                                         secondSelect = node;
                                         nodeDispSet.get(node.getID()).setFill(Color.rgb(100, 215, 0, 0.99));
-                                        nodeID = secondSelect.getShortName();
+                                        nodeID = secondSelect.getLongName();
 
                                         mapBuilderEdgeFormController.setEndNodeTxt(secondSelect.getID());
-                                        System.out.println("Second Node: " + secondSelect.getShortName());
+                                        System.out.println("Second Node: " + secondSelect.getLongName());
                                         firstChoice = true;
                                         break;
                                     }
@@ -674,28 +682,65 @@ public class MapBuilderController implements Initializable {
      * this just updates the map if the spinner is clicked
      */
     @FXML
-    public void spinnerOp(){
-        floorState = floorSpinner.getValue();
-        switch (floorState) {
-            case "3":
-                currentFloor = Node.floorType.LEVEL_3;
-                break;
-            case "2":
-                currentFloor = Node.floorType.LEVEL_2;
-                break;
-            case "1":
-                currentFloor = Node.floorType.LEVEL_1;
-                break;
-            case "G":
-                currentFloor = Node.floorType.LEVEL_G;
-                break;
-            case "L1":
-                currentFloor = Node.floorType.LEVEL_L1;
-                break;
-            case "L2":
-                currentFloor = Node.floorType.LEVEL_L2;
-                break;
+    public void floorL2ButtonOp(ActionEvent e){
+        floorState = floorL2Button.getText();
+        currentFloor = Node.floorType.LEVEL_L2;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(path);
         }
+    }
+
+    @FXML
+    public void floorL1ButtonOp(ActionEvent e){
+        floorState = floorL1Button.getText();
+        currentFloor = Node.floorType.LEVEL_L1;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(path);
+        }
+    }
+
+    @FXML
+    public void floorGButtonOp(ActionEvent e){
+        floorState = floorGButton.getText();
+        currentFloor = Node.floorType.LEVEL_G;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(path);
+        }
+    }
+
+    @FXML
+    public void floor1ButtonOp(ActionEvent e){
+        floorState = floor1Button.getText();
+        currentFloor = Node.floorType.LEVEL_1;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(path);
+        }
+    }
+
+    @FXML
+    public void floor2ButtonOp(ActionEvent e){
+        floorState = floor2Button.getText();
+        currentFloor = Node.floorType.LEVEL_2;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(path);
+        }
+    }
+
+    @FXML
+    public void floor3ButtonOp(ActionEvent e){
+        floorState = floor3Button.getText();
+        currentFloor = Node.floorType.LEVEL_3;
+
         updateMap();
         if (pathDrawn){
             drawPath(path);
@@ -795,7 +840,7 @@ public class MapBuilderController implements Initializable {
                     double nodex2Coord = scaledx2Coord/X_SCALE + X_OFFSET;
                     double nodey2Coord = scaledy2Coord/Y_SCALE + Y_OFFSET;
                     newNodeForm();
-                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorState);
                     mapBuilderNodeFormController.setFloor(currentFloor.toString());
 
                 }
@@ -1055,7 +1100,7 @@ public class MapBuilderController implements Initializable {
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
         for (Node node : nodeSet.values()) {
-            if (node.getShortName().compareTo(string) == 0) {
+            if (node.getLongName().compareTo(string) == 0) {
                 aNode = node;
             }
         }
@@ -1123,7 +1168,7 @@ public class MapBuilderController implements Initializable {
                 HashMap<String, Node> nodeSet = db.getAllNodes();
 
                 for (Node node : nodeSet.values()) {
-                    if (node.getShortName().compareTo(string) == 0) {
+                    if (node.getLongName().compareTo(string) == 0) {
                         aNode = node;
                     }
                 }

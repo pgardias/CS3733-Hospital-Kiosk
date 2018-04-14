@@ -1,11 +1,13 @@
 package edu.wpi.cs3733d18.teamp.ui.map;
 
 import com.jfoenix.controls.JFXButton;
+import com.sun.scenario.effect.Effect;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -75,18 +77,6 @@ public class MapScreenController {
     Slider zoomSlider;
 
     @FXML
-    Spinner<String> floorSpinner;
-    ObservableList<String> floorsList = FXCollections.observableArrayList( "L2",
-            "L1",
-            "G",
-            "1",
-            "2",
-            "3");
-
-    SpinnerValueFactory<String> floors = new SpinnerValueFactory.ListSpinnerValueFactory<String>(floorsList);
-
-
-    @FXML
     StackPane mapPane;
 
     @FXML
@@ -94,6 +84,29 @@ public class MapScreenController {
 
     @FXML
     AnchorPane nodesEdgesPane;
+
+    @FXML
+    JFXButton floorL2Button;
+
+    @FXML
+    JFXButton floorL1Button;
+
+
+    @FXML
+    JFXButton floorGButton;
+
+
+    @FXML
+    JFXButton floor1Button;
+
+
+    @FXML
+    JFXButton floor2Button;
+
+
+    @FXML
+    JFXButton floor3Button;
+
 
 
     SearchBarOverlayController searchBarOverlayController = null;
@@ -109,9 +122,8 @@ public class MapScreenController {
     @FXML
     public void onStartUp() {
         mapScreenController = this;
-        floors.setValue("2");
-        floorSpinner.setValueFactory(floors);
-        spinnerOp();
+        floorState = floor2Button.getText();
+        currentFloor = Node.floorType.LEVEL_2;
         zoomSlider.setValue(1);
         Image newImage = new Image("/img/maps/2d/02_thesecondfloor.png");
         mapImage.setImage(newImage);
@@ -149,29 +161,67 @@ public class MapScreenController {
         stage.show();
     }
 
+
     @FXML
-    public void spinnerOp(){
-        floorState = floorSpinner.getValue().toString();
-        switch (floorState) {
-            case "3":
-                currentFloor = Node.floorType.LEVEL_3;
-                break;
-            case "2":
-                currentFloor = Node.floorType.LEVEL_2;
-                break;
-            case "1":
-                currentFloor = Node.floorType.LEVEL_1;
-                break;
-            case "G":
-                currentFloor = Node.floorType.LEVEL_G;
-                break;
-            case "L1":
-                currentFloor = Node.floorType.LEVEL_L1;
-                break;
-            case "L2":
-                currentFloor = Node.floorType.LEVEL_L2;
-                break;
+    public void floorL2ButtonOp(ActionEvent e){
+        floorState = floorL2Button.getText();
+        currentFloor = Node.floorType.LEVEL_L2;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(pathMade);
         }
+    }
+
+    @FXML
+    public void floorL1ButtonOp(ActionEvent e){
+        floorState = floorL1Button.getText();
+        currentFloor = Node.floorType.LEVEL_L1;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(pathMade);
+        }
+    }
+
+    @FXML
+    public void floorGButtonOp(ActionEvent e){
+        floorState = floorGButton.getText();
+        currentFloor = Node.floorType.LEVEL_G;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(pathMade);
+        }
+    }
+
+    @FXML
+    public void floor1ButtonOp(ActionEvent e){
+        floorState = floor1Button.getText();
+        currentFloor = Node.floorType.LEVEL_1;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(pathMade);
+        }
+    }
+
+    @FXML
+    public void floor2ButtonOp(ActionEvent e){
+        floorState = floor2Button.getText();
+        currentFloor = Node.floorType.LEVEL_2;
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(pathMade);
+        }
+    }
+
+    @FXML
+    public void floor3ButtonOp(ActionEvent e){
+        floorState = floor3Button.getText();
+        currentFloor = Node.floorType.LEVEL_3;
+
         updateMap();
         if (pathDrawn){
             drawPath(pathMade);
@@ -184,7 +234,7 @@ public class MapScreenController {
      */
     public void getMap(){
         Image image;
-        floorState = floorSpinner.getValue().toString();
+
         if (toggleOn){
             X_OFFSET = 0;
             Y_OFFSET = -19;
@@ -480,7 +530,7 @@ public class MapScreenController {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setFill(Color.GREEN);
-                            searchBarOverlayController.setSourceSearchBar(node.getShortName());
+                            searchBarOverlayController.setSourceSearchBar(node.getLongName());
                         }
                     }
                 } else if (searchBarOverlayController.isDestinationFocused()) {
@@ -489,7 +539,7 @@ public class MapScreenController {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setFill(Color.RED);
-                            searchBarOverlayController.setDestinationSearchBar(node.getShortName());
+                            searchBarOverlayController.setDestinationSearchBar(node.getLongName());
                         }
                     }
                 } else if (!firstSelected){
@@ -498,7 +548,7 @@ public class MapScreenController {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setFill(Color.GREEN);
-                            searchBarOverlayController.setSourceSearchBar(node.getShortName());
+                            searchBarOverlayController.setSourceSearchBar(node.getLongName());
                         }
                     }
                     firstSelected = true;
@@ -508,7 +558,7 @@ public class MapScreenController {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setFill(Color.RED);
-                            searchBarOverlayController.setDestinationSearchBar(node.getShortName());
+                            searchBarOverlayController.setDestinationSearchBar(node.getLongName());
                         }
                     }
                     firstSelected = false;
@@ -581,7 +631,6 @@ public class MapScreenController {
     public void updateMap(){
         nodeDispSet.clear();
         nodesEdgesPane.getChildren().clear();
-        floorSpinner.setValueFactory(floors);
         getMap();
         drawEdges();
         drawNodes();
@@ -598,13 +647,21 @@ public class MapScreenController {
         if(pathMade != null){
             resetPath();
         }
+
+        double lineWidth, lineHeight;
+        double angle;
+
         this.pathMade = path;
         //setSpinner();
         Line line;
         for (Node n : path) {
             pastNode = currentNode;
             currentNode = n;
-            //if (path.get(0).equals(n) || path.get(path.size()-1).equals(n)) {
+//            if (!path.get(0).equals(n)) {
+//                //calculate the width and height of the line
+//                lineWidth = pastNode.getX() - currentNode.getX();
+//                lineHeight =
+//            }
             nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
             // }
             if (path.get(0).equals(n)) {
@@ -671,7 +728,12 @@ public class MapScreenController {
 
     public void setToggleOn(Boolean toggleOn){
         this.toggleOn = toggleOn;
-        spinnerOp();
+
+        updateMap();
+        if (pathDrawn){
+            drawPath(pathMade);
+        }
+
     }
 
     public void clearStartNode(){

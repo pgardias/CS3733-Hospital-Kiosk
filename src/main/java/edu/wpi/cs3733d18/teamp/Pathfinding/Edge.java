@@ -22,7 +22,6 @@ public class Edge {
             this.weight = 1000;
         } else {
             this.weight = Math.hypot((this.start.getX() - this.end.getX()), (this.start.getY() - this.end.getY()));
-            System.out.println(this.weight);
         }
     }
     //Maybe this Edge ID is for creating an edge to show initially, before it's submitted to the database?
@@ -36,7 +35,6 @@ public class Edge {
             this.weight = 1000;
         } else {
             this.weight = Math.hypot((this.start.getX()-this.end.getX()), (this.start.getY()-this.end.getY()));
-            System.out.println(this.weight);
         }
     }
     //Edge constructor that shows whether or not it is active
@@ -50,7 +48,6 @@ public class Edge {
             this.weight = 1000;
         } else {
             this.weight = Math.hypot((this.start.getX()-this.end.getX()), (this.start.getY()-this.end.getY()));
-            System.out.println(this.weight);
         }
     }
 

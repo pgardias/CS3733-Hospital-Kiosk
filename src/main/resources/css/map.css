@@ -1,3 +1,9 @@
+.floor-buttons{
+    -jfx-button-type: RAISED;
+    -fx-background-color: #0b2f5b;
+    -fx-text-fill: WHITE;
+    -fx-background-radius: 20;
+}
 .yellow-button {
     -jfx-button-type: RAISED;
     -fx-background-color: #F5BC3A;
