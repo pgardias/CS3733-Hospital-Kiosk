@@ -480,7 +480,7 @@ public class MapScreenController {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setFill(Color.GREEN);
-                            searchBarOverlayController.setSourceSearchBar(node.getShortName());
+                            searchBarOverlayController.setSourceSearchBar(node.getLongName());
                         }
                     }
                 } else if (searchBarOverlayController.isDestinationFocused()) {
@@ -489,7 +489,7 @@ public class MapScreenController {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setFill(Color.RED);
-                            searchBarOverlayController.setDestinationSearchBar(node.getShortName());
+                            searchBarOverlayController.setDestinationSearchBar(node.getLongName());
                         }
                     }
                 } else if (!firstSelected){
@@ -508,7 +508,7 @@ public class MapScreenController {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setFill(Color.RED);
-                            searchBarOverlayController.setDestinationSearchBar(node.getShortName());
+                            searchBarOverlayController.setDestinationSearchBar(node.getLongName());
                         }
                     }
                     firstSelected = false;
@@ -598,13 +598,21 @@ public class MapScreenController {
         if(pathMade != null){
             resetPath();
         }
+
+        double lineWidth, lineHeight;
+        double angle;
+
         this.pathMade = path;
         //setSpinner();
         Line line;
         for (Node n : path) {
             pastNode = currentNode;
             currentNode = n;
-            //if (path.get(0).equals(n) || path.get(path.size()-1).equals(n)) {
+            if (!path.get(0).equals(n)) {
+                //calculate the width and height of the line
+                lineWidth = pastNode.getX() - currentNode.getX();
+                lineHeight =
+            }
             nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
             // }
             if (path.get(0).equals(n)) {
