@@ -1,4 +1,4 @@
-package edu.wpi.cs3733d18.teamp.ui.map;
+package edu.wpi.cs3733d18.teamp.ui.home;
 
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;

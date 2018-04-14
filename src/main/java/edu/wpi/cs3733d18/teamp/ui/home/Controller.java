@@ -1,7 +1,8 @@
 package edu.wpi.cs3733d18.teamp.ui.home;
 
 import com.jfoenix.controls.JFXButton;
-import edu.wpi.cs3733d18.teamp.ui.map.LoginPopUpController;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733d18.teamp.ui.map.MapScreenController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,6 +25,12 @@ public class Controller {
 
     @FXML
     JFXButton mapButton;
+
+    @FXML
+    JFXTextField usernameTxt;
+
+    @FXML
+    JFXPasswordField passwordTxt;
 
     /**
      * This function respond to clicking the either the service request
@@ -67,6 +74,7 @@ public class Controller {
             loginPopUpController.startUp(false, this);
         }
         stage.show();
+//        usernameTxt.requestFocus();
     }
 
 
@@ -138,5 +146,16 @@ public class Controller {
         stage.setScene(new Scene(root, 1920, 1080));
         stage.setFullScreen(true);
         stage.show();
+    }
+
+    @FXML
+    public void loginButtonOp() {
+//        final Timeline timeline = new Timeline();
+//        timeline.setCycleCount(Timeline.INDEFINITE);
+//        timeline.setAutoReverse(true);
+//        final KeyValue kv = new KeyValue(loginTxt.opacityProperty(), 0);
+//        final KeyFrame kf = new KeyFrame(Duration.millis(600), kv);
+//        timeline.getKeyFrames().add(kf);
+//        timeline.play();
     }
 }
