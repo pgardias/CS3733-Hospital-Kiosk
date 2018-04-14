@@ -102,9 +102,7 @@ public class Controller {
         mapScreenController = loader.getController();
         mapScreenController.onStartUp();
 
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setFullScreen(true);
-        stage.show();
+        mapButton.getScene().setRoot(root);
         return true;
     }
 
