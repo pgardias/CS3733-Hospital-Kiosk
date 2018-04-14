@@ -11,7 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import java.io.IOException;
 
-public class ServiceRequestNewPopUpController {
+public class PopUpController {
 
     LanguageInterpreterController languageInterpreterController;
     ReligiousServiceController religiousServiceController;

@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class MapScreenSearchBarController implements Initializable{
+public class SearchBarOverlayController implements Initializable{
 
     public static final int X_OFFSET = -523;
     public static final int Y_OFFSET = 0;
@@ -361,7 +361,7 @@ public class MapScreenSearchBarController implements Initializable{
         EmailPopUpController emailPopUp;
 
         stage = new Stage();
-        loader = new FXMLLoader(getClass().getResource("/EmailPopUp.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/map/EmailPopUp.fxml"));
 
         try {
             root = loader.load();
@@ -393,7 +393,7 @@ public class MapScreenSearchBarController implements Initializable{
         PhonePopUpController phonePopUp;
 
         stage = new Stage();
-        loader = new FXMLLoader(getClass().getResource("/PhonePopUp.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/map/PhonePopUp.fxml"));
 
         try {
             root = loader.load();

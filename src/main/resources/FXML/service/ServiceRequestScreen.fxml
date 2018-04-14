@@ -13,7 +13,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #979fa3;" stylesheets="@css/common.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.service.ServiceRequestScreen">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #979fa3;" stylesheets="@../../css/common.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.service.ServiceRequestScreen">
     <top>
         <GridPane prefHeight="100.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
             <columnConstraints>
@@ -98,7 +98,7 @@
                   <Insets bottom="10.0" />
                </GridPane.margin>
             </Label>
-            <TableView fx:id="newRequestTable" editable="true" onMouseClicked="#onNewRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@css/tableview.css" tableMenuButtonVisible="true" GridPane.rowIndex="1">
+            <TableView fx:id="newRequestTable" editable="true" onMouseClicked="#onNewRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" tableMenuButtonVisible="true" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
@@ -107,7 +107,7 @@
                   <TableColumn fx:id="rType1" prefWidth="312.0" text="Request Type" />
                </columns>
             </TableView>
-            <TableView fx:id="inProgRequestTable" onMouseClicked="#onInProgRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@css/tableview.css" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <TableView fx:id="inProgRequestTable" onMouseClicked="#onInProgRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" GridPane.columnIndex="2" GridPane.rowIndex="1">
               <columns>
                 <TableColumn fx:id="rID2" prefWidth="100.0" text="Request ID" />
                 <TableColumn fx:id="rType2" prefWidth="312.0" text="Request Type" />
@@ -116,7 +116,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </TableView>
-            <TableView fx:id="completedRequestTable" onMouseClicked="#onCompletedRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@css/tableview.css" GridPane.columnIndex="4" GridPane.rowIndex="1">
+            <TableView fx:id="completedRequestTable" onMouseClicked="#onCompletedRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" GridPane.columnIndex="4" GridPane.rowIndex="1">
               <columns>
                 <TableColumn fx:id="rID3" prefWidth="100.0" text="Request ID" />
                 <TableColumn fx:id="rType3" prefWidth="312.0" text="Request Type" />

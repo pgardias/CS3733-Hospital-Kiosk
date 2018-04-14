@@ -2,7 +2,6 @@ package edu.wpi.cs3733d18.teamp.ui.admin;
 
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733d18.teamp.Main;
-import edu.wpi.cs3733d18.teamp.ui.admin.AdminMapViewController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,7 +28,7 @@ public class AdminMenuController {
         FXMLLoader loader;
 
         stage = (Stage) employeeButton.getScene().getWindow();
-        loader = new FXMLLoader(getClass().getResource("/ManageEmployeeScreen.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/ManageEmployeeScreen.fxml"));
         try {
             root = loader.load();
         } catch (IOException ioe) {
@@ -45,18 +44,18 @@ public class AdminMenuController {
         Stage stage;
         Parent root;
         FXMLLoader loader;
-        AdminMapViewController adminMapViewController;
+        MapBuilderController mapBuilderController;
 
         stage = (Stage) mapManagementButton.getScene().getWindow();
-        loader = new FXMLLoader(getClass().getResource("/AdminMapView.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/MapBuilder.fxml"));
         try {
             root = loader.load();
         } catch (IOException ioe) {
             ioe.printStackTrace();
             return;
         }
-        adminMapViewController = loader.getController();
-        adminMapViewController.startUp();
+        mapBuilderController = loader.getController();
+        mapBuilderController.startUp();
         stage.setScene(new Scene(root, 1920, 1080));
         stage.setFullScreen(true);
         stage.show();
@@ -68,7 +67,7 @@ public class AdminMenuController {
         FXMLLoader loader;
 
         stage = (Stage) backButton.getScene().getWindow();
-        loader = new FXMLLoader(getClass().getResource("/HomeScreen.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
         try {
             root = loader.load();
         } catch (IOException ioe) {

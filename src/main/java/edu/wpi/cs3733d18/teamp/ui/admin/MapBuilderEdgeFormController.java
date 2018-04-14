@@ -1,4 +1,4 @@
-package edu.wpi.cs3733d18.teamp.ui.admin.overlays;
+package edu.wpi.cs3733d18.teamp.ui.admin;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -11,7 +11,7 @@ import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.OrphanNodeException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
-import edu.wpi.cs3733d18.teamp.ui.admin.AdminMapViewController;
+import edu.wpi.cs3733d18.teamp.ui.admin.MapBuilderController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -50,17 +50,17 @@ public class MapBuilderEdgeFormController {
     GridPane formPane;
 
     /**
-     * Initializes the AdminMapViewController object and sets the delete button to invisible
+     * Initializes the MapBuilderController object and sets the delete button to invisible
      */
-    AdminMapViewController adminMapViewController;
-    public void startUp(AdminMapViewController adminMapViewController){
-        this.adminMapViewController = adminMapViewController;
+    MapBuilderController mapBuilderController;
+    public void startUp(MapBuilderController mapBuilderController){
+        this.mapBuilderController = mapBuilderController;
         deleteButton.setVisible(false);
     }
 
-    public void startUp(AdminMapViewController adminMapViewController, String edgeID, Node startNode,
+    public void startUp(MapBuilderController mapBuilderController, String edgeID, Node startNode,
                         Node endNode, Boolean isActive){
-        this.adminMapViewController = adminMapViewController;
+        this.mapBuilderController = mapBuilderController;
         editedEdgeID = edgeID;
         startNodeTxt.setText(startNode.getID());
         endNodeTxt.setText(endNode.getID());
@@ -75,7 +75,7 @@ public class MapBuilderEdgeFormController {
      */
     @FXML
     public void cancelFormButtonOp(ActionEvent e){
-        adminMapViewController.addOverlay();
+        mapBuilderController.addOverlay();
     }
 
     /**
@@ -121,8 +121,8 @@ public class MapBuilderEdgeFormController {
             }
         }
 
-        adminMapViewController.updateMap();
-        adminMapViewController.addOverlay();
+        mapBuilderController.updateMap();
+        mapBuilderController.addOverlay();
     }
 
     /**
@@ -178,8 +178,8 @@ public class MapBuilderEdgeFormController {
         } catch (NodeNotFoundException | EdgeNotFoundException ne) {
             ne.printStackTrace();
         }
-        adminMapViewController.updateMap();
-        adminMapViewController.addOverlay();
+        mapBuilderController.updateMap();
+        mapBuilderController.addOverlay();
     }
 
 }

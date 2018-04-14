@@ -93,7 +93,7 @@ public class RecordScreenController implements Initializable {
         Stage stage;
         Parent root;
 
-        loader = new FXMLLoader(getClass().getResource("/ServiceRequestScreen.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/service/ServiceRequestScreen.fxml"));
         try {
             root = loader.load();
         } catch (IOException ie) {

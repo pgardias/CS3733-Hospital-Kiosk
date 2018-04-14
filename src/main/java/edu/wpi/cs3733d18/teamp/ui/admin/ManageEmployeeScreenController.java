@@ -99,7 +99,7 @@ public class ManageEmployeeScreenController implements Initializable {
         Parent root;
         FXMLLoader loader;
 
-        loader = new FXMLLoader(getClass().getResource("/AdminMenuScreen.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
         stage = (Stage) backButton.getScene().getWindow();
         try {
             root = loader.load();
@@ -136,7 +136,7 @@ public class ManageEmployeeScreenController implements Initializable {
         FXMLLoader loader;
 
         stage = new Stage();
-        loader = new FXMLLoader(getClass().getResource("/ManageEmployee-EmployeeForm.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/EmployeeForm.fxml"));
 
         try {
             root = loader.load();
@@ -162,7 +162,7 @@ public class ManageEmployeeScreenController implements Initializable {
         FXMLLoader loader;
 
         stage = new Stage();
-        loader = new FXMLLoader(getClass().getResource("/ManageEmployee-EmployeeForm.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/EmployeeForm.fxml"));
 
         try {
             root = loader.load();

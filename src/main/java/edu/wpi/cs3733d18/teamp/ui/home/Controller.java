@@ -43,7 +43,7 @@ public class Controller {
 
         stage = new Stage();
         //getting the FXML file to load into the scene
-        loader = new FXMLLoader(getClass().getResource("/LoginPopUp.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/home/LoginPopUp.fxml"));
         //setting the new fxml file to this instance of the controller
         //loading the new FXML file
         try {
@@ -84,7 +84,7 @@ public class Controller {
         Group showNodes = new Group();
 
         stage = (Stage) mapButton.getScene().getWindow();
-        loader = new FXMLLoader(getClass().getResource("/MapScreen-Rebuild.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
         try {
             root = loader.load();
         } catch (IOException ie) {
@@ -106,7 +106,7 @@ public class Controller {
         Stage stage;
         Parent root;
 
-        loader = new FXMLLoader(getClass().getResource("/ServiceRequestScreen.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/service/ServiceRequestScreen.fxml"));
         try {
             root = loader.load();
         } catch (IOException ie) {
@@ -126,7 +126,7 @@ public class Controller {
         Stage stage;
         Parent root;
 
-        loader = new FXMLLoader(getClass().getResource("/AdminMenuScreen.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
         try {
             root = loader.load();
         } catch (IOException ie) {

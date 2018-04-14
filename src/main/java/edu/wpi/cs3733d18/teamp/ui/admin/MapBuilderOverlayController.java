@@ -1,6 +1,6 @@
-package edu.wpi.cs3733d18.teamp.ui.admin.overlays;
+package edu.wpi.cs3733d18.teamp.ui.admin;
 
-import edu.wpi.cs3733d18.teamp.ui.admin.AdminMapViewController;
+import edu.wpi.cs3733d18.teamp.ui.admin.MapBuilderController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class MapBuilderOverlayController {
 
-    AdminMapViewController adminMapViewController = null;
+    MapBuilderController mapBuilderController = null;
 
     @FXML
     Button addNewNodeButton;
@@ -25,28 +25,28 @@ public class MapBuilderOverlayController {
     Button backButton;
 
     /**
-     * initializes the adminMapViewController so this object can interact with the main screen
-     * @param adminMapViewController
+     * initializes the mapBuilderController so this object can interact with the main screen
+     * @param mapBuilderController
      */
-    public void startUp(AdminMapViewController adminMapViewController){
-        this.adminMapViewController = adminMapViewController;
+    public void startUp(MapBuilderController mapBuilderController){
+        this.mapBuilderController = mapBuilderController;
     }
 
     /**
-     * calls the newNodeForm() from the AdminMapViewController class
+     * calls the newNodeForm() from the MapBuilderController class
      */
     @FXML
     public void newNodeButtonOp(){
-        adminMapViewController.newNodeForm();
+        mapBuilderController.newNodeForm();
 
     }
 
     /**
-     * calls the newEdgeForm() from the AdminMapViewController class
+     * calls the newEdgeForm() from the MapBuilderController class
      */
     @FXML
     public void newEdgeButtonOp(){
-        adminMapViewController.newEdgeForm();
+        mapBuilderController.newEdgeForm();
     }
 
     /**
@@ -62,7 +62,7 @@ public class MapBuilderOverlayController {
 
         //setting stage back to home screen
         stage = (Stage) backButton.getScene().getWindow();
-        loader = new FXMLLoader(getClass().getResource("/AdminMenuScreen.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
         root = loader.load();
 
         stage.setScene(new Scene(root, 1920, 1080));

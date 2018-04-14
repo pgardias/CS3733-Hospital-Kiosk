@@ -4,8 +4,6 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.EdgeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
-import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
-import edu.wpi.cs3733d18.teamp.Pathfinding.Pathfinder;
 import edu.wpi.cs3733d18.teamp.Pathfinding.PathfindingContext;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,10 +11,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import edu.wpi.cs3733d18.teamp.Pathfinding.Node.nodeType;
-
-import java.util.ArrayList;
 
 public class Main extends Application {
 
@@ -35,7 +29,7 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/HomeScreen.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/FXML/home/HomeScreen.fxml"));
         primaryStage.setTitle("Brigham & Women's Hospital Kiosk");
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream( "/img/icons/favicon-16x16.png")));
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream( "/img/icons/favicon-32x32.png")));

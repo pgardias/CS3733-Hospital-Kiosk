@@ -96,7 +96,7 @@ public class MapScreenController {
     AnchorPane nodesEdgesPane;
 
 
-    MapScreenSearchBarController mapScreenSearchBarController = null;
+    SearchBarOverlayController searchBarOverlayController = null;
     MapScreenController mapScreenController;
 
     /**
@@ -135,7 +135,7 @@ public class MapScreenController {
         FXMLLoader loader;
 
         stage = (Stage) backButton.getScene().getWindow();
-        loader = new FXMLLoader(getClass().getResource("/HomeScreen.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
         try {
             root = loader.load();
         } catch (IOException ie) {
@@ -474,22 +474,22 @@ public class MapScreenController {
             if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
                 HashMap<String, Node> nodeSet;
                 nodeSet = db.getAllNodes();
-                if (mapScreenSearchBarController.isSourceFocused()) {
+                if (searchBarOverlayController.isSourceFocused()) {
                     clearStartNode();
                     for (String string : nodeDispSet.keySet()) {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setFill(Color.GREEN);
-                            mapScreenSearchBarController.setSourceSearchBar(node.getShortName());
+                            searchBarOverlayController.setSourceSearchBar(node.getShortName());
                         }
                     }
-                } else if (mapScreenSearchBarController.isDestinationFocused()) {
+                } else if (searchBarOverlayController.isDestinationFocused()) {
                     clearEndNode();
                     for (String string : nodeDispSet.keySet()) {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setFill(Color.RED);
-                            mapScreenSearchBarController.setDestinationSearchBar(node.getShortName());
+                            searchBarOverlayController.setDestinationSearchBar(node.getShortName());
                         }
                     }
                 } else if (!firstSelected){
@@ -498,7 +498,7 @@ public class MapScreenController {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setFill(Color.GREEN);
-                            mapScreenSearchBarController.setSourceSearchBar(node.getShortName());
+                            searchBarOverlayController.setSourceSearchBar(node.getShortName());
                         }
                     }
                     firstSelected = true;
@@ -508,7 +508,7 @@ public class MapScreenController {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setFill(Color.RED);
-                            mapScreenSearchBarController.setDestinationSearchBar(node.getShortName());
+                            searchBarOverlayController.setDestinationSearchBar(node.getShortName());
                         }
                     }
                     firstSelected = false;
@@ -562,15 +562,15 @@ public class MapScreenController {
         Stage stage;
         FXMLLoader loader;
 
-        loader = new FXMLLoader(getClass().getResource("/MapScreen-SearchBar.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/map/SearchBarOverlay.fxml"));
         try {
             root = loader.load();
         } catch (IOException ie) {
             ie.printStackTrace();
             return;
         }
-       mapScreenSearchBarController = loader.getController();
-       mapScreenSearchBarController.startUp(mapScreenController);
+       searchBarOverlayController = loader.getController();
+       searchBarOverlayController.startUp(mapScreenController);
        searchBarOverlayPane.setTop(root);
     }
 

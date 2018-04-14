@@ -1,4 +1,4 @@
-package edu.wpi.cs3733d18.teamp.ui.admin.overlays;
+package edu.wpi.cs3733d18.teamp.ui.admin;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -9,7 +9,7 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.EdgeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
-import edu.wpi.cs3733d18.teamp.ui.admin.AdminMapViewController;
+import edu.wpi.cs3733d18.teamp.ui.admin.MapBuilderController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -142,16 +142,16 @@ public class MapBuilderNodeFormController implements Initializable{
         sourceBinding.setPrefWidth(connectingNodeTextBox.getPrefWidth());
     }
 
-    AdminMapViewController adminMapViewController;
+    MapBuilderController mapBuilderController;
 
     /**
      * initializes a blank node form fxml
-     * AdminMapViewController is initializes
+     * MapBuilderController is initializes
      * and the combo boxes are set up
-     * @param adminMapViewController
+     * @param mapBuilderController
      */
-    public void startUp(AdminMapViewController adminMapViewController){
-        this.adminMapViewController = adminMapViewController;
+    public void startUp(MapBuilderController mapBuilderController){
+        this.mapBuilderController = mapBuilderController;
 
         nodeTypeComboBox.setItems(nodeTypes);
         buildingComboBox.setItems(buildingOptions);
@@ -163,8 +163,8 @@ public class MapBuilderNodeFormController implements Initializable{
 
     /**
      * intializes a filled in node form fxml
-     * AdminMapViewController is intialized
-     * @param adminMapViewController
+     * MapBuilderController is intialized
+     * @param mapBuilderController
      * @param nodeID
      * @param nodeLongName
      * @param x2d
@@ -176,10 +176,10 @@ public class MapBuilderNodeFormController implements Initializable{
      * @param nodeType
      * @param isActive
      */
-    public void startUp(AdminMapViewController adminMapViewController, String nodeID, String nodeLongName,
+    public void startUp(MapBuilderController mapBuilderController, String nodeID, String nodeLongName,
                         double x2d, double y2d, double x3d, double y3d, String nodeFloor, String nodeBuilding,
                         String nodeType, Boolean isActive){
-        this.adminMapViewController = adminMapViewController;
+        this.mapBuilderController = mapBuilderController;
         longNameTxt.setText(nodeLongName);
         nodex2Txt.setText(Double.toString(x2d));
         nodey2Txt.setText(Double.toString(y2d));
@@ -211,8 +211,8 @@ public class MapBuilderNodeFormController implements Initializable{
     @FXML
     public void cancelFormButtonOp(ActionEvent e){
 
-        adminMapViewController.addOverlay();
-        adminMapViewController.updateMap();
+        mapBuilderController.addOverlay();
+        mapBuilderController.updateMap();
     }
 
     /**
@@ -279,8 +279,8 @@ public class MapBuilderNodeFormController implements Initializable{
                 enfe.printStackTrace();
             }
         }
-        adminMapViewController.addOverlay();
-        adminMapViewController.updateMap();
+        mapBuilderController.addOverlay();
+        mapBuilderController.updateMap();
 
     }
 
@@ -346,8 +346,8 @@ public class MapBuilderNodeFormController implements Initializable{
             ne.printStackTrace();
         }
 
-        adminMapViewController.updateMap();
-        adminMapViewController.addOverlay();
+        mapBuilderController.updateMap();
+        mapBuilderController.addOverlay();
     }
 
 

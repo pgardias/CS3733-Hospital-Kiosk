@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 
 
 public class ServiceRequestScreen implements Initializable{
-    ServiceRequestNewPopUpController serviceRequestNewPopUpController;
+    PopUpController popUpController;
     DBSystem db = DBSystem.getInstance();
     ArrayList<Request> requests;
     int requestSize;
@@ -284,7 +284,7 @@ public class ServiceRequestScreen implements Initializable{
         FXMLLoader loader;
 
         stage = (Stage) backButton.getScene().getWindow();
-        loader = new FXMLLoader(getClass().getResource("/HomeScreen.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
         try {
             root = loader.load();
         } catch (IOException ie) {
@@ -310,7 +310,7 @@ public class ServiceRequestScreen implements Initializable{
         RecordScreenController recordScreenController;
 
         stage = (Stage) recordsButton.getScene().getWindow();
-        loader = new FXMLLoader(getClass().getResource("/RecordScreen.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/service/RecordScreen.fxml"));
 
         try {
             root = loader.load();
@@ -337,7 +337,7 @@ public class ServiceRequestScreen implements Initializable{
         FXMLLoader loader;
 
         stage = new Stage();
-        loader = new FXMLLoader(getClass().getResource("/ServiceRequestScreen-FormContainer.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/service/FormContainer.fxml"));
 
         try {
             root = loader.load();
@@ -346,8 +346,8 @@ public class ServiceRequestScreen implements Initializable{
             return false;
         }
 
-        serviceRequestNewPopUpController = loader.getController();
-        serviceRequestNewPopUpController.StartUp(this);
+        popUpController = loader.getController();
+        popUpController.StartUp(this);
         stage.setScene(new Scene(root, 1000, 950));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(newRequestButton.getScene().getWindow());

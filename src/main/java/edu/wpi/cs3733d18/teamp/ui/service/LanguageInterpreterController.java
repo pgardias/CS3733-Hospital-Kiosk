@@ -28,7 +28,7 @@ public class LanguageInterpreterController implements Initializable {
 
     ArrayList<String> locationWords = new ArrayList<String>();
     DBSystem db = DBSystem.getInstance();
-    ServiceRequestNewPopUpController serviceRequestNewPopUpController;
+    PopUpController popUpController;
     ServiceRequestScreen serviceRequestScreen;
 
     @FXML
@@ -91,11 +91,11 @@ public class LanguageInterpreterController implements Initializable {
 
     /**
      * Calls startup
-     * @param serviceRequestNewPopUpController
+     * @param popUpController
      */
-    public void StartUp(ServiceRequestScreen serviceRequestScreen, ServiceRequestNewPopUpController serviceRequestNewPopUpController) {
+    public void StartUp(ServiceRequestScreen serviceRequestScreen, PopUpController popUpController) {
         this.serviceRequestScreen = serviceRequestScreen;
-        this.serviceRequestNewPopUpController = serviceRequestNewPopUpController;
+        this.popUpController = popUpController;
     }
 
     /**

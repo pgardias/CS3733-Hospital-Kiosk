@@ -8,9 +8,6 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.Pathfinding.PathfindingContext;
-import edu.wpi.cs3733d18.teamp.ui.admin.overlays.MapBuilderOverlayController;
-import edu.wpi.cs3733d18.teamp.ui.admin.overlays.MapBuilderEdgeFormController;
-import edu.wpi.cs3733d18.teamp.ui.admin.overlays.MapBuilderNodeFormController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -43,7 +40,7 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 
-public class AdminMapViewController implements Initializable {
+public class MapBuilderController implements Initializable {
 
     public static final int X_OFFSET = -523;
     public static final int Y_OFFSET = 0;
@@ -135,7 +132,7 @@ public class AdminMapViewController implements Initializable {
     SpinnerValueFactory<String> floors = new SpinnerValueFactory.ListSpinnerValueFactory<String>(floorsList);
 
 
-    AdminMapViewController adminMapViewController = null;
+    MapBuilderController mapBuilderController = null;
     MapBuilderOverlayController mapBuilderOverlayController = null;
 
 
@@ -189,14 +186,14 @@ public class AdminMapViewController implements Initializable {
 
     /**
      * intializes values such as
-     *      adminMapViewController to this object
+     *      mapBuilderController to this object
      *      sets the current floor
      *      initializes the zoom slider and binds it to the map
      *      draws the initial screen and sets mouse events
      */
     @FXML
     public void startUp(){
-        adminMapViewController = this;
+        mapBuilderController = this;
         floors.setValue("2");
         currentFloor = Node.floorType.LEVEL_2;
         floorSpinner.setValueFactory(floors);
@@ -814,7 +811,7 @@ public class AdminMapViewController implements Initializable {
         Stage stage;
         FXMLLoader loader;
 
-        loader = new FXMLLoader(getClass().getResource("/MapBuilderAddOverlay.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/MpaBuilderOverlay.fxml"));
         try {
             root = loader.load();
         } catch (IOException ie){
@@ -825,7 +822,7 @@ public class AdminMapViewController implements Initializable {
         firstSelect = null;
         secondSelect = null;
         mapBuilderOverlayController = loader.getController();
-        mapBuilderOverlayController.startUp(adminMapViewController);
+        mapBuilderOverlayController.startUp(mapBuilderController);
         edgeSelected = false;
         nodeState = 0;
         formOverlayPane.setLeft(root);
@@ -841,7 +838,7 @@ public class AdminMapViewController implements Initializable {
         Stage stage;
         FXMLLoader loader;
 
-        loader = new FXMLLoader(getClass().getResource("/MapBuilder-NodeForm.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/NodeForm.fxml"));
 
         try{
             root = loader.load();
@@ -850,7 +847,7 @@ public class AdminMapViewController implements Initializable {
             return;
         }
         mapBuilderNodeFormController = loader.getController();
-        mapBuilderNodeFormController.startUp(adminMapViewController);
+        mapBuilderNodeFormController.startUp(mapBuilderController);
         formOverlayPane.setLeft(root);
     }
 
@@ -874,7 +871,7 @@ public class AdminMapViewController implements Initializable {
         Stage stage;
         FXMLLoader loader;
 
-        loader = new FXMLLoader(getClass().getResource("/MapBuilder-NodeForm.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/NodeForm.fxml"));
 
         try{
             root = loader.load();
@@ -883,7 +880,7 @@ public class AdminMapViewController implements Initializable {
             return;
         }
         mapBuilderNodeFormController = loader.getController();
-        mapBuilderNodeFormController.startUp(adminMapViewController, nodeID, nodeLongName, x2d, y2d, x3d, y3d, nodeFloor,
+        mapBuilderNodeFormController.startUp(mapBuilderController, nodeID, nodeLongName, x2d, y2d, x3d, y3d, nodeFloor,
                 nodeBuilding, nodeType, isActive);
         formOverlayPane.setLeft(root);
     }
@@ -899,7 +896,7 @@ public class AdminMapViewController implements Initializable {
         Stage stage;
         FXMLLoader loader;
 
-        loader = new FXMLLoader(getClass().getResource("/MapBuilder-EdgeForm.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/EdgeForm.fxml"));
 
         try{
             root = loader.load();
@@ -910,7 +907,7 @@ public class AdminMapViewController implements Initializable {
         edgeSelected = true;
         nodeState = 0;
         mapBuilderEdgeFormController = loader.getController();
-        mapBuilderEdgeFormController.startUp(adminMapViewController);
+        mapBuilderEdgeFormController.startUp(mapBuilderController);
         formOverlayPane.setLeft(root);
     }
 
@@ -928,7 +925,7 @@ public class AdminMapViewController implements Initializable {
         Stage stage;
         FXMLLoader loader;
 
-        loader = new FXMLLoader(getClass().getResource("/MapBuilder-EdgeForm.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/EdgeForm.fxml"));
 
         try{
             root = loader.load();
@@ -939,7 +936,7 @@ public class AdminMapViewController implements Initializable {
         edgeSelected = true;
         nodeState = 0;
         mapBuilderEdgeFormController = loader.getController();
-        mapBuilderEdgeFormController.startUp(adminMapViewController, edgeID, startNode,
+        mapBuilderEdgeFormController.startUp(mapBuilderController, edgeID, startNode,
                 endNode, isActive);
         formOverlayPane.setLeft(root);
     }
