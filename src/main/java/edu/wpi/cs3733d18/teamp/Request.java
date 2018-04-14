@@ -8,7 +8,7 @@ import java.util.Date;
 public class Request {
 
     // Request enum
-    public enum requesttype {LANGUAGEINTERP, HOLYPERSON, DEFAULT}
+    public enum requesttype {LANGUAGEINTERP, HOLYPERSON, EMERGENCY, DEFAULT}
 
     // Attributes
     private int requestID;
@@ -21,6 +21,7 @@ public class Request {
     private Timestamp timeMade;
     private Timestamp timeCompleted;
     private int completed;
+    private int priority;
 
     // Constructor
     public Request(){} // Empty constructor
@@ -35,6 +36,13 @@ public class Request {
         this.timeMade = timeMade;
         this.timeCompleted = timeCompleted;
         this.completed = completed;
+
+        if (this.requestType == requesttype.EMERGENCY) {
+            this.priority = 1;
+        }
+        else {
+            this.priority = 0;
+        }
     }
 
     /**
@@ -87,6 +95,10 @@ public class Request {
         return completed;
     }
 
+    public int getPriority() {
+        return priority;
+    }
+
     // Setters
     public void setRequestID(int requestID) {
         this.requestID = requestID;
@@ -123,18 +135,10 @@ public class Request {
     }
 
     public void setCompleted(int completed) {
-        switch(completed){
-            case 0:
-                this.completed = 0;
-                break;
-            case 1:
-                this.completed = 1;
-                break;
-            case 2:
-                this.completed = 2;
-                break;
-            default:
-                this.completed = 0;
-        }
+        this.completed = completed;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }
