@@ -206,14 +206,14 @@ public class SearchBarOverlayController implements Initializable{
 
         startLabel.setLayoutX((srcNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
         startLabel.setLayoutY((srcNode.getyDisplay()-40- Y_OFFSET)*Y_SCALE);
-        startLabel.setText(srcNode.getShortName());
+        startLabel.setText(srcNode.getLongName());
         startLabel.setFont(font);
 
         startLabel.toFront();
 
         endLabel.setLayoutX((dstNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
         endLabel.setLayoutY((dstNode.getyDisplay()-34- Y_OFFSET)*Y_SCALE);
-        endLabel.setText(dstNode.getShortName());
+        endLabel.setText(dstNode.getLongName());
         endLabel.setFont(font);
 
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
