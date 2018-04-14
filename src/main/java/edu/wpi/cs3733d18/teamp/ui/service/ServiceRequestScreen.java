@@ -157,7 +157,7 @@ public class ServiceRequestScreen implements Initializable{
         try {
             Request r = db.getOneRequest(requestID);
             timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
-            requestTypeLabel.setText(r.getRequestType().toString());
+            requestTypeLabel.setText(r.toString());
             locationLabel.setText(r.getLocation());
             createdByLabel.setText(r.getMadeBy());
             assignedToLabel.setText(r.getCompletedBy());
@@ -177,7 +177,7 @@ public class ServiceRequestScreen implements Initializable{
             Request r = db.getOneRequest(requestID);
             timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
             timeCompletedLabel.setText("");
-            requestTypeLabel.setText(r.getRequestType().toString());
+            requestTypeLabel.setText(r.toString());
             locationLabel.setText(r.getLocation());
             createdByLabel.setText(r.getMadeBy());
             assignedToLabel.setText(r.getCompletedBy());
@@ -197,7 +197,7 @@ public class ServiceRequestScreen implements Initializable{
             Request r = db.getOneRequest(requestID);
             timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
             timeCompletedLabel.setText(r.convertTime(r.getTimeCompleted().getTime()));
-            requestTypeLabel.setText(r.getRequestType().toString());
+            requestTypeLabel.setText(r.toString());
             locationLabel.setText(r.getLocation());
             createdByLabel.setText(r.getMadeBy());
             assignedToLabel.setText(r.getCompletedBy());
@@ -218,16 +218,27 @@ public class ServiceRequestScreen implements Initializable{
         int requestID = newRequestTable.getSelectionModel().getSelectedItem().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
-            if (Main.currentUser.getIsAdmin() ||
-                    (db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType())) &&
-                    Main.currentUser.getSubType().equals(r.getSubType()))) {
-                r.setCompleted(1);
-                String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
-                r.setCompletedBy(firstAndLastName);
-                db.modifyRequest(r);
+            if (r.getRequestType() == Request.requesttype.LANGUAGEINTERP || r.getRequestType() == Request.requesttype.HOLYPERSON) {
+                if (Main.currentUser.getIsAdmin() ||
+                        (db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType())) &&
+                                Main.currentUser.getSubType().equals(r.getSubType()))) {
+                    r.setCompleted(1);
+                    String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+                    r.setCompletedBy(firstAndLastName);
+                    db.modifyRequest(r);
+                } else {
+                    incorrectPermissionsLabel.setText("You are not authorized to claim this service request");
+                }
             }
             else {
-                incorrectPermissionsLabel.setText("You are not authorized to claim this service request");
+                if (Main.currentUser.getIsAdmin() || db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType()))) {
+                    r.setCompleted(1);
+                    String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+                    r.setCompletedBy(firstAndLastName);
+                    db.modifyRequest(r);
+                } else {
+                    incorrectPermissionsLabel.setText("You are not authorized to claim this service request");
+                }
             }
 
         }

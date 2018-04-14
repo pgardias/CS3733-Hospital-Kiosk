@@ -271,6 +271,10 @@ public class RequestRepo {
                 reqtype = Request.requesttype.EMERGENCY;
                 break;
 
+            case "computer service":
+                reqtype = Request.requesttype.COMPUTER;
+                break;
+
             case "language interpreter":
                 reqtype = Request.requesttype.LANGUAGEINTERP;
                 break;
@@ -292,6 +296,10 @@ public class RequestRepo {
         switch (type) {
             case EMERGENCY:
                 reqtype = "emergency";
+                break;
+
+            case COMPUTER:
+                reqtype = "computer service";
                 break;
 
             case LANGUAGEINTERP:

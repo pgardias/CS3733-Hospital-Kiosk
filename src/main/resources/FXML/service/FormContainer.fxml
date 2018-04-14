@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <BorderPane fx:id="serviceRequestPopup" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1000.0" styleClass="background" stylesheets="@../../css/common.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.service.PopUpController">
    <top>
       <GridPane prefHeight="150.0" BorderPane.alignment="CENTER">
@@ -30,6 +29,7 @@
               <items>
                 <MenuItem fx:id="languageInterpreter" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Language Interpreter Request" />
                   <MenuItem fx:id="religiousPeople" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Religious Request" />
+                  <MenuItem fx:id="computerService" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Computer Service Request" />
               </items>
             </MenuButton>
          </children>

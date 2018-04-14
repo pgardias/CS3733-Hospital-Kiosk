@@ -15,6 +15,7 @@ public class PopUpController {
 
     LanguageInterpreterController languageInterpreterController;
     ReligiousServiceController religiousServiceController;
+    ComputerServiceController computerServiceController;
     ServiceRequestScreen serviceRequestScreen;
     DBSystem db = DBSystem.getInstance();
     Controller controller = null;
@@ -29,6 +30,9 @@ public class PopUpController {
 
     @FXML
     MenuItem religiousPeople;
+
+    @FXML
+    MenuItem computerService;
 
     @FXML
     MenuButton serviceRequestMenu;
@@ -58,6 +62,8 @@ public class PopUpController {
         formName = formName.replaceAll("\\s", "");
         requestType = formName;
 
+        System.out.println(requestType);
+
         //loads the appropriate scene depending on the option selected
         serviceRequestMenu.setText(selectedForm.getText());
         loader = new FXMLLoader(getClass().getResource("/FXML/service/" + requestType + "Form.fxml"));
@@ -78,6 +84,11 @@ public class PopUpController {
         if (requestType.equals("Religious")) {
             religiousServiceController = loader.getController();
             religiousServiceController.StartUp(serviceRequestScreen, this);
+            serviceRequestPopup.setCenter(root);
+        }
+        if (requestType.equals("ComputerService")) {
+            computerServiceController = loader.getController();
+            computerServiceController.StartUp(serviceRequestScreen, this);
             serviceRequestPopup.setCenter(root);
         }
 

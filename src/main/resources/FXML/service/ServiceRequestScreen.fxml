@@ -174,18 +174,18 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
-                  <Label fx:id="timeCreatedLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Label fx:id="requestTypeLabel" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Label fx:id="locationLabel" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Label fx:id="createdByLabel" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Label fx:id="assignedToLabel" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Label fx:id="additionalInfoLabel" GridPane.columnIndex="7" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                  <Label fx:id="timeCreatedLabel" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="requestTypeLabel" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="locationLabel" textAlignment="CENTER" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="createdByLabel" textAlignment="CENTER" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="assignedToLabel" textAlignment="CENTER" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="additionalInfoLabel" textAlignment="CENTER" GridPane.columnIndex="7" GridPane.rowIndex="1" GridPane.valignment="TOP">
                      <GridPane.margin>
                         <Insets left="5.0" top="5.0" />
                      </GridPane.margin>
                   </Label>
                   <Label text="Time Completed" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-                  <Label fx:id="timeCompletedLabel" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="timeCompletedLabel" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </children>
