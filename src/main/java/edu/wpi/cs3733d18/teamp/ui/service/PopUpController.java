@@ -60,7 +60,7 @@ public class PopUpController {
 
         //loads the appropriate scene depending on the option selected
         serviceRequestMenu.setText(selectedForm.getText());
-        loader = new FXMLLoader(getClass().getResource("/ServiceRequest-" + requestType + "Form.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/service/" + requestType + "Form.fxml"));
 
         try {
             root = loader.load();
