@@ -570,10 +570,11 @@ public class MapScreenController {
                     firstSelected = false;
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED) { // TODO Check zoom level to prevent graphical glitches
-                System.out.println(Runtime.getRuntime().toString() + ": MOUSE_ENTERED event at " + event.getSource());
+                System.out.println("MOUSE_ENTERED event at " + event.getSource());
                 for (String string : nodeDispSet.keySet()) {
                     if (nodeDispSet.get(string) == event.getSource()) {
                         if (popOver != null && popOver.getOpacity() == 0) {
+                            popOver.hide();
                             popOver = null;
                         }
                         Node node = nodeSet.get(string);
@@ -581,21 +582,23 @@ public class MapScreenController {
                         Label nodeLongNameLabel = new Label("Name: " + node.getLongName());
                         nodeIDLabel.setStyle("-fx-font-size: 18px; -fx-alignment: CENTER; -fx-padding: 10px 10px 0 10px;");
                         nodeLongNameLabel.setStyle("-fx-font-size: 18px; -fx-alignment: CENTER; -fx-padding: 0 10px 10px 10px;");
-//                        popOver = new PopOver(new VBox(nodeIDLabel, nodeLongNameLabel));
-                        popOver = new PopOver();
-                        popOver.setStyle("");
-//                        popOver.getRoot().getStylesheets().add("/css/map.css");
+                        VBox popOverVBox = new VBox(nodeIDLabel, nodeLongNameLabel);
+//                        popOverVBox.setStyle("-fx-font-size: 18px; -fx-alignment: CENTER; -fx-padding: 10px 10px 0 10px;");
+                        popOver = new PopOver(popOverVBox);
                         popOver.setTitle(node.getType().toString());
                         popOver.setHeaderAlwaysVisible(true);
                         popOver.show((javafx.scene.Node) event.getSource());
-                        popOver.setContentNode(new VBox(nodeIDLabel, nodeLongNameLabel));
+//                        popOver.setContentNode(new VBox(nodeIDLabel, nodeLongNameLabel));
+                        popOver.setCloseButtonEnabled(false);
+                        popOver.setCornerRadius(20);
                         popOver.setAutoFix(true);
                         popOver.setAutoHide(true);
+                        popOver.setDetachable(false);
                         popOver.setHideOnEscape(true);
                     }
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
-//                popOver.hide();
+                popOver.hide();
             }
             event.consume();
         }
