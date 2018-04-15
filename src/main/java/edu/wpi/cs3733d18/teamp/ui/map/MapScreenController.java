@@ -433,16 +433,6 @@ public class MapScreenController {
                             searchBarOverlayController.setDestinationSearchBar(node.getShortName());
                         }
                     }
-                } else if (!firstSelected){
-                    clearStartNode();
-                    for (String string : nodeDispSet.keySet()) {
-                        if (nodeDispSet.get(string) == event.getSource()) {
-                            Node node = nodeSet.get(string);
-                            nodeDispSet.get(string).setFill(Color.GREEN);
-                            searchBarOverlayController.setSourceSearchBar(node.getShortName());
-                        }
-                    }
-                    firstSelected = true;
                 } else {
                     clearEndNode();
                     for (String string : nodeDispSet.keySet()) {
@@ -452,7 +442,6 @@ public class MapScreenController {
                             searchBarOverlayController.setDestinationSearchBar(node.getShortName());
                         }
                     }
-                    firstSelected = false;
                 }
             }
             event.consume();
