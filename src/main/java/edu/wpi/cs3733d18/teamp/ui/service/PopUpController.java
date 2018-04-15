@@ -15,6 +15,13 @@ public class PopUpController {
 
     LanguageInterpreterController languageInterpreterController;
     ReligiousServiceController religiousServiceController;
+    ComputerServiceController computerServiceController;
+    GiftDeliveryController giftDeliveryController;
+    MaintenanceController maintenanceController;
+    AudioVisualController audioVisualController;
+    SanitationController sanitationController;
+    SecurityController securityController;
+
     ServiceRequestScreen serviceRequestScreen;
     DBSystem db = DBSystem.getInstance();
     Controller controller = null;
@@ -29,6 +36,24 @@ public class PopUpController {
 
     @FXML
     MenuItem religiousPeople;
+
+    @FXML
+    MenuItem computerService;
+
+    @FXML
+    MenuItem securityIssue;
+
+    @FXML
+    MenuItem maintenanceProblem;
+
+    @FXML
+    MenuItem sanitationMess;
+
+    @FXML
+    MenuItem audioVisualHelp;
+
+    @FXML
+    MenuItem giftDelivery;
 
     @FXML
     MenuButton serviceRequestMenu;
@@ -58,6 +83,8 @@ public class PopUpController {
         formName = formName.replaceAll("\\s", "");
         requestType = formName;
 
+        System.out.println(requestType);
+
         //loads the appropriate scene depending on the option selected
         serviceRequestMenu.setText(selectedForm.getText());
         loader = new FXMLLoader(getClass().getResource("/FXML/service/" + requestType + "Form.fxml"));
@@ -70,16 +97,34 @@ public class PopUpController {
             return false;
         }
 
-        if (requestType.equals("LanguageInterpreter")) {
-            languageInterpreterController = loader.getController();
-            languageInterpreterController.StartUp(serviceRequestScreen, this);
-            serviceRequestPopup.setCenter(root);
+        switch(requestType) {
+            case "LanguageInterpreter":
+                languageInterpreterController = loader.getController();
+                languageInterpreterController.StartUp(serviceRequestScreen, this);
+            case "Religious":
+                religiousServiceController = loader.getController();
+                religiousServiceController.StartUp(serviceRequestScreen, this);
+            case "ComputerService":
+                computerServiceController = loader.getController();
+                computerServiceController.StartUp(serviceRequestScreen, this);
+            case "Security":
+                securityController = loader.getController();
+                securityController.StartUp(serviceRequestScreen, this);
+            case "Maintenance":
+                maintenanceController = loader.getController();
+                maintenanceController.StartUp(serviceRequestScreen,this);
+            case "Sanitation":
+                sanitationController = loader.getController();
+                sanitationController.StartUp(serviceRequestScreen, this);
+            case "AudioorVisualHelp":
+                audioVisualController = loader.getController();
+                audioVisualController.StartUp(serviceRequestScreen,this);
+            case "GiftDelivery":
+                giftDeliveryController = loader.getController();
+                giftDeliveryController.StartUp(serviceRequestScreen,this);
+
         }
-        if (requestType.equals("Religious")) {
-            religiousServiceController = loader.getController();
-            religiousServiceController.StartUp(serviceRequestScreen, this);
-            serviceRequestPopup.setCenter(root);
-        }
+        serviceRequestPopup.setCenter(root);
 
         return true;
     }
