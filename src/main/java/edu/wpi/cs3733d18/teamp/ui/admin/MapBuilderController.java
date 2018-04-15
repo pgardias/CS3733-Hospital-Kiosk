@@ -49,8 +49,10 @@ public class MapBuilderController implements Initializable {
     public double Y_SCALE = 1080.0/3400.0;
     public static final double NODE_RADIUS = 3.0;
     public static final double EDGE_WIDTH = 1.0;
-    public static final int WIDTH = 1380;
-    public static final int HEIGHT = 776;
+    public static final int IMG_WIDTH = 5000;
+    public int IMG_HEIGHT = 3400;
+    private static final double ZOOM_3D_MIN = 1.013878875;
+    private static final double ZOOM_2D_MIN = 1.208888889;
 
     Circle newNodeCircle = new Circle();
 
@@ -203,7 +205,8 @@ public class MapBuilderController implements Initializable {
         floors.setValue("2");
         currentFloor = Node.floorType.LEVEL_2;
         floorSpinner.setValueFactory(floors);
-        zoomSlider.setValue(1);
+        zoomSlider.setMin(ZOOM_2D_MIN);
+        zoomSlider.setValue(ZOOM_2D_MIN);
         Image newImage = new Image("/img/maps/2d/02_thesecondfloor.png");
         mapImage.setImage(newImage);
         mapImage.scaleXProperty().bind(zoomSlider.valueProperty());
@@ -340,14 +343,17 @@ public class MapBuilderController implements Initializable {
         double newValue = (s.getDeltaY())/15 + zoomSlider.getValue();
         zoomSlider.setValue(newValue);
 
-        if(newTranslateX > (X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880))
-            newTranslateX = X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880;
-        if(newTranslateX < -(X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880))
-            newTranslateX = -(X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880);
-        if(newTranslateY > (Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530))
-            newTranslateY = (Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530);
-        if(newTranslateY < -(Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530))
-            newTranslateY = -(Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530);
+        double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
+        double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
+
+        if(newTranslateX > (translateSlopeX - 1920)/2)
+            newTranslateX = (translateSlopeX - 1920)/2;
+        if(newTranslateX < -(translateSlopeX - 1920)/2)
+            newTranslateX = -(translateSlopeX - 1920)/2;
+        if(newTranslateY > (translateSlopeY - 1080)/2)
+            newTranslateY = (translateSlopeY - 1080)/2;
+        if(newTranslateY < -(translateSlopeY - 1080)/2)
+            newTranslateY = -(translateSlopeY - 1080)/2;
         mapImage.setTranslateX(newTranslateX);
         mapImage.setTranslateY(newTranslateY);
         nodesEdgesPane.setTranslateX(newTranslateX);
@@ -833,15 +839,17 @@ public class MapBuilderController implements Initializable {
                 newTranslateX = orgTranslateX + offsetX;
                 newTranslateY = orgTranslateY + offsetY;
 
-                System.out.println("Offset X: " + offsetX + " Offset Y: " + offsetY);
-                if(newTranslateX > (X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880))
-                    newTranslateX = X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880;
-                if(newTranslateX < -(X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880))
-                    newTranslateX = -(X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880);
-                if(newTranslateY > (Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530))
-                    newTranslateY = (Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530);
-                if(newTranslateY < -(Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530))
-                    newTranslateY = -(Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530);
+                double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
+                double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
+
+                if(newTranslateX > (translateSlopeX - 1920)/2)
+                    newTranslateX = (translateSlopeX - 1920)/2;
+                if(newTranslateX < -(translateSlopeX - 1920)/2)
+                    newTranslateX = -(translateSlopeX - 1920)/2;
+                if(newTranslateY > (translateSlopeY - 1080)/2)
+                    newTranslateY = (translateSlopeY - 1080)/2;
+                if(newTranslateY < -(translateSlopeY - 1080)/2)
+                    newTranslateY = -(translateSlopeY - 1080)/2;
                 mapImage.setTranslateX(newTranslateX);
                 mapImage.setTranslateY(newTranslateY);
                 nodesEdgesPane.setTranslateX(newTranslateX);
@@ -1320,12 +1328,18 @@ public class MapBuilderController implements Initializable {
             Y_OFFSET = -19;
             X_SCALE = 1920.0/5000.0;
             Y_SCALE = 1065.216/2774.0;
+            IMG_HEIGHT = 2774;
+            zoomSlider.setMin(ZOOM_3D_MIN);
+            zoomSlider.setValue(ZOOM_3D_MIN);
             toggleOn = true;
         } else {
             X_OFFSET = -523;
             Y_OFFSET = 0;
             X_SCALE = 1588.235294/5000.0;
             Y_SCALE = 1080.0/3400.0;
+            IMG_HEIGHT = 3400;
+            zoomSlider.setMin(ZOOM_2D_MIN);
+            zoomSlider.setValue(ZOOM_2D_MIN);
             toggleOn = false;
         }
         updateMap();
