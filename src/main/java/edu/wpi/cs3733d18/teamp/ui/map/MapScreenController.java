@@ -581,13 +581,13 @@ public class MapScreenController {
                         }
                         Node node = nodeSet.get(string);
                         Label nodeTypeLabel = new Label(node.getType().toString().toUpperCase());
-                        Label nodeIDLabel = new Label("ID: " + node.getID());
                         Label nodeLongNameLabel = new Label("Name: " + node.getLongName());
+                        Label nodeBuildingLabel = new Label("Building: "+ node.getBuilding().toString());
                         nodeTypeLabel.setStyle("-fx-font-size: 28px; -fx-text-fill: #0b2f5b; -fx-font-weight: 700; -fx-padding: 10px 10px 0 10px;");
                         nodeTypeLabel.setAlignment(Pos.CENTER);
-                        nodeIDLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 0 10px;");
-                        nodeLongNameLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
-                        VBox popOverVBox = new VBox(nodeTypeLabel, nodeIDLabel, nodeLongNameLabel);
+                        nodeLongNameLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 0 10px;");
+                        nodeBuildingLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
+                        VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
 //                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
                         popOver = new PopOver(popOverVBox);
 //                        popOver.setTitle(node.getType().toString());
