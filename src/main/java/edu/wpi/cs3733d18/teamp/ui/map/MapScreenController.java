@@ -162,10 +162,7 @@ public class MapScreenController {
             return;
         }
 
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setTitle("Home Screen");
-        stage.setFullScreen(true);
-        stage.show();
+        backButton.getScene().setRoot(root);
     }
 
 
