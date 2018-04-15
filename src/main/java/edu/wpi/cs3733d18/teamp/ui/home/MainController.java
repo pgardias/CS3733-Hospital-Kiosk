@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class Controller {
+public class MainController {
 
     @FXML
     JFXButton adminButton;
@@ -51,7 +51,7 @@ public class Controller {
         stage = new Stage();
         //getting the FXML file to load into the scene
         loader = new FXMLLoader(getClass().getResource("/FXML/home/LoginPopUp.fxml"));
-        //setting the new fxml file to this instance of the controller
+        //setting the new fxml file to this instance of the mainController
         //loading the new FXML file
         try {
             root = loader.load();
@@ -66,7 +66,7 @@ public class Controller {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(adminButton.getScene().getWindow());
         //check which button is pressed to display the correct title
-        //TODO fix the method to work with new controller
+        //TODO fix the method to work with new mainController
         if(e.getSource() == adminButton) {
             loginPopUpController.startUp(true, this);
         }

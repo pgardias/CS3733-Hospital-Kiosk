@@ -14,3 +14,4 @@ screenshot.png
 *.class
 *.jar
 *.lock
+scenicView\.properties

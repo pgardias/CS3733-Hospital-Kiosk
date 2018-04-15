@@ -141,7 +141,7 @@ public class SearchBarOverlayController implements Initializable{
 
         int i = 0;
         for (Node node : nodeSet.values()) {
-            sourceWords.add(node.getShortName());
+            sourceWords.add(node.getLongName());
         }
         destinationWords.addAll(sourceWords);
         destinationWords.add("NEAREST HALLWAY");
@@ -180,7 +180,7 @@ public class SearchBarOverlayController implements Initializable{
 //        System.out.println("test, " + src);
 
         // Check if the source node was input
-        if (src.length() > 0 && !src.equals("Current Kiosk")) {
+        if (src.length() > 0 && !src.equals("Primary Kiosk")) {
             // Source has been chosen by user, get Node entity from nodeID through NodeRepo
 //            System.out.println("Something typed in! " + src);
             srcNode = nodeSet.get(parseSourceInput(src).getID());
@@ -206,14 +206,14 @@ public class SearchBarOverlayController implements Initializable{
 
         startLabel.setLayoutX((srcNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
         startLabel.setLayoutY((srcNode.getyDisplay()-40- Y_OFFSET)*Y_SCALE);
-        startLabel.setText(srcNode.getShortName());
+        startLabel.setText(srcNode.getLongName());
         startLabel.setFont(font);
 
         startLabel.toFront();
 
         endLabel.setLayoutX((dstNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
         endLabel.setLayoutY((dstNode.getyDisplay()-34- Y_OFFSET)*Y_SCALE);
-        endLabel.setText(dstNode.getShortName());
+        endLabel.setText(dstNode.getLongName());
         endLabel.setFont(font);
 
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
@@ -244,7 +244,7 @@ public class SearchBarOverlayController implements Initializable{
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
         for (Node node : nodeSet.values()) {
-            if (node.getShortName().compareTo(string) == 0) {
+            if (node.getLongName().compareTo(string) == 0) {
                 aNode = node;
             }
         }
@@ -312,7 +312,7 @@ public class SearchBarOverlayController implements Initializable{
                 HashMap<String, Node> nodeSet = db.getAllNodes();
 
                 for (Node node : nodeSet.values()) {
-                    if (node.getShortName().compareTo(string) == 0) {
+                    if (node.getLongName().compareTo(string) == 0) {
                         aNode = node;
                     }
                 }
