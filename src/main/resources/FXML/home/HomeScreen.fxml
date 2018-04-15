@@ -87,21 +87,21 @@
                <children>
                   <Rectangle arcHeight="20.0" arcWidth="20.0" fill="WHITE" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, GRAY, 10, 0.0, 0, 0);" width="275.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="RIGHT">
                      <GridPane.margin>
-                        <Insets right="-20.0" top="60.0" />
+                        <Insets right="-5.0" top="60.0" />
                      </GridPane.margin>
                   </Rectangle>
-                  <JFXTextField fx:id="usernameTxt" focusColor="#f5bc3a" promptText="username" unFocusColor="#0b2f5b" GridPane.columnIndex="1">
+                  <JFXTextField fx:id="usernameTxt" focusColor="#f5bc3a" promptText="Username" unFocusColor="#0b2f5b" GridPane.columnIndex="1">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </JFXTextField>
-                  <JFXPasswordField fx:id="passwordTxt" focusColor="#f5bc3a" promptText="password" unFocusColor="#0b2f5b" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <JFXPasswordField fx:id="passwordTxt" focusColor="#f5bc3a" promptText="Password" unFocusColor="#0b2f5b" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </JFXPasswordField>
                   <JFXButton fx:id="loginButton" defaultButton="true" onAction="#loginButtonOp" styleClass="login-button" text="Login" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Label fx:id="loginErrorLabel" contentDisplay="CENTER" prefHeight="44.0" prefWidth="245.0" textAlignment="CENTER" textFill="RED" GridPane.halignment="CENTER" GridPane.rowSpan="2" GridPane.valignment="CENTER" />
+                  <Label fx:id="loginErrorLabel" contentDisplay="CENTER" prefHeight="45.0" prefWidth="250.0" textAlignment="CENTER" textFill="RED" GridPane.halignment="CENTER" GridPane.rowSpan="2" GridPane.valignment="CENTER" />
                </children>
                <GridPane.margin>
                   <Insets />

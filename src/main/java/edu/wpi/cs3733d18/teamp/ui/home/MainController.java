@@ -52,10 +52,6 @@ public class MainController {
      */
     @FXML
     public void loginButtonOp(ActionEvent e) {
-        Parent root;
-        Stage stage;
-        FXMLLoader loader;
-        String text;
 
         String username = usernameTxt.getText();
         String password = passwordTxt.getText();
@@ -63,10 +59,13 @@ public class MainController {
         try {
             Main.currentUser = db.checkEmployeeLogin(username, password);
         } catch(LoginInvalidException e1) {
-            loginErrorLabel.setText("Login failed, invalid username or password");
-            loginErrorLabel.setVisible(true);
             usernameTxt.setPromptText("Username");
             passwordTxt.setPromptText("Password");
+            usernameTxt.clear();
+            passwordTxt.clear();
+            loginErrorLabel.setText("Login failed, invalid username or password");
+            loginErrorLabel.setVisible(true);
+
             return;
         }
 
