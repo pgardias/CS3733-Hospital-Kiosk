@@ -18,6 +18,7 @@
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints />
@@ -45,6 +46,11 @@
                         <Insets />
                      </GridPane.margin>
                   </Label>
+                  <JFXButton fx:id="serviceRequestScreenButton" buttonType="RAISED" maxHeight="250.0" maxWidth="350.0" onAction="#serviceRequestScreenButtonOp" style="-fx-background-color: WHITE;" text="Service Request Screen" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <font>
+                        <Font size="40.0" />
+                     </font>
+                  </JFXButton>
                </children>
                <BorderPane.margin>
                   <Insets top="200.0" />

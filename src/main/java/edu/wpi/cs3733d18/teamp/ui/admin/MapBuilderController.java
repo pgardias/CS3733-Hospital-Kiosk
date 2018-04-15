@@ -856,7 +856,7 @@ public class MapBuilderController implements Initializable {
         Stage stage;
         FXMLLoader loader;
 
-        loader = new FXMLLoader(getClass().getResource("/FXML/admin/MpaBuilderOverlay.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/MapBuilderOverlay.fxml"));
         try {
             root = loader.load();
         } catch (IOException ie){
