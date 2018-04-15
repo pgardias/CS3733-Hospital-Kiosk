@@ -3,13 +3,10 @@ package edu.wpi.cs3733d18.teamp.ui.admin;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
-import edu.wpi.cs3733d18.teamp.*;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.Pathfinding.PathfindingContext;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -856,7 +853,7 @@ public class MapBuilderController implements Initializable {
         Stage stage;
         FXMLLoader loader;
 
-        loader = new FXMLLoader(getClass().getResource("/FXML/admin/MpaBuilderOverlay.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/MapBuilderOverlay.fxml"));
         try {
             root = loader.load();
         } catch (IOException ie){
