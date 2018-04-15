@@ -590,17 +590,12 @@ public class MapScreenController {
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
 //                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
                         popOver = new PopOver(popOverVBox);
-//                        popOver.setTitle(node.getType().toString());
-//                        popOver.setHeaderAlwaysVisible(true);
                         popOver.show((javafx.scene.Node) event.getSource());
                         popOverHidden = false;
-//                        popOver.setContentNode(new VBox(nodeIDLabel, nodeLongNameLabel));
                         popOver.setCloseButtonEnabled(false);
 //                        popOver.setCornerRadius(20);
-//                        popOver.setAutoFix(true);
-//                        popOver.setAutoHide(true);
+                        popOver.setAutoFix(true);
                         popOver.setDetachable(false);
-//                        popOver.setHideOnEscape(true);
                     }
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
