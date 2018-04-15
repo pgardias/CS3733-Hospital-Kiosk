@@ -271,6 +271,10 @@ public class RequestRepo {
                 reqtype = Request.requesttype.EMERGENCY;
                 break;
 
+            case "delivergift":
+                reqtype = Request.requesttype.GIFTS;
+                break;
+
             case "audio+visual":
                 reqtype = Request.requesttype.AV;
                 break;
@@ -312,6 +316,10 @@ public class RequestRepo {
         switch (type) {
             case EMERGENCY:
                 reqtype = "emergency";
+                break;
+
+            case GIFTS:
+                reqtype = "delivergift";
                 break;
 
             case AV:

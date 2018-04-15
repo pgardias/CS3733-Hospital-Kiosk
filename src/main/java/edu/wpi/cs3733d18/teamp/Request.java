@@ -8,7 +8,7 @@ import java.util.Date;
 public class Request {
 
     // Request enum
-    public enum requesttype {LANGUAGEINTERP, HOLYPERSON, COMPUTER, SECURITY, MAINTENANCE, SANITATION, AV, EMERGENCY, DEFAULT}
+    public enum requesttype {LANGUAGEINTERP, HOLYPERSON, COMPUTER, SECURITY, MAINTENANCE, SANITATION, AV, GIFTS, EMERGENCY, DEFAULT}
 
     // Attributes
     private int requestID;
@@ -63,6 +63,8 @@ public class Request {
                 type = "Sanitation Request";
             case AV:
                 type = "Audio/Visual Request";
+            case GIFTS:
+                type = "Gift Delivery Request";
         }
         return type;
     }
