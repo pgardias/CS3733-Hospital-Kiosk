@@ -436,81 +436,35 @@ public class MapBuilderController implements Initializable {
         edgeSet = db.getAllEdges();
 
         for (Edge edge : edgeSet.values()) {
-            if (edge.getStart().getFloor() == currentFloor && edge.getEnd().getFloor() == currentFloor) {
-                Line line = new Line();
-                nodesEdgesPane.getChildren().add(line);
-                if (!toggleOn) {
-                    line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
-                    line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
-                    line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
-                    line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
-                } else {
-                    line.setStartX((edge.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
-                    line.setStartY((edge.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);
-                    line.setEndX((edge.getEnd().getxDisplay() - X_OFFSET) * X_SCALE);
-                    line.setEndY((edge.getEnd().getyDisplay() - Y_OFFSET) * Y_SCALE);
-                }
-                line.setStrokeWidth(EDGE_WIDTH);
-                line.setStrokeType(StrokeType.CENTERED);
-                if(!edge.getActive()){
-                    line.getStrokeDashArray().addAll(5.0, 2.5);
-                    line.setOpacity(0.5);
-                }
-                line.setOnMouseClicked(edgeClickHandler);
 
-                String label = edge.getID();
-                edgeDispSet.put(label, line);
+            Line line = new Line();
+            nodesEdgesPane.getChildren().add(line);
+            if (!toggleOn) {
+                line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
+                line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
+                line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
+                line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
+            } else {
+                line.setStartX((edge.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
+                line.setStartY((edge.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);
+                line.setEndX((edge.getEnd().getxDisplay() - X_OFFSET) * X_SCALE);
+                line.setEndY((edge.getEnd().getyDisplay() - Y_OFFSET) * Y_SCALE);
             }
-            else if(edge.getStart().getFloor() == currentFloor || edge.getEnd().getFloor() == currentFloor){
-                Line line = new Line();
-                nodesEdgesPane.getChildren().add(line);
-                if (!toggleOn) {
-                    line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
-                    line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
-                    line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
-                    line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
-                } else {
-                    line.setStartX((edge.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
-                    line.setStartY((edge.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);
-                    line.setEndX((edge.getEnd().getxDisplay() - X_OFFSET) * X_SCALE);
-                    line.setEndY((edge.getEnd().getyDisplay() - Y_OFFSET) * Y_SCALE);
-                }
-                line.setStrokeWidth(0);
-                line.setStrokeType(StrokeType.CENTERED);
-                if(!edge.getActive()){
-                    line.getStrokeDashArray().addAll(5.0, 2.5);
-                    line.setOpacity(0.5);
-                }
-                line.setOnMouseClicked(edgeClickHandler);
 
-                String label = edge.getID();
-                edgeDispSet.put(label, line);
+            line.setStrokeWidth(EDGE_WIDTH);
+            line.setStrokeType(StrokeType.CENTERED);
+            if(!edge.getActive()){
+                line.getStrokeDashArray().addAll(5.0, 2.5);
+                line.setOpacity(0.5);
             }
-            else {
-                Line line = new Line();
-                nodesEdgesPane.getChildren().add(line);
-                if (!toggleOn) {
-                    line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
-                    line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
-                    line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
-                    line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
-                } else {
-                    line.setStartX((edge.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
-                    line.setStartY((edge.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);
-                    line.setEndX((edge.getEnd().getxDisplay() - X_OFFSET) * X_SCALE);
-                    line.setEndY((edge.getEnd().getyDisplay() - Y_OFFSET) * Y_SCALE);
-                }
-                line.setStrokeWidth(0);
-                line.setStrokeType(StrokeType.CENTERED);
-                if (!edge.getActive()) {
-                    line.getStrokeDashArray().addAll(5.0, 2.5);
-                    line.setOpacity(0.5);
-                }
                 line.setOnMouseClicked(edgeClickHandler);
-
-                String label = edge.getID();
-                edgeDispSet.put(label, line);
+            if (edge.getStart().getFloor() != currentFloor || edge.getEnd().getFloor() != currentFloor) {
+                line.setVisible(false);
+                line.setDisable(true);
+                line.setPickOnBounds(false);
             }
+            String label = edge.getID();
+            edgeDispSet.put(label, line);
         }
     }
 
@@ -1265,9 +1219,7 @@ public class MapBuilderController implements Initializable {
         for (Node n : path) {
             pastNode = currentNode;
             currentNode = n;
-            //if (path.get(0).equals(n) || path.get(path.size()-1).equals(n)) {
-                nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
-           // }
+            nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
             if (path.get(0).equals(n)) {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.GREEN);
             }
@@ -1278,14 +1230,13 @@ public class MapBuilderController implements Initializable {
 
                 if (pastNode != null) {
                     if (e.contains(pastNode)) {
-                        line = edgeDispSet.get(e.getID());
                         edgeDispSet.get(e.getID()).setStroke(Color.rgb(250, 150, 0));
+                        edgeDispSet.get(e.getID()).setStrokeWidth(5.0);
+                        edgeDispSet.get(e.getID()).setVisible(true);
                         if(e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor){
-                            edgeDispSet.get(e.getID()).setStrokeWidth(5.0);
-                        }
-                        if(e.getStart().getFloor() != e.getEnd().getFloor()) {
-                            nodeDispSet.get(pastNode.getID()).setFill(Color.DARKMAGENTA);
-                            nodeDispSet.get(currentNode.getID()).setFill(Color.DARKMAGENTA);
+                            edgeDispSet.get(e.getID()).setOpacity(1.0);
+                        } else {
+                            edgeDispSet.get(e.getID()).setOpacity(0.3);
                         }
 
                     }
@@ -1309,10 +1260,12 @@ public class MapBuilderController implements Initializable {
             for (Edge e : currentNode.getEdges()) {
                 if (pastNode != null) {
                     if (e.contains(pastNode)) {
-                        line = edgeDispSet.get(e.getID());
                         edgeDispSet.get(e.getID()).setStroke(Color.BLACK);
+                        edgeDispSet.get(e.getID()).setStrokeWidth(EDGE_WIDTH);
                         if(e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor){
-                            edgeDispSet.get(e.getID()).setStrokeWidth(EDGE_WIDTH);
+
+                        } else{
+                            edgeDispSet.get(e.getID()).setVisible(false);
                         }
                     }
                 }

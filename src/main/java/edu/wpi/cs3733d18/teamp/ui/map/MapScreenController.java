@@ -25,6 +25,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -132,6 +133,7 @@ public class MapScreenController {
         addOverlay();
 
         searchBarOverlayController.setSourceSearchBar("Current Kiosk");
+        nodeDispSet.get("PKIOS00102").setFill(Color.GREEN);
     }
 
     @FXML
@@ -333,14 +335,6 @@ public class MapScreenController {
                 String label = node.getID();
                 nodeDispSet.put(label, circle);
 
-//                if(node.getType() == Node.nodeType.KIOS) {
-//                    File file = new File("main/kiosk/resources/img/pip.png");
-//                    Image pip = new Image(file.toURI().toString());
-//                    ImageView position = new ImageView(pip);
-//                    position.setX((node.getX() - X_OFFSET) * X_SCALE);
-//                    position.setY((node.getY() - Y_OFFSET - 10) * Y_SCALE);
-//                    kioskPip = position;
-//                }
             } else {
                 Circle circle = new Circle(0);
                 nodesEdgesPane.getChildren().add(circle);
@@ -567,7 +561,7 @@ public class MapScreenController {
                         if(e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor){
                             edgeDispSet.get(e.getID()).setOpacity(1.0);
                         } else {
-                          edgeDispSet.get(e.getID()).setOpacity(0.25);
+                          edgeDispSet.get(e.getID()).setOpacity(0.3);
                         }
                     }
                 }
