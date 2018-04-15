@@ -204,7 +204,7 @@
                   <Font size="18.0" />
                </font>
             </JFXButton>
-            <Label fx:id="nodeFormErrorLabel" alignment="CENTER" contentDisplay="CENTER" text="TestError" textFill="#f50202" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+            <Label fx:id="nodeFormErrorLabel" alignment="CENTER" contentDisplay="CENTER" textFill="#f50202" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.valignment="TOP">
                <font>
                   <Font size="18.0" />
                </font>
