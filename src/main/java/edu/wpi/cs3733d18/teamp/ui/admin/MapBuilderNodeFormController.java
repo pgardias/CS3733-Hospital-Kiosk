@@ -328,6 +328,7 @@ public class MapBuilderNodeFormController implements Initializable{
         Coordinate coord = new Coordinate((int)Math.round(x2), (int)Math.round(y2), floor);
         nodex3Txt.setText(Double.toString(coord.getX3D()));
         nodey3Txt.setText(Double.toString(coord.getY3D()));
+        nodeFormErrorLabel.setText("Your 3D coordinates have been changed!");
     }
 
     public void set3XYCoords(double x3, double y3){
