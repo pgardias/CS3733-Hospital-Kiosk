@@ -184,7 +184,7 @@ public class MapViewerBuilder implements Initializable{
     }
 
     static MeshView[] loadMeshView() {
-        File file = new File("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W2ndFloor.obj");
+        File file = new File("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W2ndFloorReverseNormals.obj");
         ObjModelImporter importer = new ObjModelImporter();
         importer.read(file);
         //Mesh mesh = importer.getImport();
