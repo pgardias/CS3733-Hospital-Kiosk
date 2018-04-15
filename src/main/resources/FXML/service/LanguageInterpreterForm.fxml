@@ -77,7 +77,7 @@
                   <Insets right="20.0" />
                </padding>
             </Label>
-            <Label alignment="CENTER" text="Language of Interpreter:" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+            <Label alignment="CENTER" text="Language:" GridPane.halignment="LEFT" GridPane.rowIndex="2">
                <font>
                   <Font size="24.0" />
                </font>

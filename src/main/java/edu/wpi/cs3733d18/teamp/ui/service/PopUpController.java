@@ -101,27 +101,35 @@ public class PopUpController {
             case "LanguageInterpreter":
                 languageInterpreterController = loader.getController();
                 languageInterpreterController.StartUp(serviceRequestScreen, this);
+                break;
             case "Religious":
                 religiousServiceController = loader.getController();
                 religiousServiceController.StartUp(serviceRequestScreen, this);
+                break;
             case "ComputerService":
                 computerServiceController = loader.getController();
                 computerServiceController.StartUp(serviceRequestScreen, this);
+                break;
             case "Security":
                 securityController = loader.getController();
                 securityController.StartUp(serviceRequestScreen, this);
+                break;
             case "Maintenance":
                 maintenanceController = loader.getController();
                 maintenanceController.StartUp(serviceRequestScreen,this);
+                break;
             case "Sanitation":
                 sanitationController = loader.getController();
                 sanitationController.StartUp(serviceRequestScreen, this);
+                break;
             case "AudioorVisualHelp":
                 audioVisualController = loader.getController();
                 audioVisualController.StartUp(serviceRequestScreen,this);
+                break;
             case "GiftDelivery":
                 giftDeliveryController = loader.getController();
                 giftDeliveryController.StartUp(serviceRequestScreen,this);
+                break;
 
         }
         serviceRequestPopup.setCenter(root);
