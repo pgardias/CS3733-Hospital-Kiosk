@@ -22,12 +22,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import java.math.*;
 
 public class MapScreenController {
 
@@ -54,6 +57,7 @@ public class MapScreenController {
     private Boolean toggleOn = false;
 
     private static HashMap<String, Circle> nodeDispSet = new HashMap<>();
+    private static ArrayList<Polygon> arrowDispSet = new ArrayList<Polygon>();
     private static HashMap<String, Line> edgeDispSet = new HashMap<>();
 
 
@@ -594,6 +598,11 @@ public class MapScreenController {
      */
     //removed static hope it didn't break anything
     public void drawPath(ArrayList<Node> path) {
+        double width, height, angle;
+        double distanceCounter = 0;
+
+
+
         Node currentNode = null, pastNode = null;
         if(pathMade != null){
             resetPath();
@@ -604,7 +613,24 @@ public class MapScreenController {
         for (Node n : path) {
             pastNode = currentNode;
             currentNode = n;
-            //if (path.get(0).equals(n) || path.get(path.size()-1).equals(n)) {
+            if (!path.get(0).equals(n)) {
+                width = currentNode.getX() - pastNode.getX();
+                height = currentNode.getY() - pastNode.getY();
+                angle = Math.atan2(height , width);
+
+                //increment the distanceCounter
+                distanceCounter += currentNode.distanceBetweenNodes(pastNode);
+
+                if(distanceCounter >= 175) {
+                    distanceCounter = 0;
+
+                    drawTriangle(angle, pastNode.getX(), pastNode.getY());
+                }
+
+
+
+
+            }
             nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
             // }
             if (path.get(0).equals(n)) {
@@ -633,6 +659,42 @@ public class MapScreenController {
         pathDrawn = true;
     }
 
+
+    public void drawTriangle(double angle, double initX, double initY) {
+
+        double x1, x2, x3, y1, y2, y3;
+
+
+        Polygon arrow = new Polygon();
+
+
+
+        initX = (initX - X_OFFSET) * X_SCALE;
+        initY = (initY - Y_OFFSET) * Y_SCALE;
+
+        //System.out.println("X:  " + initX + "  Y:  " + initY);
+
+        x1 = initX + (12 * Math.cos(angle));
+        y1 = initY + (12 * Math.sin(angle));
+
+        x2 = initX + (10 * Math.cos(angle - (2 * Math.PI / 3)));
+        y2 = initY + (10 * Math.sin(angle - (2 * Math.PI / 3)));
+
+        x3 = initX + (10 * Math.cos(angle + (2 * Math.PI / 3)));
+        y3 = initY + (10 * Math.sin(angle + (2 * Math.PI / 3)));
+
+
+        arrow.getPoints().addAll(new Double[]{
+                initX, initY,
+                x2, y2,
+                x1, y1,
+                x3, y3});
+        arrow.setFill(Color.rgb(250, 150, 0));
+
+        nodesEdgesPane.getChildren().add(arrow);
+
+        arrowDispSet.add(arrow);
+    }
     /*
     public void setSpinner(){
         ObservableList<String> allowedFloorsList = FXCollections.observableArrayList((pathMade.get(pathMade.size()-1).getFloor().toString()),
@@ -666,6 +728,11 @@ public class MapScreenController {
                     }
                 }
             }
+            for (Polygon p : arrowDispSet){
+                p.setVisible(false);
+                p.setPickOnBounds(false);
+            }
+            arrowDispSet.clear();
         }
     }
 
