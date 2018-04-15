@@ -42,10 +42,10 @@ import java.util.ResourceBundle;
 
 public class MapBuilderController implements Initializable {
 
-    public static final int X_OFFSET = -523;
-    public static final int Y_OFFSET = 0;
-    public static final double X_SCALE = 1588.235294/5000.0;
-    public static final double Y_SCALE = 1080.0/3400.0;
+    public int X_OFFSET = -523;
+    public int Y_OFFSET = 0;
+    public double X_SCALE = 1588.235294/5000.0;
+    public double Y_SCALE = 1080.0/3400.0;
     public static final double NODE_RADIUS = 3.0;
     public static final double EDGE_WIDTH = 1.0;
     public static final int WIDTH = 1380;
@@ -236,31 +236,62 @@ public class MapBuilderController implements Initializable {
         Main.pathfindingContext.setPathfindingContext(Main.settings.getPathfindingSettings());
     }
 
+    Boolean toggleOn = true;
     /**
      * switch statement that determines which map is loaded in
      */
     public void getMap(){
         Image image;
-        floorState = floorSpinner.getValue();
-        switch (floorState) {
-            case "3":
-                image = new Image("/img/maps/2d/03_thethirdfloor.png");
-                break;
-            case "2":
-                image = new Image("/img/maps/2d/02_thesecondfloor.png");
-                break;
-            case "1":
-                image = new Image("/img/maps/2d/01_thefirstfloor.png");
-                break;
-            case "G":
-                image = new Image("/img/maps/2d/00_thegroundfloor.png");
-                break;
-            case "L1":
-                image = new Image("/img/maps/2d/00_thelowerlevel1.png");
-                break;
-            default:
-                image = new Image("/img/maps/2d/00_thelowerlevel2.png");
-                break;
+        if (toggleOn){
+            X_OFFSET = 0;
+            Y_OFFSET = -19;
+            X_SCALE = 1920.0/5000.0;
+            Y_SCALE = 1065.216/2774.0;
+            switch(floorState) {
+                case "3":
+                    image = new Image("/img/maps/3d/3-ICONS.png");
+                    break;
+                case "2":
+                    image = new Image("/img/maps/3d/2-ICONS.png");
+                    break;
+                case "1":
+                    image = new Image("/img/maps/3d/1-ICONS.png");
+                    break;
+                case "G":
+                    image = new Image("/img/maps/3d/1-ICONS.png");
+                    break;
+                case "L1":
+                    image = new Image("/img/maps/3d/L1-ICONS.png");
+                    break;
+                default:
+                    image = new Image("/img/maps/3d/L2-ICONS.png");
+                    break;
+            }
+        } else {
+            X_OFFSET = -523;
+            Y_OFFSET = 0;
+            X_SCALE = 1588.235294/5000.0;
+            Y_SCALE = 1080.0/3400.0;
+            switch (floorState) {
+                case "3":
+                    image = new Image("/img/maps/2d/03_thethirdfloor.png");
+                    break;
+                case "2":
+                    image = new Image("/img/maps/2d/02_thesecondfloor.png");
+                    break;
+                case "1":
+                    image = new Image("/img/maps/2d/01_thefirstfloor.png");
+                    break;
+                case "G":
+                    image = new Image("/img/maps/2d/00_thegroundfloor.png");
+                    break;
+                case "L1":
+                    image = new Image("/img/maps/2d/00_thelowerlevel1.png");
+                    break;
+                default:
+                    image = new Image("/img/maps/2d/00_thelowerlevel2.png");
+                    break;
+            }
         }
         mapImage.setImage(image);
     }
@@ -338,8 +369,14 @@ public class MapBuilderController implements Initializable {
             if (node.getFloor() == currentFloor) {
                 Circle circle = new Circle(NODE_RADIUS);
                 nodesEdgesPane.getChildren().add(circle);
-                circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
-                circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
+                if (!toggleOn) {
+                    circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
+                    circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
+                } else {
+                    circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
+                    circle.setCenterX((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
+                }
+
                 //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
                 circle.setFill(Color.DODGERBLUE);
                 circle.setStroke(Color.BLACK);
@@ -365,8 +402,13 @@ public class MapBuilderController implements Initializable {
             } else {
                 Circle circle = new Circle(0);
                 nodesEdgesPane.getChildren().add(circle);
-                circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
-                circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
+                if (!toggleOn) {
+                    circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
+                    circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
+                } else {
+                    circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
+                    circle.setCenterX((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
+                }
                 //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
                 circle.setFill(Color.DODGERBLUE);
                 circle.setStroke(Color.BLACK);
