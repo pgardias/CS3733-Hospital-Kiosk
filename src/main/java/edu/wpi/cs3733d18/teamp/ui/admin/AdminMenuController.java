@@ -35,9 +35,7 @@ public class AdminMenuController {
             ioe.printStackTrace();
             return;
         }
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setFullScreen(true);
-        stage.show();
+        employeeButton.getScene().setRoot(root);
     }
 
     public void mapManagementButtonOp(ActionEvent e) {
@@ -56,9 +54,7 @@ public class AdminMenuController {
         }
         mapBuilderController = loader.getController();
         mapBuilderController.startUp();
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setFullScreen(true);
-        stage.show();
+        mapManagementButton.getScene().setRoot(root);
     }
 
     public void backButtonOp(ActionEvent e) {
@@ -75,8 +71,6 @@ public class AdminMenuController {
             return;
         }
         Main.logoutCurrentUser();
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setFullScreen(true);
-        stage.show();
+        backButton.getScene().setRoot(root);
     }
 }

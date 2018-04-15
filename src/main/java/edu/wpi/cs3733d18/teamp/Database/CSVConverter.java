@@ -112,8 +112,8 @@ public class CSVConverter {
 
             //Prepare mass insert statement
             sql = "INSERT INTO REQUEST_INFO (requestID, requestType, subType, location, additionalInfo, madeBy, " +
-                    "completedBy, timeMade, timeCompleted, completed) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "completedBy, timeMade, timeCompleted, completed, priority) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
             while ((line = br.readLine()) != null) {
@@ -136,6 +136,7 @@ public class CSVConverter {
                     pstmt.setString(9, table_data[8]); // timeCompleted
                 }
                 pstmt.setInt(10, Integer.parseInt(table_data[9])); // completed
+                pstmt.setInt(11, Integer.parseInt(table_data[10])); // priority
                 pstmt.executeUpdate();
             }
 
@@ -359,6 +360,8 @@ public class CSVConverter {
         sb.append("timeCompleted");
         sb.append(",");
         sb.append("completed");
+        sb.append(",");
+        sb.append("priority");
         sb.append("\n");
 
         while (results.next()) {
@@ -381,6 +384,8 @@ public class CSVConverter {
             sb.append(results.getString(9));
             sb.append(",");
             sb.append(results.getString(10));
+            sb.append(",");
+            sb.append(results.getString(11));
             sb.append("\n");
         }
 
