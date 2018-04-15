@@ -850,7 +850,6 @@ public class MapBuilderController implements Initializable {
             else if (event.getEventType() == MouseEvent.MOUSE_CLICKED){
                 System.out.println("ready to click");
                 if(!isDragging) {
-                    isNewNode = true;
                     System.out.println("Mouse Clicked");
                     clearCircles();
                     double x2Coord = event.getSceneX();
@@ -868,9 +867,14 @@ public class MapBuilderController implements Initializable {
 
                     double nodex2Coord = scaledx2Coord/X_SCALE + X_OFFSET;
                     double nodey2Coord = scaledy2Coord/Y_SCALE + Y_OFFSET;
-                    newNodeForm();
-                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
-                    mapBuilderNodeFormController.setFloor(currentFloor.toString());
+                    if (!isNewNode) {
+                        isNewNode = true;
+                        newNodeForm();
+                        mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                        mapBuilderNodeFormController.setFloor(currentFloor.toString());
+                    } else {
+                        mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                    }
 
                 }
             }
