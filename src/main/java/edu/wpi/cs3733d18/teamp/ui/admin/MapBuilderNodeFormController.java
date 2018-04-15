@@ -330,6 +330,11 @@ public class MapBuilderNodeFormController implements Initializable{
         nodey3Txt.setText(Double.toString(coord.getY3D()));
     }
 
+    public void set3XYCoords(double x3, double y3){
+        nodex3Txt.setText(Double.toString(x3));
+        nodey3Txt.setText(Double.toString(y3));
+    }
+
     public void setFloor(String floor){
         //TODO pick building based off of node coordinates
         floorComboBox.setValue(floor);

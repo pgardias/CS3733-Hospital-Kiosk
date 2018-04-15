@@ -544,7 +544,11 @@ public class MapBuilderController implements Initializable {
 
                 double nodex2Coord = newCenterX/X_SCALE + X_OFFSET;
                 double nodey2Coord = newCenterY/Y_SCALE + Y_OFFSET;
-                mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                if (!toggleOn) {
+                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                } else {
+                    mapBuilderNodeFormController.set3XYCoords(nodex2Coord, nodey2Coord);
+                }
 
                 //System.out.println("New Center X: " + newCenterX + " New Center Y: " + newCenterY + "\n");
                 //TODO drag bounds
@@ -592,7 +596,7 @@ public class MapBuilderController implements Initializable {
                 isDragging = true;
             }
             else if(event.getEventType() == MouseEvent.MOUSE_DRAGGED){
-                if(isDragging){
+                if(isDragging && !isNewNode){
                     ArrayList<Edge> dragEdges = dragNodeOrg.getEdges();
 
                     double offsetX = event.getSceneX() - orgMouseX;
@@ -623,7 +627,11 @@ public class MapBuilderController implements Initializable {
                     newNodeForm(dragNodeOrg.getID(), dragNodeOrg.getLongName(), dragNodeOrg.getX(), dragNodeOrg.getY(),
                             dragNodeOrg.getxDisplay(), dragNodeOrg.getyDisplay(), dragNodeOrg.getFloor().toString(),
                             dragNodeOrg.getBuilding().toString(), dragNodeOrg.getType().toString(), dragNodeOrg.getActive());
-                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                    if (!toggleOn) {
+                        mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                    } else {
+                        mapBuilderNodeFormController.set3XYCoords(nodex2Coord, nodey2Coord);
+                    }
 
                 }
             }
@@ -1014,7 +1022,11 @@ public class MapBuilderController implements Initializable {
      */
     public void updateMap(){
         nodeDispSet.clear();
+        endNode = null;
+        firstSelect = null;
+        secondSelect = null;
         edgeDispSet.clear();
+        selectedEdge = null;
         nodesEdgesPane.getChildren().clear();
         getMap();
         drawEdges();
