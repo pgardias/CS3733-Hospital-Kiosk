@@ -2,6 +2,7 @@ package edu.wpi.cs3733d18.teamp.ui.admin;
 
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733d18.teamp.Main;
+import edu.wpi.cs3733d18.teamp.ui.service.ServiceRequestScreen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,9 @@ public class AdminMenuController {
 
     @FXML
     JFXButton mapManagementButton;
+
+    @FXML
+    JFXButton serviceRequestScreenButton;
 
     @FXML
     JFXButton backButton;
@@ -55,6 +59,24 @@ public class AdminMenuController {
         mapBuilderController = loader.getController();
         mapBuilderController.startUp();
         mapManagementButton.getScene().setRoot(root);
+    }
+
+    public void serviceRequestScreenButtonOp(ActionEvent e) {
+        Stage stage;
+        Parent root;
+        FXMLLoader loader;
+        ServiceRequestScreen serviceRequestScreen;
+
+        stage = (Stage) serviceRequestScreenButton.getScene().getWindow();
+        loader = new FXMLLoader(getClass().getResource("/FXML/service/ServiceRequestScreen.fxml"));
+        try {
+            root = loader.load();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return;
+        }
+        serviceRequestScreen = loader.getController();
+        serviceRequestScreenButton.getScene().setRoot(root);
     }
 
     public void backButtonOp(ActionEvent e) {
