@@ -48,7 +48,7 @@ public class RequestRepo {
                     request.setTimeMade(results.getTimestamp("timeMade"));
                     request.setTimeCompleted(results.getTimestamp("timeCompleted"));
                     request.setCompleted(results.getInt("completed"));
-
+                    request.setPriority(results.getInt("priority"));
 
                     allRequests.add(request);
                 }while(results.next());
@@ -95,7 +95,7 @@ public class RequestRepo {
             request.setTimeMade(results.getTimestamp("timeMade"));
             request.setTimeCompleted(results.getTimestamp("timeCompleted"));
             request.setCompleted(results.getInt("completed"));
-
+            request.setPriority(results.getInt("priority"));
 
             results.close();
             pstmt.close();
@@ -119,8 +119,8 @@ public class RequestRepo {
             conn = DriverManager.getConnection(DB_URL);
 
             // Prepare statement
-            String sql = "INSERT INTO REQUEST_INFO (requestID, requestType, subType, location, additionalInfo, madeBy, completedBy, timeMade, timeCompleted, completed)" +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO REQUEST_INFO (requestID, requestType, subType, location, additionalInfo, madeBy, completedBy, timeMade, timeCompleted, completed, priority)" +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
             // Convert timestamps
@@ -138,6 +138,7 @@ public class RequestRepo {
             pstmt.setTimestamp(8, request.getTimeMade());
             pstmt.setTimestamp(9, request.getTimeCompleted()); // Not completed by default
             pstmt.setInt(10, request.isCompleted());
+            pstmt.setInt(11, request.getPriority());
             int success = pstmt.executeUpdate();
 
             pstmt.close();
@@ -163,7 +164,7 @@ public class RequestRepo {
 
             // Prepare statement
             String sql = "UPDATE REQUEST_INFO " +
-                         "SET completed = ?, requestType = ?, subType = ?, location = ?, additionalInfo = ?, completedBy = ?" +
+                         "SET completed = ?, requestType = ?, subType = ?, location = ?, additionalInfo = ?, completedBy = ?, priority = ?" +
                          "WHERE requestID = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
@@ -173,7 +174,8 @@ public class RequestRepo {
             pstmt.setString(4, request.getLocation());
             pstmt.setString(5, request.getAdditionalInfo());
             pstmt.setString(6, request.getCompletedBy());
-            pstmt.setInt(7, request.getRequestID());
+            pstmt.setInt(7, request.getPriority());
+            pstmt.setInt(8, request.getRequestID());
 
             int success = pstmt.executeUpdate();
 
@@ -265,6 +267,34 @@ public class RequestRepo {
         Request.requesttype reqtype;
 
         switch(type){
+            case "emergency":
+                reqtype = Request.requesttype.EMERGENCY;
+                break;
+
+            case "delivergift":
+                reqtype = Request.requesttype.GIFTS;
+                break;
+
+            case "audio+visual":
+                reqtype = Request.requesttype.AV;
+                break;
+
+            case "sanitation":
+                reqtype = Request.requesttype.SANITATION;
+                break;
+
+            case "maintenance":
+                reqtype = Request.requesttype.MAINTENANCE;
+                break;
+
+            case "security":
+                reqtype = Request.requesttype.SECURITY;
+                break;
+
+            case "computer service":
+                reqtype = Request.requesttype.COMPUTER;
+                break;
+
             case "language interpreter":
                 reqtype = Request.requesttype.LANGUAGEINTERP;
                 break;
@@ -284,6 +314,34 @@ public class RequestRepo {
         String reqtype;
 
         switch (type) {
+            case EMERGENCY:
+                reqtype = "emergency";
+                break;
+
+            case GIFTS:
+                reqtype = "delivergift";
+                break;
+
+            case AV:
+                reqtype = "audio+visual";
+                break;
+
+            case SANITATION:
+                reqtype = "sanitation";
+                break;
+
+            case MAINTENANCE:
+                reqtype = "maintenance";
+                break;
+
+            case SECURITY:
+                reqtype = "security";
+                break;
+
+            case COMPUTER:
+                reqtype = "computer service";
+                break;
+
             case LANGUAGEINTERP:
                 reqtype = "language interpreter";
                 break;
