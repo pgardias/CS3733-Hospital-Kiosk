@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -44,10 +45,13 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#909090" height="120.0" stroke="#d3d3d3" strokeDashOffset="5.0" strokeLineJoin="BEVEL" strokeType="INSIDE" strokeWidth="0.0" visible="false" width="325.0" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+                        <Rectangle fill="#f2f2f2" height="115.0" stroke="#d3d3d3" strokeDashOffset="5.0" strokeLineJoin="BEVEL" strokeType="INSIDE" strokeWidth="0.0" width="350.0" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
                            <GridPane.margin>
                               <Insets right="-5.0" top="-5.0" />
                            </GridPane.margin>
+                           <effect>
+                              <DropShadow blurType="GAUSSIAN" height="0.0" radius="2.0" width="10.0" />
+                           </effect>
                         </Rectangle>
                         <JFXTextField fx:id="usernameTxt" focusColor="#f5bc3a" promptText=" username" styleClass="login-txt" stylesheets="@../../css/home.css" unFocusColor="#0b2f5b">
                            <font>
@@ -101,7 +105,7 @@
             </JFXButton>
          </center>
       </BorderPane>
-      <AnchorPane mouseTransparent="true" pickOnBounds="false" prefHeight="800.0" prefWidth="1500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane focusTraversable="true" mouseTransparent="true" pickOnBounds="false" prefHeight="800.0" prefWidth="1500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fx:id="aboutButton" fitHeight="400.0" fitWidth="425.0" onMouseClicked="#aboutButtonOp" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, LIGHTGRAY, 5, 0.0, 0, 0);" x="30.0" y="25.0">
                <image>
