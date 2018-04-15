@@ -33,7 +33,7 @@
                   <Font size="40.0" />
                </font>
             </JFXButton>
-            <JFXButton id="admin-button" fx:id="adminButton" buttonType="RAISED" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#loginButtonOp" ripplerFill="WHITE" style="-fx-background-color: #0B2F5B; -fx-effect: dropshadow( one-pass-box, black, 8, 0.0, 2, 0 )" text="Admin Login" textFill="#e6e6e6" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <JFXButton id="admin-button" fx:id="adminButton" buttonType="RAISED" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#loginButtonOp" onKeyTyped="#swipeLogin" ripplerFill="WHITE" style="-fx-background-color: #0B2F5B; -fx-effect: dropshadow( one-pass-box, black, 8, 0.0, 2, 0 )" text="Admin Login" textFill="#e6e6e6" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets left="10.0" top="20.0" />
                </GridPane.margin>
@@ -85,7 +85,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Rectangle arcHeight="20.0" arcWidth="20.0" fill="WHITE" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, GRAY, 10, 0.0, 0, 0);" width="275.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="RIGHT">
+                  <Rectangle fx:id="loginRectangle" arcHeight="20.0" arcWidth="20.0" fill="WHITE" height="100.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, GRAY, 10, 0.0, 0, 0);" width="275.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="RIGHT">
                      <GridPane.margin>
                         <Insets right="-5.0" top="60.0" />
                      </GridPane.margin>
@@ -100,7 +100,7 @@
                         <Font size="18.0" />
                      </font>
                   </JFXPasswordField>
-                  <JFXButton fx:id="loginButton" defaultButton="true" onAction="#loginButtonOp" styleClass="login-button" text="Login" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <JFXButton fx:id="loginButton" defaultButton="true" onMouseClicked="#loginButtonOp" styleClass="login-button" text="Login" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                   <Label fx:id="loginErrorLabel" contentDisplay="CENTER" prefHeight="45.0" prefWidth="250.0" textAlignment="CENTER" textFill="RED" GridPane.halignment="CENTER" GridPane.rowSpan="2" GridPane.valignment="CENTER" />
                </children>
                <GridPane.margin>

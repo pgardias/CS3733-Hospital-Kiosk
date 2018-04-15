@@ -334,12 +334,12 @@ public class EmployeeRepo {
      * @param id
      * @return an Employee that is an Admin, and throws an exception if the employee is not an Admin
      */
-    Employee checkAdminLoginID(String id) throws LoginInvalidException, AccessNotAllowedException {
+    Employee checkLoginID(String id) throws LoginInvalidException {
         Employee employee = new Employee();
         try {
             conn = DriverManager.getConnection(DB_URL);
 
-            String sql = "SELECT * FROM EMPLOYEE_INFO WHERE employeeID = ? AND isAdmin = 1";
+            String sql = "SELECT * FROM EMPLOYEE_INFO WHERE employeeID = ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, Integer.valueOf(id));
             ResultSet results = pstmt.executeQuery();
@@ -362,9 +362,6 @@ public class EmployeeRepo {
 
                 } while (results.next());
             }
-            if(!employee.getIsAdmin()){
-                throw new AccessNotAllowedException();
-            }
 
             results.close();
             pstmt.close();
@@ -377,54 +374,6 @@ public class EmployeeRepo {
         }
 
         return employee;
-    }
-
-    /**
-     * checkEmployeeLogin checks if the username and password
-     * of an Employee are in the current Employee database
-     * @param id
-     * @return gives an Employee object if the username and password for the employee match the given values
-     * in the database, gives an exception if otherwise
-     */
-    Employee checkEmployeeLoginID(String id) throws LoginInvalidException {
-        Employee employee = new Employee();
-        try {
-            conn = DriverManager.getConnection(DB_URL);
-
-            String sql = "SELECT * FROM EMPLOYEE_INFO WHERE employeeID = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, Integer.valueOf(id));
-            ResultSet results = pstmt.executeQuery();
-
-            if (!results.next()) {
-                throw new LoginInvalidException();
-            }
-
-            employee.setUserName(results.getString("username"));
-            employee.setPassword(results.getString("password"));
-            employee.setFirstName(results.getString("firstName"));
-            employee.setLastName(results.getString("lastName"));
-            // Check if admin
-            if (results.getInt("isAdmin") == 0) {
-                employee.setIsAdmin(false);
-            } else if (results.getInt("isAdmin") == 1) {
-                employee.setIsAdmin(true);
-            }
-            employee.setEmployeeType(StringToEmployeeType(results.getString("employeeType")));
-            employee.setSubType(results.getString("subType"));
-
-            pstmt.close();
-            conn.close();
-            results.close();
-            pstmt.close();
-            conn.close();
-        }catch(SQLException se){
-            se.printStackTrace();
-        }catch(NullPointerException e){
-            e.printStackTrace();
-            throw new LoginInvalidException();
-        }
-        return employee; // Returns Employee object
     }
 
     private int generateID(){

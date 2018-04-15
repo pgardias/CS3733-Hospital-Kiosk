@@ -4,24 +4,40 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
+import edu.wpi.cs3733d18.teamp.Exceptions.AccessNotAllowedException;
+import edu.wpi.cs3733d18.teamp.Exceptions.EmployeeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.LoginInvalidException;
 import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.ui.map.MapScreenController;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
+
+import java.awt.*;
 import java.io.IOException;
+import java.security.Key;
+import java.util.ArrayList;
 
 public class MainController {
     String userType;
     private DBSystem db = DBSystem.getInstance();
+    private ArrayList<Character> loginID = new ArrayList<>();
+
     @FXML
     JFXButton adminButton;
 
@@ -42,6 +58,37 @@ public class MainController {
 
     @FXML
     Label loginErrorLabel;
+
+    @FXML
+    Rectangle loginRectangle;
+
+
+    @FXML
+    public void initialize() {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                loginRectangle.requestFocus();
+            }
+        });
+        loginRectangle.addEventHandler(KeyEvent.KEY_TYPED, keyEventEventHandler);
+    }
+
+
+    /**
+     * this is the event handler for clicking on the map to create a node
+     */
+    EventHandler<KeyEvent> keyEventEventHandler = new EventHandler<KeyEvent>() {
+        Boolean isDragging;
+
+        @Override
+        public void handle(KeyEvent event) {
+            swipeLogin(event);
+            event.consume();
+        }
+    };
+
+
     /**
      * This function respond to clicking the either the service request
      * or admin login buttons opening the Login.fxml
@@ -51,56 +98,30 @@ public class MainController {
      * @throws IOException
      */
     @FXML
-    public void loginButtonOp(ActionEvent e) {
+    public void loginButtonOp(MouseEvent e) {
+        System.out.println(e.getEventType());
 
-        String username = usernameTxt.getText();
-        String password = passwordTxt.getText();
+            String username = usernameTxt.getText();
+            String password = passwordTxt.getText();
 
-        try {
-            Main.currentUser = db.checkEmployeeLogin(username, password);
-        } catch(LoginInvalidException e1) {
-            usernameTxt.setPromptText("Username");
-            passwordTxt.setPromptText("Password");
-            usernameTxt.clear();
-            passwordTxt.clear();
-            loginErrorLabel.setText("Login failed, invalid username or password");
-            loginErrorLabel.setVisible(true);
+            try {
+                Main.currentUser = db.checkEmployeeLogin(username, password);
+            } catch (LoginInvalidException e1) {
+                usernameTxt.setPromptText("Username");
+                passwordTxt.setPromptText("Password");
+                usernameTxt.clear();
+                passwordTxt.clear();
+                loginErrorLabel.setText("Login failed, invalid username or password");
+                loginErrorLabel.setVisible(true);
 
-            return;
-        }
+                return;
+            }
 
-        if (Main.currentUser.getIsAdmin()){
-            goToAdminRequestScreen();
-        } else{
-            goToServiceRequestScreen();
-        }
-
-        
-//        loader = new FXMLLoader(getClass().getResource("/FXML/home/LoginPopUp.fxml"));
-//        //setting the new fxml file to this instance of the mainController
-//        //loading the new FXML file
-//        try {
-//            root = loader.load();
-//        } catch (IOException ie) {
-//            ie.printStackTrace();
-//            return;
-//        }
-       // loginPopUpController = loader.getController();
-        //setting the new root into a new scene and declaring it a pop-up
-        //stage.setScene(new Scene(root, 600, 400));
-//        stage.setTitle("Login Page");
-//        stage.initModality(Modality.APPLICATION_MODAL);
-//        stage.initOwner(adminButton.getScene().getWindow());
-        //check which button is pressed to display the correct title
-        //TODO fix the method to work with new mainController
-//        if(e.getSource() == adminButton) {
-//            loginPopUpController.startUp(true, this);
-//        }
-//        else {
-//            loginPopUpController.startUp(false, this);
-//        }
-//        stage.show();
-//        usernameTxt.requestFocus();
+            if (Main.currentUser.getIsAdmin()) {
+                goToAdminRequestScreen();
+            } else {
+                goToServiceRequestScreen();
+            }
     }
 
 
@@ -174,14 +195,82 @@ public class MainController {
         stage.show();
     }
 
+
     @FXML
-    public void loginButtonOp() {
-//        final Timeline timeline = new Timeline();
-//        timeline.setCycleCount(Timeline.INDEFINITE);
-//        timeline.setAutoReverse(true);
-//        final KeyValue kv = new KeyValue(loginTxt.opacityProperty(), 0);
-//        final KeyFrame kf = new KeyFrame(Duration.millis(600), kv);
-//        timeline.getKeyFrames().add(kf);
-//        timeline.play();
+    public void swipeLogin(KeyEvent ke) {
+        boolean goodToLogin = false;
+        loginID.add(ke.getCharacter().toCharArray()[0]);
+        if (loginID.size() > 13) {
+            // %18262028501?+18262028501?
+            // ;18262028501?+18262028501?
+            // %89068008401?;89068008401?+89068008401?
+            int loginState = 0;
+            int loginCount = 0;
+            String loginString = "";
+
+            for (char c : loginID) {
+                switch (loginState) {
+                    case 0:
+                        if (c == '%' || c == ';') {
+                            loginState = 1;
+                        }
+                        break;
+
+                    case 1:
+                        if (c == '1' || c == '2' || c == '3' || c == '4' || c == '5' ||
+                                c == '6' || c == '7' || c == '8' || c == '9' || c == '0') {
+                            loginCount++;
+                            loginString = loginString + c;
+                            if (loginCount == 9) {
+                                loginState = 2;
+                            }
+                        }
+                        break;
+
+                    case 2:
+                        if (c == '0') {
+                            loginState = 3;
+                        }
+                        break;
+
+                    case 3:
+                        if (c == '1') {
+                            loginState = 4;
+                        }
+                        break;
+
+                    case 4:
+                        if (c == '?') {
+                            loginState = 5;
+                        } else {
+                            loginCount = 0;
+                            loginState = 0;
+                            loginString = "";
+                        }
+                        break;
+                    case 5:
+                        loginRectangle.removeEventHandler(KeyEvent.KEY_TYPED, keyEventEventHandler);
+                        goodToLogin = true;
+                        break;
+                }
+            }
+            if (goodToLogin) {
+                try {
+                    Main.currentUser = db.checkLoginID(loginString);
+                } catch (LoginInvalidException le) {
+                    le.printStackTrace();
+                    loginErrorLabel.setText("Login failed, please swipe again");
+                    loginErrorLabel.setVisible(true);
+                }
+
+                if (Main.currentUser.getIsAdmin()) {
+                    goToAdminRequestScreen();
+                } else {
+                    goToServiceRequestScreen();
+                }
+            }
+//            toClose = (Stage) loginButton.getScene().getWindow();
+//            toClose.close();
+        }
     }
 }

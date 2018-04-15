@@ -1,4 +1,4 @@
 employeeID,username,firstName,lastName,password,isAdmin,employeeType,subtype
 1,admin,Building,Owner,admin,1,DEFAULT,DEFAULT
 2,staff,Building,Owner,staff,0,DEFAULT,DEFAULT
-890680084,BenTitus,Ben,Titus,ben,0,DEFAULT,DEFAULT
+890680084,BenTitus,Ben,Titus,ben,1,DEFAULT,DEFAULT
