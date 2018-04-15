@@ -577,7 +577,22 @@ public class MapScreenController {
                             popOver = null;
                         }
                         Node node = nodeSet.get(string);
-                        Label nodeTypeLabel = new Label(node.getType().toString().toUpperCase());
+                        // Correcting enum toString conversion
+                        String type = node.getType().toString().toUpperCase();
+                        if (type.equals("STAIR")) {
+                            type = "STAIRS";
+                        } else if (type.equals("CONFERENCE")) {
+                            type = "CONFERENCE ROOM";
+                        } else if (type.equals("HALL")) {
+                            type = "HALLWAY";
+                        } else if (type.equals("INFORMATION")) {
+                            type = "INFORMATION DESK";
+                        } else if (type.equals("LABS")) {
+                            type = "LABORATORY";
+                        } else if (type.equals("SERVICE")) {
+                            type = "SERVICES";
+                        }
+                        Label nodeTypeLabel = new Label(type);
                         Label nodeLongNameLabel = new Label("Name: " + node.getLongName());
                         Label nodeBuildingLabel = new Label("Building: "+ node.getBuilding().toString());
                         nodeTypeLabel.setStyle("-fx-font-size: 28px; -fx-text-fill: #0b2f5b; -fx-font-weight: 700; -fx-padding: 10px 10px 0 10px;");
