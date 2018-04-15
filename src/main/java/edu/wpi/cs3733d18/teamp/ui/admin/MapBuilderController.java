@@ -3,6 +3,7 @@ package edu.wpi.cs3733d18.teamp.ui.admin;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToggleButton;
 import edu.wpi.cs3733d18.teamp.*;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
@@ -65,6 +66,7 @@ public class MapBuilderController implements Initializable {
     private Boolean edgeSelected = false;
     private Boolean pathDrawn = false;
     private Boolean isNewNode = false;
+    private Boolean toggleOn = false;
 
     private static HashMap<String, Circle> nodeDispSet = new HashMap<>();
     private static HashMap<String, Line> edgeDispSet = new HashMap<>();
@@ -87,6 +89,9 @@ public class MapBuilderController implements Initializable {
 
     @FXML
     JFXButton goButton;
+
+    @FXML
+    JFXToggleButton mapToggleButton;
 
     @FXML
     AnchorPane basePane;
@@ -208,9 +213,9 @@ public class MapBuilderController implements Initializable {
 
 
         mapImage.addEventHandler(MouseEvent.ANY, mouseEventEventHandler);
+        getMap();
         drawEdges();
         drawNodes();
-        getMap();
         nodesEdgesPane.getChildren().add(newNodeCircle);
         //newNodeCircle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
         addOverlay();
@@ -236,17 +241,14 @@ public class MapBuilderController implements Initializable {
         Main.pathfindingContext.setPathfindingContext(Main.settings.getPathfindingSettings());
     }
 
-    Boolean toggleOn = true;
+
     /**
      * switch statement that determines which map is loaded in
      */
     public void getMap(){
         Image image;
+        floorState = floorSpinner.getValue().toString();
         if (toggleOn){
-            X_OFFSET = 0;
-            Y_OFFSET = -19;
-            X_SCALE = 1920.0/5000.0;
-            Y_SCALE = 1065.216/2774.0;
             switch(floorState) {
                 case "3":
                     image = new Image("/img/maps/3d/3-ICONS.png");
@@ -268,10 +270,6 @@ public class MapBuilderController implements Initializable {
                     break;
             }
         } else {
-            X_OFFSET = -523;
-            Y_OFFSET = 0;
-            X_SCALE = 1588.235294/5000.0;
-            Y_SCALE = 1080.0/3400.0;
             switch (floorState) {
                 case "3":
                     image = new Image("/img/maps/2d/03_thethirdfloor.png");
@@ -374,7 +372,7 @@ public class MapBuilderController implements Initializable {
                     circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
                 } else {
                     circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
-                    circle.setCenterX((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
+                    circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
                 }
 
                 //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
@@ -407,7 +405,7 @@ public class MapBuilderController implements Initializable {
                     circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
                 } else {
                     circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
-                    circle.setCenterX((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
+                    circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
                 }
                 //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
                 circle.setFill(Color.DODGERBLUE);
@@ -435,10 +433,17 @@ public class MapBuilderController implements Initializable {
             if (edge.getStart().getFloor() == currentFloor && edge.getEnd().getFloor() == currentFloor) {
                 Line line = new Line();
                 nodesEdgesPane.getChildren().add(line);
-                line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
-                line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
-                line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
-                line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
+                if (!toggleOn) {
+                    line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
+                    line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
+                    line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
+                    line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
+                } else {
+                    line.setStartX((edge.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
+                    line.setStartY((edge.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);
+                    line.setEndX((edge.getEnd().getxDisplay() - X_OFFSET) * X_SCALE);
+                    line.setEndY((edge.getEnd().getyDisplay() - Y_OFFSET) * Y_SCALE);
+                }
                 line.setStrokeWidth(EDGE_WIDTH);
                 line.setStrokeType(StrokeType.CENTERED);
                 if(!edge.getActive()){
@@ -453,10 +458,17 @@ public class MapBuilderController implements Initializable {
             else if(edge.getStart().getFloor() == currentFloor || edge.getEnd().getFloor() == currentFloor){
                 Line line = new Line();
                 nodesEdgesPane.getChildren().add(line);
-                line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
-                line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
-                line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
-                line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
+                if (!toggleOn) {
+                    line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
+                    line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
+                    line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
+                    line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
+                } else {
+                    line.setStartX((edge.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
+                    line.setStartY((edge.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);
+                    line.setEndX((edge.getEnd().getxDisplay() - X_OFFSET) * X_SCALE);
+                    line.setEndY((edge.getEnd().getyDisplay() - Y_OFFSET) * Y_SCALE);
+                }
                 line.setStrokeWidth(0);
                 line.setStrokeType(StrokeType.CENTERED);
                 if(!edge.getActive()){
@@ -471,10 +483,17 @@ public class MapBuilderController implements Initializable {
             else {
                 Line line = new Line();
                 nodesEdgesPane.getChildren().add(line);
-                line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
-                line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
-                line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
-                line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
+                if (!toggleOn) {
+                    line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
+                    line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
+                    line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
+                    line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
+                } else {
+                    line.setStartX((edge.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
+                    line.setStartY((edge.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);
+                    line.setEndX((edge.getEnd().getxDisplay() - X_OFFSET) * X_SCALE);
+                    line.setEndY((edge.getEnd().getyDisplay() - Y_OFFSET) * Y_SCALE);
+                }
                 line.setStrokeWidth(0);
                 line.setStrokeType(StrokeType.CENTERED);
                 if (!edge.getActive()) {
@@ -994,6 +1013,8 @@ public class MapBuilderController implements Initializable {
      * this also brings in the basic overlays
      */
     public void updateMap(){
+        nodeDispSet.clear();
+        edgeDispSet.clear();
         nodesEdgesPane.getChildren().clear();
         getMap();
         drawEdges();
@@ -1274,6 +1295,24 @@ public class MapBuilderController implements Initializable {
             }
         }
 //        path = new ArrayList<>();
+    }
+
+    @FXML
+    public void mapToggleButtonOp(){
+        if (mapToggleButton.isSelected()){
+            X_OFFSET = 0;
+            Y_OFFSET = -19;
+            X_SCALE = 1920.0/5000.0;
+            Y_SCALE = 1065.216/2774.0;
+            toggleOn = true;
+        } else {
+            X_OFFSET = -523;
+            Y_OFFSET = 0;
+            X_SCALE = 1588.235294/5000.0;
+            Y_SCALE = 1080.0/3400.0;
+            toggleOn = false;
+        }
+        updateMap();
     }
 
     public Boolean getSourceFocus(){
