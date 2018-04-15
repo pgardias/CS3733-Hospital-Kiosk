@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -113,6 +114,7 @@ public class MapScreenController {
 
     @FXML
     static PopOver popOver;
+    Boolean popOverHidden = true;
 
     SearchBarOverlayController searchBarOverlayController = null;
     MapScreenController mapScreenController;
@@ -569,7 +571,7 @@ public class MapScreenController {
                     }
                     firstSelected = false;
                 }
-            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED) { // TODO Check zoom level to prevent graphical glitches
+            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED && popOverHidden) { // TODO Check zoom level to prevent graphical glitches
                 System.out.println("MOUSE_ENTERED event at " + event.getSource());
                 for (String string : nodeDispSet.keySet()) {
                     if (nodeDispSet.get(string) == event.getSource()) {
@@ -578,27 +580,32 @@ public class MapScreenController {
                             popOver = null;
                         }
                         Node node = nodeSet.get(string);
+                        Label nodeTypeLabel = new Label(node.getType().toString().toUpperCase());
                         Label nodeIDLabel = new Label("ID: " + node.getID());
                         Label nodeLongNameLabel = new Label("Name: " + node.getLongName());
-                        nodeIDLabel.setStyle("-fx-font-size: 18px; -fx-alignment: CENTER; -fx-padding: 10px 10px 0 10px;");
-                        nodeLongNameLabel.setStyle("-fx-font-size: 18px; -fx-alignment: CENTER; -fx-padding: 0 10px 10px 10px;");
-                        VBox popOverVBox = new VBox(nodeIDLabel, nodeLongNameLabel);
-//                        popOverVBox.setStyle("-fx-font-size: 18px; -fx-alignment: CENTER; -fx-padding: 10px 10px 0 10px;");
+                        nodeTypeLabel.setStyle("-fx-font-size: 28px; -fx-text-fill: #0b2f5b; -fx-font-weight: 700; -fx-padding: 10px 10px 0 10px;");
+                        nodeTypeLabel.setAlignment(Pos.CENTER);
+                        nodeIDLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 0 10px;");
+                        nodeLongNameLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
+                        VBox popOverVBox = new VBox(nodeTypeLabel, nodeIDLabel, nodeLongNameLabel);
+//                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
                         popOver = new PopOver(popOverVBox);
-                        popOver.setTitle(node.getType().toString());
-                        popOver.setHeaderAlwaysVisible(true);
+//                        popOver.setTitle(node.getType().toString());
+//                        popOver.setHeaderAlwaysVisible(true);
                         popOver.show((javafx.scene.Node) event.getSource());
+                        popOverHidden = false;
 //                        popOver.setContentNode(new VBox(nodeIDLabel, nodeLongNameLabel));
                         popOver.setCloseButtonEnabled(false);
-                        popOver.setCornerRadius(20);
-                        popOver.setAutoFix(true);
-                        popOver.setAutoHide(true);
+//                        popOver.setCornerRadius(20);
+//                        popOver.setAutoFix(true);
+//                        popOver.setAutoHide(true);
                         popOver.setDetachable(false);
-                        popOver.setHideOnEscape(true);
+//                        popOver.setHideOnEscape(true);
                     }
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
                 popOver.hide();
+                popOverHidden = true;
             }
             event.consume();
         }
