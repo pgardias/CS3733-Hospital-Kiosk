@@ -4,3 +4,13 @@
     -fx-text-fill: WHITE;
     -fx-background-radius: 20;
 }
+
+
+.popover {
+    -fx-background-color: YELLOW;
+    -fx-font-color: WHITE;
+    -fx-font-size: 24px;
+}
+.popover > .border {
+    -fx-border-style: none;
+}
