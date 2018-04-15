@@ -123,6 +123,7 @@ public class MapScreenController {
         mapImage.scaleYProperty().bind(zoomSlider.valueProperty());
         nodesEdgesPane.scaleXProperty().bind(zoomSlider.valueProperty());
         nodesEdgesPane.scaleYProperty().bind(zoomSlider.valueProperty());
+        firstSelected = true;
 
         mapImage.addEventHandler(MouseEvent.ANY, mouseEventEventHandler);
         drawEdges();
@@ -130,6 +131,7 @@ public class MapScreenController {
         getMap();
         addOverlay();
 
+        searchBarOverlayController.setSourceSearchBar("Current Kiosk");
     }
 
     @FXML
@@ -302,30 +304,34 @@ public class MapScreenController {
      * Draws the nodes according to what was given back from the database
      */
     public void drawNodes() {
-        if (!toggleOn) {
-            HashMap<String, Node> nodeSet;
+        HashMap<String, Node> nodeSet;
 
-            nodeSet = db.getAllNodes();
-            System.out.println("drawing nodes");
-            for (Node node : nodeSet.values()) {
-                if (node.getFloor() == currentFloor && node.getType() != Node.nodeType.HALL) {
-                    Circle circle = new Circle(NODE_RADIUS);
-                    nodesEdgesPane.getChildren().add(circle);
+        nodeSet = db.getAllNodes();
+        System.out.println("drawing nodes");
+        for (Node node : nodeSet.values()) {
+            if (node.getFloor() == currentFloor && node.getType() != Node.nodeType.HALL) {
+                Circle circle = new Circle(NODE_RADIUS);
+                nodesEdgesPane.getChildren().add(circle);
+                if (!toggleOn) {
                     circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
                     circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
-                    System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-                    circle.setFill(Color.DODGERBLUE);
-                    circle.setStroke(Color.BLACK);
-                    circle.setStrokeType(StrokeType.INSIDE);
-                    if (!node.getActive()) {
-                        circle.setOpacity(0.5);
-                        circle.setFill(Color.GRAY);
-                    }
-                    circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
+                } else {
+                    circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
+                    circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
+                }
+                System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
+                circle.setFill(Color.DODGERBLUE);
+                circle.setStroke(Color.BLACK);
+                circle.setStrokeType(StrokeType.INSIDE);
+                if (!node.getActive()) {
+                    circle.setOpacity(0.5);
+                    circle.setFill(Color.GRAY);
+                }
+                circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
 //                circle.setOnMouseClicked(clickCallback());
 
-                    String label = node.getID();
-                    nodeDispSet.put(label, circle);
+                String label = node.getID();
+                nodeDispSet.put(label, circle);
 
 //                if(node.getType() == Node.nodeType.KIOS) {
 //                    File file = new File("main/kiosk/resources/img/pip.png");
@@ -335,72 +341,25 @@ public class MapScreenController {
 //                    position.setY((node.getY() - Y_OFFSET - 10) * Y_SCALE);
 //                    kioskPip = position;
 //                }
-                } else {
-                    Circle circle = new Circle(0);
-                    nodesEdgesPane.getChildren().add(circle);
+            } else {
+                Circle circle = new Circle(0);
+                nodesEdgesPane.getChildren().add(circle);
+                if (!toggleOn) {
                     circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
                     circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
-                    //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-                    circle.setFill(Color.DODGERBLUE);
-                    circle.setStroke(Color.BLACK);
-                    circle.setStrokeType(StrokeType.INSIDE);
-                    circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
-
-                    String label = node.getID();
-                    nodeDispSet.put(label, circle);
-                }
-            }
-            System.out.println("Printed All Nodes");
-        }
-        else {
-            HashMap<String, Node> nodeSet;
-
-            nodeSet = db.getAllNodes();
-            System.out.println("drawing nodes");
-            for (Node node : nodeSet.values()) {
-                if (node.getFloor() == currentFloor && node.getType() != Node.nodeType.HALL) {
-                    Circle circle = new Circle(NODE_RADIUS);
-                    nodesEdgesPane.getChildren().add(circle);
-                    circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
-                    circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
-                    System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-                    circle.setFill(Color.DODGERBLUE);
-                    circle.setStroke(Color.BLACK);
-                    circle.setStrokeType(StrokeType.INSIDE);
-                    if (!node.getActive()) {
-                        circle.setOpacity(0.5);
-                        circle.setFill(Color.GRAY);
-                    }
-                    circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
-//                circle.setOnMouseClicked(clickCallback());
-
-                    String label = node.getID();
-                    nodeDispSet.put(label, circle);
-
-//                if(node.getType() == Node.nodeType.KIOS) {
-//                    File file = new File("main/kiosk/resources/img/pip.png");
-//                    Image pip = new Image(file.toURI().toString());
-//                    ImageView position = new ImageView(pip);
-//                    position.setX((node.getX() - X_OFFSET) * X_SCALE);
-//                    position.setY((node.getY() - Y_OFFSET - 10) * Y_SCALE);
-//                    kioskPip = position;
-//                }
                 } else {
-                    Circle circle = new Circle(0);
-                    nodesEdgesPane.getChildren().add(circle);
                     circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
                     circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
-                    //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-                    circle.setFill(Color.DODGERBLUE);
-                    circle.setStroke(Color.BLACK);
-                    circle.setStrokeType(StrokeType.INSIDE);
-                    circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
-
-                    String label = node.getID();
-                    nodeDispSet.put(label, circle);
                 }
+                //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
+                circle.setFill(Color.DODGERBLUE);
+                circle.setStroke(Color.BLACK);
+                circle.setStrokeType(StrokeType.INSIDE);
+                circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
+
+                String label = node.getID();
+                nodeDispSet.put(label, circle);
             }
-            System.out.println("Printed All Nodes");
         }
     }
 
@@ -409,58 +368,33 @@ public class MapScreenController {
      * Draws the edges according to what was given back from the database
      */
     public void drawEdges() {
-        if (!toggleOn) {
-            HashMap<String, Edge> edgeSet;
+        HashMap<String, Edge> edgeSet;
 
-            edgeSet = db.getAllEdges();
+        edgeSet = db.getAllEdges();
 
-            for (Edge edge : edgeSet.values()) {
-                if (!edge.getActive()) {
-
-                } else {
-                    Line line = new Line();
-                    nodesEdgesPane.getChildren().add(line);
+        for (Edge edge : edgeSet.values()) {
+            if (edge.getActive()) {
+                Line line = new Line();
+                nodesEdgesPane.getChildren().add(line);
+                if (!toggleOn) {
                     line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
                     line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
                     line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
                     line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
-                    line.setStrokeWidth(0);
-                    line.setStrokeType(StrokeType.CENTERED);
-                    if (!edge.getActive()) {
-                        line.getStrokeDashArray().addAll(5.0, 2.5);
-                        line.setOpacity(0.5);
-                    }
-
-                    String label = edge.getID();
-                    edgeDispSet.put(label, line);
-                }
-            }
-        }
-        else {
-            HashMap<String, Edge> edgeSet;
-
-            edgeSet = db.getAllEdges();
-
-            for (Edge edge : edgeSet.values()) {
-                if (!edge.getActive()) {
-
                 } else {
-                    Line line = new Line();
-                    nodesEdgesPane.getChildren().add(line);
                     line.setStartX((edge.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
                     line.setStartY((edge.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);
                     line.setEndX((edge.getEnd().getxDisplay() - X_OFFSET) * X_SCALE);
                     line.setEndY((edge.getEnd().getyDisplay() - Y_OFFSET) * Y_SCALE);
-                    line.setStrokeWidth(0);
-                    line.setStrokeType(StrokeType.CENTERED);
-                    if (!edge.getActive()) {
-                        line.getStrokeDashArray().addAll(5.0, 2.5);
-                        line.setOpacity(0.5);
-                    }
-
-                    String label = edge.getID();
-                    edgeDispSet.put(label, line);
                 }
+                line.setStrokeWidth(5.0);
+                line.setStrokeType(StrokeType.CENTERED);
+                line.setVisible(false);
+                line.setPickOnBounds(false);
+                line.setDisable(true);
+
+                String label = edge.getID();
+                edgeDispSet.put(label, line);
             }
         }
     }
@@ -615,32 +549,25 @@ public class MapScreenController {
             resetPath();
         }
         this.pathMade = path;
-        //setSpinner();
-        Line line;
+
         for (Node n : path) {
             pastNode = currentNode;
             currentNode = n;
-            //if (path.get(0).equals(n) || path.get(path.size()-1).equals(n)) {
             nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
-            // }
             if (path.get(0).equals(n)) {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.GREEN);
-            }
-            if (path.get(path.size()-1).equals(n)) {
+            } else if (path.get(path.size()-1).equals(n)) {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.RED);
             }
             for (Edge e : currentNode.getEdges()) {
                 if (pastNode != null) {
                     if (e.contains(pastNode)) {
-                        line = edgeDispSet.get(e.getID());
                         edgeDispSet.get(e.getID()).setStroke(Color.rgb(250, 150, 0));
-                        //edgeDispSet.get(e.getID()).setStrokeWidth(5.0);
+                        edgeDispSet.get(e.getID()).setVisible(true);
                         if(e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor){
-                            edgeDispSet.get(e.getID()).setStrokeWidth(5.0);
-                        }
-                        if(e.getStart().getFloor() != e.getEnd().getFloor()) {
-                            nodeDispSet.get(pastNode.getID()).setFill(Color.DARKMAGENTA);
-                            nodeDispSet.get(currentNode.getID()).setFill(Color.DARKMAGENTA);
+                            edgeDispSet.get(e.getID()).setOpacity(1.0);
+                        } else {
+                          edgeDispSet.get(e.getID()).setOpacity(0.25);
                         }
                     }
                 }
@@ -649,15 +576,6 @@ public class MapScreenController {
         pathDrawn = true;
     }
 
-    /*
-    public void setSpinner(){
-        ObservableList<String> allowedFloorsList = FXCollections.observableArrayList((pathMade.get(pathMade.size()-1).getFloor().toString()),
-                (pathMade.get(0).getFloor().toString()));
-        floors = new SpinnerValueFactory.ListSpinnerValueFactory<String>(allowedFloorsList);
-
-        floorSpinner.setValueFactory(floors);
-    }
-    */
 
     /**
      * Used to draw the list of nodes returned by AStar
@@ -674,11 +592,7 @@ public class MapScreenController {
             for (Edge e : currentNode.getEdges()) {
                 if (pastNode != null) {
                     if (e.contains(pastNode)) {
-                        edgeDispSet.get(e.getID()).setStroke(Color.BLACK);
-                        edgeDispSet.get(e.getID()).setStrokeWidth(0);
-                        if(e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor){
-                            edgeDispSet.get(e.getID()).setStrokeWidth(0);
-                        }
+                        edgeDispSet.get(e.getID()).setVisible(false);
                     }
                 }
             }
