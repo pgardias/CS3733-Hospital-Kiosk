@@ -107,10 +107,7 @@ public class ManageEmployeeScreenController implements Initializable {
             ie.printStackTrace();
             return false;
         }
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setTitle("");
-        stage.setFullScreen(true);
-        stage.show();
+        backButton.getScene().setRoot(root);
 
         return true;
     }

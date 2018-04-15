@@ -1,7 +1,2 @@
-requestID,requestType,subType,location,additionalInfo,madeBy,completedBy,timeMade,timeCompleted,completed
-1,language interpreter,Choose a language,75 Francis Exit,Language: Choose a language Additional Info: ,BuildingOwner, ,2018-04-13 16:37:14.075,null,0
-2,language interpreter,Choose a language,75 Francis Exit,Language: Choose a language Additional Info: ,BuildingOwner, ,2018-04-13 16:37:27.995,null,0
-3,religion handler,Choose a religion,Cardiac Stress Test Lab,Religion: Choose a religion Additional Info: ,BuildingOwner, ,2018-04-13 16:38:23.421,null,0
-4,language interpreter,Choose a language,Cardiac Stress Test Lab,Language: Choose a language Additional Info: ,BuildingOwner, ,2018-04-13 16:41:33.499,null,0
-5,language interpreter,Choose a language,ABP,Language: Choose a language Additional Info: ,BuildingOwner, ,2018-04-14 12:24:10.726,null,0
-6,religion handler,Judaism,ABP,Religion: Judaism Additional Info: ,BuildingOwner, ,2018-04-14 12:28:53.691,null,0
+requestID,requestType,subType,location,additionalInfo,madeBy,completedBy,timeMade,timeCompleted,completed,priority
+1,language interpreter,German,Cafeasd,Language: German Additional Info: hi,BuildingOwner, ,2018-04-14 13:15:23.757,null,0,0
