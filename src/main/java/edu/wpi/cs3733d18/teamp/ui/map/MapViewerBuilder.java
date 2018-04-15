@@ -1,8 +1,6 @@
 package edu.wpi.cs3733d18.teamp.ui.map;
 
 import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
-import com.interactivemesh.jfx.importer.stl.StlMeshImporter;
-import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,7 +23,6 @@ import java.util.ResourceBundle;
 public class MapViewerBuilder implements Initializable{
 
     // Static global variables
-    private static final double MODEL_SCALE_FACTOR = 15;
     private static final double MODEL_X_OFFSET = 0; // standard
     private static final double MODEL_Y_OFFSET = 0; // standard
     private static final int VIEWPORT_SIZE = 800;
@@ -36,7 +33,7 @@ public class MapViewerBuilder implements Initializable{
     private PointLight pointLight;
 
     private static final int ROTATION_SPEED = 2;
-    private static final int PAN_SPEED = 5;
+    private static final int PAN_SPEED = 10;
 
     // Changeable global variables
     private double mouseInSceneX;
@@ -47,6 +44,8 @@ public class MapViewerBuilder implements Initializable{
     private double curXTranslation;
     private double curYTranslation;
     private double curZTranslation;
+    private double curScale;
+    private double curZoom;
 
     // FXML variables
     @FXML
@@ -78,19 +77,20 @@ public class MapViewerBuilder implements Initializable{
         Boolean isDragging;
         @Override
         public void handle(MouseEvent event) {
+            MeshView mv = getMesh();
 
             // Left Mouse Button, Rotating
             if (event.getButton() == MouseButton.PRIMARY) {
                 if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                    System.out.println("Mouse_Pressed");
+                    //System.out.println("Mouse_Pressed");
                     mouseInSceneX = event.getSceneX();
                     mouseInSceneY = event.getSceneY();
                     isDragging = false;
                 } else if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
-                    System.out.println("Drag_Detected");
+                    //System.out.println("Drag_Detected");
                     isDragging = true;
                 } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-                    System.out.println("Mouse_Dragged");
+                    //System.out.println("Mouse_Dragged");
                     double newMouseInSceneX = event.getSceneX();
                     double newMouseInSceneY = event.getSceneY();
                     double xChange = newMouseInSceneX - mouseInSceneX;
@@ -100,25 +100,17 @@ public class MapViewerBuilder implements Initializable{
                     // Change Rotation Y
                     if (xChange < 0) {
                         curYRotation += ROTATION_SPEED;
-                        Group group = (Group) threeDAnchorPane.getChildren().get(2);
-                        MeshView mv = (MeshView) group.getChildren().get(0);
                         mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
                     } else if (xChange > 0) {
                         curYRotation -= ROTATION_SPEED;
-                        Group group = (Group) threeDAnchorPane.getChildren().get(2);
-                        MeshView mv = (MeshView) group.getChildren().get(0);
                         mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
                     }
                     // Change Rotation X
                     if (yChange < 0) {
                         curXRotation += ROTATION_SPEED;
-                        Group group = (Group) threeDAnchorPane.getChildren().get(2);
-                        MeshView mv = (MeshView) group.getChildren().get(0);
                         mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
                     } else if (yChange > 0) {
                         curXRotation -= ROTATION_SPEED;
-                        Group group = (Group) threeDAnchorPane.getChildren().get(2);
-                        MeshView mv = (MeshView) group.getChildren().get(0);
                         mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
                     }
                     mouseInSceneX = newMouseInSceneX;
@@ -129,42 +121,34 @@ public class MapViewerBuilder implements Initializable{
             // Right Mouse Button, Panning
             else if (event.getButton() == MouseButton.SECONDARY) {
                 if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                    System.out.println("Mouse_Pressed");
+                    //System.out.println("Mouse_Pressed");
                     mouseInSceneX = event.getSceneX();
                     mouseInSceneY = event.getSceneY();
                     isDragging = false;
                 } else if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
-                    System.out.println("Drag_Detected");
+                    //System.out.println("Drag_Detected");
                     isDragging = true;
                 } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-                    System.out.println("Mouse_Dragged");
+                    //System.out.println("Mouse_Dragged");
                     double newMouseInSceneX = event.getSceneX();
                     double newMouseInSceneY = event.getSceneY();
                     double xChange = newMouseInSceneX - mouseInSceneX;
                     double yChange = newMouseInSceneY - mouseInSceneY;
 
                     // Change Panning X
-                    if (xChange < 0) {
+                    if (xChange < 0) { // Pan left
                         curXTranslation -= PAN_SPEED;
-                        Group group = (Group) threeDAnchorPane.getChildren().get(2);
-                        MeshView mv = (MeshView) group.getChildren().get(0);
                         mv.setTranslateX(curXTranslation);
-                    } else if (xChange > 0) {
+                    } else if (xChange > 0) { // Pan right
                         curXTranslation += PAN_SPEED;
-                        Group group = (Group) threeDAnchorPane.getChildren().get(2);
-                        MeshView mv = (MeshView) group.getChildren().get(0);
                         mv.setTranslateX(curXTranslation);
                     }
                     // Change Panning Y
-                    if (yChange < 0) {
+                    if (yChange < 0) { // Pan down
                         curYTranslation -= PAN_SPEED;
-                        Group group = (Group) threeDAnchorPane.getChildren().get(2);
-                        MeshView mv = (MeshView) group.getChildren().get(0);
                         mv.setTranslateY(curYTranslation);
-                    } else if (yChange > 0) {
+                    } else if (yChange > 0) { // Pan up
                         curYTranslation += PAN_SPEED;
-                        Group group = (Group) threeDAnchorPane.getChildren().get(2);
-                        MeshView mv = (MeshView) group.getChildren().get(0);
                         mv.setTranslateY(curYTranslation);
                     }
 
@@ -176,13 +160,27 @@ public class MapViewerBuilder implements Initializable{
     };
 
     /**
-     * this lets the user scroll the wheel to move the zoom slider
-     * This also readjusts the screen based on the bounds
+     * this lets the user scroll the wheel to scale the 3D model
      * @param s
      */
     @FXML
     public void zoomScrollWheel(ScrollEvent s){
-        double newValue = (s.getDeltaY());
+        double newZoom = (s.getDeltaY()); // Get value from scroll wheel
+        MeshView mv = getMesh();
+        //System.out.println("SCROLLING ZOOM. OLD DELTA: "+curZoom+" NEW DELTA: "+newZoom);
+        if (newZoom > 0 && curScale + 5 <= 100) {
+            curScale += 5;
+            mv.setScaleX(curScale);
+            mv.setScaleY(curScale);
+            mv.setScaleZ(curScale);
+        }
+        else if (newZoom < 0 && curScale - 5 > 0) {
+            curScale -= 5;
+            mv.setScaleX(curScale);
+            mv.setScaleY(curScale);
+            mv.setScaleZ(curScale);
+        }
+        curZoom = newZoom; // Set next zoom value to compare to
     }
 
     static MeshView[] loadMeshView() {
@@ -200,12 +198,13 @@ public class MapViewerBuilder implements Initializable{
             curXTranslation = (VIEWPORT_SIZE / 2 + MODEL_X_OFFSET);
             curYTranslation = (VIEWPORT_SIZE / 2 + MODEL_Y_OFFSET);
             curZTranslation = (VIEWPORT_SIZE / 2);
+            curScale = 15;
             meshViews[i].setTranslateX(curXTranslation);
             meshViews[i].setTranslateY(curYTranslation);
             meshViews[i].setTranslateZ(curZTranslation);
-            meshViews[i].setScaleX(MODEL_SCALE_FACTOR);
-            meshViews[i].setScaleY(MODEL_SCALE_FACTOR);
-            meshViews[i].setScaleZ(MODEL_SCALE_FACTOR);
+            meshViews[i].setScaleX(curScale);
+            meshViews[i].setScaleY(curScale);
+            meshViews[i].setScaleZ(curScale);
 
             /*PhongMaterial sample = new PhongMaterial(buildingColor);
             sample.setSpecularColor(lightColor);
@@ -255,16 +254,23 @@ public class MapViewerBuilder implements Initializable{
 
     public void leftButtonOp() {
         curYRotation += 10;
-        Group group = (Group)threeDAnchorPane.getChildren().get(2);
-        MeshView mv = (MeshView)group.getChildren().get(0);
+        MeshView mv = getMesh();
         mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
     }
 
     public void rightButtonOp() {
         curYRotation -= 10;
-        Group group = (Group)threeDAnchorPane.getChildren().get(2);
-        MeshView mv = (MeshView)group.getChildren().get(0);
+        MeshView mv = getMesh();
         mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
+    }
+
+    /**
+     * Gets mesh value from group hierarchy for convenience
+     * @return The MeshView we are looking for
+     */
+    private MeshView getMesh() {
+        Group group = (Group)threeDAnchorPane.getChildren().get(2);
+        return (MeshView)group.getChildren().get(0);
     }
 
 }
