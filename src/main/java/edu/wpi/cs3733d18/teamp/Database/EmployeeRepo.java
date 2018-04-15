@@ -328,6 +328,105 @@ public class EmployeeRepo {
             return employee;
     }
 
+    /**
+     * checkAdminLogin checks that the person logging into the
+     * Admin page is an Admin by verifying their access privileges
+     * @param id
+     * @return an Employee that is an Admin, and throws an exception if the employee is not an Admin
+     */
+    Employee checkAdminLoginID(String id) throws LoginInvalidException, AccessNotAllowedException {
+        Employee employee = new Employee();
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+
+            String sql = "SELECT * FROM EMPLOYEE_INFO WHERE employeeID = ? AND isAdmin = 1";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, Integer.valueOf(id));
+            ResultSet results = pstmt.executeQuery();
+            if(!results.next()){
+                throw new LoginInvalidException();
+            }else {
+                do {
+                    employee.setUserName(results.getString("username"));
+                    employee.setPassword(results.getString("password"));
+                    employee.setFirstName(results.getString("firstName"));
+                    employee.setLastName(results.getString("lastName"));
+                    // Check if admin
+                    if (results.getInt("isAdmin") == 0) {
+                        employee.setIsAdmin(false);
+                    } else if (results.getInt("isAdmin") == 1) {
+                        employee.setIsAdmin(true);
+                    }
+                    employee.setEmployeeType(StringToEmployeeType(results.getString("employeeType")));
+                    employee.setSubType(results.getString("subType"));
+
+                } while (results.next());
+            }
+            if(!employee.getIsAdmin()){
+                throw new AccessNotAllowedException();
+            }
+
+            results.close();
+            pstmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            throw new LoginInvalidException();
+        }
+
+        return employee;
+    }
+
+    /**
+     * checkEmployeeLogin checks if the username and password
+     * of an Employee are in the current Employee database
+     * @param id
+     * @return gives an Employee object if the username and password for the employee match the given values
+     * in the database, gives an exception if otherwise
+     */
+    Employee checkEmployeeLoginID(String id) throws LoginInvalidException {
+        Employee employee = new Employee();
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+
+            String sql = "SELECT * FROM EMPLOYEE_INFO WHERE employeeID = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, Integer.valueOf(id));
+            ResultSet results = pstmt.executeQuery();
+
+            if (!results.next()) {
+                throw new LoginInvalidException();
+            }
+
+            employee.setUserName(results.getString("username"));
+            employee.setPassword(results.getString("password"));
+            employee.setFirstName(results.getString("firstName"));
+            employee.setLastName(results.getString("lastName"));
+            // Check if admin
+            if (results.getInt("isAdmin") == 0) {
+                employee.setIsAdmin(false);
+            } else if (results.getInt("isAdmin") == 1) {
+                employee.setIsAdmin(true);
+            }
+            employee.setEmployeeType(StringToEmployeeType(results.getString("employeeType")));
+            employee.setSubType(results.getString("subType"));
+
+            pstmt.close();
+            conn.close();
+            results.close();
+            pstmt.close();
+            conn.close();
+        }catch(SQLException se){
+            se.printStackTrace();
+        }catch(NullPointerException e){
+            e.printStackTrace();
+            throw new LoginInvalidException();
+        }
+        return employee; // Returns Employee object
+    }
+
     private int generateID(){
         int max;
         try {
