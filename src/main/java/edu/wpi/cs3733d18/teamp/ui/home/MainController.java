@@ -7,6 +7,7 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.AccessNotAllowedException;
 import edu.wpi.cs3733d18.teamp.Exceptions.EmployeeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.LoginInvalidException;
+import edu.wpi.cs3733d18.teamp.Exceptions.SwipeInvalidException;
 import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.ui.map.MapScreenController;
 import javafx.application.Platform;
@@ -37,6 +38,7 @@ public class MainController {
     String userType;
     private DBSystem db = DBSystem.getInstance();
     private ArrayList<Character> loginID = new ArrayList<>();
+    private boolean swipeDetected = false;
 
     @FXML
     JFXButton adminButton;
@@ -72,6 +74,10 @@ public class MainController {
             }
         });
         loginRectangle.addEventHandler(KeyEvent.KEY_TYPED, keyEventEventHandler);
+        usernameTxt.addEventHandler(KeyEvent.KEY_TYPED, keyEventEventHandler);
+        passwordTxt.addEventHandler(KeyEvent.KEY_TYPED, keyEventEventHandler);
+        usernameTxt.setText("");
+        passwordTxt.setText("");
     }
 
 
@@ -83,7 +89,23 @@ public class MainController {
 
         @Override
         public void handle(KeyEvent event) {
-            swipeLogin(event);
+            if (!swipeDetected) {
+                System.out.println("no swipe");
+                if (event.getCharacter().equals("%") || event.getCharacter().equals(";")) {
+                    System.out.println("new swipe!");
+                    swipeDetected = true;
+                } else {
+                    System.out.println("still no swipe");
+                    if (event.getSource().equals(usernameTxt)) {
+                        System.out.println("usernametxt: " + usernameTxt.getText() + " event text: " + event.getCharacter());
+                        usernameTxt.setText(usernameTxt.getText() + event.getCharacter());
+                    }
+                }
+            }
+            if (swipeDetected) {
+                System.out.println("swipe!");
+                swipeLogin(event);
+            }
             event.consume();
         }
     };
@@ -94,6 +116,7 @@ public class MainController {
      * or admin login buttons opening the Login.fxml
      * The login.fxml then has a different login button function and title
      * depending on which one was clicked
+     *
      * @param e button press
      * @throws IOException
      */
@@ -101,32 +124,33 @@ public class MainController {
     public void loginButtonOp(MouseEvent e) {
         System.out.println(e.getEventType());
 
-            String username = usernameTxt.getText();
-            String password = passwordTxt.getText();
+        String username = usernameTxt.getText();
+        String password = passwordTxt.getText();
 
-            try {
-                Main.currentUser = db.checkEmployeeLogin(username, password);
-            } catch (LoginInvalidException e1) {
-                usernameTxt.setPromptText("Username");
-                passwordTxt.setPromptText("Password");
-                usernameTxt.clear();
-                passwordTxt.clear();
-                loginErrorLabel.setText("Login failed, invalid username or password");
-                loginErrorLabel.setVisible(true);
+        try {
+            Main.currentUser = db.checkEmployeeLogin(username, password);
+        } catch (LoginInvalidException e1) {
+            usernameTxt.setPromptText("Username");
+            passwordTxt.setPromptText("Password");
+            usernameTxt.clear();
+            passwordTxt.clear();
+            loginErrorLabel.setText("Login failed, invalid username or password");
+            loginErrorLabel.setVisible(true);
 
-                return;
-            }
+            return;
+        }
 
-            if (Main.currentUser.getIsAdmin()) {
-                goToAdminRequestScreen();
-            } else {
-                goToServiceRequestScreen();
-            }
+        if (Main.currentUser.getIsAdmin()) {
+            goToAdminRequestScreen();
+        } else {
+            goToServiceRequestScreen();
+        }
     }
 
 
     /**
      * This method will bring the user to the main map screen when pressed
+     *
      * @param e button press
      * @return returns true if successful
      */
@@ -156,7 +180,7 @@ public class MainController {
     }
 
     @FXML
-    public void goToServiceRequestScreen(){
+    public void goToServiceRequestScreen() {
         FXMLLoader loader;
         Stage stage;
         Parent root;
@@ -176,7 +200,7 @@ public class MainController {
     }
 
     @FXML
-    public void goToAdminRequestScreen(){
+    public void goToAdminRequestScreen() {
         FXMLLoader loader;
         Stage stage;
         Parent root;
@@ -199,8 +223,10 @@ public class MainController {
     @FXML
     public void swipeLogin(KeyEvent ke) {
         boolean goodToLogin = false;
+        boolean invalidSwipe = false;
         loginID.add(ke.getCharacter().toCharArray()[0]);
-        if (loginID.size() > 13) {
+        System.out.println(ke.getCharacter());
+//        if (loginID.size() > 13) {
             // %18262028501?+18262028501?
             // ;18262028501?+18262028501?
             // %89068008401?;89068008401?+89068008401?
@@ -213,6 +239,11 @@ public class MainController {
                     case 0:
                         if (c == '%' || c == ';') {
                             loginState = 1;
+                        } else {
+                            loginCount = 0;
+                            loginState = 0;
+                            loginString = "";
+                            invalidSwipe = true;
                         }
                         break;
 
@@ -224,18 +255,33 @@ public class MainController {
                             if (loginCount == 9) {
                                 loginState = 2;
                             }
+                        } else {
+                            loginCount = 0;
+                            loginState = 0;
+                            loginString = "";
+                            invalidSwipe = true;
                         }
                         break;
 
                     case 2:
                         if (c == '0') {
                             loginState = 3;
+                        } else {
+                            loginCount = 0;
+                            loginState = 0;
+                            loginString = "";
+                            invalidSwipe = true;
                         }
                         break;
 
                     case 3:
                         if (c == '1') {
                             loginState = 4;
+                        } else {
+                            loginCount = 0;
+                            loginState = 0;
+                            loginString = "";
+                            invalidSwipe = true;
                         }
                         break;
 
@@ -246,11 +292,14 @@ public class MainController {
                             loginCount = 0;
                             loginState = 0;
                             loginString = "";
+                            invalidSwipe = true;
                         }
                         break;
                     case 5:
                         loginRectangle.removeEventHandler(KeyEvent.KEY_TYPED, keyEventEventHandler);
                         goodToLogin = true;
+                        invalidSwipe = false;
+                        System.out.println("good swipe received!");
                         break;
                 }
             }
@@ -261,6 +310,7 @@ public class MainController {
                     le.printStackTrace();
                     loginErrorLabel.setText("Login failed, please swipe again");
                     loginErrorLabel.setVisible(true);
+                    return;
                 }
 
                 if (Main.currentUser.getIsAdmin()) {
@@ -268,9 +318,12 @@ public class MainController {
                 } else {
                     goToServiceRequestScreen();
                 }
+            } else if (invalidSwipe) {
+                loginErrorLabel.setText("Swipe failed, please swipe again");
+                loginErrorLabel.setVisible(true);
             }
 //            toClose = (Stage) loginButton.getScene().getWindow();
 //            toClose.close();
         }
-    }
+//    }
 }

@@ -4,6 +4,7 @@ import edu.wpi.cs3733d18.teamp.Employee;
 import edu.wpi.cs3733d18.teamp.Exceptions.AccessNotAllowedException;
 import edu.wpi.cs3733d18.teamp.Exceptions.EmployeeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.LoginInvalidException;
+import edu.wpi.cs3733d18.teamp.Exceptions.SwipeInvalidException;
 
 import java.sql.*;
 import java.util.HashMap;
