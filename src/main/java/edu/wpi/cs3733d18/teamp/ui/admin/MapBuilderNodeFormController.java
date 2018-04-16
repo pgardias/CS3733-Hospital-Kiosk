@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733d18.teamp.Coordinate;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
+import edu.wpi.cs3733d18.teamp.Exceptions.DuplicateLongNameException;
 import edu.wpi.cs3733d18.teamp.Exceptions.EdgeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
@@ -267,6 +268,11 @@ public class MapBuilderNodeFormController implements Initializable{
             catch(EdgeNotFoundException enfe){
                 enfe.printStackTrace();
             }
+            catch (DuplicateLongNameException de) {
+                nodeFormErrorLabel.setText("Node " + de.getNodeID() + " already has this Long Name");
+                nodeFormErrorLabel.setVisible(true);
+                return;
+            }
             editedNodeID = null;
         } else {
             try {
@@ -277,6 +283,11 @@ public class MapBuilderNodeFormController implements Initializable{
             }
             catch(EdgeNotFoundException enfe){
                 enfe.printStackTrace();
+            }
+            catch (DuplicateLongNameException de) {
+                nodeFormErrorLabel.setText("Node " + de.getNodeID() + " already has this Long Name");
+                nodeFormErrorLabel.setVisible(true);
+                return;
             }
         }
         mapBuilderController.addOverlay();

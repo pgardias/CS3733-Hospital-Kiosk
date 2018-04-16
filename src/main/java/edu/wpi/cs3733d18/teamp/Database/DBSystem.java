@@ -91,13 +91,13 @@ public class DBSystem {
 
     // Node Repository Functions
 
-    public Boolean createNode(Node node, Node connectedNode) throws NodeNotFoundException, EdgeNotFoundException {
+    public Boolean createNode(Node node, Node connectedNode) throws NodeNotFoundException, EdgeNotFoundException, DuplicateLongNameException {
         Boolean success = nodeRepo.createNode(node, connectedNode);
         storage.update();
         return success;
     }
 
-    public Boolean modifyNode(Node node) throws NodeNotFoundException, EdgeNotFoundException {
+    public Boolean modifyNode(Node node) throws NodeNotFoundException, EdgeNotFoundException, DuplicateLongNameException {
         Boolean success = nodeRepo.modifyNode(node);
         storage.update();
         return success;
