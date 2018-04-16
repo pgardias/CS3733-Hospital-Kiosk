@@ -311,49 +311,35 @@ public class MapScreenController {
         nodeSet = db.getAllNodes();
         System.out.println("drawing nodes");
         for (Node node : nodeSet.values()) {
-            if (node.getFloor() == currentFloor && node.getType() != Node.nodeType.HALL) {
-                Circle circle = new Circle(NODE_RADIUS);
-                nodesEdgesPane.getChildren().add(circle);
-                if (!toggleOn) {
-                    circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
-                    circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
-                } else {
-                    circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
-                    circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
-                }
-                System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-                circle.setFill(Color.DODGERBLUE);
-                circle.setStroke(Color.BLACK);
-                circle.setStrokeType(StrokeType.INSIDE);
-                if (!node.getActive()) {
-                    circle.setOpacity(0.5);
-                    circle.setFill(Color.GRAY);
-                }
-                circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
+            Circle circle = new Circle();
+            circle.setRadius(NODE_RADIUS);
+            if (node.getFloor() != currentFloor || node.getType() == Node.nodeType.HALL) {
+                circle.setVisible(false);
+                circle.setDisable(true);
+                circle.setPickOnBounds(false);
+            }
+            nodesEdgesPane.getChildren().add(circle);
+            if (!toggleOn) {
+                circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
+                circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
+            } else {
+                circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
+                circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
+            }
+            //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
+            circle.setFill(Color.DODGERBLUE);
+            circle.setStroke(Color.BLACK);
+            circle.setStrokeType(StrokeType.INSIDE);
+            if(!node.getActive()) {
+                circle.setOpacity(0.5);
+                circle.setFill(Color.GRAY);
+            }
+            circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
 //                circle.setOnMouseClicked(clickCallback());
 
-                String label = node.getID();
-                nodeDispSet.put(label, circle);
+            String label = node.getID();
+            nodeDispSet.put(label, circle);
 
-            } else {
-                Circle circle = new Circle(0);
-                nodesEdgesPane.getChildren().add(circle);
-                if (!toggleOn) {
-                    circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
-                    circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
-                } else {
-                    circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
-                    circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
-                }
-                //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-                circle.setFill(Color.DODGERBLUE);
-                circle.setStroke(Color.BLACK);
-                circle.setStrokeType(StrokeType.INSIDE);
-                circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
-
-                String label = node.getID();
-                nodeDispSet.put(label, circle);
-            }
         }
     }
 

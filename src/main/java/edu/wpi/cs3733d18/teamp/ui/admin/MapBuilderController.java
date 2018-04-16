@@ -377,7 +377,6 @@ public class MapBuilderController implements Initializable {
                circle.setDisable(true);
                circle.setPickOnBounds(false);
             }
-            
             nodesEdgesPane.getChildren().add(circle);
             if (!toggleOn) {
                 circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
@@ -386,7 +385,6 @@ public class MapBuilderController implements Initializable {
                 circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
                 circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
             }
-
             //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
             circle.setFill(Color.DODGERBLUE);
             circle.setStroke(Color.BLACK);
