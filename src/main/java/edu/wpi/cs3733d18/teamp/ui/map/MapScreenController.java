@@ -243,7 +243,7 @@ public class MapScreenController {
             Y_SCALE = 1065.216/2774.0;
             switch(floorState) {
                 case "3":
-                    image = new Image("/img/maps/3d/3-ICONS.png");
+                    image = new Image("/img/maps/3d/3-ICONS.png"); //TODO use this bit of information for image drawing
                     break;
                 case "2":
                     image = new Image("/img/maps/3d/2-ICONS.png");
