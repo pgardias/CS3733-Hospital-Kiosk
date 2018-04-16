@@ -45,6 +45,9 @@ public class ServiceRequestScreen implements Initializable{
     JFXButton completeRequestButton;
 
     @FXML
+    JFXButton serviceAPIButton;
+
+    @FXML
     Label serviceRequestErrorLabel;
 
     @FXML
@@ -377,5 +380,17 @@ public class ServiceRequestScreen implements Initializable{
 
     }
 
+    @FXML
+    public void serviceAPIButtonOp(ActionEvent e) {
+        /*
+        FoodRequest foodRequest = new FoodRequest();
+        try {
+            foodRequest.run(0, 0, 1900, 1000, null, null, null);
+        } catch (Exception ex) {
+            System.out.println("Failed to run API");
+            ex.printStackTrace();
+        }
+        */
+    }
 }
 
