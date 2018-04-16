@@ -1083,6 +1083,13 @@ public class MapBuilderController implements Initializable {
         if(pathDrawn) resetPath();
         if (nodeModify != null) {
             nodeDispSet.get(nodeModify.getID()).setFill(Color.DODGERBLUE);
+            if (toggleOn) {
+                nodeDispSet.get(nodeModify.getID()).setCenterX((nodeModify.getxDisplay() - X_OFFSET) * X_SCALE);
+                nodeDispSet.get(nodeModify.getID()).setCenterY((nodeModify.getyDisplay() - Y_OFFSET) * Y_SCALE);
+            } else {
+                nodeDispSet.get(nodeModify.getID()).setCenterX((nodeModify.getX() - X_OFFSET) * X_SCALE);
+                nodeDispSet.get(nodeModify.getID()).setCenterY((nodeModify.getY() - Y_OFFSET) * Y_SCALE);
+            }
         }
         if (firstSelect != null) {
             nodeDispSet.get(firstSelect.getID()).setFill(Color.DODGERBLUE);
