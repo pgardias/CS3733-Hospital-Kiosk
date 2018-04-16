@@ -58,6 +58,7 @@ public class MapBuilderController implements Initializable {
 
     private Node startNode;
     private Node endNode;
+    private Node nodeModify;
     private Edge selectedEdge;
     private Node dragNodeOrg;
     //this is for creating new edges
@@ -67,6 +68,7 @@ public class MapBuilderController implements Initializable {
 
     private Boolean edgeSelected = false;
     private Boolean pathDrawn = false;
+    private Boolean modifyingNode = false;
     private Boolean isNewNode = false;
     private Boolean toggleOn = false;
 
@@ -386,15 +388,29 @@ public class MapBuilderController implements Initializable {
                circle.setPickOnBounds(false);
             }
             nodesEdgesPane.getChildren().add(circle);
-            if (!toggleOn) {
-                circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
-                circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
-            } else {
-                circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
-                circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
+            if (modifyingNode && node.getID() == nodeModify.getID()){
+                if (!toggleOn) {
+                    circle.setCenterX((mapBuilderNodeFormController.getNode2XCoord() - X_OFFSET) * X_SCALE);
+                    circle.setCenterY((mapBuilderNodeFormController.getNode2YCoord() - Y_OFFSET) * Y_SCALE);
+                } else {
+                    circle.setCenterX((mapBuilderNodeFormController.getNode3XCoord() - X_OFFSET) * X_SCALE);
+                    circle.setCenterY((mapBuilderNodeFormController.getNode3YCoord() - Y_OFFSET) * Y_SCALE);
+                }
+                circle.setFill(Color.RED);
             }
+            else {
+                if (!toggleOn) {
+                    circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
+                    circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
+                } else {
+                    circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
+                    circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
+                }
+                circle.setFill(Color.DODGERBLUE);
+            }
+
             //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-            circle.setFill(Color.DODGERBLUE);
+
             circle.setStroke(Color.BLACK);
             circle.setStrokeType(StrokeType.INSIDE);
             if(!node.getActive()) {
@@ -419,21 +435,50 @@ public class MapBuilderController implements Initializable {
 
 
         edgeSet = db.getAllEdges();
-
+        Boolean fixEdgeStart = false;
+        Boolean fixEdgeEnd = false;
         for (Edge edge : edgeSet.values()) {
 
             Line line = new Line();
             nodesEdgesPane.getChildren().add(line);
+
+            if (modifyingNode) {
+                ArrayList<Edge> dragEdges = nodeModify.getEdges();
+
+                for (Edge modifyEdge : dragEdges) {
+                    if (modifyEdge.equals(edge)) {
+                        System.out.println("modify edge equals the edge");
+                        if (modifyEdge.getStart() == nodeModify) fixEdgeStart = true;
+                        if (modifyEdge.getEnd() == nodeModify) fixEdgeEnd = true;
+                        break;
+                    }
+                }
+            }
+
             if (!toggleOn) {
                 line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
                 line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
                 line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
                 line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
+                if (fixEdgeEnd){
+                    line.setEndX((mapBuilderNodeFormController.getNode2XCoord() - X_OFFSET) * X_SCALE);
+                    line.setEndY((mapBuilderNodeFormController.getNode2YCoord() - Y_OFFSET) * Y_SCALE);
+                } else if (fixEdgeStart){
+                    line.setStartX((mapBuilderNodeFormController.getNode2XCoord() - X_OFFSET) * X_SCALE);
+                    line.setStartY((mapBuilderNodeFormController.getNode2YCoord() - Y_OFFSET) * Y_SCALE);
+                }
             } else {
                 line.setStartX((edge.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
                 line.setStartY((edge.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);
                 line.setEndX((edge.getEnd().getxDisplay() - X_OFFSET) * X_SCALE);
                 line.setEndY((edge.getEnd().getyDisplay() - Y_OFFSET) * Y_SCALE);
+                if (fixEdgeEnd){
+                    line.setEndX((mapBuilderNodeFormController.getNode3XCoord() - X_OFFSET) * X_SCALE);
+                    line.setEndY((mapBuilderNodeFormController.getNode3YCoord() - Y_OFFSET) * Y_SCALE);
+                } else if (fixEdgeStart){
+                    line.setStartX((mapBuilderNodeFormController.getNode3XCoord() - X_OFFSET) * X_SCALE);
+                    line.setStartY((mapBuilderNodeFormController.getNode3YCoord() - Y_OFFSET) * Y_SCALE);
+                }
             }
 
             line.setStrokeWidth(EDGE_WIDTH);
@@ -448,6 +493,9 @@ public class MapBuilderController implements Initializable {
                 line.setDisable(true);
                 line.setPickOnBounds(false);
             }
+            fixEdgeEnd = false;
+            fixEdgeStart = false;
+
             String label = edge.getID();
             edgeDispSet.put(label, line);
         }
@@ -541,7 +589,9 @@ public class MapBuilderController implements Initializable {
                 isDragging = true;
             }
             else if(event.getEventType() == MouseEvent.MOUSE_DRAGGED){
-                if(isDragging && !isNewNode){
+                if(isDragging && !isNewNode && !edgeSelected){
+                    modifyingNode = true;
+                    nodeModify = dragNodeOrg;
                     ArrayList<Edge> dragEdges = dragNodeOrg.getEdges();
 
                     double offsetX = event.getSceneX() - orgMouseX;
@@ -623,17 +673,18 @@ public class MapBuilderController implements Initializable {
                         for (String string : nodeDispSet.keySet()) {
                             if (nodeDispSet.get(string) == event.getSource()) {
                                 Node node = nodeSet.get(string);
-                                endNode = node;
+                                nodeModify = node;
                                 nodeDispSet.get(node.getID()).setFill(Color.rgb(205, 35, 0, 0.99));
-                                nodeID = endNode.getLongName();
+                                nodeID = nodeModify.getLongName();
 
 
-                                System.out.println(endNode.getID());
-                                newNodeForm(endNode.getID(), endNode.getLongName(), endNode.getX(), endNode.getY(),
-                                        endNode.getxDisplay(), endNode.getyDisplay(), endNode.getFloor().toString(),
-                                        endNode.getBuilding().toString(), endNode.getType().toString(), endNode.getActive());
+                                System.out.println(nodeModify.getID());
+                                newNodeForm(nodeModify.getID(), nodeModify.getLongName(), nodeModify.getX(), nodeModify.getY(),
+                                        nodeModify.getxDisplay(), nodeModify.getyDisplay(), nodeModify.getFloor().toString(),
+                                        nodeModify.getBuilding().toString(), nodeModify.getType().toString(), nodeModify.getActive());
                             }
                         }
+                        modifyingNode = true;
                     } else {
                         //This modifies the edge by replacing the start and end node in the edge
                         //when clicking on new nodes
@@ -886,6 +937,7 @@ public class MapBuilderController implements Initializable {
         mapBuilderOverlayController = loader.getController();
         mapBuilderOverlayController.startUp(mapBuilderController);
         edgeSelected = false;
+        modifyingNode = false;
         isNewNode = false;
         nodeState = 0;
         formOverlayPane.setLeft(root);
@@ -1009,16 +1061,16 @@ public class MapBuilderController implements Initializable {
      * this also brings in the basic overlays
      */
     public void updateMap(){
-        nodeDispSet.clear();
-        endNode = null;
-        firstSelect = null;
-        secondSelect = null;
-        edgeDispSet.clear();
-        selectedEdge = null;
+
         nodesEdgesPane.getChildren().clear();
+        nodeDispSet.clear();
+        edgeDispSet.clear();
         getMap();
         drawEdges();
         drawNodes();
+        firstSelect = null;
+        secondSelect = null;
+        selectedEdge = null;
         nodesEdgesPane.getChildren().add(newNodeCircle);
         //addOverlay();
     }
@@ -1028,8 +1080,8 @@ public class MapBuilderController implements Initializable {
      */
     public void clearCircles(){
         if(pathDrawn) resetPath();
-        if (endNode != null) {
-            nodeDispSet.get(endNode.getID()).setFill(Color.DODGERBLUE);
+        if (nodeModify != null) {
+            nodeDispSet.get(nodeModify.getID()).setFill(Color.DODGERBLUE);
         }
         if (firstSelect != null) {
             nodeDispSet.get(firstSelect.getID()).setFill(Color.DODGERBLUE);

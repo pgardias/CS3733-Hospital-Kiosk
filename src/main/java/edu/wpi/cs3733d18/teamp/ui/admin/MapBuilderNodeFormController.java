@@ -370,5 +370,19 @@ public class MapBuilderNodeFormController implements Initializable{
         return null;
     }
 
+    public double getNode2XCoord(){
+        return Double.parseDouble(nodex2Txt.getText());
+    }
 
+    public double getNode2YCoord(){
+        return Double.parseDouble(nodey2Txt.getText());
+    }
+
+    public double getNode3XCoord(){
+        return Double.parseDouble(nodex3Txt.getText());
+    }
+
+    public double getNode3YCoord(){
+        return Double.parseDouble(nodey3Txt.getText());
+    }
 }
