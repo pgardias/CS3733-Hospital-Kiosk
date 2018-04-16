@@ -15,7 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class LanguageInterpreterController implements Initializable {
+public class ComputerServiceController implements Initializable {
 
     ArrayList<String> locationWords = new ArrayList<String>();
     DBSystem db = DBSystem.getInstance();
@@ -40,26 +40,26 @@ public class LanguageInterpreterController implements Initializable {
     JFXButton submitFormButton;
 
     @FXML
-    Label languageInterpreterErrorLabel;
+    Label computerServiceErrorLabel;
 
     @FXML
-    JFXTextField languageInterpreterLocationTxt = new JFXTextField();
+    JFXTextField computerServiceLocationTxt = new JFXTextField();
 
     @FXML
-    JFXComboBox languageInterpreterComboBox;
+    JFXComboBox computerServiceComboBox;
 
     @FXML
-    JFXTextArea languageInterpreterInfoTxtArea;
+    JFXTextArea computerServiceInfoTxtArea;
 
-    ObservableList<String> languages = FXCollections.observableArrayList(
-            "French",
-            "Spanish",
-            "Portuguese",
-            "Polish",
-            "German",
-            "Mandarin",
-            "Turkish",
-            "Japanese"
+    ObservableList<String> devices = FXCollections.observableArrayList(
+            "Desktop Computer",
+            "Laptop",
+            "Projector",
+            "Podium",
+            "TV",
+            "Printer",
+            "Fax Machine",
+            "Pager"
     );
 
     /**
@@ -69,7 +69,7 @@ public class LanguageInterpreterController implements Initializable {
         HashMap<String, Node> nodeSet;
         nodeSet = db.getAllNodes();
         for (Node node : nodeSet.values()) {
-            locationWords.add(node.getLongName());
+            locationWords.add(node.getShortName());
         }
 
     }
@@ -84,12 +84,12 @@ public class LanguageInterpreterController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setLocationArray();
 
-        AutoCompletionBinding<String> destBinding = TextFields.bindAutoCompletion(languageInterpreterLocationTxt, locationWords);
+        AutoCompletionBinding<String> destBinding = TextFields.bindAutoCompletion(computerServiceLocationTxt, locationWords);
 
-        destBinding.setPrefWidth(languageInterpreterLocationTxt.getPrefWidth());
+        destBinding.setPrefWidth(computerServiceLocationTxt.getPrefWidth());
 
-        languageInterpreterComboBox.setValue("Choose a language");
-        languageInterpreterComboBox.setItems(languages);
+        computerServiceComboBox.setValue("Choose a device");
+        computerServiceComboBox.setItems(devices);
     }
 
     /**
@@ -121,38 +121,38 @@ public class LanguageInterpreterController implements Initializable {
      */
     @FXML
     public void submitFormButtonOp(ActionEvent e) {
-        String language = null;
+        String device = null;
         String nodeID = null;
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
-        Request.requesttype type = Request.requesttype.LANGUAGEINTERP;
+        Request.requesttype type = Request.requesttype.COMPUTER;
         try {
-            nodeID = languageInterpreterLocationTxt.getText();
-            String interpreterID = parseSourceInput(nodeID).getID();
-            Node locationNode = nodeSet.get(interpreterID);
+            nodeID = computerServiceLocationTxt.getText();
+            String deviceID = parseSourceInput(nodeID).getID();
+            Node locationNode = nodeSet.get(deviceID);
             if (locationNode == null) {
-                throw new NodeNotFoundException(interpreterID);
+                throw new NodeNotFoundException(deviceID);
             }
         } catch (NodeNotFoundException nnfe) {
-            languageInterpreterErrorLabel.setText("Please insert a valid location.");
-            languageInterpreterErrorLabel.setVisible(true);
+            computerServiceErrorLabel.setText("Please insert a valid location.");
+            computerServiceErrorLabel.setVisible(true);
             return;
         }
         try {
-            language = languageInterpreterComboBox.getValue().toString();
-            if (language.equals("Choose a language")) {
+            device = computerServiceComboBox.getValue().toString();
+            if (device.equals("Choose a device")) {
                 throw new NothingSelectedException();
             }
         } catch (NothingSelectedException nse) {
-            languageInterpreterErrorLabel.setText("Please select a language.");
-            languageInterpreterErrorLabel.setVisible(true);
+            computerServiceErrorLabel.setText("Please select a device.");
+            computerServiceErrorLabel.setVisible(true);
             return;
         }
-        String additionalInfo = languageInterpreterInfoTxtArea.getText().replaceAll("\n", System.getProperty("line.separator"));
+        String additionalInfo = computerServiceInfoTxtArea.getText().replaceAll("\n", System.getProperty("line.separator"));
         String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
-        String totalInfo = "Language: " + language + " Additional Info: " + additionalInfo;
+        String totalInfo = "Device: " + device + " Additional Info: " + additionalInfo;
         Timestamp timeMade = new Timestamp(System.currentTimeMillis());
-        Request newRequest = new Request(type, language, nodeID, totalInfo, firstAndLastName, " ", timeMade, null, 0);
+        Request newRequest = new Request(type, device, nodeID, totalInfo, firstAndLastName, " ", timeMade, null, 0);
         db.createRequest(newRequest);
         serviceRequestScreen.refresh();
         Stage stage = (Stage) submitFormButton.getScene().getWindow();
@@ -166,7 +166,7 @@ public class LanguageInterpreterController implements Initializable {
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
         for (Node node : nodeSet.values()) {
-            if (node.getLongName().compareTo(string) == 0) {
+            if (node.getShortName().compareTo(string) == 0) {
                 aNode = node;
             }
         }

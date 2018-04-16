@@ -1,7 +1,7 @@
 package edu.wpi.cs3733d18.teamp.ui.service;
 
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
-import edu.wpi.cs3733d18.teamp.ui.home.Controller;
+import edu.wpi.cs3733d18.teamp.ui.home.MainController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,9 +15,16 @@ public class PopUpController {
 
     LanguageInterpreterController languageInterpreterController;
     ReligiousServiceController religiousServiceController;
+    ComputerServiceController computerServiceController;
+    GiftDeliveryController giftDeliveryController;
+    MaintenanceController maintenanceController;
+    AudioVisualController audioVisualController;
+    SanitationController sanitationController;
+    SecurityController securityController;
+
     ServiceRequestScreen serviceRequestScreen;
     DBSystem db = DBSystem.getInstance();
-    Controller controller = null;
+    MainController mainController = null;
     private String requestType;
 
     // Elements for popup Screen
@@ -29,6 +36,24 @@ public class PopUpController {
 
     @FXML
     MenuItem religiousPeople;
+
+    @FXML
+    MenuItem computerService;
+
+    @FXML
+    MenuItem securityIssue;
+
+    @FXML
+    MenuItem maintenanceProblem;
+
+    @FXML
+    MenuItem sanitationMess;
+
+    @FXML
+    MenuItem audioVisualHelp;
+
+    @FXML
+    MenuItem giftDelivery;
 
     @FXML
     MenuButton serviceRequestMenu;
@@ -58,6 +83,8 @@ public class PopUpController {
         formName = formName.replaceAll("\\s", "");
         requestType = formName;
 
+        System.out.println(requestType);
+
         //loads the appropriate scene depending on the option selected
         serviceRequestMenu.setText(selectedForm.getText());
         loader = new FXMLLoader(getClass().getResource("/FXML/service/" + requestType + "Form.fxml"));
@@ -70,16 +97,42 @@ public class PopUpController {
             return false;
         }
 
-        if (requestType.equals("LanguageInterpreter")) {
-            languageInterpreterController = loader.getController();
-            languageInterpreterController.StartUp(serviceRequestScreen, this);
-            serviceRequestPopup.setCenter(root);
+        switch(requestType) {
+            case "LanguageInterpreter":
+                languageInterpreterController = loader.getController();
+                languageInterpreterController.StartUp(serviceRequestScreen, this);
+                break;
+            case "Religious":
+                religiousServiceController = loader.getController();
+                religiousServiceController.StartUp(serviceRequestScreen, this);
+                break;
+            case "ComputerService":
+                computerServiceController = loader.getController();
+                computerServiceController.StartUp(serviceRequestScreen, this);
+                break;
+            case "Security":
+                securityController = loader.getController();
+                securityController.StartUp(serviceRequestScreen, this);
+                break;
+            case "Maintenance":
+                maintenanceController = loader.getController();
+                maintenanceController.StartUp(serviceRequestScreen,this);
+                break;
+            case "Sanitation":
+                sanitationController = loader.getController();
+                sanitationController.StartUp(serviceRequestScreen, this);
+                break;
+            case "AudioorVisualHelp":
+                audioVisualController = loader.getController();
+                audioVisualController.StartUp(serviceRequestScreen,this);
+                break;
+            case "GiftDelivery":
+                giftDeliveryController = loader.getController();
+                giftDeliveryController.StartUp(serviceRequestScreen,this);
+                break;
+
         }
-        if (requestType.equals("Religious")) {
-            religiousServiceController = loader.getController();
-            religiousServiceController.StartUp(serviceRequestScreen, this);
-            serviceRequestPopup.setCenter(root);
-        }
+        serviceRequestPopup.setCenter(root);
 
         return true;
     }

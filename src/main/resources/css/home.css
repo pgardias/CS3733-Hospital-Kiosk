@@ -21,3 +21,10 @@
     -fx-font-family: "Abyssinica SIL";
     -jfx-button-type: RAISED;
 }
+
+.login-button {
+    -jfx-button-type: RAISED;
+    -fx-font-family: "Abyssinica SIl";
+    -fx-font-size: 18px;
+    -fx-background-color: LIGHTBLUE;
+}

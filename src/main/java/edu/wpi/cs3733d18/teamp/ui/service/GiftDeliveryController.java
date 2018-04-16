@@ -15,7 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class LanguageInterpreterController implements Initializable {
+public class GiftDeliveryController implements Initializable {
 
     ArrayList<String> locationWords = new ArrayList<String>();
     DBSystem db = DBSystem.getInstance();
@@ -40,26 +40,26 @@ public class LanguageInterpreterController implements Initializable {
     JFXButton submitFormButton;
 
     @FXML
-    Label languageInterpreterErrorLabel;
+    Label giftErrorLabel;
 
     @FXML
-    JFXTextField languageInterpreterLocationTxt = new JFXTextField();
+    JFXTextField giftLocationTxt = new JFXTextField();
 
     @FXML
-    JFXComboBox languageInterpreterComboBox;
+    JFXComboBox giftComboBox;
 
     @FXML
-    JFXTextArea languageInterpreterInfoTxtArea;
+    JFXTextArea giftInfoTxtArea;
 
-    ObservableList<String> languages = FXCollections.observableArrayList(
-            "French",
-            "Spanish",
-            "Portuguese",
-            "Polish",
-            "German",
-            "Mandarin",
-            "Turkish",
-            "Japanese"
+    ObservableList<String> gifts = FXCollections.observableArrayList(
+            "A Dozen Flowers",
+            "Puzzle",
+            "Stuffed Animal",
+            "Balloons",
+            "Chocolate",
+            "Candy",
+            "Sweatshirt",
+            "T-shirt"
     );
 
     /**
@@ -69,7 +69,7 @@ public class LanguageInterpreterController implements Initializable {
         HashMap<String, Node> nodeSet;
         nodeSet = db.getAllNodes();
         for (Node node : nodeSet.values()) {
-            locationWords.add(node.getLongName());
+            locationWords.add(node.getShortName());
         }
 
     }
@@ -84,12 +84,12 @@ public class LanguageInterpreterController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setLocationArray();
 
-        AutoCompletionBinding<String> destBinding = TextFields.bindAutoCompletion(languageInterpreterLocationTxt, locationWords);
+        AutoCompletionBinding<String> destBinding = TextFields.bindAutoCompletion(giftLocationTxt, locationWords);
 
-        destBinding.setPrefWidth(languageInterpreterLocationTxt.getPrefWidth());
+        destBinding.setPrefWidth(giftLocationTxt.getPrefWidth());
 
-        languageInterpreterComboBox.setValue("Choose a language");
-        languageInterpreterComboBox.setItems(languages);
+        giftComboBox.setValue("Choose a gift");
+        giftComboBox.setItems(gifts);
     }
 
     /**
@@ -121,38 +121,38 @@ public class LanguageInterpreterController implements Initializable {
      */
     @FXML
     public void submitFormButtonOp(ActionEvent e) {
-        String language = null;
+        String gift = null;
         String nodeID = null;
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
-        Request.requesttype type = Request.requesttype.LANGUAGEINTERP;
+        Request.requesttype type = Request.requesttype.GIFTS;
         try {
-            nodeID = languageInterpreterLocationTxt.getText();
-            String interpreterID = parseSourceInput(nodeID).getID();
-            Node locationNode = nodeSet.get(interpreterID);
+            nodeID = giftLocationTxt.getText();
+            String giftID = parseSourceInput(nodeID).getID();
+            Node locationNode = nodeSet.get(giftID);
             if (locationNode == null) {
-                throw new NodeNotFoundException(interpreterID);
+                throw new NodeNotFoundException(giftID);
             }
         } catch (NodeNotFoundException nnfe) {
-            languageInterpreterErrorLabel.setText("Please insert a valid location.");
-            languageInterpreterErrorLabel.setVisible(true);
+            giftErrorLabel.setText("Please insert a valid location.");
+            giftErrorLabel.setVisible(true);
             return;
         }
         try {
-            language = languageInterpreterComboBox.getValue().toString();
-            if (language.equals("Choose a language")) {
+            gift = giftComboBox.getValue().toString();
+            if (gift.equals("Choose a gift")) {
                 throw new NothingSelectedException();
             }
         } catch (NothingSelectedException nse) {
-            languageInterpreterErrorLabel.setText("Please select a language.");
-            languageInterpreterErrorLabel.setVisible(true);
+            giftErrorLabel.setText("Please select a gift.");
+            giftErrorLabel.setVisible(true);
             return;
         }
-        String additionalInfo = languageInterpreterInfoTxtArea.getText().replaceAll("\n", System.getProperty("line.separator"));
+        String additionalInfo = giftInfoTxtArea.getText().replaceAll("\n", System.getProperty("line.separator"));
         String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
-        String totalInfo = "Language: " + language + " Additional Info: " + additionalInfo;
+        String totalInfo = "Gift: " + gift + " Additional Info: " + additionalInfo;
         Timestamp timeMade = new Timestamp(System.currentTimeMillis());
-        Request newRequest = new Request(type, language, nodeID, totalInfo, firstAndLastName, " ", timeMade, null, 0);
+        Request newRequest = new Request(type, gift, nodeID, totalInfo, firstAndLastName, " ", timeMade, null, 0);
         db.createRequest(newRequest);
         serviceRequestScreen.refresh();
         Stage stage = (Stage) submitFormButton.getScene().getWindow();
@@ -166,7 +166,7 @@ public class LanguageInterpreterController implements Initializable {
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
         for (Node node : nodeSet.values()) {
-            if (node.getLongName().compareTo(string) == 0) {
+            if (node.getShortName().compareTo(string) == 0) {
                 aNode = node;
             }
         }

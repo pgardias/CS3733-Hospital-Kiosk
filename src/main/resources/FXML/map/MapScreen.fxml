@@ -3,7 +3,6 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Slider?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -11,6 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../../css/common.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.map.MapScreenController">
    <children>
@@ -22,12 +22,16 @@
       </StackPane>
       <BorderPane fx:id="buttonOverlayPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0">
          <right>
-            <GridPane pickOnBounds="false" BorderPane.alignment="CENTER">
+            <GridPane pickOnBounds="false" prefHeight="388.0" prefWidth="716.0" stylesheets="@../../css/map.css" BorderPane.alignment="CENTER">
               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
@@ -35,8 +39,40 @@
                   <Insets right="50.0" />
                </padding>
                <children>
-                  <Slider fx:id="zoomSlider" blockIncrement="0.1" max="10.0" min="1.0" orientation="VERTICAL" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Spinner fx:id="floorSpinner" onMousePressed="#spinnerOp" GridPane.rowIndex="2" />
+                  <Slider fx:id="zoomSlider" blockIncrement="0.1" max="10.0" maxHeight="-Infinity" maxWidth="-Infinity" min="1.0" orientation="VERTICAL" prefHeight="444.0" prefWidth="28.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
+                  <JFXButton fx:id="floor3Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor3ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="floor-buttons" text="3" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="floor2Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor2ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="floor-buttons" text="2" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="floor1Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor1ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="floor-buttons" text="1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="floorGButton" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floorGButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="floor-buttons" text="G" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="floorL1Button" onAction="#floorL1ButtonOp" prefHeight="85.0" prefWidth="85.0" ripplerFill="WHITE" styleClass="floor-buttons" text="L1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="floorL2Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floorL2ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="floor-buttons" text="L2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </JFXButton>
                </children>
             </GridPane>
          </right>
@@ -48,6 +84,6 @@
             </JFXButton>
          </top>
       </BorderPane>
-      <BorderPane fx:id="searchBarOverlayPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" />
+      <BorderPane fx:id="searchBarOverlayPane" layoutX="2.0" layoutY="6.0" pickOnBounds="false" prefHeight="1084.0" prefWidth="1918.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-2.0" />
    </children>
 </AnchorPane>

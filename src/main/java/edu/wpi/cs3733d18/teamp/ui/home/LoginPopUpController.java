@@ -5,7 +5,6 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.AccessNotAllowedException;
 import edu.wpi.cs3733d18.teamp.Exceptions.LoginInvalidException;
 import edu.wpi.cs3733d18.teamp.Main;
-import edu.wpi.cs3733d18.teamp.ui.home.Controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +19,7 @@ import java.io.IOException;
 public class LoginPopUpController {
 
     private DBSystem db = DBSystem.getInstance();
-    Controller controller = null;
+    MainController mainController = null;
 
     @FXML
     TextField usernameTxt;
@@ -42,13 +41,13 @@ public class LoginPopUpController {
 
 
     /**
-     * this is the method called from Controller.java which initializes the login screen
+     * this is the method called from MainController.java which initializes the login screen
      * depending on whether or not the admin button was clicked
      * @param isAdmin Boolean
      */
     @FXML
-    public void startUp(Boolean isAdmin, Controller controller){
-        this.controller = controller;
+    public void startUp(Boolean isAdmin, MainController mainController){
+        this.mainController = mainController;
         if (isAdmin){
             loginLabel.setText("Administrator Login");
             loginButton.setOnAction(e -> adminLoginButtonOp(e));
@@ -90,7 +89,7 @@ public class LoginPopUpController {
             return;
         }
 
-        controller.goToAdminRequestScreen();
+        mainController.goToAdminRequestScreen();
         toClose = (Stage) loginButton.getScene().getWindow();
         toClose.close();
     }
@@ -120,7 +119,7 @@ public class LoginPopUpController {
             loginErrorLabel.setVisible(true);
             return;
         }
-        controller.goToServiceRequestScreen();
+        mainController.goToServiceRequestScreen();
         toClose = (Stage) loginButton.getScene().getWindow();
         toClose.close();
     }

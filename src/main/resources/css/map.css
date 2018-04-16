@@ -1,0 +1,26 @@
+.floor-buttons{
+    -jfx-button-type: RAISED;
+    -fx-background-color: #0b2f5b;
+    -fx-text-fill: WHITE;
+    -fx-background-radius: 20;
+}
+.yellow-button {
+    -jfx-button-type: RAISED;
+    -fx-background-color: #F5BC3A;
+    -fx-background-radius: 50;
+    -fx-effect: dropshadow(gaussian, BLACK, 10, 0.15, 0, 0);
+}
+
+.search-bar-bg {
+    -fx-background-radius: 0 0 75 75;
+}
+
+
+.popover {
+    -fx-background-color: YELLOW;
+    -fx-font-color: WHITE;
+    -fx-font-size: 24px;
+}
+.popover > .border {
+    -fx-border-style: none;
+}

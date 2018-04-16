@@ -15,7 +15,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-public class LanguageInterpreterController implements Initializable {
+public class SecurityController implements Initializable {
 
     ArrayList<String> locationWords = new ArrayList<String>();
     DBSystem db = DBSystem.getInstance();
@@ -40,26 +40,27 @@ public class LanguageInterpreterController implements Initializable {
     JFXButton submitFormButton;
 
     @FXML
-    Label languageInterpreterErrorLabel;
+    Label securityErrorLabel;
 
     @FXML
-    JFXTextField languageInterpreterLocationTxt = new JFXTextField();
+    JFXTextField securityLocationTxt = new JFXTextField();
 
     @FXML
-    JFXComboBox languageInterpreterComboBox;
+    JFXComboBox securityComboBox;
 
     @FXML
-    JFXTextArea languageInterpreterInfoTxtArea;
+    JFXTextArea securityInfoTxtArea;
 
-    ObservableList<String> languages = FXCollections.observableArrayList(
-            "French",
-            "Spanish",
-            "Portuguese",
-            "Polish",
-            "German",
-            "Mandarin",
-            "Turkish",
-            "Japanese"
+    ObservableList<String> situations = FXCollections.observableArrayList(
+            "Patient Disrespecting Hospital Employees",
+            "Patient Injuring Hospital Employees",
+            "Patient Injuring Fellow Patients",
+            "Visitor Refusing To Be Identified",
+            "Visitor Disrespecting Hospital Employees",
+            "Visitor Injuring Patients",
+            "Visitor Injuring Hospital Employees",
+            "Visitor Injuring Other Visitors",
+            "Rouge Employee"
     );
 
     /**
@@ -69,7 +70,7 @@ public class LanguageInterpreterController implements Initializable {
         HashMap<String, Node> nodeSet;
         nodeSet = db.getAllNodes();
         for (Node node : nodeSet.values()) {
-            locationWords.add(node.getLongName());
+            locationWords.add(node.getShortName());
         }
 
     }
@@ -84,12 +85,12 @@ public class LanguageInterpreterController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setLocationArray();
 
-        AutoCompletionBinding<String> destBinding = TextFields.bindAutoCompletion(languageInterpreterLocationTxt, locationWords);
+        AutoCompletionBinding<String> destBinding = TextFields.bindAutoCompletion(securityLocationTxt, locationWords);
 
-        destBinding.setPrefWidth(languageInterpreterLocationTxt.getPrefWidth());
+        destBinding.setPrefWidth(securityLocationTxt.getPrefWidth());
 
-        languageInterpreterComboBox.setValue("Choose a language");
-        languageInterpreterComboBox.setItems(languages);
+        securityComboBox.setValue("Choose a situation");
+        securityComboBox.setItems(situations);
     }
 
     /**
@@ -121,38 +122,38 @@ public class LanguageInterpreterController implements Initializable {
      */
     @FXML
     public void submitFormButtonOp(ActionEvent e) {
-        String language = null;
+        String situation = null;
         String nodeID = null;
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
-        Request.requesttype type = Request.requesttype.LANGUAGEINTERP;
+        Request.requesttype type = Request.requesttype.SECURITY;
         try {
-            nodeID = languageInterpreterLocationTxt.getText();
-            String interpreterID = parseSourceInput(nodeID).getID();
-            Node locationNode = nodeSet.get(interpreterID);
+            nodeID = securityLocationTxt.getText();
+            String situationID = parseSourceInput(nodeID).getID();
+            Node locationNode = nodeSet.get(situationID);
             if (locationNode == null) {
-                throw new NodeNotFoundException(interpreterID);
+                throw new NodeNotFoundException(situationID);
             }
         } catch (NodeNotFoundException nnfe) {
-            languageInterpreterErrorLabel.setText("Please insert a valid location.");
-            languageInterpreterErrorLabel.setVisible(true);
+            securityErrorLabel.setText("Please insert a valid location.");
+            securityErrorLabel.setVisible(true);
             return;
         }
         try {
-            language = languageInterpreterComboBox.getValue().toString();
-            if (language.equals("Choose a language")) {
+            situation = securityComboBox.getValue().toString();
+            if (situation.equals("Choose a situation")) {
                 throw new NothingSelectedException();
             }
         } catch (NothingSelectedException nse) {
-            languageInterpreterErrorLabel.setText("Please select a language.");
-            languageInterpreterErrorLabel.setVisible(true);
+            securityErrorLabel.setText("Please select a situation.");
+            securityErrorLabel.setVisible(true);
             return;
         }
-        String additionalInfo = languageInterpreterInfoTxtArea.getText().replaceAll("\n", System.getProperty("line.separator"));
+        String additionalInfo = securityInfoTxtArea.getText().replaceAll("\n", System.getProperty("line.separator"));
         String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
-        String totalInfo = "Language: " + language + " Additional Info: " + additionalInfo;
+        String totalInfo = "Situation: " + situation + " Additional Info: " + additionalInfo;
         Timestamp timeMade = new Timestamp(System.currentTimeMillis());
-        Request newRequest = new Request(type, language, nodeID, totalInfo, firstAndLastName, " ", timeMade, null, 0);
+        Request newRequest = new Request(type, situation, nodeID, totalInfo, firstAndLastName, " ", timeMade, null, 0);
         db.createRequest(newRequest);
         serviceRequestScreen.refresh();
         Stage stage = (Stage) submitFormButton.getScene().getWindow();
@@ -166,7 +167,7 @@ public class LanguageInterpreterController implements Initializable {
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
         for (Node node : nodeSet.values()) {
-            if (node.getLongName().compareTo(string) == 0) {
+            if (node.getShortName().compareTo(string) == 0) {
                 aNode = node;
             }
         }

@@ -107,6 +107,7 @@ public class DBHandler {
                         " timeMade TIMESTAMP, " +
                         " timeCompleted TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                         " completed INT, " +
+                        " priority INT, " +
                         " PRIMARY KEY (requestID))";
                 stmt.executeUpdate(sql);
                 CSVConverter requestCSV = new CSVConverter("data/request_info.csv");
