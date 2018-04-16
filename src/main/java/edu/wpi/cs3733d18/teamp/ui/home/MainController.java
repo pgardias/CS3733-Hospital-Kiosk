@@ -25,10 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
-
-import java.awt.*;
 import java.io.IOException;
 import java.security.Key;
 import java.util.ArrayList;
@@ -98,11 +95,10 @@ public class MainController {
      * @throws IOException
      */
     @FXML
-    public void loginButtonOp(MouseEvent e) {
-        System.out.println(e.getEventType());
+    public void loginButtonOp(ActionEvent e) {
 
-            String username = usernameTxt.getText();
-            String password = passwordTxt.getText();
+        String username = usernameTxt.getText();
+        String password = passwordTxt.getText();
 
             try {
                 Main.currentUser = db.checkEmployeeLogin(username, password);
@@ -117,11 +113,35 @@ public class MainController {
                 return;
             }
 
-            if (Main.currentUser.getIsAdmin()) {
-                goToAdminRequestScreen();
-            } else {
-                goToServiceRequestScreen();
+        if (Main.currentUser.getIsAdmin()){
+            System.out.println("Logging in Admin");
+            FXMLLoader loader;
+            Stage stage;
+            Parent root;
+
+            loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
+            try {
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return;
             }
+            loginButton.getScene().setRoot(root);
+        } else {
+            System.out.println("Logging in Employee");
+            FXMLLoader loader;
+            Stage stage;
+            Parent root;
+
+            loader = new FXMLLoader(getClass().getResource("/FXML/service/ServiceRequestScreen.fxml"));
+            try {
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return;
+            }
+            loginButton.getScene().setRoot(root);
+        }
     }
 
 
@@ -156,43 +176,8 @@ public class MainController {
     }
 
     @FXML
-    public void goToServiceRequestScreen(){
-        FXMLLoader loader;
-        Stage stage;
-        Parent root;
+    public void aboutButtonOp() {
 
-        loader = new FXMLLoader(getClass().getResource("/FXML/service/ServiceRequestScreen.fxml"));
-        try {
-            root = loader.load();
-        } catch (IOException ie) {
-            ie.printStackTrace();
-            return;
-        }
-        stage = (Stage) loginButton.getScene().getWindow();
-        stage.setFullScreen(false);
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.show();
-        stage.setFullScreen(true);
-    }
-
-    @FXML
-    public void goToAdminRequestScreen(){
-        FXMLLoader loader;
-        Stage stage;
-        Parent root;
-
-        loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
-        try {
-            root = loader.load();
-        } catch (IOException ie) {
-            ie.printStackTrace();
-            return;
-        }
-        stage = (Stage) loginButton.getScene().getWindow();
-        stage.setFullScreen(false);
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setFullScreen(true);
-        stage.show();
     }
 
 
@@ -263,11 +248,10 @@ public class MainController {
                     loginErrorLabel.setVisible(true);
                 }
 
-                if (Main.currentUser.getIsAdmin()) {
-                    goToAdminRequestScreen();
-                } else {
-                    goToServiceRequestScreen();
-                }
+                usernameTxt.setText(Main.currentUser.getUserName());
+                passwordTxt.setText(Main.currentUser.getPassword());
+
+                loginButtonOp(new ActionEvent());
             }
 //            toClose = (Stage) loginButton.getScene().getWindow();
 //            toClose.close();

@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.IOException;
 
 public class AdminMenuController {
@@ -26,6 +27,7 @@ public class AdminMenuController {
     @FXML
     JFXButton backButton;
 
+    @FXML
     public void employeeButtonOp(ActionEvent e) {
         Stage stage;
         Parent root;
@@ -42,6 +44,7 @@ public class AdminMenuController {
         employeeButton.getScene().setRoot(root);
     }
 
+    @FXML
     public void mapManagementButtonOp(ActionEvent e) {
         Stage stage;
         Parent root;
@@ -61,6 +64,7 @@ public class AdminMenuController {
         mapManagementButton.getScene().setRoot(root);
     }
 
+    @FXML
     public void serviceRequestScreenButtonOp(ActionEvent e) {
         Stage stage;
         Parent root;
@@ -79,6 +83,7 @@ public class AdminMenuController {
         serviceRequestScreenButton.getScene().setRoot(root);
     }
 
+    @FXML
     public void backButtonOp(ActionEvent e) {
         Stage stage;
         Parent root;
@@ -94,5 +99,10 @@ public class AdminMenuController {
         }
         Main.logoutCurrentUser();
         backButton.getScene().setRoot(root);
+    }
+
+    @FXML
+    public void settingsButtonOp(ActionEvent e) {
+
     }
 }

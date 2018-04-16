@@ -27,6 +27,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
 import org.controlsfx.control.PopOver;
@@ -35,6 +36,8 @@ import org.controlsfx.control.PopOver.ArrowLocation;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import java.math.*;
 
 public class MapScreenController {
 
@@ -61,6 +64,7 @@ public class MapScreenController {
     private Boolean toggleOn = false;
 
     private static HashMap<String, Circle> nodeDispSet = new HashMap<>();
+    private static ArrayList<Polygon> arrowDispSet = new ArrayList<Polygon>();
     private static HashMap<String, Line> edgeDispSet = new HashMap<>();
 
 
@@ -246,7 +250,7 @@ public class MapScreenController {
             Y_SCALE = 1065.216 / 2774.0;
             switch (floorState) {
                 case "3":
-                    image = new Image("/img/maps/3d/3-ICONS.png");
+                    image = new Image("/img/maps/3d/3-ICONS.png"); //TODO use this bit of information for image drawing
                     break;
                 case "2":
                     image = new Image("/img/maps/3d/2-ICONS.png");
@@ -577,7 +581,22 @@ public class MapScreenController {
                             popOver = null;
                         }
                         Node node = nodeSet.get(string);
-                        Label nodeTypeLabel = new Label(node.getType().toString().toUpperCase());
+                        // Correcting enum toString conversion
+                        String type = node.getType().toString().toUpperCase();
+                        if (type.equals("STAIR")) {
+                            type = "STAIRS";
+                        } else if (type.equals("CONFERENCE")) {
+                            type = "CONFERENCE ROOM";
+                        } else if (type.equals("HALL")) {
+                            type = "HALLWAY";
+                        } else if (type.equals("INFORMATION")) {
+                            type = "INFORMATION DESK";
+                        } else if (type.equals("LABS")) {
+                            type = "LABORATORY";
+                        } else if (type.equals("SERVICE")) {
+                            type = "SERVICES";
+                        }
+                        Label nodeTypeLabel = new Label(type);
                         Label nodeLongNameLabel = new Label("Name: " + node.getLongName());
                         Label nodeBuildingLabel = new Label("Building: "+ node.getBuilding().toString());
                         nodeTypeLabel.setStyle("-fx-font-size: 28px; -fx-text-fill: #0b2f5b; -fx-font-weight: 700; -fx-padding: 10px 10px 0 10px;");
@@ -680,13 +699,15 @@ public class MapScreenController {
      */
     //removed static hope it didn't break anything
     public void drawPath(ArrayList<Node> path) {
+        double width, height, angle;
+        double distanceCounter = 0;
+
+
+
         Node currentNode = null, pastNode = null;
         if (pathMade != null) {
             resetPath();
         }
-
-        double lineWidth, lineHeight;
-        double angle;
 
         this.pathMade = path;
         //setSpinner();
@@ -694,11 +715,24 @@ public class MapScreenController {
         for (Node n : path) {
             pastNode = currentNode;
             currentNode = n;
-//            if (!path.get(0).equals(n)) {
-//                //calculate the width and height of the line
-//                lineWidth = pastNode.getX() - currentNode.getX();
-//                lineHeight =
-//            }
+            if (!path.get(0).equals(n)) {
+                width = currentNode.getX() - pastNode.getX();
+                height = currentNode.getY() - pastNode.getY();
+                angle = Math.atan2(height , width);
+
+                //increment the distanceCounter
+                distanceCounter += currentNode.distanceBetweenNodes(pastNode);
+
+                if(distanceCounter >= 175) {
+                    distanceCounter = 0;
+
+                    drawTriangle(angle, pastNode.getX(), pastNode.getY());
+                }
+
+
+
+
+            }
             nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
             // }
             if (path.get(0).equals(n)) {
@@ -727,6 +761,49 @@ public class MapScreenController {
         pathDrawn = true;
     }
 
+    /**
+     * drawTriangle is the function that draws directional arrows for the function
+     * @param angle is the angle used to generate this
+     * @param initX is where it starts on the X axis
+     * @param initY is where it starts on the Y axis
+     *
+     * This outputs an arrow on the screen along the line.
+     */
+    public void drawTriangle(double angle, double initX, double initY) {
+
+        double x1, x2, x3, y1, y2, y3;
+
+
+        Polygon arrow = new Polygon();
+
+
+
+        initX = (initX - X_OFFSET) * X_SCALE;
+        initY = (initY - Y_OFFSET) * Y_SCALE;
+
+        //System.out.println("X:  " + initX + "  Y:  " + initY);
+
+        x1 = initX + (12 * Math.cos(angle));
+        y1 = initY + (12 * Math.sin(angle));
+
+        x2 = initX + (10 * Math.cos(angle - (2 * Math.PI / 3)));
+        y2 = initY + (10 * Math.sin(angle - (2 * Math.PI / 3)));
+
+        x3 = initX + (10 * Math.cos(angle + (2 * Math.PI / 3)));
+        y3 = initY + (10 * Math.sin(angle + (2 * Math.PI / 3)));
+
+
+        arrow.getPoints().addAll(new Double[]{
+                initX, initY,
+                x2, y2,
+                x1, y1,
+                x3, y3});
+        arrow.setFill(Color.rgb(250, 150, 0));
+
+        nodesEdgesPane.getChildren().add(arrow);
+
+        arrowDispSet.add(arrow);
+    }
     /*
     public void setSpinner(){
         ObservableList<String> allowedFloorsList = FXCollections.observableArrayList((pathMade.get(pathMade.size()-1).getFloor().toString()),
@@ -760,6 +837,11 @@ public class MapScreenController {
                     }
                 }
             }
+            for (Polygon p : arrowDispSet){
+                p.setVisible(false);
+                p.setPickOnBounds(false);
+            }
+            arrowDispSet.clear();
         }
     }
 
