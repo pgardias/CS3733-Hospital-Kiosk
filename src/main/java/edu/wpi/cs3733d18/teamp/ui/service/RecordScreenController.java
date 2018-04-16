@@ -52,7 +52,13 @@ public class RecordScreenController implements Initializable {
     ObservableList<String> requestTypes = FXCollections.observableArrayList(
             "All",
             "Language Interpreter",
-            "Religious Request"
+            "Religious Request",
+            "Sanitation Request",
+            "Maintenance Request",
+            "Security Request",
+            "Computer Service Request",
+            "Audio/Visual Request",
+            "Gift Delivery Request"
     );
 
     @Override
@@ -108,32 +114,83 @@ public class RecordScreenController implements Initializable {
     }
 
     /**
-     *
+     * Displays only the give type of requests
      * @param e Action event
-     * @return
+     * @return True if everything runs properly
      */
     public Boolean filterRecordComboBoxOp(ActionEvent e) {
-        if (filterRecordComboBox.getValue().toString().equals("All")) {
-            recordTable.getItems().clear();
-            for (Record record: records) {
-                recordTable.getItems().add(record);
-            }
-        }
-        if (filterRecordComboBox.getValue().toString().equals("Language Interpreter")) {
-            recordTable.getItems().clear();
-            for (Record record: records) {
-                if (db.RequestTypeToString(record.getRequestType()).equals("language interpreter")) {
+        String requestType = filterRecordComboBox.getValue().toString();
+        switch(requestType) {
+            case "All":
+                recordTable.getItems().clear();
+                for (Record record: records) {
                     recordTable.getItems().add(record);
                 }
-            }
-        }
-        else if (filterRecordComboBox.getValue().toString().equals("Religious Request")) {
-            recordTable.getItems().clear();
-            for (Record record: records) {
-                if (db.RequestTypeToString(record.getRequestType()).equals("religion handler")) {
-                    recordTable.getItems().add(record);
+                break;
+            case "Language Interpreter":
+                recordTable.getItems().clear();
+                for (Record record: records) {
+                    if (db.RequestTypeToString(record.getRequestType()).equals("language interpreter")) {
+                        recordTable.getItems().add(record);
+                    }
                 }
-            }
+                break;
+            case  "Religious Request":
+                recordTable.getItems().clear();
+                for (Record record: records) {
+                    if (db.RequestTypeToString(record.getRequestType()).equals("religion handler")) {
+                        recordTable.getItems().add(record);
+                    }
+                }
+                break;
+            case  "Sanitation Request":
+                recordTable.getItems().clear();
+                for (Record record: records) {
+                    if (db.RequestTypeToString(record.getRequestType()).equals("sanitation")) {
+                        recordTable.getItems().add(record);
+                    }
+                }
+                break;
+            case  "Maintenance Request":
+                recordTable.getItems().clear();
+                for (Record record: records) {
+                    if (db.RequestTypeToString(record.getRequestType()).equals("maintenance")) {
+                        recordTable.getItems().add(record);
+                    }
+                }
+                break;
+            case  "Security Request":
+                recordTable.getItems().clear();
+                for (Record record: records) {
+                    if (db.RequestTypeToString(record.getRequestType()).equals("security")) {
+                        recordTable.getItems().add(record);
+                    }
+                }
+                break;
+            case  "Computer Service Request":
+                recordTable.getItems().clear();
+                for (Record record: records) {
+                    if (db.RequestTypeToString(record.getRequestType()).equals("computer service")) {
+                        recordTable.getItems().add(record);
+                    }
+                }
+                break;
+            case  "Audio/Visual Request":
+                recordTable.getItems().clear();
+                for (Record record: records) {
+                    if (db.RequestTypeToString(record.getRequestType()).equals("audio+visual")) {
+                        recordTable.getItems().add(record);
+                    }
+                }
+                break;
+            case  "Gift Delivery Request":
+                recordTable.getItems().clear();
+                for (Record record: records) {
+                    if (db.RequestTypeToString(record.getRequestType()).equals("delivergift")) {
+                        recordTable.getItems().add(record);
+                    }
+                }
+                break;
         }
         return true;
     }

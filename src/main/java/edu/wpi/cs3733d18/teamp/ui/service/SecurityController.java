@@ -60,7 +60,7 @@ public class SecurityController implements Initializable {
             "Visitor Injuring Patients",
             "Visitor Injuring Hospital Employees",
             "Visitor Injuring Other Visitors",
-            "Rouge Employee"
+            "Rogue Employee"
     );
 
     /**
