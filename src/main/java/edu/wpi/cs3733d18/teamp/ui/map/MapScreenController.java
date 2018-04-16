@@ -159,7 +159,7 @@ public class MapScreenController {
         getMap();
         addOverlay();
 
-        searchBarOverlayController.setSourceSearchBar("Current Kiosk");
+        searchBarOverlayController.setSourceSearchBar("Primary Kiosk");
         nodeDispSet.get("PKIOS00102").setFill(Color.GREEN);
     }
 

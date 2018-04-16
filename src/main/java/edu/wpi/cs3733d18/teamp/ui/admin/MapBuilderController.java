@@ -490,7 +490,7 @@ public class MapBuilderController implements Initializable {
                 double nodex2Coord = newCenterX/X_SCALE + X_OFFSET;
                 double nodey2Coord = newCenterY/Y_SCALE + Y_OFFSET;
                 if (!toggleOn) {
-                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorState);
                 } else {
                     mapBuilderNodeFormController.set3XYCoords(nodex2Coord, nodey2Coord);
                 }
@@ -573,7 +573,7 @@ public class MapBuilderController implements Initializable {
                             dragNodeOrg.getxDisplay(), dragNodeOrg.getyDisplay(), dragNodeOrg.getFloor().toString(),
                             dragNodeOrg.getBuilding().toString(), dragNodeOrg.getType().toString(), dragNodeOrg.getActive());
                     if (!toggleOn) {
-                        mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                        mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorState);
                     } else {
                         mapBuilderNodeFormController.set3XYCoords(nodex2Coord, nodey2Coord);
                     }
@@ -593,7 +593,7 @@ public class MapBuilderController implements Initializable {
                             if (nodeDispSet.get(string) == event.getSource()) {
                                 Node node = nodeSet.get(string);
                                 nodeDispSet.get(node.getID()).setFill(Color.GREEN);
-                                sourceSearchBar.setText(node.getShortName());
+                                sourceSearchBar.setText(node.getLongName());
                             }
                         }
                     }else if (getDestinationFocus()){
@@ -605,7 +605,7 @@ public class MapBuilderController implements Initializable {
                             if (nodeDispSet.get(string) == event.getSource()) {
                                 Node node = nodeSet.get(string);
                                 nodeDispSet.get(node.getID()).setFill(Color.RED);
-                                destinationSearchBar.setText(node.getShortName());
+                                destinationSearchBar.setText(node.getLongName());
                             }
                         }
                     } else if (isNewNode){

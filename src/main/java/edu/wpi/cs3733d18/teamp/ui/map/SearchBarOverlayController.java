@@ -171,6 +171,7 @@ public class SearchBarOverlayController implements Initializable{
         System.out.println("get path");
         //get all nodes
         HashMap<String, Node> nodeSet = db.getAllNodes();
+        System.out.println(" size: " + nodeSet.size());
 
         //Declare source node, destination node, and get the typed in inputs for both search boxes
         Node srcNode, dstNode;
@@ -204,17 +205,18 @@ public class SearchBarOverlayController implements Initializable{
         Font font = new Font("verdana", 24.0);
 //        System.out.println("Source Node ID: "+srcNode.getID());
 
-        startLabel.setLayoutX((srcNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
-        startLabel.setLayoutY((srcNode.getyDisplay()-40- Y_OFFSET)*Y_SCALE);
-        startLabel.setText(srcNode.getLongName());
-        startLabel.setFont(font);
-
-        startLabel.toFront();
-
-        endLabel.setLayoutX((dstNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
-        endLabel.setLayoutY((dstNode.getyDisplay()-34- Y_OFFSET)*Y_SCALE);
-        endLabel.setText(dstNode.getLongName());
-        endLabel.setFont(font);
+        //TODO set up proper labels when searching a node
+//        startLabel.setLayoutX((srcNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
+//        startLabel.setLayoutY((srcNode.getyDisplay()-40- Y_OFFSET)*Y_SCALE);
+//        startLabel.setText(srcNode.getLongName());
+//        startLabel.setFont(font);
+//
+//        startLabel.toFront();
+//
+//        endLabel.setLayoutX((dstNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
+//        endLabel.setLayoutY((dstNode.getyDisplay()-34- Y_OFFSET)*Y_SCALE);
+//        endLabel.setText(dstNode.getLongName());
+//        endLabel.setFont(font);
 
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
         System.out.println(path);
