@@ -1,6 +1,9 @@
 package edu.wpi.cs3733d18.teamp.ui.map;
 
 import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
+import com.jfoenix.controls.JFXButton;
+import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -58,7 +61,26 @@ public class MapViewerBuilder implements Initializable{
     Button rightButton;
 
     @FXML
-    Button switchButton;
+    JFXButton floorL2Button;
+
+    @FXML
+    JFXButton floorL1Button;
+
+
+    @FXML
+    JFXButton floorGButton;
+
+
+    @FXML
+    JFXButton floor1Button;
+
+
+    @FXML
+    JFXButton floor2Button;
+
+
+    @FXML
+    JFXButton floor3Button;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -280,15 +302,45 @@ public class MapViewerBuilder implements Initializable{
      * Loads in a new mesh when switching floors
      */
     @FXML
-    public void switchMeshOp() {
+    public void switchMesh(String fileName) {
         threeDAnchorPane.getChildren().remove(3);
-        Group newRoot = buildScene("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WL1Floor.obj");
+        Group newRoot = buildScene(fileName);
         newRoot.setScaleX(2);
         newRoot.setScaleY(2);
         newRoot.setScaleZ(2);
         newRoot.setTranslateX(500);
         newRoot.setTranslateY(100);
         threeDAnchorPane.getChildren().add(newRoot);
+    }
+
+    @FXML
+    public void floorL2ButtonOp(ActionEvent e) {
+        switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WL2Floor.obj");
+    }
+
+    @FXML
+    public void floorL1ButtonOp(ActionEvent e) {
+        switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WL1Floor.obj");
+    }
+
+    @FXML
+    public void floorGButtonOp(ActionEvent e) {
+        switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WGFloor.obj");
+    }
+
+    @FXML
+    public void floor1ButtonOp(ActionEvent e) {
+        switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W1stFloor.obj");
+    }
+
+    @FXML
+    public void floor2ButtonOp(ActionEvent e) {
+        switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W2ndFloor.obj");
+    }
+
+    @FXML
+    public void floor3ButtonOp(ActionEvent e) {
+        switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W3rdFloor.obj");
     }
 
 }
