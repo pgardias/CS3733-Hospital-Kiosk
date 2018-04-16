@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733d18.teamp.Coordinate;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
+import edu.wpi.cs3733d18.teamp.Exceptions.DuplicateLongNameException;
 import edu.wpi.cs3733d18.teamp.Exceptions.EdgeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
@@ -129,7 +130,7 @@ public class MapBuilderNodeFormController implements Initializable{
 
         int i = 0;
         for (Node node : nodeSet.values()) {
-            sourceWords.add(node.getID());
+            sourceWords.add(node.getLongName());
         }
     }
 
@@ -248,7 +249,7 @@ public class MapBuilderNodeFormController implements Initializable{
         Node connectingNode = null;
         if (!editFlag) {
             try {
-                connectingNode = db.getOneNode(connectingNodeTextBox.getText());
+                connectingNode = db.getOneNode(getNodeID(connectingNodeTextBox.getText()));
             } catch (NodeNotFoundException nnfe) {
                 nnfe.printStackTrace();
                 System.out.println(nnfe.getNodeID());
@@ -267,6 +268,11 @@ public class MapBuilderNodeFormController implements Initializable{
             catch(EdgeNotFoundException enfe){
                 enfe.printStackTrace();
             }
+            catch (DuplicateLongNameException de) {
+                nodeFormErrorLabel.setText("Node " + de.getNodeID() + " already has this Long Name");
+                nodeFormErrorLabel.setVisible(true);
+                return;
+            }
             editedNodeID = null;
         } else {
             try {
@@ -277,6 +283,11 @@ public class MapBuilderNodeFormController implements Initializable{
             }
             catch(EdgeNotFoundException enfe){
                 enfe.printStackTrace();
+            }
+            catch (DuplicateLongNameException de) {
+                nodeFormErrorLabel.setText("Node " + de.getNodeID() + " already has this Long Name");
+                nodeFormErrorLabel.setVisible(true);
+                return;
             }
         }
         mapBuilderController.addOverlay();
@@ -328,6 +339,12 @@ public class MapBuilderNodeFormController implements Initializable{
         Coordinate coord = new Coordinate((int)Math.round(x2), (int)Math.round(y2), floor);
         nodex3Txt.setText(Double.toString(coord.getX3D()));
         nodey3Txt.setText(Double.toString(coord.getY3D()));
+        nodeFormErrorLabel.setText("Your 3D coordinates have been changed!");
+    }
+
+    public void set3XYCoords(double x3, double y3){
+        nodex3Txt.setText(Double.toString(x3));
+        nodey3Txt.setText(Double.toString(y3));
     }
 
     public void setFloor(String floor){
@@ -348,6 +365,20 @@ public class MapBuilderNodeFormController implements Initializable{
 
         mapBuilderController.updateMap();
         mapBuilderController.addOverlay();
+    }
+
+    public void setConnectingNodeTextBox(String nodeLongName){
+        connectingNodeTextBox.setText(nodeLongName);
+    }
+
+    public String getNodeID(String nodeLongName){
+        HashMap<String, Node> nodeSet = db.getAllNodes();
+        for(Node node: nodeSet.values()){
+            if (node.getLongName().equals(nodeLongName)){
+                return node.getID();
+            }
+        }
+        return null;
     }
 
 
