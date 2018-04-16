@@ -197,7 +197,7 @@ public class DBSystem {
         return employeeRepo.checkAdminLogin(username, password);
     }
 
-    public Employee checkLoginID(String id) throws LoginInvalidException {
+    public Employee checkLoginID(String id) throws LoginInvalidException{
         return employeeRepo.checkLoginID(id);
     }
     // Record Repository Functions

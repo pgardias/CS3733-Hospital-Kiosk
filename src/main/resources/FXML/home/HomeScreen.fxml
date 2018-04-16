@@ -90,12 +90,12 @@
                         <Insets right="-5.0" top="60.0" />
                      </GridPane.margin>
                   </Rectangle>
-                  <JFXTextField fx:id="usernameTxt" focusColor="#f5bc3a" promptText="Username" unFocusColor="#0b2f5b" GridPane.columnIndex="1">
+                  <JFXTextField fx:id="usernameTxt" focusColor="#f5bc3a" onKeyTyped="#swipeLogin" promptText="Username" unFocusColor="#0b2f5b" GridPane.columnIndex="1">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </JFXTextField>
-                  <JFXPasswordField fx:id="passwordTxt" focusColor="#f5bc3a" promptText="Password" unFocusColor="#0b2f5b" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <JFXPasswordField fx:id="passwordTxt" focusColor="#f5bc3a" onKeyTyped="#swipeLogin" promptText="Password" unFocusColor="#0b2f5b" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <font>
                         <Font size="18.0" />
                      </font>
