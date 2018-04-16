@@ -14,7 +14,6 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.home.MainController">
    <children>
       <Rectangle fill="#dadada" height="1050.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, GRAY, 5, 0.0, 0, 0);" width="1890.0" x="15.0" y="15.0" />
@@ -44,17 +43,17 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Rectangle fill="#f2f2f2" height="115.0" stroke="#d3d3d3" strokeDashOffset="5.0" strokeLineJoin="BEVEL" strokeType="INSIDE" strokeWidth="0.0" width="350.0" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+                        <Rectangle fx:id="loginRectangle" fill="#f2f2f2" height="115.0" stroke="#d3d3d3" strokeDashOffset="5.0" strokeLineJoin="BEVEL" strokeType="INSIDE" strokeWidth="0.0" width="350.0" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
                            <GridPane.margin>
                               <Insets right="-5.0" top="-5.0" />
                            </GridPane.margin>
                         </Rectangle>
-                        <JFXTextField fx:id="usernameTxt" focusColor="#f5bc3a" promptText=" username" styleClass="login-txt" stylesheets="@../../css/home.css" unFocusColor="#0b2f5b">
+                        <JFXTextField fx:id="usernameTxt" focusColor="#f5bc3a" promptText="Username" styleClass="login-txt" stylesheets="@../../css/home.css" unFocusColor="#0b2f5b">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </JFXTextField>
-                        <JFXPasswordField fx:id="passwordTxt" focusColor="#f5bc3a" minWidth="200.0" promptText=" password" styleClass="login-txt" stylesheets="@../../css/home.css" unFocusColor="#0b2f5b" GridPane.rowIndex="1">
+                        <JFXPasswordField fx:id="passwordTxt" focusColor="#f5bc3a" minWidth="200.0" promptText="Password" styleClass="login-txt" stylesheets="@../../css/home.css" unFocusColor="#0b2f5b" GridPane.rowIndex="1">
                            <font>
                               <Font size="18.0" />
                            </font>
