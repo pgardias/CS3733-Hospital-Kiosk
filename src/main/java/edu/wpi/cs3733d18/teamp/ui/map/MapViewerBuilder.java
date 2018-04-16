@@ -132,11 +132,15 @@ public class MapViewerBuilder implements Initializable{
                     }
                     // Change Rotation X
                     if (yChange < 0) {
-                        curXRotation += ROTATION_SPEED;
-                        mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
+                        //if (180 > (curXRotation + ROTATION_SPEED)) {
+                            curXRotation += ROTATION_SPEED;
+                            mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
+                        //}
                     } else if (yChange > 0) {
-                        curXRotation -= ROTATION_SPEED;
-                        mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
+                        //if (0 < (curXRotation - ROTATION_SPEED)) {
+                            curXRotation -= ROTATION_SPEED;
+                            mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
+                        //}
                     }
                     mouseInSceneX = newMouseInSceneX;
                     mouseInSceneY = newMouseInSceneY;
