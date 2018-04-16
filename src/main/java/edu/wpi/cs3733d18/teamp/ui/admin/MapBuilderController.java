@@ -591,6 +591,7 @@ public class MapBuilderController implements Initializable {
             }
             else if(event.getEventType() == MouseEvent.MOUSE_DRAGGED){
                 if(isDragging && !isNewNode && !edgeSelected){
+                    clearCircles();
                     modifyingNode = true;
                     nodeModify = dragNodeOrg;
                     ArrayList<Edge> dragEdges = dragNodeOrg.getEdges();
@@ -686,9 +687,10 @@ public class MapBuilderController implements Initializable {
                             }
                         }
                         modifyingNode = true;
-                    } else {
+                    } else if (edgeSelected){
                         //This modifies the edge by replacing the start and end node in the edge
                         //when clicking on new nodes
+                        System.out.println("lets edit an edge");
                         if (mapBuilderEdgeFormController.checkEndNodeBar()) nodeState = 1;
                         if (mapBuilderEdgeFormController.checkStartNodeBar()) nodeState = 0;
                         switch (nodeState) {
@@ -1089,6 +1091,25 @@ public class MapBuilderController implements Initializable {
             } else {
                 nodeDispSet.get(nodeModify.getID()).setCenterX((nodeModify.getX() - X_OFFSET) * X_SCALE);
                 nodeDispSet.get(nodeModify.getID()).setCenterY((nodeModify.getY() - Y_OFFSET) * Y_SCALE);
+            }
+            for (Edge modifiedEdge : nodeModify.getEdges()){
+                if (modifiedEdge.getStart().equals(nodeModify)){
+                    if (toggleOn) {
+                        edgeDispSet.get(modifiedEdge.getID()).setStartX((nodeModify.getxDisplay() - X_OFFSET) * X_SCALE);
+                        edgeDispSet.get(modifiedEdge.getID()).setStartY((nodeModify.getyDisplay() - Y_OFFSET) * Y_SCALE);
+                    } else {
+                        edgeDispSet.get(modifiedEdge.getID()).setStartX((nodeModify.getX() - X_OFFSET) * X_SCALE);
+                        edgeDispSet.get(modifiedEdge.getID()).setStartY((nodeModify.getY() - Y_OFFSET) * Y_SCALE);
+                    }
+                } else if (modifiedEdge.getEnd().equals(nodeModify)){
+                    if (toggleOn) {
+                        edgeDispSet.get(modifiedEdge.getID()).setEndX((nodeModify.getxDisplay() - X_OFFSET) * X_SCALE);
+                        edgeDispSet.get(modifiedEdge.getID()).setEndY((nodeModify.getyDisplay() - Y_OFFSET) * Y_SCALE);
+                    } else {
+                        edgeDispSet.get(modifiedEdge.getID()).setEndX((nodeModify.getX() - X_OFFSET) * X_SCALE);
+                        edgeDispSet.get(modifiedEdge.getID()).setEndY((nodeModify.getY() - Y_OFFSET) * Y_SCALE);
+                    }
+                }
             }
         }
         if (firstSelect != null) {
