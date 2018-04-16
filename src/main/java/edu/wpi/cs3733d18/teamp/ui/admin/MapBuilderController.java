@@ -370,58 +370,37 @@ public class MapBuilderController implements Initializable {
         nodeSet = db.getAllNodes();
 
         for (Node node : nodeSet.values()) {
-            if (node.getFloor() == currentFloor) {
-                Circle circle = new Circle(NODE_RADIUS);
-                nodesEdgesPane.getChildren().add(circle);
-                if (!toggleOn) {
-                    circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
-                    circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
-                } else {
-                    circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
-                    circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
-                }
+            Circle circle = new Circle();
+            circle.setRadius(NODE_RADIUS);
+            if (node.getFloor() != currentFloor) {
+               circle.setVisible(false);
+               circle.setDisable(true);
+               circle.setPickOnBounds(false);
+            }
+            
+            nodesEdgesPane.getChildren().add(circle);
+            if (!toggleOn) {
+                circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
+                circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
+            } else {
+                circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
+                circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
+            }
 
-                //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-                circle.setFill(Color.DODGERBLUE);
-                circle.setStroke(Color.BLACK);
-                circle.setStrokeType(StrokeType.INSIDE);
-                if(!node.getActive()) {
-                    circle.setOpacity(0.5);
-                    circle.setFill(Color.GRAY);
-                }
-                circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
+            //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
+            circle.setFill(Color.DODGERBLUE);
+            circle.setStroke(Color.BLACK);
+            circle.setStrokeType(StrokeType.INSIDE);
+            if(!node.getActive()) {
+                circle.setOpacity(0.5);
+                circle.setFill(Color.GRAY);
+            }
+            circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
 //                circle.setOnMouseClicked(clickCallback());
 
-                String label = node.getID();
-                nodeDispSet.put(label, circle);
+            String label = node.getID();
+            nodeDispSet.put(label, circle);
 
-//                if(node.getType() == Node.nodeType.KIOS) {
-//                    File file = new File("main/kiosk/resources/img/pip.png");
-//                    Image pip = new Image(file.toURI().toString());
-//                    ImageView position = new ImageView(pip);
-//                    position.setX((node.getX() - X_OFFSET) * X_SCALE);
-//                    position.setY((node.getY() - Y_OFFSET - 10) * Y_SCALE);
-//                    kioskPip = position;
-//                }
-            } else {
-                Circle circle = new Circle(0);
-                nodesEdgesPane.getChildren().add(circle);
-                if (!toggleOn) {
-                    circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
-                    circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
-                } else {
-                    circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
-                    circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
-                }
-                //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-                circle.setFill(Color.DODGERBLUE);
-                circle.setStroke(Color.BLACK);
-                circle.setStrokeType(StrokeType.INSIDE);
-                circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
-
-                String label = node.getID();
-                nodeDispSet.put(label, circle);
-            }
         }
         System.out.println("Printed All Nodes");
     }
@@ -1214,8 +1193,6 @@ public class MapBuilderController implements Initializable {
     //removed static hope it didn't break anything
     public void drawPath(ArrayList<Node> path) {
         Node currentNode = null, pastNode = null;
-        Circle waypoint;
-        Line line;
         for (Node n : path) {
             pastNode = currentNode;
             currentNode = n;
@@ -1227,7 +1204,6 @@ public class MapBuilderController implements Initializable {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.RED);
             }
             for (Edge e : currentNode.getEdges()) {
-
                 if (pastNode != null) {
                     if (e.contains(pastNode)) {
                         edgeDispSet.get(e.getID()).setStroke(Color.rgb(250, 150, 0));
