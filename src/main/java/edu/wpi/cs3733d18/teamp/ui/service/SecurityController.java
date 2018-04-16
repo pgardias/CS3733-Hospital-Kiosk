@@ -174,5 +174,4 @@ public class SecurityController implements Initializable {
 
         return aNode;
     }
-
 }
