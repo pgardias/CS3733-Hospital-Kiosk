@@ -305,6 +305,7 @@ public class MapBuilderController implements Initializable {
             }
         }
         mapImage.setImage(image);
+        autoTranslateZoom(zoomSlider.getMin(), zoomSlider.getMin(), IMG_WIDTH/2, IMG_HEIGHT/2);
     }
 
     /**
@@ -749,7 +750,7 @@ public class MapBuilderController implements Initializable {
 
         updateMap();
         if (pathDrawn){
-            drawPath(path);
+            drawPath(pathMade);
         }
     }
 
@@ -771,7 +772,7 @@ public class MapBuilderController implements Initializable {
 
         updateMap();
         if (pathDrawn){
-            drawPath(path);
+            drawPath(pathMade);
         }
     }
 
@@ -781,9 +782,6 @@ public class MapBuilderController implements Initializable {
         currentFloor = Node.floorType.LEVEL_1;
 
         updateMap();
-        if (pathDrawn){
-            drawPath(path);
-        }
     }
 
     @FXML
@@ -793,7 +791,7 @@ public class MapBuilderController implements Initializable {
 
         updateMap();
         if (pathDrawn){
-            drawPath(path);
+            drawPath(pathMade);
         }
     }
 
@@ -804,7 +802,7 @@ public class MapBuilderController implements Initializable {
 
         updateMap();
         if (pathDrawn){
-            drawPath(path);
+            drawPath(pathMade);
         }
     }
 
@@ -1072,6 +1070,9 @@ public class MapBuilderController implements Initializable {
         secondSelect = null;
         selectedEdge = null;
         nodesEdgesPane.getChildren().add(newNodeCircle);
+        if (pathDrawn){
+            drawPath(pathMade);
+        }
         //addOverlay();
     }
 
