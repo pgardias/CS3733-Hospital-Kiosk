@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -21,12 +22,16 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
 import javafx.stage.Stage;
+import org.controlsfx.control.PopOver;
+import org.controlsfx.control.PopOver.ArrowLocation;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,8 +43,8 @@ public class MapScreenController {
 
     private int X_OFFSET = -523;
     private int Y_OFFSET = 0;
-    private double X_SCALE = 1588.235294/5000.0;
-    private double Y_SCALE = 1080.0/3400.0;
+    private double X_SCALE = 1588.235294 / 5000.0;
+    private double Y_SCALE = 1080.0 / 3400.0;
     public static final double NODE_RADIUS = 3.0;
     public static final double EDGE_WIDTH = 1.0;
     public static final int WIDTH = 1380;
@@ -111,17 +116,19 @@ public class MapScreenController {
     @FXML
     JFXButton floor3Button;
 
-
+    @FXML
+    static PopOver popOver;
+    Boolean popOverHidden = true;
 
     SearchBarOverlayController searchBarOverlayController = null;
     MapScreenController mapScreenController;
 
     /**
      * intializes values such as
-     *      adminMapViewController to this object
-     *      sets the current floor
-     *      initializes the zoom slider and binds it to the map
-     *      draws the initial screen and sets mouse events
+     * adminMapViewController to this object
+     * sets the current floor
+     * initializes the zoom slider and binds it to the map
+     * draws the initial screen and sets mouse events
      */
     @FXML
     public void onStartUp() {
@@ -164,67 +171,67 @@ public class MapScreenController {
 
 
     @FXML
-    public void floorL2ButtonOp(ActionEvent e){
+    public void floorL2ButtonOp(ActionEvent e) {
         floorState = floorL2Button.getText();
         currentFloor = Node.floorType.LEVEL_L2;
 
         updateMap();
-        if (pathDrawn){
+        if (pathDrawn) {
             drawPath(pathMade);
         }
     }
 
     @FXML
-    public void floorL1ButtonOp(ActionEvent e){
+    public void floorL1ButtonOp(ActionEvent e) {
         floorState = floorL1Button.getText();
         currentFloor = Node.floorType.LEVEL_L1;
 
         updateMap();
-        if (pathDrawn){
+        if (pathDrawn) {
             drawPath(pathMade);
         }
     }
 
     @FXML
-    public void floorGButtonOp(ActionEvent e){
+    public void floorGButtonOp(ActionEvent e) {
         floorState = floorGButton.getText();
         currentFloor = Node.floorType.LEVEL_G;
 
         updateMap();
-        if (pathDrawn){
+        if (pathDrawn) {
             drawPath(pathMade);
         }
     }
 
     @FXML
-    public void floor1ButtonOp(ActionEvent e){
+    public void floor1ButtonOp(ActionEvent e) {
         floorState = floor1Button.getText();
         currentFloor = Node.floorType.LEVEL_1;
 
         updateMap();
-        if (pathDrawn){
+        if (pathDrawn) {
             drawPath(pathMade);
         }
     }
 
     @FXML
-    public void floor2ButtonOp(ActionEvent e){
+    public void floor2ButtonOp(ActionEvent e) {
         floorState = floor2Button.getText();
         currentFloor = Node.floorType.LEVEL_2;
 
         updateMap();
-        if (pathDrawn){
+        if (pathDrawn) {
             drawPath(pathMade);
         }
     }
 
     @FXML
-    public void floor3ButtonOp(ActionEvent e){
+    public void floor3ButtonOp(ActionEvent e) {
         floorState = floor3Button.getText();
         currentFloor = Node.floorType.LEVEL_3;
 
         updateMap();
-        if (pathDrawn){
+        if (pathDrawn) {
             drawPath(pathMade);
         }
     }
@@ -233,15 +240,15 @@ public class MapScreenController {
     /**
      * switch statement that determines which map is loaded in
      */
-    public void getMap(){
+    public void getMap() {
         Image image;
 
-        if (toggleOn){
+        if (toggleOn) {
             X_OFFSET = 0;
             Y_OFFSET = -19;
-            X_SCALE = 1920.0/5000.0;
-            Y_SCALE = 1065.216/2774.0;
-            switch(floorState) {
+            X_SCALE = 1920.0 / 5000.0;
+            Y_SCALE = 1065.216 / 2774.0;
+            switch (floorState) {
                 case "3":
                     image = new Image("/img/maps/3d/3-ICONS.png"); //TODO use this bit of information for image drawing
                     break;
@@ -264,8 +271,8 @@ public class MapScreenController {
         } else {
             X_OFFSET = -523;
             Y_OFFSET = 0;
-            X_SCALE = 1588.235294/5000.0;
-            Y_SCALE = 1080.0/3400.0;
+            X_SCALE = 1588.235294 / 5000.0;
+            Y_SCALE = 1080.0 / 3400.0;
             switch (floorState) {
                 case "3":
                     image = new Image("/img/maps/2d/03_thethirdfloor.png");
@@ -295,13 +302,15 @@ public class MapScreenController {
     double orgSceneY = 0;
     double orgTranslateX = 0;
     double orgTranslateY = 0;
+
     /**
      * this gets the current position of the mouse before using the mouse
      * to pan the map
+     *
      * @param t
      */
     @FXML
-    public void getMouseValue(MouseEvent t){
+    public void getMouseValue(MouseEvent t) {
         orgSceneX = t.getSceneX();
         orgSceneY = t.getSceneY();
         orgTranslateX = mapImage.getTranslateX();
@@ -311,24 +320,26 @@ public class MapScreenController {
 
     double newTranslateX = 0;
     double newTranslateY = 0;
+
     /**
      * this lets the user scroll the wheel to move the zoom slider
      * This also readjusts the screen based on the bounds
+     *
      * @param s
      */
     @FXML
-    public void zoomScrollWheel(ScrollEvent s){
-        double newValue = (s.getDeltaY())/15 + zoomSlider.getValue();
+    public void zoomScrollWheel(ScrollEvent s) {
+        double newValue = (s.getDeltaY()) / 15 + zoomSlider.getValue();
         zoomSlider.setValue(newValue);
 
-        if(newTranslateX > (X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880))
-            newTranslateX = X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880;
-        if(newTranslateX < -(X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880))
-            newTranslateX = -(X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880);
-        if(newTranslateY > (Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530))
-            newTranslateY = (Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530);
-        if(newTranslateY < -(Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530))
-            newTranslateY = -(Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530);
+        if (newTranslateX > (X_SCALE * mapImage.getScaleX() * 2880 - X_SCALE * 2880))
+            newTranslateX = X_SCALE * mapImage.getScaleX() * 2880 - X_SCALE * 2880;
+        if (newTranslateX < -(X_SCALE * mapImage.getScaleX() * 2880 - X_SCALE * 2880))
+            newTranslateX = -(X_SCALE * mapImage.getScaleX() * 2880 - X_SCALE * 2880);
+        if (newTranslateY > (Y_SCALE * mapImage.getScaleX() * 1530 - X_SCALE * 1530))
+            newTranslateY = (Y_SCALE * mapImage.getScaleX() * 1530 - X_SCALE * 1530);
+        if (newTranslateY < -(Y_SCALE * mapImage.getScaleX() * 1530 - X_SCALE * 1530))
+            newTranslateY = -(Y_SCALE * mapImage.getScaleX() * 1530 - X_SCALE * 1530);
         mapImage.setTranslateX(newTranslateX);
         mapImage.setTranslateY(newTranslateY);
         nodesEdgesPane.setTranslateX(newTranslateX);
@@ -389,8 +400,7 @@ public class MapScreenController {
                 }
             }
             System.out.println("Printed All Nodes");
-        }
-        else {
+        } else {
             HashMap<String, Node> nodeSet;
 
             nodeSet = db.getAllNodes();
@@ -473,8 +483,7 @@ public class MapScreenController {
                     edgeDispSet.put(label, line);
                 }
             }
-        }
-        else {
+        } else {
             HashMap<String, Edge> edgeSet;
 
             edgeSet = db.getAllEdges();
@@ -503,8 +512,6 @@ public class MapScreenController {
         }
     }
 
-
-
     int nodeState = 0;
     /**
      * this handles all mouse events related to nodes that exist in the database
@@ -520,11 +527,12 @@ public class MapScreenController {
         double orgCenterY;
         double newCenterX;
         double newCenterY;
+
         @Override
         public void handle(MouseEvent event) {
+            HashMap<String, Node> nodeSet;
+            nodeSet = db.getAllNodes();
             if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
-                HashMap<String, Node> nodeSet;
-                nodeSet = db.getAllNodes();
                 if (searchBarOverlayController.isSourceFocused()) {
                     clearStartNode();
                     for (String string : nodeDispSet.keySet()) {
@@ -543,7 +551,7 @@ public class MapScreenController {
                             searchBarOverlayController.setDestinationSearchBar(node.getLongName());
                         }
                     }
-                } else if (!firstSelected){
+                } else if (!firstSelected) {
                     clearStartNode();
                     for (String string : nodeDispSet.keySet()) {
                         if (nodeDispSet.get(string) == event.getSource()) {
@@ -564,27 +572,72 @@ public class MapScreenController {
                     }
                     firstSelected = false;
                 }
+            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED && popOverHidden) { // TODO Check zoom level to prevent graphical glitches
+                System.out.println("MOUSE_ENTERED event at " + event.getSource());
+                for (String string : nodeDispSet.keySet()) {
+                    if (nodeDispSet.get(string) == event.getSource()) {
+                        if (popOver != null && popOver.getOpacity() == 0) {
+                            popOver.hide();
+                            popOver = null;
+                        }
+                        Node node = nodeSet.get(string);
+                        // Correcting enum toString conversion
+                        String type = node.getType().toString().toUpperCase();
+                        if (type.equals("STAIR")) {
+                            type = "STAIRS";
+                        } else if (type.equals("CONFERENCE")) {
+                            type = "CONFERENCE ROOM";
+                        } else if (type.equals("HALL")) {
+                            type = "HALLWAY";
+                        } else if (type.equals("INFORMATION")) {
+                            type = "INFORMATION DESK";
+                        } else if (type.equals("LABS")) {
+                            type = "LABORATORY";
+                        } else if (type.equals("SERVICE")) {
+                            type = "SERVICES";
+                        }
+                        Label nodeTypeLabel = new Label(type);
+                        Label nodeLongNameLabel = new Label("Name: " + node.getLongName());
+                        Label nodeBuildingLabel = new Label("Building: "+ node.getBuilding().toString());
+                        nodeTypeLabel.setStyle("-fx-font-size: 28px; -fx-text-fill: #0b2f5b; -fx-font-weight: 700; -fx-padding: 10px 10px 0 10px;");
+                        nodeTypeLabel.setAlignment(Pos.CENTER);
+                        nodeLongNameLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 0 10px;");
+                        nodeBuildingLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
+                        VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
+//                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
+                        popOver = new PopOver(popOverVBox);
+                        popOver.show((javafx.scene.Node) event.getSource());
+                        popOverHidden = false;
+                        popOver.setCloseButtonEnabled(false);
+//                        popOver.setCornerRadius(20);
+                        popOver.setAutoFix(true);
+                        popOver.setDetachable(false);
+                    }
+                }
+            } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
+                popOver.hide();
+                popOverHidden = true;
             }
             event.consume();
         }
     };
 
-        /**
+    /**
      * this is the event handler for clicking on the map to create a node
      */
     EventHandler<MouseEvent> mouseEventEventHandler = new EventHandler<MouseEvent>() {
         Boolean isDragging;
+
         @Override
         public void handle(MouseEvent event) {
-            if(event.getEventType() == MouseEvent.MOUSE_PRESSED){
+            if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
                 System.out.println("Mouse_Pressed");
                 getMouseValue(event);
                 isDragging = false;
-            }
-            else if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
+            } else if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
                 System.out.println("Drag_Detected");
                 isDragging = true;
-            } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED){
+            } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
                 System.out.println("Mouse_Dragged");
                 double offsetX = event.getSceneX() - orgSceneX;
                 double offsetY = event.getSceneY() - orgSceneY;
@@ -592,14 +645,14 @@ public class MapScreenController {
                 newTranslateY = orgTranslateY + offsetY;
 
                 System.out.println("Offset X: " + offsetX + " Offset Y: " + offsetY);
-                if(newTranslateX > (X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880))
-                    newTranslateX = X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880;
-                if(newTranslateX < -(X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880))
-                    newTranslateX = -(X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880);
-                if(newTranslateY > (Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530))
-                    newTranslateY = (Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530);
-                if(newTranslateY < -(Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530))
-                    newTranslateY = -(Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530);
+                if (newTranslateX > (X_SCALE * mapImage.getScaleX() * 2880 - X_SCALE * 2880))
+                    newTranslateX = X_SCALE * mapImage.getScaleX() * 2880 - X_SCALE * 2880;
+                if (newTranslateX < -(X_SCALE * mapImage.getScaleX() * 2880 - X_SCALE * 2880))
+                    newTranslateX = -(X_SCALE * mapImage.getScaleX() * 2880 - X_SCALE * 2880);
+                if (newTranslateY > (Y_SCALE * mapImage.getScaleX() * 1530 - X_SCALE * 1530))
+                    newTranslateY = (Y_SCALE * mapImage.getScaleX() * 1530 - X_SCALE * 1530);
+                if (newTranslateY < -(Y_SCALE * mapImage.getScaleX() * 1530 - X_SCALE * 1530))
+                    newTranslateY = -(Y_SCALE * mapImage.getScaleX() * 1530 - X_SCALE * 1530);
                 mapImage.setTranslateX(newTranslateX);
                 mapImage.setTranslateY(newTranslateY);
                 nodesEdgesPane.setTranslateX(newTranslateX);
@@ -620,16 +673,16 @@ public class MapScreenController {
             ie.printStackTrace();
             return;
         }
-       searchBarOverlayController = loader.getController();
-       searchBarOverlayController.startUp(mapScreenController);
-       searchBarOverlayPane.setTop(root);
+        searchBarOverlayController = loader.getController();
+        searchBarOverlayController.startUp(mapScreenController);
+        searchBarOverlayPane.setTop(root);
     }
 
     /**
      * this clears the anchor pane, draws the edges and the nodes and loads in the new map
      * this also brings in the basic overlays
      */
-    public void updateMap(){
+    public void updateMap() {
         nodeDispSet.clear();
         nodesEdgesPane.getChildren().clear();
         getMap();
@@ -638,8 +691,10 @@ public class MapScreenController {
     }
 
     ArrayList<Node> pathMade;
+
     /**
      * Used to draw the list of nodes returned by AStar
+     *
      * @param path List of Nodes to be drawn
      */
     //removed static hope it didn't break anything
@@ -650,7 +705,7 @@ public class MapScreenController {
 
 
         Node currentNode = null, pastNode = null;
-        if(pathMade != null){
+        if (pathMade != null) {
             resetPath();
         }
 
@@ -683,7 +738,7 @@ public class MapScreenController {
             if (path.get(0).equals(n)) {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.GREEN);
             }
-            if (path.get(path.size()-1).equals(n)) {
+            if (path.get(path.size() - 1).equals(n)) {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.RED);
             }
             for (Edge e : currentNode.getEdges()) {
@@ -692,10 +747,10 @@ public class MapScreenController {
                         line = edgeDispSet.get(e.getID());
                         edgeDispSet.get(e.getID()).setStroke(Color.rgb(250, 150, 0));
                         //edgeDispSet.get(e.getID()).setStrokeWidth(5.0);
-                        if(e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor){
+                        if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
                             edgeDispSet.get(e.getID()).setStrokeWidth(5.0);
                         }
-                        if(e.getStart().getFloor() != e.getEnd().getFloor()) {
+                        if (e.getStart().getFloor() != e.getEnd().getFloor()) {
                             nodeDispSet.get(pastNode.getID()).setFill(Color.DARKMAGENTA);
                             nodeDispSet.get(currentNode.getID()).setFill(Color.DARKMAGENTA);
                         }
@@ -776,7 +831,7 @@ public class MapScreenController {
                     if (e.contains(pastNode)) {
                         edgeDispSet.get(e.getID()).setStroke(Color.BLACK);
                         edgeDispSet.get(e.getID()).setStrokeWidth(0);
-                        if(e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor){
+                        if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
                             edgeDispSet.get(e.getID()).setStrokeWidth(0);
                         }
                     }
@@ -790,30 +845,30 @@ public class MapScreenController {
         }
     }
 
-    public void setToggleOn(Boolean toggleOn){
+    public void setToggleOn(Boolean toggleOn) {
         this.toggleOn = toggleOn;
 
         updateMap();
-        if (pathDrawn){
+        if (pathDrawn) {
             drawPath(pathMade);
         }
 
     }
 
-    public void clearStartNode(){
+    public void clearStartNode() {
         if (pathDrawn) resetPath();
-        for (Circle c: nodeDispSet.values()){
-            if(c.getFill().equals(Color.GREEN)) {
+        for (Circle c : nodeDispSet.values()) {
+            if (c.getFill().equals(Color.GREEN)) {
                 c.setFill(Color.DODGERBLUE);
             }
 
         }
     }
 
-    public void clearEndNode(){
+    public void clearEndNode() {
         if (pathDrawn) resetPath();
-        for (Circle c: nodeDispSet.values()){
-            if(c.getFill().equals(Color.RED)) {
+        for (Circle c : nodeDispSet.values()) {
+            if (c.getFill().equals(Color.RED)) {
                 c.setFill(Color.DODGERBLUE);
             }
 

@@ -285,7 +285,12 @@ public class ServiceRequestScreen implements Initializable{
         FXMLLoader loader;
 
         stage = (Stage) backButton.getScene().getWindow();
-        loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+        if(Main.currentUser.getIsAdmin()) {
+            loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
+        }else{
+            loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+            Main.logoutCurrentUser();
+        }
         try {
             root = loader.load();
         } catch (IOException ie) {
@@ -293,7 +298,7 @@ public class ServiceRequestScreen implements Initializable{
             return false;
         }
 
-        Main.logoutCurrentUser();
+
         backButton.getScene().setRoot(root);
         return true;
     }
