@@ -88,11 +88,7 @@ public class MainController {
                 ie.printStackTrace();
                 return;
             }
-            stage = (Stage) loginButton.getScene().getWindow();
-            stage.setFullScreen(false);
-            stage.setScene(new Scene(root, 1920, 1080));
-            stage.setFullScreen(true);
-            stage.show();
+            loginButton.getScene().setRoot(root);
         } else {
             System.out.println("Logging in Employee");
             FXMLLoader loader;
@@ -106,11 +102,7 @@ public class MainController {
                 ie.printStackTrace();
                 return;
             }
-            stage = (Stage) loginButton.getScene().getWindow();
-            stage.setFullScreen(false);
-            stage.setScene(new Scene(root, 1920, 1080));
-            stage.show();
-            stage.setFullScreen(true);
+            loginButton.getScene().setRoot(root);
         }
     }
 
