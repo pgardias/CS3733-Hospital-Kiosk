@@ -62,7 +62,7 @@ public class MapViewerBuilder implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Group group = buildScene("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W1stFloor.obj");
+        Group group = buildScene("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WWholeMap.obj");
         group.setScaleX(2);
         group.setScaleY(2);
         group.setScaleZ(2);
@@ -283,6 +283,11 @@ public class MapViewerBuilder implements Initializable{
     public void switchMeshOp() {
         threeDAnchorPane.getChildren().remove(3);
         Group newRoot = buildScene("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WL1Floor.obj");
+        newRoot.setScaleX(2);
+        newRoot.setScaleY(2);
+        newRoot.setScaleZ(2);
+        newRoot.setTranslateX(500);
+        newRoot.setTranslateY(100);
         threeDAnchorPane.getChildren().add(newRoot);
     }
 
