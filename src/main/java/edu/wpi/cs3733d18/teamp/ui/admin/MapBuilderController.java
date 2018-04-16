@@ -3,6 +3,7 @@ package edu.wpi.cs3733d18.teamp.ui.admin;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToggleButton;
 import edu.wpi.cs3733d18.teamp.*;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
@@ -42,14 +43,16 @@ import java.util.ResourceBundle;
 
 public class MapBuilderController implements Initializable {
 
-    public static final int X_OFFSET = -523;
-    public static final int Y_OFFSET = 0;
-    public static final double X_SCALE = 1588.235294/5000.0;
-    public static final double Y_SCALE = 1080.0/3400.0;
+    public int X_OFFSET = -523;
+    public int Y_OFFSET = 0;
+    public double X_SCALE = 1588.235294/5000.0;
+    public double Y_SCALE = 1080.0/3400.0;
     public static final double NODE_RADIUS = 3.0;
     public static final double EDGE_WIDTH = 1.0;
-    public static final int WIDTH = 1380;
-    public static final int HEIGHT = 776;
+    public static final int IMG_WIDTH = 5000;
+    public int IMG_HEIGHT = 3400;
+    private static final double ZOOM_3D_MIN = 1.013878875;
+    private static final double ZOOM_2D_MIN = 1.208888889;
 
     Circle newNodeCircle = new Circle();
 
@@ -64,6 +67,8 @@ public class MapBuilderController implements Initializable {
 
     private Boolean edgeSelected = false;
     private Boolean pathDrawn = false;
+    private Boolean isNewNode = false;
+    private Boolean toggleOn = false;
 
     private static HashMap<String, Circle> nodeDispSet = new HashMap<>();
     private static HashMap<String, Line> edgeDispSet = new HashMap<>();
@@ -86,6 +91,9 @@ public class MapBuilderController implements Initializable {
 
     @FXML
     JFXButton goButton;
+
+    @FXML
+    JFXToggleButton mapToggleButton;
 
     @FXML
     AnchorPane basePane;
@@ -204,7 +212,8 @@ public class MapBuilderController implements Initializable {
         mapBuilderController = this;
         floorState = "2";
         currentFloor = Node.floorType.LEVEL_2;
-        zoomSlider.setValue(1);
+        zoomSlider.setMin(ZOOM_2D_MIN);
+        zoomSlider.setValue(ZOOM_2D_MIN);
         Image newImage = new Image("/img/maps/2d/02_thesecondfloor.png");
         mapImage.setImage(newImage);
         mapImage.scaleXProperty().bind(zoomSlider.valueProperty());
@@ -214,9 +223,9 @@ public class MapBuilderController implements Initializable {
 
 
         mapImage.addEventHandler(MouseEvent.ANY, mouseEventEventHandler);
+        getMap();
         drawEdges();
         drawNodes();
-        getMap();
         nodesEdgesPane.getChildren().add(newNodeCircle);
         //newNodeCircle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
         addOverlay();
@@ -244,30 +253,54 @@ public class MapBuilderController implements Initializable {
         Main.pathfindingContext.setPathfindingContext(Main.settings.getPathfindingSettings());
     }
 
+
     /**
      * switch statement that determines which map is loaded in
      */
     public void getMap(){
         Image image;
-        switch (floorState) {
-            case "3":
-                image = new Image("/img/maps/2d/03_thethirdfloor.png");
-                break;
-            case "2":
-                image = new Image("/img/maps/2d/02_thesecondfloor.png");
-                break;
-            case "1":
-                image = new Image("/img/maps/2d/01_thefirstfloor.png");
-                break;
-            case "G":
-                image = new Image("/img/maps/2d/00_thegroundfloor.png");
-                break;
-            case "L1":
-                image = new Image("/img/maps/2d/00_thelowerlevel1.png");
-                break;
-            default:
-                image = new Image("/img/maps/2d/00_thelowerlevel2.png");
-                break;
+        if (toggleOn){
+            switch(floorState) {
+                case "3":
+                    image = new Image("/img/maps/3d/3-ICONS.png");
+                    break;
+                case "2":
+                    image = new Image("/img/maps/3d/2-ICONS.png");
+                    break;
+                case "1":
+                    image = new Image("/img/maps/3d/1-ICONS.png");
+                    break;
+                case "G":
+                    image = new Image("/img/maps/3d/1-ICONS.png");
+                    break;
+                case "L1":
+                    image = new Image("/img/maps/3d/L1-ICONS.png");
+                    break;
+                default:
+                    image = new Image("/img/maps/3d/L2-ICONS.png");
+                    break;
+            }
+        } else {
+            switch (floorState) {
+                case "3":
+                    image = new Image("/img/maps/2d/03_thethirdfloor.png");
+                    break;
+                case "2":
+                    image = new Image("/img/maps/2d/02_thesecondfloor.png");
+                    break;
+                case "1":
+                    image = new Image("/img/maps/2d/01_thefirstfloor.png");
+                    break;
+                case "G":
+                    image = new Image("/img/maps/2d/00_thegroundfloor.png");
+                    break;
+                case "L1":
+                    image = new Image("/img/maps/2d/00_thelowerlevel1.png");
+                    break;
+                default:
+                    image = new Image("/img/maps/2d/00_thelowerlevel2.png");
+                    break;
+            }
         }
         mapImage.setImage(image);
     }
@@ -318,14 +351,17 @@ public class MapBuilderController implements Initializable {
         double newValue = (s.getDeltaY())/15 + zoomSlider.getValue();
         zoomSlider.setValue(newValue);
 
-        if(newTranslateX > (X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880))
-            newTranslateX = X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880;
-        if(newTranslateX < -(X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880))
-            newTranslateX = -(X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880);
-        if(newTranslateY > (Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530))
-            newTranslateY = (Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530);
-        if(newTranslateY < -(Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530))
-            newTranslateY = -(Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530);
+        double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
+        double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
+
+        if(newTranslateX > (translateSlopeX - 1920)/2)
+            newTranslateX = (translateSlopeX - 1920)/2;
+        if(newTranslateX < -(translateSlopeX - 1920)/2)
+            newTranslateX = -(translateSlopeX - 1920)/2;
+        if(newTranslateY > (translateSlopeY - 1080)/2)
+            newTranslateY = (translateSlopeY - 1080)/2;
+        if(newTranslateY < -(translateSlopeY - 1080)/2)
+            newTranslateY = -(translateSlopeY - 1080)/2;
         mapImage.setTranslateX(newTranslateX);
         mapImage.setTranslateY(newTranslateY);
         nodesEdgesPane.setTranslateX(newTranslateX);
@@ -342,47 +378,35 @@ public class MapBuilderController implements Initializable {
         nodeSet = db.getAllNodes();
 
         for (Node node : nodeSet.values()) {
-            if (node.getFloor() == currentFloor) {
-                Circle circle = new Circle(NODE_RADIUS);
-                nodesEdgesPane.getChildren().add(circle);
+            Circle circle = new Circle();
+            circle.setRadius(NODE_RADIUS);
+            if (node.getFloor() != currentFloor) {
+               circle.setVisible(false);
+               circle.setDisable(true);
+               circle.setPickOnBounds(false);
+            }
+            nodesEdgesPane.getChildren().add(circle);
+            if (!toggleOn) {
                 circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
                 circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
-                //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-                circle.setFill(Color.DODGERBLUE);
-                circle.setStroke(Color.BLACK);
-                circle.setStrokeType(StrokeType.INSIDE);
-                if(!node.getActive()) {
-                    circle.setOpacity(0.5);
-                    circle.setFill(Color.GRAY);
-                }
-                circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
+            } else {
+                circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
+                circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
+            }
+            //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
+            circle.setFill(Color.DODGERBLUE);
+            circle.setStroke(Color.BLACK);
+            circle.setStrokeType(StrokeType.INSIDE);
+            if(!node.getActive()) {
+                circle.setOpacity(0.5);
+                circle.setFill(Color.GRAY);
+            }
+            circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
 //                circle.setOnMouseClicked(clickCallback());
 
-                String label = node.getID();
-                nodeDispSet.put(label, circle);
+            String label = node.getID();
+            nodeDispSet.put(label, circle);
 
-//                if(node.getType() == Node.nodeType.KIOS) {
-//                    File file = new File("main/kiosk/resources/img/pip.png");
-//                    Image pip = new Image(file.toURI().toString());
-//                    ImageView position = new ImageView(pip);
-//                    position.setX((node.getX() - X_OFFSET) * X_SCALE);
-//                    position.setY((node.getY() - Y_OFFSET - 10) * Y_SCALE);
-//                    kioskPip = position;
-//                }
-            } else {
-                Circle circle = new Circle(0);
-                nodesEdgesPane.getChildren().add(circle);
-                circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
-                circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
-                //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-                circle.setFill(Color.DODGERBLUE);
-                circle.setStroke(Color.BLACK);
-                circle.setStrokeType(StrokeType.INSIDE);
-                circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
-
-                String label = node.getID();
-                nodeDispSet.put(label, circle);
-            }
         }
         System.out.println("Printed All Nodes");
     }
@@ -397,60 +421,35 @@ public class MapBuilderController implements Initializable {
         edgeSet = db.getAllEdges();
 
         for (Edge edge : edgeSet.values()) {
-            if (edge.getStart().getFloor() == currentFloor && edge.getEnd().getFloor() == currentFloor) {
-                Line line = new Line();
-                nodesEdgesPane.getChildren().add(line);
+
+            Line line = new Line();
+            nodesEdgesPane.getChildren().add(line);
+            if (!toggleOn) {
                 line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
                 line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
                 line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
                 line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
-                line.setStrokeWidth(EDGE_WIDTH);
-                line.setStrokeType(StrokeType.CENTERED);
-                if(!edge.getActive()){
-                    line.getStrokeDashArray().addAll(5.0, 2.5);
-                    line.setOpacity(0.5);
-                }
-                line.setOnMouseClicked(edgeClickHandler);
-
-                String label = edge.getID();
-                edgeDispSet.put(label, line);
+            } else {
+                line.setStartX((edge.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
+                line.setStartY((edge.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);
+                line.setEndX((edge.getEnd().getxDisplay() - X_OFFSET) * X_SCALE);
+                line.setEndY((edge.getEnd().getyDisplay() - Y_OFFSET) * Y_SCALE);
             }
-            else if(edge.getStart().getFloor() == currentFloor || edge.getEnd().getFloor() == currentFloor){
-                Line line = new Line();
-                nodesEdgesPane.getChildren().add(line);
-                line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
-                line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
-                line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
-                line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
-                line.setStrokeWidth(0);
-                line.setStrokeType(StrokeType.CENTERED);
-                if(!edge.getActive()){
-                    line.getStrokeDashArray().addAll(5.0, 2.5);
-                    line.setOpacity(0.5);
-                }
-                line.setOnMouseClicked(edgeClickHandler);
 
-                String label = edge.getID();
-                edgeDispSet.put(label, line);
+            line.setStrokeWidth(EDGE_WIDTH);
+            line.setStrokeType(StrokeType.CENTERED);
+            if(!edge.getActive()){
+                line.getStrokeDashArray().addAll(5.0, 2.5);
+                line.setOpacity(0.5);
             }
-            else {
-                Line line = new Line();
-                nodesEdgesPane.getChildren().add(line);
-                line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
-                line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
-                line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
-                line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
-                line.setStrokeWidth(0);
-                line.setStrokeType(StrokeType.CENTERED);
-                if (!edge.getActive()) {
-                    line.getStrokeDashArray().addAll(5.0, 2.5);
-                    line.setOpacity(0.5);
-                }
                 line.setOnMouseClicked(edgeClickHandler);
-
-                String label = edge.getID();
-                edgeDispSet.put(label, line);
+            if (edge.getStart().getFloor() != currentFloor || edge.getEnd().getFloor() != currentFloor) {
+                line.setVisible(false);
+                line.setDisable(true);
+                line.setPickOnBounds(false);
             }
+            String label = edge.getID();
+            edgeDispSet.put(label, line);
         }
     }
 
@@ -490,7 +489,11 @@ public class MapBuilderController implements Initializable {
 
                 double nodex2Coord = newCenterX/X_SCALE + X_OFFSET;
                 double nodey2Coord = newCenterY/Y_SCALE + Y_OFFSET;
-                mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord,floorState);
+                if (!toggleOn) {
+                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                } else {
+                    mapBuilderNodeFormController.set3XYCoords(nodex2Coord, nodey2Coord);
+                }
 
                 //System.out.println("New Center X: " + newCenterX + " New Center Y: " + newCenterY + "\n");
                 //TODO drag bounds
@@ -538,7 +541,7 @@ public class MapBuilderController implements Initializable {
                 isDragging = true;
             }
             else if(event.getEventType() == MouseEvent.MOUSE_DRAGGED){
-                if(isDragging){
+                if(isDragging && !isNewNode){
                     ArrayList<Edge> dragEdges = dragNodeOrg.getEdges();
 
                     double offsetX = event.getSceneX() - orgMouseX;
@@ -569,42 +572,52 @@ public class MapBuilderController implements Initializable {
                     newNodeForm(dragNodeOrg.getID(), dragNodeOrg.getLongName(), dragNodeOrg.getX(), dragNodeOrg.getY(),
                             dragNodeOrg.getxDisplay(), dragNodeOrg.getyDisplay(), dragNodeOrg.getFloor().toString(),
                             dragNodeOrg.getBuilding().toString(), dragNodeOrg.getType().toString(), dragNodeOrg.getActive());
-                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorState);
+                    if (!toggleOn) {
+                        mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorSpinner.getValue());
+                    } else {
+                        mapBuilderNodeFormController.set3XYCoords(nodex2Coord, nodey2Coord);
+                    }
 
                 }
             }
             else if(event.getEventType() == MouseEvent.MOUSE_CLICKED) {
                 if(!isDragging) {
+                    HashMap<String, Node> nodeSet;
+                    nodeSet = db.getAllNodes();
                     if (getSourceFocus()){
-
-                        HashMap<String, Node> nodeSet;
+                        // if the start search bar is clicked the node gets put in there
                         removeFocus();
-                        nodeSet = db.getAllNodes();
                         clearCircles();
                         System.out.println("clear all nodes");
                         for (String string : nodeDispSet.keySet()) {
                             if (nodeDispSet.get(string) == event.getSource()) {
                                 Node node = nodeSet.get(string);
-                                sourceSearchBar.setText(node.getLongName());
+                                nodeDispSet.get(node.getID()).setFill(Color.GREEN);
+                                sourceSearchBar.setText(node.getShortName());
                             }
                         }
                     }else if (getDestinationFocus()){
+                        // if the destination bar is clicked, the clicked node gets put in there
                         removeFocus();
-                        HashMap<String, Node> nodeSet;
-
-                        nodeSet = db.getAllNodes();
                         clearCircles();
                         System.out.println("clear all nodes");
                         for (String string : nodeDispSet.keySet()) {
                             if (nodeDispSet.get(string) == event.getSource()) {
                                 Node node = nodeSet.get(string);
-                                destinationSearchBar.setText(node.getLongName());
+                                nodeDispSet.get(node.getID()).setFill(Color.RED);
+                                destinationSearchBar.setText(node.getShortName());
+                            }
+                        }
+                    } else if (isNewNode){
+                        for (String string : nodeDispSet.keySet()) {
+                            if (nodeDispSet.get(string) == event.getSource()) {
+                                Node node = nodeSet.get(string);
+                                nodeDispSet.get(node.getID()).setFill(Color.GREEN);
+                                mapBuilderNodeFormController.setConnectingNodeTextBox(node.getLongName());
                             }
                         }
                     } else if (!edgeSelected) {
-                        HashMap<String, Node> nodeSet;
-
-                        nodeSet = db.getAllNodes();
+                        // if an edge was not selected, clicking a node opens up the modify node form
                         clearCircles();
                         System.out.println("clear all nodes");
                         for (String string : nodeDispSet.keySet()) {
@@ -621,16 +634,14 @@ public class MapBuilderController implements Initializable {
                                         endNode.getBuilding().toString(), endNode.getType().toString(), endNode.getActive());
                             }
                         }
-                    }else {
-                        HashMap<String, Node> nodeSet;
-                        nodeSet = db.getAllNodes();
+                    } else {
+                        //This modifies the edge by replacing the start and end node in the edge
+                        //when clicking on new nodes
                         if (mapBuilderEdgeFormController.checkEndNodeBar()) nodeState = 1;
                         if (mapBuilderEdgeFormController.checkStartNodeBar()) nodeState = 0;
-                        Circle c;
                         switch (nodeState) {
                             case 0:
                                 if (firstSelect != null) {
-                                    c = nodeDispSet.get(firstSelect.getID());
                                     nodeDispSet.get(firstSelect.getID()).setFill(Color.DODGERBLUE);
                                 }
                                 for (String string : nodeDispSet.keySet()) {
@@ -650,7 +661,6 @@ public class MapBuilderController implements Initializable {
                                 break;
                             case 1:
                                 if (secondSelect != null) {
-                                    c = nodeDispSet.get(secondSelect.getID());
                                     nodeDispSet.get(secondSelect.getID()).setFill(Color.DODGERBLUE);
                                 }
                                 for (String string : nodeDispSet.keySet()) {
@@ -699,7 +709,7 @@ public class MapBuilderController implements Initializable {
 
         updateMap();
         if (pathDrawn){
-            drawPath(path);
+            drawPath(pathMade);
         }
     }
 
@@ -805,15 +815,17 @@ public class MapBuilderController implements Initializable {
                 newTranslateX = orgTranslateX + offsetX;
                 newTranslateY = orgTranslateY + offsetY;
 
-                System.out.println("Offset X: " + offsetX + " Offset Y: " + offsetY);
-                if(newTranslateX > (X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880))
-                    newTranslateX = X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880;
-                if(newTranslateX < -(X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880))
-                    newTranslateX = -(X_SCALE*mapImage.getScaleX()*2880 - X_SCALE*2880);
-                if(newTranslateY > (Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530))
-                    newTranslateY = (Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530);
-                if(newTranslateY < -(Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530))
-                    newTranslateY = -(Y_SCALE*mapImage.getScaleX()*1530 - X_SCALE*1530);
+                double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
+                double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
+
+                if(newTranslateX > (translateSlopeX - 1920)/2)
+                    newTranslateX = (translateSlopeX - 1920)/2;
+                if(newTranslateX < -(translateSlopeX - 1920)/2)
+                    newTranslateX = -(translateSlopeX - 1920)/2;
+                if(newTranslateY > (translateSlopeY - 1080)/2)
+                    newTranslateY = (translateSlopeY - 1080)/2;
+                if(newTranslateY < -(translateSlopeY - 1080)/2)
+                    newTranslateY = -(translateSlopeY - 1080)/2;
                 mapImage.setTranslateX(newTranslateX);
                 mapImage.setTranslateY(newTranslateY);
                 nodesEdgesPane.setTranslateX(newTranslateX);
@@ -839,9 +851,14 @@ public class MapBuilderController implements Initializable {
 
                     double nodex2Coord = scaledx2Coord/X_SCALE + X_OFFSET;
                     double nodey2Coord = scaledy2Coord/Y_SCALE + Y_OFFSET;
-                    newNodeForm();
-                    mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorState);
-                    mapBuilderNodeFormController.setFloor(currentFloor.toString());
+                    if (!isNewNode) {
+                        isNewNode = true;
+                        newNodeForm();
+                        mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorState);
+                        mapBuilderNodeFormController.setFloor(currentFloor.toString());
+                    } else {
+                        mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorState);
+                    }
 
                 }
             }
@@ -869,6 +886,7 @@ public class MapBuilderController implements Initializable {
         mapBuilderOverlayController = loader.getController();
         mapBuilderOverlayController.startUp(mapBuilderController);
         edgeSelected = false;
+        isNewNode = false;
         nodeState = 0;
         formOverlayPane.setLeft(root);
     }
@@ -991,6 +1009,12 @@ public class MapBuilderController implements Initializable {
      * this also brings in the basic overlays
      */
     public void updateMap(){
+        nodeDispSet.clear();
+        endNode = null;
+        firstSelect = null;
+        secondSelect = null;
+        edgeDispSet.clear();
+        selectedEdge = null;
         nodesEdgesPane.getChildren().clear();
         getMap();
         drawEdges();
@@ -1083,7 +1107,6 @@ public class MapBuilderController implements Initializable {
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
         System.out.println(path);
         drawPath(path);
-        pathDrawn = true;
         this.path = path;
         return true;
     }
@@ -1205,6 +1228,8 @@ public class MapBuilderController implements Initializable {
         return shortestDistanceNode;
     }
 
+
+    ArrayList<Node> pathMade;
     /**
      * Used to draw the list of nodes returned by AStar
      * @param path List of Nodes to be drawn
@@ -1212,14 +1237,34 @@ public class MapBuilderController implements Initializable {
     //removed static hope it didn't break anything
     public void drawPath(ArrayList<Node> path) {
         Node currentNode = null, pastNode = null;
-        Circle waypoint;
-        Line line;
+
+        if(pathMade != null){
+            resetPath();
+        }
+        this.pathMade = path;
+
+        double maxXCoord = 0;
+        double maxYCoord = 0;
+        double minXCoord = 5000;
+        double minYCoord = 3400;
+
         for (Node n : path) {
+
+            if (toggleOn) {
+                if (n.getxDisplay() < minXCoord) minXCoord = n.getxDisplay();
+                if (n.getxDisplay() > maxXCoord) maxXCoord = n.getxDisplay();
+                if (n.getyDisplay() < minYCoord) minYCoord = n.getyDisplay();
+                if (n.getyDisplay() > maxYCoord) maxYCoord = n.getyDisplay();
+            } else {
+                if (n.getX() < minXCoord) minXCoord = n.getX();
+                if (n.getX() > maxXCoord) maxXCoord = n.getX();
+                if (n.getY() < minYCoord) minYCoord = n.getY();
+                if (n.getY() > maxYCoord) maxYCoord = n.getY();
+            }
+
             pastNode = currentNode;
             currentNode = n;
-            //if (path.get(0).equals(n) || path.get(path.size()-1).equals(n)) {
-                nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
-           // }
+            //nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
             if (path.get(0).equals(n)) {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.GREEN);
             }
@@ -1227,23 +1272,42 @@ public class MapBuilderController implements Initializable {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.RED);
             }
             for (Edge e : currentNode.getEdges()) {
-
                 if (pastNode != null) {
                     if (e.contains(pastNode)) {
-                        line = edgeDispSet.get(e.getID());
                         edgeDispSet.get(e.getID()).setStroke(Color.rgb(250, 150, 0));
+                        edgeDispSet.get(e.getID()).setStrokeWidth(5.0);
+                        edgeDispSet.get(e.getID()).setVisible(true);
                         if(e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor){
-                            edgeDispSet.get(e.getID()).setStrokeWidth(5.0);
-                        }
-                        if(e.getStart().getFloor() != e.getEnd().getFloor()) {
-                            nodeDispSet.get(pastNode.getID()).setFill(Color.DARKMAGENTA);
-                            nodeDispSet.get(currentNode.getID()).setFill(Color.DARKMAGENTA);
+                            edgeDispSet.get(e.getID()).setOpacity(1.0);
+                        } else {
+                            edgeDispSet.get(e.getID()).setOpacity(0.3);
                         }
 
                     }
                 }
             }
         }
+        minXCoord -= 200;
+        minYCoord -= 400;
+        maxXCoord += 200;
+        maxYCoord += 100;
+
+        System.out.println("MaxX: " + maxXCoord + "Min X: " + minXCoord
+                + "Max Y: " + maxYCoord + "Min Y: " + minYCoord);
+        double rangeX = maxXCoord - minXCoord;
+        double rangeY = maxYCoord - minYCoord;
+
+
+        double desiredZoomX = 1920/(rangeX * X_SCALE);
+        double desiredZoomY = 1080/(rangeY * Y_SCALE);
+        System.out.println("desired X zoom: " + desiredZoomX +  " desired Zoom Y: " + desiredZoomY);
+
+        double centerX = (maxXCoord + minXCoord)/2;
+        double centerY = (maxYCoord + minYCoord)/2;
+
+        autoTranslateZoom(desiredZoomX, desiredZoomY, centerX, centerY);
+
+        pathDrawn = true;
     }
 
     /**
@@ -1253,7 +1317,7 @@ public class MapBuilderController implements Initializable {
         Node currentNode = null, pastNode = null;
         Circle waypoint;
         Line line;
-        for (Node n : path) {
+        for (Node n : pathMade) {
             pastNode = currentNode;
             currentNode = n;
             nodeDispSet.get(n.getID()).setFill(Color.DODGERBLUE);
@@ -1261,16 +1325,42 @@ public class MapBuilderController implements Initializable {
             for (Edge e : currentNode.getEdges()) {
                 if (pastNode != null) {
                     if (e.contains(pastNode)) {
-                        line = edgeDispSet.get(e.getID());
                         edgeDispSet.get(e.getID()).setStroke(Color.BLACK);
+                        edgeDispSet.get(e.getID()).setStrokeWidth(EDGE_WIDTH);
                         if(e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor){
-                            edgeDispSet.get(e.getID()).setStrokeWidth(EDGE_WIDTH);
+
+                        } else{
+                            edgeDispSet.get(e.getID()).setVisible(false);
                         }
                     }
                 }
             }
         }
 //        path = new ArrayList<>();
+    }
+
+    @FXML
+    public void mapToggleButtonOp(){
+        if (mapToggleButton.isSelected()){
+            X_OFFSET = 0;
+            Y_OFFSET = -19;
+            X_SCALE = 1920.0/5000.0;
+            Y_SCALE = 1065.216/2774.0;
+            IMG_HEIGHT = 2774;
+            zoomSlider.setMin(ZOOM_3D_MIN);
+            zoomSlider.setValue(ZOOM_3D_MIN);
+            toggleOn = true;
+        } else {
+            X_OFFSET = -523;
+            Y_OFFSET = 0;
+            X_SCALE = 1588.235294/5000.0;
+            Y_SCALE = 1080.0/3400.0;
+            IMG_HEIGHT = 3400;
+            zoomSlider.setMin(ZOOM_2D_MIN);
+            zoomSlider.setValue(ZOOM_2D_MIN);
+            toggleOn = false;
+        }
+        updateMap();
     }
 
     public Boolean getSourceFocus(){
@@ -1283,6 +1373,51 @@ public class MapBuilderController implements Initializable {
 
     public void removeFocus(){
         goButton.requestFocus();
+    }
+
+
+    public void autoTranslateZoom(double zoomX, double zoomY, double centerX, double centerY){
+
+        double zoom;
+        if (zoomX > zoomY)
+            zoom = zoomY;
+        else
+            zoom = zoomX;
+
+        if (zoom > zoomSlider.getMax()) zoom = zoomSlider.getMax();
+        if (zoom < zoomSlider.getMin()) zoom = zoomSlider.getMin();
+
+        System.out.println("chosen zoom: " + zoom);
+
+        zoomSlider.setValue(zoom);
+
+        System.out.println("Center X: " + centerX + " Center Y: " + centerY);
+        double screenX = (centerX - X_OFFSET)*X_SCALE;
+        double screenY = (centerY - Y_OFFSET)*Y_SCALE;
+        System.out.println("Screen x: " + screenX + " Screen Y: " + screenY);
+
+        double translateX = 960 - screenX;
+        double translateY = 540 - screenY;
+        double screenTranslateX = (translateX * zoom);
+        double screenTranslateY = (translateY * zoom);
+        System.out.println("translate X: " + translateX + " translate Y: " + translateY);
+
+        double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
+        double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
+        if(screenTranslateX > (translateSlopeX - 1920)/2)
+            screenTranslateX = (translateSlopeX - 1920)/2;
+        if(screenTranslateX < -(translateSlopeX - 1920)/2)
+            screenTranslateX = -(translateSlopeX - 1920)/2;
+        if(screenTranslateY > (translateSlopeY - 1080)/2)
+            screenTranslateY = (translateSlopeY - 1080)/2;
+        if(screenTranslateY < -(translateSlopeY - 1080)/2)
+            screenTranslateY = -(translateSlopeY - 1080)/2;
+
+        System.out.println("Chosen translate X: " + screenTranslateX + " Chosen translate Y: " + screenTranslateY);
+        mapImage.setTranslateX(screenTranslateX);
+        mapImage.setTranslateY(screenTranslateY);
+        nodesEdgesPane.setTranslateX(screenTranslateX);
+        nodesEdgesPane.setTranslateY(screenTranslateY);
     }
 }
 
