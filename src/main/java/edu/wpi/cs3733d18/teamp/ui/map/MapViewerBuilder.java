@@ -57,9 +57,12 @@ public class MapViewerBuilder implements Initializable{
     @FXML
     Button rightButton;
 
+    @FXML
+    Button switchButton;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Group group = buildScene();
+        Group group = buildScene("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W1stFloor.obj");
         group.setScaleX(2);
         group.setScaleY(2);
         group.setScaleZ(2);
@@ -183,8 +186,8 @@ public class MapViewerBuilder implements Initializable{
         curZoom = newZoom; // Set next zoom value to compare to
     }
 
-    static MeshView[] loadMeshView() {
-        File file = new File("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W2ndFloorReverseNormals.obj");
+    static MeshView[] loadMeshView(String fileName) {
+        File file = new File(fileName);
         ObjModelImporter importer = new ObjModelImporter();
         importer.read(file);
         //Mesh mesh = importer.getImport();
@@ -192,8 +195,8 @@ public class MapViewerBuilder implements Initializable{
         return importer.getImport();
     }
 
-    private Group buildScene() {
-        MeshView[] meshViews = loadMeshView();
+    private Group buildScene(String fileName) {
+        MeshView[] meshViews = loadMeshView(fileName);
         for (int i = 0; i < meshViews.length; i++) {
             curXTranslation = (VIEWPORT_SIZE / 2 + MODEL_X_OFFSET);
             curYTranslation = (VIEWPORT_SIZE / 2 + MODEL_Y_OFFSET);
@@ -269,8 +272,18 @@ public class MapViewerBuilder implements Initializable{
      * @return The MeshView we are looking for
      */
     private MeshView getMesh() {
-        Group group = (Group)threeDAnchorPane.getChildren().get(2);
+        Group group = (Group)threeDAnchorPane.getChildren().get(3); // TODO index needs to be incremented whenever a new element is added to the pane
         return (MeshView)group.getChildren().get(0);
+    }
+
+    /**
+     * Loads in a new mesh when switching floors
+     */
+    @FXML
+    public void switchMeshOp() {
+        threeDAnchorPane.getChildren().remove(3);
+        Group newRoot = buildScene("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WL1Floor.obj");
+        threeDAnchorPane.getChildren().add(newRoot);
     }
 
 }
