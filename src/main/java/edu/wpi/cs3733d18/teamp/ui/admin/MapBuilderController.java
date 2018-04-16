@@ -708,7 +708,7 @@ public class MapBuilderController implements Initializable {
         }
         updateMap();
         if (pathDrawn){
-            drawPath(path);
+            drawPath(pathMade);
         }
     }
 
@@ -1062,7 +1062,6 @@ public class MapBuilderController implements Initializable {
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
         System.out.println(path);
         drawPath(path);
-        pathDrawn = true;
         this.path = path;
         return true;
     }
@@ -1184,6 +1183,8 @@ public class MapBuilderController implements Initializable {
         return shortestDistanceNode;
     }
 
+
+    ArrayList<Node> pathMade;
     /**
      * Used to draw the list of nodes returned by AStar
      * @param path List of Nodes to be drawn
@@ -1191,10 +1192,34 @@ public class MapBuilderController implements Initializable {
     //removed static hope it didn't break anything
     public void drawPath(ArrayList<Node> path) {
         Node currentNode = null, pastNode = null;
+
+        if(pathMade != null){
+            resetPath();
+        }
+        this.pathMade = path;
+
+        double maxXCoord = 0;
+        double maxYCoord = 0;
+        double minXCoord = 5000;
+        double minYCoord = 3400;
+
         for (Node n : path) {
+
+            if (toggleOn) {
+                if (n.getxDisplay() < minXCoord) minXCoord = n.getxDisplay();
+                if (n.getxDisplay() > maxXCoord) maxXCoord = n.getxDisplay();
+                if (n.getyDisplay() < minYCoord) minYCoord = n.getyDisplay();
+                if (n.getyDisplay() > maxYCoord) maxYCoord = n.getyDisplay();
+            } else {
+                if (n.getX() < minXCoord) minXCoord = n.getX();
+                if (n.getX() > maxXCoord) maxXCoord = n.getX();
+                if (n.getY() < minYCoord) minYCoord = n.getY();
+                if (n.getY() > maxYCoord) maxYCoord = n.getY();
+            }
+
             pastNode = currentNode;
             currentNode = n;
-            nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
+            //nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
             if (path.get(0).equals(n)) {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.GREEN);
             }
@@ -1217,6 +1242,27 @@ public class MapBuilderController implements Initializable {
                 }
             }
         }
+        minXCoord -= 200;
+        minYCoord -= 400;
+        maxXCoord += 200;
+        maxYCoord += 100;
+
+        System.out.println("MaxX: " + maxXCoord + "Min X: " + minXCoord
+                + "Max Y: " + maxYCoord + "Min Y: " + minYCoord);
+        double rangeX = maxXCoord - minXCoord;
+        double rangeY = maxYCoord - minYCoord;
+
+
+        double desiredZoomX = 1920/(rangeX * X_SCALE);
+        double desiredZoomY = 1080/(rangeY * Y_SCALE);
+        System.out.println("desired X zoom: " + desiredZoomX +  " desired Zoom Y: " + desiredZoomY);
+
+        double centerX = (maxXCoord + minXCoord)/2;
+        double centerY = (maxYCoord + minYCoord)/2;
+
+        autoTranslateZoom(desiredZoomX, desiredZoomY, centerX, centerY);
+
+        pathDrawn = true;
     }
 
     /**
@@ -1226,7 +1272,7 @@ public class MapBuilderController implements Initializable {
         Node currentNode = null, pastNode = null;
         Circle waypoint;
         Line line;
-        for (Node n : path) {
+        for (Node n : pathMade) {
             pastNode = currentNode;
             currentNode = n;
             nodeDispSet.get(n.getID()).setFill(Color.DODGERBLUE);
@@ -1282,6 +1328,51 @@ public class MapBuilderController implements Initializable {
 
     public void removeFocus(){
         goButton.requestFocus();
+    }
+
+
+    public void autoTranslateZoom(double zoomX, double zoomY, double centerX, double centerY){
+
+        double zoom;
+        if (zoomX > zoomY)
+            zoom = zoomY;
+        else
+            zoom = zoomX;
+
+        if (zoom > zoomSlider.getMax()) zoom = zoomSlider.getMax();
+        if (zoom < zoomSlider.getMin()) zoom = zoomSlider.getMin();
+
+        System.out.println("chosen zoom: " + zoom);
+
+        zoomSlider.setValue(zoom);
+
+        System.out.println("Center X: " + centerX + " Center Y: " + centerY);
+        double screenX = (centerX - X_OFFSET)*X_SCALE;
+        double screenY = (centerY - Y_OFFSET)*Y_SCALE;
+        System.out.println("Screen x: " + screenX + " Screen Y: " + screenY);
+
+        double translateX = 960 - screenX;
+        double translateY = 540 - screenY;
+        double screenTranslateX = (translateX * zoom);
+        double screenTranslateY = (translateY * zoom);
+        System.out.println("translate X: " + translateX + " translate Y: " + translateY);
+
+        double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
+        double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
+        if(screenTranslateX > (translateSlopeX - 1920)/2)
+            screenTranslateX = (translateSlopeX - 1920)/2;
+        if(screenTranslateX < -(translateSlopeX - 1920)/2)
+            screenTranslateX = -(translateSlopeX - 1920)/2;
+        if(screenTranslateY > (translateSlopeY - 1080)/2)
+            screenTranslateY = (translateSlopeY - 1080)/2;
+        if(screenTranslateY < -(translateSlopeY - 1080)/2)
+            screenTranslateY = -(translateSlopeY - 1080)/2;
+
+        System.out.println("Chosen translate X: " + screenTranslateX + " Chosen translate Y: " + screenTranslateY);
+        mapImage.setTranslateX(screenTranslateX);
+        mapImage.setTranslateY(screenTranslateY);
+        nodesEdgesPane.setTranslateX(screenTranslateX);
+        nodesEdgesPane.setTranslateY(screenTranslateY);
     }
 }
 
