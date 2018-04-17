@@ -50,7 +50,7 @@
                               <Insets right="-5.0" top="-15.0" />
                            </GridPane.margin>
                         </Rectangle>
-                        <JFXTextField fx:id="usernameTxt" focusColor="#f5bc3a" promptText="Username" styleClass="login-txt" stylesheets="@../../css/home.css" unFocusColor="#0b2f5b" GridPane.columnIndex="1">
+                        <JFXTextField fx:id="usernameTxt" focusColor="#f5bc3a" promptText="Username or swipe ID" styleClass="login-txt" stylesheets="@../../css/home.css" unFocusColor="#0b2f5b" GridPane.columnIndex="1">
                            <font>
                               <Font size="18.0" />
                            </font>
