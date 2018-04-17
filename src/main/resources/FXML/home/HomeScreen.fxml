@@ -119,7 +119,7 @@
             </JFXButton>
          </center>
       </BorderPane>
-      <AnchorPane focusTraversable="true" mouseTransparent="true" pickOnBounds="false" prefHeight="800.0" prefWidth="1500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane focusTraversable="true" pickOnBounds="false" prefHeight="800.0" prefWidth="1500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fx:id="aboutButton" fitHeight="350.0" fitWidth="425.0" onMouseClicked="#aboutButtonOp" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, LIGHTGRAY, 5, 0.0, 0, 0);" x="30.0" y="30.0">
                <image>

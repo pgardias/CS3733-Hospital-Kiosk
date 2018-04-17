@@ -24,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
@@ -62,6 +63,8 @@ public class HomeController {
     @FXML
     Rectangle loginRectangle;
 
+    @FXML
+    ImageView aboutButton;
 
     @FXML
     Label loginErrorLabel;
@@ -211,7 +214,21 @@ public class HomeController {
 
     @FXML
     public void aboutButtonOp() {
-        System.out.println("ABOUT BUTTON CLICKED");
+        FXMLLoader loader;
+        Parent root = null;
+        AboutScreenController aboutScreenController;
+
+        loader = new FXMLLoader(getClass().getResource("/FXML/home/AboutScreen.fxml"));
+
+        try {
+            root = loader.load();
+        } catch (IOException ie) {
+            ie.printStackTrace();
+        }
+
+        aboutScreenController = loader.getController();
+        aboutScreenController.StartUp();
+        aboutButton.getScene().setRoot(root);
     }
 
     @FXML
