@@ -84,7 +84,7 @@ public class EmployeeRepo {
             if(!results.next()) {
                 throw new EmployeeNotFoundException();
             }
-          
+
             // Fill out node attributes with row from table
             employee.setEmployeeID(results.getInt("employeeID"));
             employee.setUserName(results.getString("username"));
@@ -325,7 +325,55 @@ public class EmployeeRepo {
             throw new LoginInvalidException();
         }
 
-            return employee;
+        return employee;
+    }
+
+    /**
+     * checkAdminLogin checks that the person logging into the
+     * Admin page is an Admin by verifying their access privileges
+     * @param id
+     * @return an Employee that is an Admin, and throws an exception if the employee is not an Admin
+     */
+    Employee checkLoginID(String id) throws LoginInvalidException {
+        Employee employee = new Employee();
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+
+            String sql = "SELECT * FROM EMPLOYEE_INFO WHERE employeeID = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, Integer.valueOf(id));
+            ResultSet results = pstmt.executeQuery();
+            if(!results.next()){
+                throw new LoginInvalidException();
+            }else {
+                do {
+                    employee.setUserName(results.getString("username"));
+                    employee.setPassword(results.getString("password"));
+                    employee.setFirstName(results.getString("firstName"));
+                    employee.setLastName(results.getString("lastName"));
+                    // Check if admin
+                    if (results.getInt("isAdmin") == 0) {
+                        employee.setIsAdmin(false);
+                    } else if (results.getInt("isAdmin") == 1) {
+                        employee.setIsAdmin(true);
+                    }
+                    employee.setEmployeeType(StringToEmployeeType(results.getString("employeeType")));
+                    employee.setSubType(results.getString("subType"));
+
+                } while (results.next());
+            }
+
+            results.close();
+            pstmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            throw new LoginInvalidException();
+        }
+
+        return employee;
     }
 
     private int generateID(){
@@ -355,16 +403,44 @@ public class EmployeeRepo {
         Employee.employeeType emptype;
 
         switch(type){
-            case "language interpreter":
+            case "Language Interpreter":
                 emptype = Employee.employeeType.LANGUAGEINTERP;
                 break;
 
-            case "religious figure":
+            case "Religious Figure":
                 emptype = Employee.employeeType.HOLYPERSON;
                 break;
 
-            case "admin":
-                emptype = Employee.employeeType.ADMIN;
+            case "Electronics Technician":
+                emptype = Employee.employeeType.COMPUTER;
+                break;
+
+            case "Security Guard":
+                emptype = Employee.employeeType.SECURITY;
+                break;
+
+            case "Facilities Maintenance":
+                emptype = Employee.employeeType.MAINTENANCE;
+                break;
+
+            case "Custodian":
+                emptype = Employee.employeeType.SANITATION;
+                break;
+
+            case "Audio/Visual Worker":
+                emptype = Employee.employeeType.AV;
+                break;
+
+            case "Delivery Man/Woman":
+                emptype = Employee.employeeType.GIFTS;
+                break;
+
+            case "emergency":
+                emptype = Employee.employeeType.EMERGENCY;
+                break;
+
+            case "Transportation Handler":
+                emptype = Employee.employeeType.TRANSPORTATION;
                 break;
 
             default:
@@ -380,15 +456,43 @@ public class EmployeeRepo {
 
         switch (type) {
             case LANGUAGEINTERP:
-                emptype = "language interpreter";
+                emptype = "Language Interpreter";
                 break;
 
             case HOLYPERSON:
-                emptype = "religious figure";
+                emptype = "Religious Figure";
                 break;
 
-            case ADMIN:
-                emptype = "admin";
+            case COMPUTER:
+                emptype = "Electronics Technician";
+                break;
+
+            case SECURITY:
+                emptype = "Security Guard";
+                break;
+
+            case MAINTENANCE:
+                emptype = "Facilities Maintenance";
+                break;
+
+            case SANITATION:
+                emptype = "Custodian";
+                break;
+
+            case AV:
+                emptype = "Audio/Visual Worker";
+                break;
+
+            case GIFTS:
+                emptype = "Delivery Man/Woman";
+                break;
+
+            case EMERGENCY:
+                emptype = "emergency";
+                break;
+
+            case TRANSPORTATION:
+                emptype = "Transportation Handler";
                 break;
 
             default:

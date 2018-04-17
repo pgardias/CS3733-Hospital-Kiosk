@@ -65,8 +65,6 @@ public class MapBuilderOverlayController {
         loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
         root = loader.load();
 
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setFullScreen(true);
-        stage.show();
+        backButton.getScene().setRoot(root);
     }
 }

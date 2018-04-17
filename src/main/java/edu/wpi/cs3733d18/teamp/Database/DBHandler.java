@@ -49,7 +49,7 @@ public class DBHandler {
                         " floor VARCHAR(3), " +
                         " building VARCHAR(50), " +
                         " nodeType CHAR(4), " +
-                        " longName VARCHAR(255), " +
+                        " longName VARCHAR(255) UNIQUE," +
                         " shortName VARCHAR(255), " +
                         " teamAssigned VARCHAR(10), " +
                         " xcoord3d INT DEFAULT 0 , " +
@@ -107,6 +107,7 @@ public class DBHandler {
                         " timeMade TIMESTAMP, " +
                         " timeCompleted TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                         " completed INT, " +
+                        " priority INT, " +
                         " PRIMARY KEY (requestID))";
                 stmt.executeUpdate(sql);
                 CSVConverter requestCSV = new CSVConverter("data/request_info.csv");

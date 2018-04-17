@@ -25,32 +25,56 @@
                 <RowConstraints minHeight="150.0" prefHeight="150.0" vgrow="SOMETIMES" />
             </rowConstraints>
          <children>
-            <Label fx:id="noRequestsFoundLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
+            <GridPane minWidth="750.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="-Infinity" />
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="350.0" minWidth="-Infinity" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <JFXButton fx:id="serviceAPIButton" buttonType="RAISED" onAction="#serviceAPIButtonOp" styleClass="blue-button" text="Service API" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets bottom="20.0" right="20.0" />
+                     </GridPane.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="recordsButton" buttonType="RAISED" onAction="#recordsButtonOp" styleClass="blue-button" text="Records" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets bottom="20.0" right="20.0" />
+                     </GridPane.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="newRequestButton" onAction="#newRequestButtonOp" styleClass="blue-button" text="Create New Request" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets bottom="20.0" />
+                     </GridPane.margin>
+                  </JFXButton>
+                  <Label fx:id="serviceRequestErrorLabel" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+               <GridPane.margin>
+                  <Insets right="50.0" />
+               </GridPane.margin>
+            </GridPane>
             <JFXButton fx:id="backButton" onAction="#backButtonOp" prefHeight="100.0" prefWidth="100.0" styleClass="back-button" text=" ">
                <GridPane.margin>
                   <Insets left="50.0" top="50.0" />
                </GridPane.margin>
             </JFXButton>
-            <JFXButton fx:id="recordsButton" buttonType="RAISED" onAction="#recordsButtonOp" styleClass="blue-button" text="Records" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
-               <font>
-                  <Font size="25.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets right="400.0" top="50.0" />
-               </GridPane.margin>
-            </JFXButton>
-            <JFXButton fx:id="newRequestButton" onAction="#newRequestButtonOp" styleClass="blue-button" text="Create New Request" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
-               <font>
-                  <Font size="25.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets right="50.0" top="50.0" />
-               </GridPane.margin>
-            </JFXButton>
-            <Label fx:id="incorrectPermissionsLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <font>
-                  <Font size="20.0" />
-               </font></Label>
          </children>
         </GridPane>
     </top>
@@ -160,7 +184,7 @@
                <children>
                   <Label text="Time Requested" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                   <Label text="Request Type" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
-                  <Label text="Additional Info" GridPane.columnIndex="7" GridPane.halignment="CENTER" />
+                  <Label text="Specfic Request Type and Additional Info" GridPane.columnIndex="7" GridPane.halignment="CENTER" />
                   <Label text="Assigned To" GridPane.columnIndex="6" GridPane.halignment="CENTER" />
                   <Label text="Created By" GridPane.columnIndex="5" GridPane.halignment="CENTER" />
                   <Label text="Location" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
@@ -174,18 +198,18 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
-                  <Label fx:id="timeCreatedLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Label fx:id="requestTypeLabel" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Label fx:id="locationLabel" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Label fx:id="createdByLabel" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Label fx:id="assignedToLabel" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <Label fx:id="additionalInfoLabel" GridPane.columnIndex="7" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                  <Label fx:id="timeCreatedLabel" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="requestTypeLabel" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="locationLabel" textAlignment="CENTER" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="createdByLabel" textAlignment="CENTER" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="assignedToLabel" textAlignment="CENTER" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="additionalInfoLabel" textAlignment="CENTER" GridPane.columnIndex="7" GridPane.rowIndex="1" GridPane.valignment="TOP">
                      <GridPane.margin>
                         <Insets left="5.0" top="5.0" />
                      </GridPane.margin>
                   </Label>
                   <Label text="Time Completed" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-                  <Label fx:id="timeCompletedLabel" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <Label fx:id="timeCompletedLabel" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </children>

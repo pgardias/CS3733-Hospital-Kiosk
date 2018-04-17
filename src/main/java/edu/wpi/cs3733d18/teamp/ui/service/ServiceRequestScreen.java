@@ -45,7 +45,10 @@ public class ServiceRequestScreen implements Initializable{
     JFXButton completeRequestButton;
 
     @FXML
-    Label incorrectPermissionsLabel;
+    JFXButton serviceAPIButton;
+
+    @FXML
+    Label serviceRequestErrorLabel;
 
     @FXML
     Label timeCreatedLabel;
@@ -67,9 +70,6 @@ public class ServiceRequestScreen implements Initializable{
 
     @FXML
     Label additionalInfoLabel;
-
-    @FXML
-    Label noRequestsFoundLabel;
 
     @FXML
     TableView<ServiceRequestTable> newRequestTable;
@@ -107,7 +107,7 @@ public class ServiceRequestScreen implements Initializable{
      */
     public void populateTableViews() {
         try {
-            noRequestsFoundLabel.setText("");
+            serviceRequestErrorLabel.setText("");
             requests = db.getAllRequests();
             requestSize = requests.size();
 
@@ -123,7 +123,7 @@ public class ServiceRequestScreen implements Initializable{
                 }
             }
         } catch (RequestNotFoundException rnfe) {
-            noRequestsFoundLabel.setText("There are currently no service requests.");
+            serviceRequestErrorLabel.setText("There are currently no service requests.");
         }
 
         newRequestTable.setItems(newRequests);
@@ -157,7 +157,7 @@ public class ServiceRequestScreen implements Initializable{
         try {
             Request r = db.getOneRequest(requestID);
             timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
-            requestTypeLabel.setText(r.getRequestType().toString());
+            requestTypeLabel.setText(r.toString());
             locationLabel.setText(r.getLocation());
             createdByLabel.setText(r.getMadeBy());
             assignedToLabel.setText(r.getCompletedBy());
@@ -177,7 +177,7 @@ public class ServiceRequestScreen implements Initializable{
             Request r = db.getOneRequest(requestID);
             timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
             timeCompletedLabel.setText("");
-            requestTypeLabel.setText(r.getRequestType().toString());
+            requestTypeLabel.setText(r.toString());
             locationLabel.setText(r.getLocation());
             createdByLabel.setText(r.getMadeBy());
             assignedToLabel.setText(r.getCompletedBy());
@@ -197,7 +197,7 @@ public class ServiceRequestScreen implements Initializable{
             Request r = db.getOneRequest(requestID);
             timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
             timeCompletedLabel.setText(r.convertTime(r.getTimeCompleted().getTime()));
-            requestTypeLabel.setText(r.getRequestType().toString());
+            requestTypeLabel.setText(r.toString());
             locationLabel.setText(r.getLocation());
             createdByLabel.setText(r.getMadeBy());
             assignedToLabel.setText(r.getCompletedBy());
@@ -214,20 +214,31 @@ public class ServiceRequestScreen implements Initializable{
      */
     @FXML
     public void claimRequestButtonOp(ActionEvent e) {
-        incorrectPermissionsLabel.setText("");
+        serviceRequestErrorLabel.setText("");
         int requestID = newRequestTable.getSelectionModel().getSelectedItem().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
-            if (Main.currentUser.getIsAdmin() ||
-                    (db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType())) &&
-                    Main.currentUser.getSubType().equals(r.getSubType()))) {
-                r.setCompleted(1);
-                String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
-                r.setCompletedBy(firstAndLastName);
-                db.modifyRequest(r);
+            if (r.getRequestType() == Request.requesttype.LANGUAGEINTERP || r.getRequestType() == Request.requesttype.HOLYPERSON) {
+                if (Main.currentUser.getIsAdmin() ||
+                        (db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType())) &&
+                                Main.currentUser.getSubType().equals(r.getSubType()))) {
+                    r.setCompleted(1);
+                    String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+                    r.setCompletedBy(firstAndLastName);
+                    db.modifyRequest(r);
+                } else {
+                    serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
+                }
             }
             else {
-                incorrectPermissionsLabel.setText("You are not authorized to claim this service request");
+                if (Main.currentUser.getIsAdmin() || db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType()))) {
+                    r.setCompleted(1);
+                    String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+                    r.setCompletedBy(firstAndLastName);
+                    db.modifyRequest(r);
+                } else {
+                    serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
+                }
             }
 
         }
@@ -243,7 +254,7 @@ public class ServiceRequestScreen implements Initializable{
      */
     @FXML
     public void completeRequestButtonOp(ActionEvent e) {
-        incorrectPermissionsLabel.setText("");
+        serviceRequestErrorLabel.setText("");
         int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
@@ -252,11 +263,9 @@ public class ServiceRequestScreen implements Initializable{
                 r.setCompleted(2);
                 r.setCompletedBy(firstAndLastName);
                 db.completeRequest(r);
-                db.handleRequest(r);
-
             }
             else {
-                incorrectPermissionsLabel.setText("You are not authorized to claim this service request");
+                serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
             }
         }
         catch (RequestNotFoundException re) {
@@ -277,7 +286,12 @@ public class ServiceRequestScreen implements Initializable{
         FXMLLoader loader;
 
         stage = (Stage) backButton.getScene().getWindow();
-        loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+        if(Main.currentUser.getIsAdmin()) {
+            loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
+        }else{
+            loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+            Main.logoutCurrentUser();
+        }
         try {
             root = loader.load();
         } catch (IOException ie) {
@@ -285,10 +299,8 @@ public class ServiceRequestScreen implements Initializable{
             return false;
         }
 
-        Main.logoutCurrentUser();
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setFullScreen(true);
-        stage.show();
+
+        backButton.getScene().setRoot(root);
         return true;
     }
 
@@ -366,5 +378,17 @@ public class ServiceRequestScreen implements Initializable{
 
     }
 
+    @FXML
+    public void serviceAPIButtonOp(ActionEvent e) {
+        /*
+        FoodRequest foodRequest = new FoodRequest();
+        try {
+            foodRequest.run(0, 0, 1900, 1000, null, null, null);
+        } catch (Exception ex) {
+            System.out.println("Failed to run API");
+            ex.printStackTrace();
+        }
+        */
+    }
 }
 

@@ -1,5 +1,6 @@
 package edu.wpi.cs3733d18.teamp.Database;
 
+import edu.wpi.cs3733d18.teamp.Exceptions.RecordNotFoundException;
 import edu.wpi.cs3733d18.teamp.Record;
 import edu.wpi.cs3733d18.teamp.Request;
 
@@ -20,7 +21,7 @@ public class RecordRepo {
      * getRecordType will return all records of a specific type
      * @return List of all records
      */
-    ArrayList<Record> getAllRecords() {
+    ArrayList<Record> getAllRecords() throws RecordNotFoundException {
         ArrayList<Record> allRecords = new ArrayList<Record>();
         try {
             conn = DriverManager.getConnection(DB_URL);
@@ -29,8 +30,8 @@ public class RecordRepo {
             String sql = "SELECT * FROM RECORD_INFO";
             Statement stmt = conn.createStatement();
             ResultSet results = stmt.executeQuery(sql);
-            if (!results.next()) { // Return null if no records exist
-                return null;
+            if (!results.next()) { // Throw exception if no records exist
+                throw new RecordNotFoundException();
             }else{
                 do {
                     Record record = new Record();
@@ -212,6 +213,116 @@ public class RecordRepo {
         }
 
         return false;
+    }
+
+    /**
+     * Counts the requests of a given subType
+     *
+     */
+    int countType(String type) {
+        int totalCount = 0;
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+
+            String sql = "SELECT * FROM RECORD_INFO WHERE requestType = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, type);
+            ResultSet results = pstmt.executeQuery();
+            if (!results.next()) {
+                System.out.println("No requests of subtype "+type);
+                return 0; // No requests of this subtype
+            }else{
+                do {
+                    totalCount += results.getInt(4);
+                }while(results.next());
+            }
+            pstmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+        return totalCount;
+    }
+
+    /**
+     * Counts the requests of a given subType
+     *
+     */
+    int countSubType(String subType) {
+        int totalCount = 0;
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+
+            String sql = "SELECT * FROM RECORD_INFO WHERE subType = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, subType);
+            ResultSet results = pstmt.executeQuery();
+            if (!results.next()) {
+                System.out.println("No requests of subtype "+subType);
+                return 0; // No requests of this subtype
+            }
+            totalCount =  results.getInt(4); // Return row count
+            pstmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+        return totalCount;
+    }
+
+    /**
+     * Counts the requests of a given type
+     *
+     */
+    int recordAverageTime(String type) {
+        int totalCount = 0;
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+
+            String sql = "SELECT * FROM RECORD_INFO WHERE requestType = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, type);
+            ResultSet results = pstmt.executeQuery();
+            if (!results.next()) {
+                System.out.println("No requests of type "+type);
+                return 0; // No requests of this subtype
+            }else{
+                do {
+                    totalCount += results.getInt(6);
+                }while(results.next());
+            }
+            pstmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+        return totalCount;
+    }
+
+    /**
+     * Counts the requests of a given subType
+     *
+     */
+    int recordAverageTimeSub(String subType) {
+        int totalCount = 0;
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+
+            String sql = "SELECT * FROM RECORD_INFO WHERE subType = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, subType);
+            ResultSet results = pstmt.executeQuery();
+            if (!results.next()) {
+                System.out.println("No requests of subtype "+subType);
+                return 0; // No requests of this subtype
+            }
+            totalCount = results.getInt(6);
+            pstmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+        return totalCount;
     }
 
     /**

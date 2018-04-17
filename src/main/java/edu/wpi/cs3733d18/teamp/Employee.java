@@ -2,7 +2,7 @@ package edu.wpi.cs3733d18.teamp;
 
 public class Employee {
     //set enum
-    public enum employeeType {LANGUAGEINTERP, HOLYPERSON, ADMIN, DEFAULT}
+    public enum employeeType {LANGUAGEINTERP, HOLYPERSON, COMPUTER, SECURITY, MAINTENANCE, SANITATION, AV, GIFTS, TRANSPORTATION, EMERGENCY, DEFAULT}
 
     private String username;
     private String password;
@@ -88,7 +88,7 @@ public class Employee {
     public void setIsAdmin(boolean admin) {
         this.isAdmin = admin;
     }
-    
+
     public void setEmployeeType(employeeType empType){
         this.type = empType;
     }

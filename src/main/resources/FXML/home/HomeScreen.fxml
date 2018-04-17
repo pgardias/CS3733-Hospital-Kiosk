@@ -1,65 +1,141 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1500.0" stylesheets="@../../css/home.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.home.Controller">
-   <bottom>
-      <GridPane prefHeight="150.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.home.HomeController">
+   <children>
+      <Rectangle fill="#dadada" height="1050.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, GRAY, 5, 0.0, 0, 0);" width="1890.0" x="15.0" y="15.0" />
+      <BorderPane id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../../css/home.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <GridPane alignment="TOP_CENTER" prefHeight="100.0" BorderPane.alignment="TOP_CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Rectangle fill="#f8f8f8" height="130.0" smooth="false" stroke="#282828" strokeType="INSIDE" strokeWidth="0.0" width="1890.0" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </Rectangle>
+                  <GridPane alignment="CENTER_RIGHT" minWidth="120.0" GridPane.columnIndex="1">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="500.0" prefWidth="150.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="175.0" minWidth="220.0" prefWidth="175.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Rectangle fx:id="loginRectangle" fill="#f2f2f2" height="130.0" stroke="#d3d3d3" strokeDashOffset="5.0" strokeLineJoin="BEVEL" strokeType="INSIDE" strokeWidth="0.0" width="350.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+                           <GridPane.margin>
+                              <Insets right="-5.0" top="-15.0" />
+                           </GridPane.margin>
+                        </Rectangle>
+                        <JFXTextField fx:id="usernameTxt" focusColor="#f5bc3a" promptText="Username or swipe ID" styleClass="login-txt" stylesheets="@../../css/home.css" unFocusColor="#0b2f5b" GridPane.columnIndex="1">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets left="10.0" />
+                           </opaqueInsets>
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                        </JFXTextField>
+                        <JFXPasswordField fx:id="passwordTxt" focusColor="#f5bc3a" minWidth="200.0" promptText="Password" styleClass="login-txt" stylesheets="@../../css/home.css" unFocusColor="#0b2f5b" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets right="10.0" />
+                           </GridPane.margin>
+                           <opaqueInsets>
+                              <Insets left="10.0" />
+                           </opaqueInsets>
+                        </JFXPasswordField>
+                        <JFXButton fx:id="loginButton" defaultButton="true" minHeight="40.0" onAction="#loginButtonOp" ripplerFill="WHITE" styleClass="login-button" text="Login" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets bottom="10.0" top="15.0" />
+                           </GridPane.margin>
+                        </JFXButton>
+                        <Label fx:id="loginErrorLabel" text=" " textFill="RED" visible="false" wrapText="true" GridPane.halignment="RIGHT">
+                           <GridPane.margin>
+                              <Insets right="50.0" />
+                           </GridPane.margin>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <JFXButton fx:id="emergencyButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#emergencyButtonOp" prefHeight="190.0" prefWidth="389.0" styleClass="emergency-buttons" stylesheets="@../../css/home.css" text="EMERGENCY" textAlignment="CENTER" textFill="WHITE" GridPane.halignment="CENTER" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="50.0" />
+                           </font>
+                           <effect>
+                              <GaussianBlur />
+                           </effect>
+                        </JFXButton>
+                     </children>
+                     <GridPane.margin>
+                        <Insets bottom="5.0" top="15.0" />
+                     </GridPane.margin>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </GridPane>
+               </children>
+               <padding>
+                  <Insets top="-5.0" />
+               </padding>
+            </GridPane>
+         </top>
+         <padding>
+            <Insets bottom="20.0" left="15.0" right="20.0" top="20.0" />
+         </padding>
+         <center>
+            <JFXButton fx:id="mapButton" alignment="BOTTOM_CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#mapButtonOp" ripplerFill="#ebebeb" styleClass="map-button" text="Touch to Explore" textAlignment="CENTER" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="60.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="20.0" />
+               </padding>
+               <BorderPane.margin>
+                  <Insets bottom="-5.0" right="-5.0" top="20.0" />
+               </BorderPane.margin>
+            </JFXButton>
+         </center>
+      </BorderPane>
+      <AnchorPane focusTraversable="true" mouseTransparent="true" pickOnBounds="false" prefHeight="800.0" prefWidth="1500.0" stylesheets="@../../css/home.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <JFXButton id="service-button" fx:id="serviceButton" buttonType="RAISED" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#loginButtonOp" ripplerFill="WHITE" style="-fx-background-color: #0B2F5B;" text="Service Requests" textFill="#e6e6e6" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <GridPane.margin>
-                  <Insets right="10.0" top="20.0" />
-               </GridPane.margin>
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </JFXButton>
-            <JFXButton id="admin-button" fx:id="adminButton" buttonType="RAISED" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#loginButtonOp" ripplerFill="WHITE" style="-fx-background-color: #0B2F5B; -fx-effect: dropshadow( one-pass-box, black, 8, 0.0, 2, 0 )" text="Admin Login" textFill="#e6e6e6" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-               <GridPane.margin>
-                  <Insets left="10.0" top="20.0" />
-               </GridPane.margin>
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </JFXButton>
+            <ImageView fx:id="aboutButton" fitHeight="350.0" fitWidth="375.0" onMouseClicked="#aboutButtonOp" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, LIGHTGRAY, 5, 0.0, 0, 0);" x="30.0" y="25.0">
+               <image>
+                  <Image url="@../../img/icons/BrighamWomensHospitalLogo.png" />
+               </image>
+            </ImageView>
          </children>
-      </GridPane>
-   </bottom>
-   <padding>
-      <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-   </padding>
-   <center>
-      <JFXButton fx:id="mapButton" alignment="TOP_CENTER" contentDisplay="CENTER" defaultButton="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#mapButtonOp" ripplerFill="WHITE" style="-fx-padding: 100;" styleClass="map-button" text="Hospital Map" textAlignment="CENTER" BorderPane.alignment="CENTER">
-         <font>
-            <Font size="60.0" />
-         </font>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin></JFXButton>
-   </center>
-   <top>
-      <ImageView fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" translateY="-25.0" BorderPane.alignment="TOP_LEFT">
-         <image>
-            <Image url="@../../img/icons/BrighamWomensHospitalLogo.png" />
-         </image>
-      </ImageView>
-   </top>
-</BorderPane>
+      </AnchorPane>
+   </children>
+</AnchorPane>
