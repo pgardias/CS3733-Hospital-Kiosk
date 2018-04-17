@@ -139,9 +139,10 @@ public class SearchBarOverlayController implements Initializable{
 
         nodeSet = db.getAllNodes();
 
-        int i = 0;
         for (Node node : nodeSet.values()) {
-            sourceWords.add(node.getLongName());
+            if (node.getType() != Node.nodeType.HALL) {
+                sourceWords.add(node.getLongName());
+            }
         }
         destinationWords.addAll(sourceWords);
         destinationWords.add("NEAREST HALLWAY");
