@@ -8,12 +8,6 @@
     -fx-text-fill: #e6e6e6;
 }
 
-.red-button {
-    -jfx-button-type: RAISED;
-    -fx-background-color: RED;
-    -fx-text-fill: BLACK;
-}
-
 .mobile {
     -fx-background-color: WHITE;
     -fx-background-image: url(../img/icons/mobile.png) no-repeat center center fixed;

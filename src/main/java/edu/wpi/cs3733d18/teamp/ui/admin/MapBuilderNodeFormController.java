@@ -6,33 +6,25 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733d18.teamp.Coordinate;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
-import edu.wpi.cs3733d18.teamp.Exceptions.DuplicateLongNameException;
 import edu.wpi.cs3733d18.teamp.Exceptions.EdgeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
+import edu.wpi.cs3733d18.teamp.ui.admin.MapBuilderController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class MapBuilderNodeFormController implements Initializable{
-
-    DeletePopUpController deletePopUpController;
 
     public static final int FULL_WIDTH = 5000;
     public static final int FULL_HEIGHT = 3400;
@@ -137,7 +129,7 @@ public class MapBuilderNodeFormController implements Initializable{
 
         int i = 0;
         for (Node node : nodeSet.values()) {
-            sourceWords.add(node.getLongName());
+            sourceWords.add(node.getID());
         }
     }
 
@@ -256,7 +248,7 @@ public class MapBuilderNodeFormController implements Initializable{
         Node connectingNode = null;
         if (!editFlag) {
             try {
-                connectingNode = db.getOneNode(getNodeID(connectingNodeTextBox.getText()));
+                connectingNode = db.getOneNode(connectingNodeTextBox.getText());
             } catch (NodeNotFoundException nnfe) {
                 nnfe.printStackTrace();
                 System.out.println(nnfe.getNodeID());
@@ -275,11 +267,6 @@ public class MapBuilderNodeFormController implements Initializable{
             catch(EdgeNotFoundException enfe){
                 enfe.printStackTrace();
             }
-            catch (DuplicateLongNameException de) {
-                nodeFormErrorLabel.setText("Node " + de.getNodeID() + " already has this Long Name");
-                nodeFormErrorLabel.setVisible(true);
-                return;
-            }
             editedNodeID = null;
         } else {
             try {
@@ -290,11 +277,6 @@ public class MapBuilderNodeFormController implements Initializable{
             }
             catch(EdgeNotFoundException enfe){
                 enfe.printStackTrace();
-            }
-            catch (DuplicateLongNameException de) {
-                nodeFormErrorLabel.setText("Node " + de.getNodeID() + " already has this Long Name");
-                nodeFormErrorLabel.setVisible(true);
-                return;
             }
         }
         mapBuilderController.addOverlay();
@@ -346,12 +328,6 @@ public class MapBuilderNodeFormController implements Initializable{
         Coordinate coord = new Coordinate((int)Math.round(x2), (int)Math.round(y2), floor);
         nodex3Txt.setText(Double.toString(coord.getX3D()));
         nodey3Txt.setText(Double.toString(coord.getY3D()));
-        nodeFormErrorLabel.setText("Your 3D coordinates have been changed!");
-    }
-
-    public void set3XYCoords(double x3, double y3){
-        nodex3Txt.setText(Double.toString(x3));
-        nodey3Txt.setText(Double.toString(y3));
     }
 
     public void setFloor(String floor){
@@ -364,69 +340,15 @@ public class MapBuilderNodeFormController implements Initializable{
      */
     @FXML
     public void deleteButtonOp(){
-
-        // Delete Node Popup
-        Stage stage;
-        Parent root;
-        FXMLLoader loader;
-
-        stage = new Stage();
-        loader = new FXMLLoader(getClass().getResource("/FXML/general/ConfirmationPopUp.fxml"));
-
         try {
-            root = loader.load();
-        } catch (IOException ie) {
-            ie.printStackTrace();
-            return;
+            db.deleteNode(editedNodeID);
+        } catch (NodeNotFoundException | EdgeNotFoundException ne) {
+            ne.printStackTrace();
         }
 
-        deletePopUpController = loader.getController();
-        deletePopUpController.StartUp(this);
-        stage.setScene(new Scene(root, 600, 150));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(deleteButton.getScene().getWindow());
-        stage.showAndWait();
-
-        // If user confirms deletion, delete the node
-        if (deletePopUpController.getChoice()) {
-            try {
-                db.deleteNode(editedNodeID);
-            } catch (NodeNotFoundException | EdgeNotFoundException ne) {
-                ne.printStackTrace();
-            }
-
-            mapBuilderController.updateMap();
-            mapBuilderController.addOverlay();
-        }
+        mapBuilderController.updateMap();
+        mapBuilderController.addOverlay();
     }
 
-    public void setConnectingNodeTextBox(String nodeLongName){
-        connectingNodeTextBox.setText(nodeLongName);
-    }
 
-    public String getNodeID(String nodeLongName){
-        HashMap<String, Node> nodeSet = db.getAllNodes();
-        for(Node node: nodeSet.values()){
-            if (node.getLongName().equals(nodeLongName)){
-                return node.getID();
-            }
-        }
-        return null;
-    }
-
-    public double getNode2XCoord(){
-        return Double.parseDouble(nodex2Txt.getText());
-    }
-
-    public double getNode2YCoord(){
-        return Double.parseDouble(nodey2Txt.getText());
-    }
-
-    public double getNode3XCoord(){
-        return Double.parseDouble(nodex3Txt.getText());
-    }
-
-    public double getNode3YCoord(){
-        return Double.parseDouble(nodey3Txt.getText());
-    }
 }

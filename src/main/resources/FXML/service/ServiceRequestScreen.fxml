@@ -25,56 +25,31 @@
                 <RowConstraints minHeight="150.0" prefHeight="150.0" vgrow="SOMETIMES" />
             </rowConstraints>
          <children>
-            <GridPane minWidth="750.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
-              <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="-Infinity" />
-                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="350.0" minWidth="-Infinity" />
-              </columnConstraints>
-              <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <JFXButton fx:id="serviceAPIButton" buttonType="RAISED" onAction="#serviceAPIButtonOp" styleClass="blue-button" text="Service API" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
-                     <font>
-                        <Font size="25.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets bottom="20.0" right="20.0" />
-                     </GridPane.margin>
-                  </JFXButton>
-                  <JFXButton fx:id="recordsButton" buttonType="RAISED" onAction="#recordsButtonOp" styleClass="blue-button" text="Records" textFill="WHITE" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
-                     <font>
-                        <Font size="25.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets bottom="20.0" right="20.0" />
-                     </GridPane.margin>
-                  </JFXButton>
-                  <JFXButton fx:id="newRequestButton" onAction="#newRequestButtonOp" styleClass="blue-button" text="Create New Request" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
-                     <font>
-                        <Font size="25.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets bottom="20.0" />
-                     </GridPane.margin>
-                  </JFXButton>
-                  <Label fx:id="serviceRequestErrorLabel" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-               </children>
-               <GridPane.margin>
-                  <Insets right="50.0" />
-               </GridPane.margin>
-            </GridPane>
             <JFXButton fx:id="backButton" onAction="#backButtonOp" prefHeight="100.0" prefWidth="100.0" styleClass="back-button" text=" ">
                <GridPane.margin>
                   <Insets left="50.0" top="50.0" />
                </GridPane.margin>
             </JFXButton>
+            <JFXButton fx:id="recordsButton" buttonType="RAISED" onAction="#recordsButtonOp" styleClass="blue-button" text="Records" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+               <font>
+                  <Font size="25.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets right="400.0" top="50.0" />
+               </GridPane.margin>
+            </JFXButton>
+            <JFXButton fx:id="newRequestButton" onAction="#newRequestButtonOp" styleClass="blue-button" text="Create New Request" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+               <font>
+                  <Font size="25.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets right="50.0" top="50.0" />
+               </GridPane.margin>
+            </JFXButton>
+            <Label fx:id="serviceRequestErrorLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="20.0" />
+               </font></Label>
          </children>
         </GridPane>
     </top>
@@ -122,19 +97,19 @@
                   <Insets bottom="10.0" />
                </GridPane.margin>
             </Label>
-            <TableView fx:id="newRequestTable" editable="true" onMouseClicked="#onNewRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" GridPane.rowIndex="1">
+            <TableView fx:id="newRequestTable" editable="true" onMouseClicked="#onNewRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" tableMenuButtonVisible="true" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
                <columns>
-                  <TableColumn fx:id="rID1" prefWidth="125.0" resizable="false" text="Request ID" />
-                  <TableColumn fx:id="rType1" minWidth="0.0" prefWidth="407.9999542236328" resizable="false" text="Request Type" />
+                  <TableColumn fx:id="rID1" prefWidth="100.0" text="Request ID" />
+                  <TableColumn fx:id="rType1" prefWidth="312.0" text="Request Type" />
                </columns>
             </TableView>
             <TableView fx:id="inProgRequestTable" onMouseClicked="#onInProgRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" GridPane.columnIndex="2" GridPane.rowIndex="1">
               <columns>
-                <TableColumn fx:id="rID2" prefWidth="100.0" resizable="false" text="Request ID" />
-                <TableColumn fx:id="rType2" prefWidth="433.0" resizable="false" text="Request Type" />
+                <TableColumn fx:id="rID2" prefWidth="100.0" text="Request ID" />
+                <TableColumn fx:id="rType2" prefWidth="312.0" text="Request Type" />
               </columns>
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -142,8 +117,8 @@
             </TableView>
             <TableView fx:id="completedRequestTable" onMouseClicked="#onCompletedRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" GridPane.columnIndex="4" GridPane.rowIndex="1">
               <columns>
-                <TableColumn fx:id="rID3" prefWidth="100.0" resizable="false" text="Request ID" />
-                <TableColumn fx:id="rType3" prefWidth="433.0" resizable="false" text="Request Type" />
+                <TableColumn fx:id="rID3" prefWidth="100.0" text="Request ID" />
+                <TableColumn fx:id="rType3" prefWidth="312.0" text="Request Type" />
               </columns>
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

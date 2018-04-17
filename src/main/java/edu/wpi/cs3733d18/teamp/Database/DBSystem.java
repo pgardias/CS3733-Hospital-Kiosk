@@ -91,13 +91,13 @@ public class DBSystem {
 
     // Node Repository Functions
 
-    public Boolean createNode(Node node, Node connectedNode) throws NodeNotFoundException, EdgeNotFoundException, DuplicateLongNameException {
+    public Boolean createNode(Node node, Node connectedNode) throws NodeNotFoundException, EdgeNotFoundException {
         Boolean success = nodeRepo.createNode(node, connectedNode);
         storage.update();
         return success;
     }
 
-    public Boolean modifyNode(Node node) throws NodeNotFoundException, EdgeNotFoundException, DuplicateLongNameException {
+    public Boolean modifyNode(Node node) throws NodeNotFoundException, EdgeNotFoundException {
         Boolean success = nodeRepo.modifyNode(node);
         storage.update();
         return success;
@@ -202,19 +202,11 @@ public class DBSystem {
     }
     // Record Repository Functions
 
-    public ArrayList<Record> getAllRecords() throws RecordNotFoundException { return recordRepo.getAllRecords(); }
+    public ArrayList<Record> getAllRecords() { return recordRepo.getAllRecords(); }
 
     public ArrayList<Record> getRecordType(String requestType) { return recordRepo.getRecordType(requestType); }
 
     public Record getSubType(String subType) { return recordRepo.getSubType(subType); }
-
-    public int countType(String type) { return recordRepo.countType(type); }
-
-    public int countSubType(String subType) { return recordRepo.countSubType(subType); }
-
-    public int recordAverageTime(String subType) { return recordRepo.recordAverageTime(subType); }
-
-    public int recordAverageTimeSub(String subType) { return recordRepo.recordAverageTimeSub(subType); }
 
     public Boolean handleRequest(Request request) { return recordRepo.handleRequest(request); }
 

@@ -3,7 +3,6 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Slider?>
@@ -106,7 +105,7 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <JFXButton fx:id="goButton" buttonType="RAISED" onAction="#searchButtonOp" prefWidth="145.0" ripplerFill="WHITE" style="-fx-background-color: #F5BC3A;" text="Find Path" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                                <JFXButton fx:id="goButton" buttonType="RAISED" onAction="#searchButtonOp" ripplerFill="WHITE" style="-fx-background-color: #F5BC3A;" text="Find Path" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                                     <font>
                                         <Font size="25.0" />
                                     </font>
@@ -139,11 +138,6 @@
                                         <Insets bottom="25.0" left="50.0" />
                                     </GridPane.margin>
                                 </JFXTextField>
-                        <JFXToggleButton fx:id="mapToggleButton" onAction="#mapToggleButtonOp" prefWidth="145.0" style="-fx-background-color: #F5BC3A;" text="3D Map" GridPane.columnIndex="1" GridPane.halignment="CENTER">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </JFXToggleButton>
                             </children>
                         </GridPane>
                         <JFXRadioButton fx:id="depthFirstRadioButton" layoutX="420.0" layoutY="218.0" onAction="#depthFirstSetOp" text="Depth-first" textFill="WHITE">

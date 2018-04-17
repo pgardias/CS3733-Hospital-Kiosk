@@ -60,7 +60,7 @@ public class SecurityController implements Initializable {
             "Visitor Injuring Patients",
             "Visitor Injuring Hospital Employees",
             "Visitor Injuring Other Visitors",
-            "Rogue Employee"
+            "Rouge Employee"
     );
 
     /**
@@ -174,4 +174,5 @@ public class SecurityController implements Initializable {
 
         return aNode;
     }
+
 }

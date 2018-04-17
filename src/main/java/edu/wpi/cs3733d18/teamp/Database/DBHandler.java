@@ -49,7 +49,7 @@ public class DBHandler {
                         " floor VARCHAR(3), " +
                         " building VARCHAR(50), " +
                         " nodeType CHAR(4), " +
-                        " longName VARCHAR(255) UNIQUE," +
+                        " longName VARCHAR(255), " +
                         " shortName VARCHAR(255), " +
                         " teamAssigned VARCHAR(10), " +
                         " xcoord3d INT DEFAULT 0 , " +

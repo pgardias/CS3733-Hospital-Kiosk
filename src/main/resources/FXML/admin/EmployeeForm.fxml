@@ -157,13 +157,5 @@
             <Insets right="20.0" />
          </GridPane.margin>
       </Label>
-      <Label fx:id="employeeErrorLabel" textAlignment="CENTER" textFill="RED" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="TOP">
-         <font>
-            <Font size="18.0" />
-         </font>
-         <GridPane.margin>
-            <Insets top="10.0" />
-         </GridPane.margin>
-      </Label>
    </children>
 </GridPane>

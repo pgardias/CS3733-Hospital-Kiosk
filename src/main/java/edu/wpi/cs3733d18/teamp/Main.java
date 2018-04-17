@@ -52,7 +52,10 @@ public class Main extends Application {
      */
     public static void main(String[] args) {
         DBSystem db = DBSystem.getInstance();
+        //db.getConn();
+        //db.shutdown();
         db.init();
+
 
         try {
             System.out.println("Loading data into persistent storage...");
