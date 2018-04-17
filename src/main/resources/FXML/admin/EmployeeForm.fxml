@@ -7,6 +7,7 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
@@ -80,7 +81,13 @@
             <Font size="30.0" />
          </font>
       </Label>
-      <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="45.0" prefWidth="300.0" textFill="RED" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
+      <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="45.0" prefWidth="436.0" textFill="RED" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin></Label>
       <JFXButton fx:id="cancelButton" buttonType="RAISED" cancelButton="true" onAction="#cancelButtonOp" style="-fx-background-color: WHITE;" text="Cancel" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
          <font>
             <Font size="24.0" />
@@ -109,7 +116,7 @@
       </JFXComboBox>
       <JFXTextField fx:id="firstNameTextField" focusColor="#f5bc3a" maxWidth="300.0" prefWidth="300.0" unFocusColor="BLACK" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="TOP">
          <GridPane.margin>
-            <Insets left="20.0" top="30.0" />
+            <Insets left="20.0" top="20.0" />
          </GridPane.margin>
          <font>
             <Font size="18.0" />
@@ -120,7 +127,7 @@
             <Font size="18.0" />
          </font>
          <GridPane.margin>
-            <Insets bottom="30.0" left="20.0" />
+            <Insets bottom="40.0" left="20.0" />
          </GridPane.margin>
       </JFXTextField>
       <JFXPasswordField fx:id="passwordPasswordField" focusColor="#f5bc3a" maxWidth="300.0" unFocusColor="BLACK" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="TOP">
@@ -130,7 +137,7 @@
       </JFXPasswordField>
       <JFXPasswordField fx:id="reEnterPasswordPasswordField" focusColor="#f5bc3a" maxWidth="300.0" unFocusColor="BLACK" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
          <GridPane.margin>
-            <Insets bottom="30.0" left="20.0" />
+            <Insets bottom="40.0" left="20.0" />
          </GridPane.margin>
       </JFXPasswordField>
       <Label fx:id="specialtyLabel" alignment="CENTER" text="Specialty:" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
@@ -156,6 +163,16 @@
          <GridPane.margin>
             <Insets right="20.0" />
          </GridPane.margin>
+      </Label>
+      <Separator prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="6" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets left="20.0" right="20.0" />
+         </GridPane.margin>
+      </Separator>
+      <Label fx:id="employeeFormErrorLabel" textFill="#f50202" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="BOTTOM">
+         <font>
+            <Font size="18.0" />
+         </font>
       </Label>
    </children>
 </GridPane>

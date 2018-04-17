@@ -21,6 +21,7 @@ import java.net.URL;
 import java.util.*;
 
 public class ManageEmployeeScreenController implements Initializable {
+    DeletePopUpController deletePopUpController;
     EmployeePopUpController employeePopUpController;
     DBSystem db = DBSystem.getInstance();
     HashMap<String, Employee> employees;
@@ -181,11 +182,35 @@ public class ManageEmployeeScreenController implements Initializable {
 
     @FXML
     public void removeEmployeeButtonOp(ActionEvent e){
-        int employeeID = employeeListTableView.getSelectionModel().getSelectedItem().getEmployeeID();
+        // Delete employee popup
+        Stage stage;
+        Parent root;
+        FXMLLoader loader;
 
-        db.deleteEmployee(employeeID);
+        stage = new Stage();
+        loader = new FXMLLoader(getClass().getResource("/FXML/general/ConfirmationPopUp.fxml"));
 
-        refresh();
+        try {
+            root = loader.load();
+        } catch (IOException ie) {
+            ie.printStackTrace();
+            return;
+        }
+
+        deletePopUpController = loader.getController();
+        deletePopUpController.StartUp(this);
+        stage.setScene(new Scene(root, 600, 150));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(removeEmployeeButton.getScene().getWindow());
+        stage.showAndWait();
+
+        if (deletePopUpController.getChoice()) {
+            int employeeID = employeeListTableView.getSelectionModel().getSelectedItem().getEmployeeID();
+
+            db.deleteEmployee(employeeID);
+
+            refresh();
+        }
     }
 
     public void refresh() {
