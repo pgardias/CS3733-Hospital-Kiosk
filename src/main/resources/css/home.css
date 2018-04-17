@@ -25,9 +25,10 @@
 
 .login-button {
     /*-jfx-button-type: RAISED;*/
-    -fx-font-family: "Abyssinica SIl";
+    /*-fx-font-family: "Abyssinica SIl";*/
     -fx-font-size: 18px;
     -fx-background-color: #F5BC3A;
+    -fx-effect: dropshadow(gaussian, LIGHTGRAY, 10, 0, 0, 0);
 }
 
 .login-txt {

@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -25,12 +26,14 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.controlsfx.control.PopOver;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 
@@ -147,6 +150,9 @@ public class MapBuilderController implements Initializable {
     @FXML
     JFXButton floor3Button;
 
+    @FXML
+    static PopOver popOver;
+    Boolean popOverHidden = true;
 
     MapBuilderController mapBuilderController = null;
     MapBuilderOverlayController mapBuilderOverlayController = null;
@@ -681,6 +687,52 @@ public class MapBuilderController implements Initializable {
                         }
                     }
                 }
+            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED && popOverHidden) { // TODO Check zoom level to prevent graphical glitches
+                HashMap<String, Node> nodeSet = db.getAllNodes();
+                System.out.println("MOUSE_ENTERED event at " + event.getSource());
+                for (String string : nodeDispSet.keySet()) {
+                    if (nodeDispSet.get(string) == event.getSource()) {
+                        if (popOver != null && popOver.getOpacity() == 0) {
+                            popOver.hide();
+                            popOver = null;
+                        }
+                        Node node = nodeSet.get(string);
+                        // Correcting enum toString conversion
+                        String type = node.getType().toString().toUpperCase();
+                        if (type.equals("STAIR")) {
+                            type = "STAIRS";
+                        } else if (type.equals("CONFERENCE")) {
+                            type = "CONFERENCE ROOM";
+                        } else if (type.equals("HALL")) {
+                            type = "HALLWAY";
+                        } else if (type.equals("INFORMATION")) {
+                            type = "INFORMATION DESK";
+                        } else if (type.equals("LABS")) {
+                            type = "LABORATORY";
+                        } else if (type.equals("SERVICE")) {
+                            type = "SERVICES";
+                        }
+                        Label nodeTypeLabel = new Label(type);
+                        Label nodeLongNameLabel = new Label("Name: " + node.getLongName());
+                        Label nodeBuildingLabel = new Label("Building: "+ node.getBuilding().toString());
+                        nodeTypeLabel.setStyle("-fx-font-size: 28px; -fx-text-fill: #0b2f5b; -fx-font-weight: 700; -fx-padding: 10px 10px 0 10px;");
+                        nodeTypeLabel.setAlignment(Pos.CENTER);
+                        nodeLongNameLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 0 10px;");
+                        nodeBuildingLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
+                        VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
+//                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
+                        popOver = new PopOver(popOverVBox);
+                        popOver.show((javafx.scene.Node) event.getSource());
+                        popOverHidden = false;
+                        popOver.setCloseButtonEnabled(false);
+//                        popOver.setCornerRadius(20);
+                        popOver.setAutoFix(true);
+                        popOver.setDetachable(false);
+                    }
+                }
+            } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
+                popOver.hide();
+                popOverHidden = true;
             }
             event.consume();
         }
