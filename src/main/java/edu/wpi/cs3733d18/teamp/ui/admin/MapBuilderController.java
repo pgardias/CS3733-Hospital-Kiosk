@@ -65,6 +65,7 @@ public class MapBuilderController implements Initializable {
     private Node firstSelect = null;
     private Node secondSelect = null;
     private Boolean firstChoice = true;
+    private Node.floorType newNodeFloor;
 
     private Boolean edgeSelected = false;
     private Boolean pathDrawn = false;
@@ -223,7 +224,7 @@ public class MapBuilderController implements Initializable {
         nodesEdgesPane.scaleXProperty().bind(zoomSlider.valueProperty());
         nodesEdgesPane.scaleYProperty().bind(zoomSlider.valueProperty());
 
-
+        newNodeCircle.setPickOnBounds(false);
         mapImage.addEventHandler(MouseEvent.ANY, mouseEventEventHandler);
         getMap();
         drawEdges();
@@ -380,6 +381,25 @@ public class MapBuilderController implements Initializable {
 
         nodeSet = db.getAllNodes();
 
+        if (isNewNode){
+            if (!toggleOn){
+                newNodeCircle.setCenterX((mapBuilderNodeFormController.getNode2XCoord() - X_OFFSET) * X_SCALE);
+                newNodeCircle.setCenterY((mapBuilderNodeFormController.getNode2YCoord() - Y_OFFSET) * Y_SCALE);
+            }else {
+                newNodeCircle.setCenterX((mapBuilderNodeFormController.getNode3XCoord() - X_OFFSET) * X_SCALE);
+                newNodeCircle.setCenterY((mapBuilderNodeFormController.getNode3YCoord() - Y_OFFSET) * Y_SCALE);
+            }
+            if (newNodeFloor.equals(currentFloor)) {
+                newNodeCircle.setRadius(NODE_RADIUS);
+                newNodeCircle.setVisible(true);
+                newNodeCircle.setDisable(false);
+                newNodeCircle.setFill(Color.RED);
+            } else {
+                newNodeCircle.setVisible(false);
+                newNodeCircle.setDisable(true);
+            }
+        }
+
         for (Node node : nodeSet.values()) {
             Circle circle = new Circle();
             circle.setRadius(NODE_RADIUS);
@@ -389,6 +409,7 @@ public class MapBuilderController implements Initializable {
                circle.setPickOnBounds(false);
             }
             nodesEdgesPane.getChildren().add(circle);
+
             if (modifyingNode && node.getID() == nodeModify.getID()){
                 if (!toggleOn) {
                     circle.setCenterX((mapBuilderNodeFormController.getNode2XCoord() - X_OFFSET) * X_SCALE);
@@ -409,6 +430,8 @@ public class MapBuilderController implements Initializable {
                 }
                 circle.setFill(Color.DODGERBLUE);
             }
+
+
 
             //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
 
@@ -900,6 +923,10 @@ public class MapBuilderController implements Initializable {
                     newNodeCircle.setStrokeType(StrokeType.INSIDE);
                     newNodeCircle.addEventHandler(MouseEvent.ANY, dragCircleHandler);
 
+                    newNodeCircle.setVisible(true);
+                    newNodeCircle.setDisable(false);
+                    newNodeFloor = currentFloor;
+
                     double nodex2Coord = scaledx2Coord/X_SCALE + X_OFFSET;
                     double nodey2Coord = scaledy2Coord/Y_SCALE + Y_OFFSET;
                     if (!isNewNode) {
@@ -1067,11 +1094,12 @@ public class MapBuilderController implements Initializable {
         edgeDispSet.clear();
         getMap();
         drawEdges();
+        nodesEdgesPane.getChildren().add(newNodeCircle);
         drawNodes();
         firstSelect = null;
         secondSelect = null;
         selectedEdge = null;
-        nodesEdgesPane.getChildren().add(newNodeCircle);
+
         if (pathDrawn){
             drawPath(pathMade);
         }
@@ -1122,8 +1150,9 @@ public class MapBuilderController implements Initializable {
             edgeDispSet.get(selectedEdge.getID()).setStroke(Color.BLACK);
         }
         if (newNodeCircle != null){
-            newNodeCircle.setRadius(0);
-            newNodeCircle.setStroke(null);
+            newNodeCircle.setVisible(false);
+            newNodeCircle.setDisable(true);
+            isNewNode = false;
         }
     }
 
