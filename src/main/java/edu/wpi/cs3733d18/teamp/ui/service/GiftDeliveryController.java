@@ -51,7 +51,7 @@ public class GiftDeliveryController implements Initializable {
     @FXML
     JFXTextArea giftInfoTxtArea;
 
-    ObservableList<String> gifts = FXCollections.observableArrayList(
+    static ObservableList<String> gifts = FXCollections.observableArrayList(
             "A Dozen Flowers",
             "Puzzle",
             "Stuffed Animal",

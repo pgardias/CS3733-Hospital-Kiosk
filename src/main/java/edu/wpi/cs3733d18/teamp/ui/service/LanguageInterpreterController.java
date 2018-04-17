@@ -51,7 +51,7 @@ public class LanguageInterpreterController implements Initializable {
     @FXML
     JFXTextArea languageInterpreterInfoTxtArea;
 
-    ObservableList<String> languages = FXCollections.observableArrayList(
+    static ObservableList<String> languages = FXCollections.observableArrayList(
             "French",
             "Spanish",
             "Portuguese",

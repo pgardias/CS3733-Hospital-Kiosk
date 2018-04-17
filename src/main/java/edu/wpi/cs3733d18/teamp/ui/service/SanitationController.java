@@ -51,7 +51,7 @@ public class SanitationController implements Initializable {
     @FXML
     JFXTextArea sanitationInfoTxtArea;
 
-    ObservableList<String> messes = FXCollections.observableArrayList(
+    static ObservableList<String> messes = FXCollections.observableArrayList(
             "Clean Food Spill",
             "Clean Water Spill",
             "Clean Other Drink Spill",

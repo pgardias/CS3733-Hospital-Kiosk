@@ -51,7 +51,7 @@ public class SecurityController implements Initializable {
     @FXML
     JFXTextArea securityInfoTxtArea;
 
-    ObservableList<String> situations = FXCollections.observableArrayList(
+    static ObservableList<String> situations = FXCollections.observableArrayList(
             "Patient Disrespecting Hospital Employees",
             "Patient Injuring Hospital Employees",
             "Patient Injuring Fellow Patients",

@@ -52,7 +52,7 @@ public class ReligiousServiceController implements Initializable {
     @FXML
     JFXTextArea religiousRequestInfoTxtArea;
 
-    ObservableList<String> religions = FXCollections.observableArrayList(
+    static ObservableList<String> religions = FXCollections.observableArrayList(
             "Christianity",
             "Judaism",
             "Islam",
