@@ -67,6 +67,7 @@ public class MainController {
             anim.playFromStart();
             usernameTxt.clear();
             passwordTxt.clear();
+            usernameTxt.requestFocus();
             return;
         }
 
