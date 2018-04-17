@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 public class DeletePopUpController {
     private MapBuilderNodeFormController mapBuilderNodeFormController;
     private MapBuilderEdgeFormController mapBuilderEdgeFormController;
+    private ManageEmployeeScreenController manageEmployeeScreenController;
     private Boolean isDelete;
 
     @FXML
@@ -35,6 +36,15 @@ public class DeletePopUpController {
     public void StartUp(MapBuilderEdgeFormController mapBuilderEdgeFormController) {
         this.mapBuilderEdgeFormController = mapBuilderEdgeFormController;
         itemLabel.setText("Are you sure you want to delete this edge? This cannot be undone.");
+    }
+
+    /**
+     * Constructor for deleting Employees
+     * @param
+     */
+    public void StartUp(ManageEmployeeScreenController manageEmployeeScreenController) {
+        this.manageEmployeeScreenController = manageEmployeeScreenController;
+        itemLabel.setText("Are you sure you want to delete this employee? This cannot be undone.");
     }
 
     @FXML
