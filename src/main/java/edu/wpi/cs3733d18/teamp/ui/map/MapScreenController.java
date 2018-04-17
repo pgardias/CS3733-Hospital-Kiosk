@@ -539,11 +539,19 @@ public class MapScreenController {
 //                        popOver.setCornerRadius(20);
                         popOver.setAutoFix(true);
                         popOver.setDetachable(false);
+
+                        nodeDispSet.get(string).setFill(Color.rgb(150,150,255));
                     }
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
                 popOver.hide();
                 popOverHidden = true;
+                for(String string : nodeDispSet.keySet()) {
+                    if (nodeDispSet.get(string) == event.getSource()) {
+                        nodeDispSet.get(string).setFill(Color.DODGERBLUE);
+                    }
+
+                }
             }
             event.consume();
         }
