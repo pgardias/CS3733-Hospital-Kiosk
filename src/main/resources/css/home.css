@@ -7,7 +7,7 @@
     -fx-font-family: "Garamond";
     -fx-font-size: 140px;
     -jfx-button-type: RAISED;
-    -fx-background-image: url(/img/icons/HomeWireframe.png) no-repeat bottom center fixed 80% 80%;
+    -fx-background-image: url(/img/icons/HomeWireframe.png) no-repeat top center fixed 100% 100%;
     -fx-background-size: cover;
     background-size: cover;
     -fx-effect: dropshadow(gaussian, LIGHTGRAY, 20, 0, 0, 0);
