@@ -69,6 +69,7 @@ public class MapScreenController {
 
     private static HashMap<String, Circle> nodeDispSet = new HashMap<>();
     private static ArrayList<Polygon> arrowDispSet = new ArrayList<Polygon>();
+    private static ArrayList<String> arrowFloorSet = new ArrayList<String>();
     private static HashMap<String, Line> edgeDispSet = new HashMap<>();
 
 
@@ -664,8 +665,14 @@ public class MapScreenController {
             currentNode = n;
 
             if (!path.get(0).equals(n)) {
-                width = currentNode.getX() - pastNode.getX();
-                height = currentNode.getY() - pastNode.getY();
+                if(toggleOn) {
+                    width = currentNode.getxDisplay() - pastNode.getxDisplay();
+                    height = currentNode.getyDisplay() - pastNode.getyDisplay();
+                } else {
+                    width = currentNode.getX() - pastNode.getX();
+                    height = currentNode.getY() - pastNode.getY();
+                }
+
                 angle = Math.atan2(height , width);
 
                 //increment the distanceCounter
@@ -674,8 +681,15 @@ public class MapScreenController {
                 if(distanceCounter >= 175) {
                     distanceCounter = 0;
 
-                    drawTriangle(angle, pastNode.getX(), pastNode.getY());
+                    arrowFloorSet.add(currentNode.getFloor().toString());
+                    if(toggleOn) {
+                        drawTriangle(angle, pastNode.getxDisplay(), pastNode.getyDisplay());
+                    } else {
+                        drawTriangle(angle, pastNode.getX(), pastNode.getY());
+                    }
+
                 }
+
             }
             
             //nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
@@ -698,6 +712,19 @@ public class MapScreenController {
                 }
             }
         }
+
+
+        for(int i = 0; i < arrowDispSet.size(); i++) {
+            System.out.println(arrowFloorSet.get(i));
+            if(arrowFloorSet.get(i).equals(currentFloor.toString())) {
+                arrowDispSet.get(i).setOpacity(1.0);
+            } else {
+                arrowDispSet.get(i).setOpacity(0.3);
+            }
+        }
+
+
+
         minXCoord -= 200;
         minYCoord -= 400;
         maxXCoord += 200;
@@ -740,14 +767,14 @@ public class MapScreenController {
 
         //System.out.println("X:  " + initX + "  Y:  " + initY);
 
-        x1 = initX + (12 * Math.cos(angle));
-        y1 = initY + (12 * Math.sin(angle));
+        x1 = initX + (5 * Math.cos(angle));
+        y1 = initY + (5 * Math.sin(angle));
 
-        x2 = initX + (10 * Math.cos(angle - (2 * Math.PI / 3)));
-        y2 = initY + (10 * Math.sin(angle - (2 * Math.PI / 3)));
+        x2 = initX + (3 * Math.cos(angle - (2 * Math.PI / 3)));
+        y2 = initY + (3 * Math.sin(angle - (2 * Math.PI / 3)));
 
-        x3 = initX + (10 * Math.cos(angle + (2 * Math.PI / 3)));
-        y3 = initY + (10 * Math.sin(angle + (2 * Math.PI / 3)));
+        x3 = initX + (3 * Math.cos(angle + (2 * Math.PI / 3)));
+        y3 = initY + (3 * Math.sin(angle + (2 * Math.PI / 3)));
 
 
         arrow.getPoints().addAll(new Double[]{
@@ -755,7 +782,7 @@ public class MapScreenController {
                 x2, y2,
                 x1, y1,
                 x3, y3});
-        arrow.setFill(Color.rgb(250, 150, 0));
+        arrow.setFill(Color.rgb(250, 60, 0));
 
         nodesEdgesPane.getChildren().add(arrow);
 
@@ -792,6 +819,7 @@ public class MapScreenController {
                 p.setPickOnBounds(false);
             }
             arrowDispSet.clear();
+            arrowFloorSet.clear();
         }
     }
 

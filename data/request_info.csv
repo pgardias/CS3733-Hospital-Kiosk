@@ -1,8 +1,2 @@
 requestID,requestType,subType,location,additionalInfo,madeBy,completedBy,timeMade,timeCompleted,completed,priority
-1,language interpreter,German,Cafeasd,Language: German Additional Info: hi,BuildingOwner,BuildingOwner,2018-04-14 13:15:23.757,2018-04-16 16:19:58.075,2,0
-2,computer service,Podium,Brigham Health,Device: Podium Additional Info: test,BuildingOwner,BuildingOwner,2018-04-16 16:16:59.801,2018-04-16 16:20:01.437,2,0
-3,security,Rouge Employee,15 Lobby Entrance,Situation: Rouge Employee Additional Info: test,BuildingOwner,BuildingOwner,2018-04-16 16:17:38.324,2018-04-16 16:20:02.575,2,0
-4,maintenance,Piping,BTM Conference,Broken Machine: Piping Additional Info: test,BuildingOwner,BuildingOwner,2018-04-16 16:18:01.63,2018-04-16 16:20:03.693,2,0
-5,sanitation,Clean Biohazard Spill,AmbExit 1,Mess Type: Clean Biohazard Spill Additional Info: test,BuildingOwner,BuildingOwner,2018-04-16 16:18:17.481,2018-04-16 16:20:04.921,2,0
-6,audio+visual,Drawing Pad,Bathroom Lobby,Audio or Visual Device: Drawing Pad Additional Info: tw,BuildingOwner,BuildingOwner,2018-04-16 16:19:09.582,2018-04-16 16:20:06.203,2,0
-7,delivergift,A Dozen Flowers,Bretholtz WR,Gift: A Dozen Flowers Additional Info: test,BuildingOwner,BuildingOwner,2018-04-16 16:19:32.66,2018-04-16 16:20:07.309,2,0
+1,language interpreter,German,Cafeasd,Language: German Additional Info: hi,BuildingOwner, ,2018-04-14 13:15:23.757,null,0,0
