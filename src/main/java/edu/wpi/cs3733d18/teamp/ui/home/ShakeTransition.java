@@ -19,6 +19,7 @@ import javafx.util.Duration;
  *
  * @author Jasper Potts
  */
+@SuppressWarnings("Deprecation")
 public class ShakeTransition extends CachedTimelineTransition {
 
     private static final int ANIM_DIST = 5;

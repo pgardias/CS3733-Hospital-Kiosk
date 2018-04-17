@@ -19,6 +19,7 @@ import javafx.util.Duration;
  *
  * @author Jasper Potts
  */
+@SuppressWarnings("Deprecation")
 public class BounceTransition extends CachedTimelineTransition {
     /**
      * Create new BounceTransition
