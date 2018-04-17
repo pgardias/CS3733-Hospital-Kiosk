@@ -1,11 +1,13 @@
 package edu.wpi.cs3733d18.teamp.ui.map;
 
 import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
+import com.interactivemesh.jfx.importer.stl.StlMeshImporter;
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.*;
 import javafx.scene.control.Button;
@@ -13,13 +15,18 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Mesh;
 import javafx.scene.shape.MeshView;
+import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -50,9 +57,19 @@ public class MapViewerBuilder implements Initializable{
     private double curScale;
     private double curZoom;
 
+    // Searchbar overlay controller
+    SearchBarOverlayController searchBarOverlayController = null;
+    MapScreenController mapScreenController;
+
     // FXML variables
     @FXML
     AnchorPane threeDAnchorPane;
+
+    @FXML
+    BorderPane buttonOverlayPane;
+
+    @FXML
+    BorderPane searchbarBorderPane;
 
     @FXML
     Button leftButton;
@@ -84,7 +101,10 @@ public class MapViewerBuilder implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Group group = buildScene("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WWholeMap.obj");
+
+        // Load initial model
+        URL pathName = getClass().getResource("/models/B&WWholeFloor.obj");
+        Group group = buildScene(pathName);
         group.setScaleX(2);
         group.setScaleY(2);
         group.setScaleZ(2);
@@ -92,7 +112,28 @@ public class MapViewerBuilder implements Initializable{
         group.setTranslateY(100);
         threeDAnchorPane.getChildren().add(group);
 
+        // Add mouse handler
         threeDAnchorPane.addEventHandler(MouseEvent.ANY, mouseEventEventHandler);
+
+        // Add searchbar overlay
+        addOverlay();
+    }
+
+    public void addOverlay() {
+        Parent root;
+        Stage stage;
+        FXMLLoader loader;
+
+        loader = new FXMLLoader(getClass().getResource("/FXML/map/SearchBarOverlay.fxml"));
+        try {
+            root = loader.load();
+        } catch (IOException ie) {
+            ie.printStackTrace();
+            return;
+        }
+        searchBarOverlayController = loader.getController();
+        searchBarOverlayController.startUp(mapScreenController);
+        searchbarBorderPane.setTop(root);
     }
 
     /**
@@ -188,6 +229,48 @@ public class MapViewerBuilder implements Initializable{
         }
     };
 
+    @FXML
+    public void floorL2ButtonOp(ActionEvent e) {
+        URL pathName = getClass().getResource("/models/B&WL2Floor.obj");
+        //switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WL2Floor.obj");
+        switchMesh(pathName);
+    }
+
+    @FXML
+    public void floorL1ButtonOp(ActionEvent e) {
+        URL pathName = getClass().getResource("/models/B&WL1Floor.obj");
+        //switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WL1Floor.obj");
+        switchMesh(pathName);
+    }
+
+    @FXML
+    public void floorGButtonOp(ActionEvent e) {
+        URL pathName = getClass().getResource("/models/B&WGFloor.obj");
+        //switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WGFloor.obj");
+        switchMesh(pathName);
+    }
+
+    @FXML
+    public void floor1ButtonOp(ActionEvent e) {
+        URL pathName = getClass().getResource("/models/B&W1stFloor.obj");
+        //switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W1stFloor.obj");
+        switchMesh(pathName);
+    }
+
+    @FXML
+    public void floor2ButtonOp(ActionEvent e) {
+        URL pathName = getClass().getResource("/models/B&W2ndFloor.obj");
+        //switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W2ndFloor.obj");
+        switchMesh(pathName);
+    }
+
+    @FXML
+    public void floor3ButtonOp(ActionEvent e) {
+        URL pathName = getClass().getResource("/models/B&W3rdFloor.obj");
+        //switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W3rdFloor.obj");
+        switchMesh(pathName);
+    }
+
     /**
      * this lets the user scroll the wheel to scale the 3D model
      * @param s
@@ -212,16 +295,15 @@ public class MapViewerBuilder implements Initializable{
         curZoom = newZoom; // Set next zoom value to compare to
     }
 
-    static MeshView[] loadMeshView(String fileName) {
-        File file = new File(fileName);
+    static MeshView[] loadMeshView(URL fileName) {
         ObjModelImporter importer = new ObjModelImporter();
-        importer.read(file);
-        //Mesh mesh = importer.getImport();
+        System.out.println(fileName);
+        importer.read(fileName);
 
         return importer.getImport();
     }
 
-    private Group buildScene(String fileName) {
+    private Group buildScene(URL fileName) {
         MeshView[] meshViews = loadMeshView(fileName);
         for (int i = 0; i < meshViews.length; i++) {
             curXTranslation = (VIEWPORT_SIZE / 2 + MODEL_X_OFFSET);
@@ -245,6 +327,7 @@ public class MapViewerBuilder implements Initializable{
             curZRotation = 0;
             meshViews[i].getTransforms().setAll(/*new Rotate(38, Rotate.Z_AXIS),*/ new Rotate(curXRotation, Rotate.X_AXIS));
         }
+
 
         pointLight = new PointLight(lightColor);
         pointLight.setTranslateX(VIEWPORT_SIZE*3/4);
@@ -271,34 +354,12 @@ public class MapViewerBuilder implements Initializable{
         return root;
     }
 
-    /*private PerspectiveCamera addCamera(Scene scene) {
-        PerspectiveCamera perspectiveCamera = new PerspectiveCamera();
-        System.out.println("Near Clip: " + perspectiveCamera.getNearClip());
-        System.out.println("Far Clip:  " + perspectiveCamera.getFarClip());
-        System.out.println("FOV:       " + perspectiveCamera.getFieldOfView());
-
-        scene.setCamera(perspectiveCamera);
-        return perspectiveCamera;
-    }*/
-
-    public void leftButtonOp() {
-        curYRotation += 10;
-        MeshView mv = getMesh();
-        mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
-    }
-
-    public void rightButtonOp() {
-        curYRotation -= 10;
-        MeshView mv = getMesh();
-        mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
-    }
-
     /**
      * Gets mesh value from group hierarchy for convenience
      * @return The MeshView we are looking for
      */
     private MeshView getMesh() {
-        Group group = (Group)threeDAnchorPane.getChildren().get(3); // TODO index needs to be incremented whenever a new element is added to the pane
+        Group group = (Group)threeDAnchorPane.getChildren().get(0); // TODO index needs to be incremented whenever a new element is added to the pane
         return (MeshView)group.getChildren().get(0);
     }
 
@@ -306,8 +367,8 @@ public class MapViewerBuilder implements Initializable{
      * Loads in a new mesh when switching floors
      */
     @FXML
-    public void switchMesh(String fileName) {
-        threeDAnchorPane.getChildren().remove(3);
+    public void switchMesh(URL fileName) {
+        threeDAnchorPane.getChildren().remove(0);
         Group newRoot = buildScene(fileName);
         newRoot.setScaleX(2);
         newRoot.setScaleY(2);
@@ -317,34 +378,11 @@ public class MapViewerBuilder implements Initializable{
         threeDAnchorPane.getChildren().add(newRoot);
     }
 
-    @FXML
-    public void floorL2ButtonOp(ActionEvent e) {
-        switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WL2Floor.obj");
-    }
+    /**
+     * Draws all of the nodes on the map depending on which map is loaded
+     */
+    public void draw3DNodes() {
 
-    @FXML
-    public void floorL1ButtonOp(ActionEvent e) {
-        switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WL1Floor.obj");
-    }
-
-    @FXML
-    public void floorGButtonOp(ActionEvent e) {
-        switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WGFloor.obj");
-    }
-
-    @FXML
-    public void floor1ButtonOp(ActionEvent e) {
-        switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W1stFloor.obj");
-    }
-
-    @FXML
-    public void floor2ButtonOp(ActionEvent e) {
-        switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W2ndFloor.obj");
-    }
-
-    @FXML
-    public void floor3ButtonOp(ActionEvent e) {
-        switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W3rdFloor.obj");
     }
 
 }
