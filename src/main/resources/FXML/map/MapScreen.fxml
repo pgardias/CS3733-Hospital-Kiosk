@@ -39,7 +39,7 @@
                   <Insets right="50.0" />
                </padding>
                <children>
-                  <Slider fx:id="zoomSlider" blockIncrement="0.1" max="10.0" maxHeight="-Infinity" maxWidth="-Infinity" min="1.0" orientation="VERTICAL" prefHeight="444.0" prefWidth="28.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
+                  <Slider fx:id="zoomSlider" blockIncrement="0.01" max="10.0" maxHeight="-Infinity" maxWidth="-Infinity" min="1.0" orientation="VERTICAL" prefHeight="444.0" prefWidth="28.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
                   <JFXButton fx:id="floor3Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor3ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="floor-buttons" text="3" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <font>
                         <Font size="36.0" />
