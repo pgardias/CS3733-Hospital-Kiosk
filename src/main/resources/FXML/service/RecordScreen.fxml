@@ -41,11 +41,11 @@
          <children>
             <TableView fx:id="recordTable" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" GridPane.rowIndex="1">
               <columns>
-                <TableColumn fx:id="colRequestType" prefWidth="278.0000305175781" text="Request Type" />
-                <TableColumn fx:id="colSpecificType" minWidth="0.0" prefWidth="295.0" text="Specific Type" />
-                  <TableColumn fx:id="colTotalOfType" prefWidth="281.0" text="Total Requests of This Type" />
-                  <TableColumn fx:id="colTotalTime" prefWidth="282.0" text="Total Time to Complete All Requests" />
-                  <TableColumn fx:id="colAvgTime" prefWidth="303.0" text="Average Time to Complete All Requests" />
+                <TableColumn fx:id="colRequestType" prefWidth="278.0000305175781" resizable="false" text="Request Type" />
+                <TableColumn fx:id="colSpecificType" minWidth="0.0" prefWidth="295.0" resizable="false" text="Specific Type" />
+                  <TableColumn fx:id="colTotalOfType" prefWidth="281.0" resizable="false" text="Total Requests of This Type" />
+                  <TableColumn fx:id="colTotalTime" prefWidth="282.0" resizable="false" text="Total Time to Complete All Requests" />
+                  <TableColumn fx:id="colAvgTime" prefWidth="303.0" resizable="false" text="Average Time to Complete All Requests" />
               </columns>
             </TableView>
             <JFXComboBox fx:id="filterRecordComboBox" onAction="#filterRecordComboBoxOp" prefWidth="400.0" promptText="Filter Type" style="-jfx-focus-color: #F5BC3A; -fx-font-size: 18;" unFocusColor="BLACK" GridPane.halignment="RIGHT">
