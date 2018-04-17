@@ -56,3 +56,5 @@ task run(type: JavaExec) {
 	main = 'Main'
 	classpath = sourceSets.main.runtimeClasspath
 }
+group 'groupIP'
+version '1.0-SNAPSHOT'

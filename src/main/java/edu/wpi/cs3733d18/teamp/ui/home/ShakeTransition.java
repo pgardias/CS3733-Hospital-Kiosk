@@ -19,6 +19,7 @@ import javafx.util.Duration;
  *
  * @author Jasper Potts
  */
+@SuppressWarnings("Deprecation")
 public class ShakeTransition extends CachedTimelineTransition {
 
     private static final int ANIM_DIST = 5;
@@ -55,6 +56,29 @@ public class ShakeTransition extends CachedTimelineTransition {
 //                                new KeyFrame(Duration.millis(900), new KeyValue(node2.translateXProperty(), -ANIM_DIST, WEB_EASE)),
                                 new KeyFrame(Duration.millis(1000), new KeyValue(node2.translateXProperty(), 0, WEB_EASE))
                         )
+                        .build()
+        );
+        setCycleDuration(Duration.seconds(0.75));
+        setDelay(Duration.seconds(0.0));
+    }
+
+    public ShakeTransition(final Node node1) {
+        super(
+                node1,
+                TimelineBuilder.create()
+                        .keyFrames(
+                                new KeyFrame(Duration.millis(0), new KeyValue(node1.translateXProperty(), 0, WEB_EASE)),
+                                new KeyFrame(Duration.millis(100), new KeyValue(node1.translateXProperty(), -ANIM_DIST, WEB_EASE)),
+                                new KeyFrame(Duration.millis(200), new KeyValue(node1.translateXProperty(), ANIM_DIST, WEB_EASE)),
+                                new KeyFrame(Duration.millis(300), new KeyValue(node1.translateXProperty(), -ANIM_DIST, WEB_EASE)),
+                                new KeyFrame(Duration.millis(400), new KeyValue(node1.translateXProperty(), ANIM_DIST, WEB_EASE)),
+                                new KeyFrame(Duration.millis(500), new KeyValue(node1.translateXProperty(), -ANIM_DIST, WEB_EASE)),
+                                new KeyFrame(Duration.millis(600), new KeyValue(node1.translateXProperty(), ANIM_DIST, WEB_EASE)),
+//                                new KeyFrame(Duration.millis(700), new KeyValue(node1.translateXProperty(), -ANIM_DIST, WEB_EASE)),
+//                                new KeyFrame(Duration.millis(800), new KeyValue(node1.translateXProperty(), ANIM_DIST, WEB_EASE)),
+//                                new KeyFrame(Duration.millis(900), new KeyValue(node1.translateXProperty(), -ANIM_DIST, WEB_EASE)),
+                                new KeyFrame(Duration.millis(1000), new KeyValue(node1.translateXProperty(), 0, WEB_EASE))
+                                )
                         .build()
         );
         setCycleDuration(Duration.seconds(0.75));

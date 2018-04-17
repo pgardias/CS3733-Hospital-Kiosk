@@ -15,6 +15,7 @@ import javafx.util.Duration;
  *
  * @author Jasper Potts
  */
+@SuppressWarnings("Deprecation")
 public class CachedTimelineTransition extends Transition {
     protected static final Interpolator WEB_EASE = Interpolator.SPLINE(0.25, 0.1, 0.25, 1);
     protected final Node node;

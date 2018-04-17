@@ -6,7 +6,7 @@ public class PathfindingContext {
     private Pathfinder pathfinder;
 
     public enum PathfindingSetting {
-        AStar, BreadthFirst, DepthFirst
+        AStar, BreadthFirst, DepthFirst, Dijkstra, BestFirst
     }
 
     public PathfindingContext() { }
@@ -30,6 +30,14 @@ public class PathfindingContext {
                 pathfinder = new DepthFirst();
                 break;
 
+            case Dijkstra:
+                pathfinder = new Dijkstra();
+                break;
+
+            /*case BestFirst:
+                pathfinder = new BestFirst();
+                break;*/
+
             default:
                 pathfinder = new AStar();
                 break;
@@ -38,6 +46,6 @@ public class PathfindingContext {
     }
 
     public ArrayList<Node> findPath(Node srcNode, Node destNode) {
-        return this.pathfinder.findPath(srcNode, destNode);
+        return pathfinder.runPathfinder(srcNode, destNode);
     }
 }
