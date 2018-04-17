@@ -5,6 +5,7 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -85,6 +86,14 @@
                               <Font size="18.0" />
                            </font>
                         </Label>
+                        <JFXButton fx:id="emergencyButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#emergencyButtonOp" prefHeight="190.0" prefWidth="389.0" styleClass="emergency-buttons" stylesheets="@../../css/home.css" text="EMERGENCY" textAlignment="CENTER" textFill="WHITE" GridPane.halignment="CENTER" GridPane.rowSpan="2" GridPane.valignment="CENTER">
+                           <font>
+                              <Font size="50.0" />
+                           </font>
+                           <effect>
+                              <GaussianBlur />
+                           </effect>
+                        </JFXButton>
                      </children>
                      <GridPane.margin>
                         <Insets bottom="5.0" />
@@ -119,7 +128,7 @@
             </JFXButton>
          </center>
       </BorderPane>
-      <AnchorPane focusTraversable="true" mouseTransparent="true" pickOnBounds="false" prefHeight="800.0" prefWidth="1500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane focusTraversable="true" mouseTransparent="true" pickOnBounds="false" prefHeight="800.0" prefWidth="1500.0" stylesheets="@../../css/home.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fx:id="aboutButton" fitHeight="400.0" fitWidth="425.0" onMouseClicked="#aboutButtonOp" pickOnBounds="true" preserveRatio="true" style="-fx-effect: dropshadow(gaussian, LIGHTGRAY, 5, 0.0, 0, 0);" x="30.0" y="25.0">
                <image>

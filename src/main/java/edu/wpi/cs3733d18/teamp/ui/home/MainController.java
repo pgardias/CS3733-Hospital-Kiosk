@@ -41,6 +41,9 @@ public class MainController {
     JFXButton loginButton;
 
     @FXML
+    JFXButton emergencyButton;
+
+    @FXML
     Label loginErrorLabel;
 
     /**
@@ -128,6 +131,29 @@ public class MainController {
         stage.setScene(new Scene(root, 1920, 1080));
         stage.setFullScreen(true);
         stage.show();
+        return true;
+    }
+
+    @FXML
+    public Boolean emergencyButtonOp(ActionEvent e) {
+        FXMLLoader loader;
+        Scene scene;
+        Parent root;
+        EmergencyRequestButtonScreenController emergencyRequestButtonScreenController;
+
+        scene =  emergencyButton.getScene();
+        loader = new FXMLLoader(getClass().getResource("/FXML/home/EmergencyRequestButtonScreen.fxml"));
+        try {
+            root = loader.load();
+        } catch (IOException ie) {
+            ie.getMessage();
+            ie.printStackTrace();
+            return false;
+        }
+        emergencyRequestButtonScreenController = loader.getController();
+        emergencyRequestButtonScreenController.onStartUp(this);
+
+        scene.setRoot(root);
         return true;
     }
 
