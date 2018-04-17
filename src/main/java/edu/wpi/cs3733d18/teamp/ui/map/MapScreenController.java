@@ -52,6 +52,7 @@ public class MapScreenController {
     public int IMG_HEIGHT = 3400;
     private static final double ZOOM_3D_MIN = 1.013878875;
     private static final double ZOOM_2D_MIN = 1.208888889;
+    private double zoomForTranslate = 0;
 
 
 
@@ -69,6 +70,7 @@ public class MapScreenController {
 
     private static HashMap<String, Circle> nodeDispSet = new HashMap<>();
     private static ArrayList<Polygon> arrowDispSet = new ArrayList<Polygon>();
+    private static ArrayList<String> arrowFloorSet = new ArrayList<String>();
     private static HashMap<String, Line> edgeDispSet = new HashMap<>();
 
 
@@ -144,6 +146,7 @@ public class MapScreenController {
 
         zoomSlider.setMin(1.20888889);
         zoomSlider.setValue(zoomSlider.getMin());
+        zoomForTranslate = zoomSlider.getValue();
 
         Image newImage = new Image("/img/maps/2d/02_thesecondfloor.png");
         mapImage.setImage(newImage);
@@ -263,6 +266,7 @@ public class MapScreenController {
             IMG_HEIGHT = 2774;
             zoomSlider.setMin(ZOOM_3D_MIN);
             zoomSlider.setValue(ZOOM_3D_MIN);
+            zoomForTranslate = zoomSlider.getValue();
             switch(floorState) {
                 case "3":
                     image = new Image("/img/maps/3d/3-ICONS.png"); //TODO use this bit of information for image drawing
@@ -291,6 +295,7 @@ public class MapScreenController {
             IMG_HEIGHT = 3400;
             zoomSlider.setMin(ZOOM_2D_MIN);
             zoomSlider.setValue(ZOOM_2D_MIN);
+            zoomForTranslate = zoomSlider.getValue();
             switch (floorState) {
                 case "3":
                     image = new Image("/img/maps/2d/03_thethirdfloor.png");
@@ -347,9 +352,40 @@ public class MapScreenController {
      */
     @FXML
     public void zoomScrollWheel(ScrollEvent s) {
-        double newValue = (s.getDeltaY()) / 15 + zoomSlider.getValue();
+        double newValue = (s.getDeltaY()) / 200 + zoomSlider.getValue();
+        System.out.println("mouse scroll change: " + s.getDeltaY());
+        double change = 1;
+
+        if (s.getDeltaY() < 0 ) change  = -1;
+        if (s.getDeltaY() > 0 ) change = 1;
+
+        double mouseX = s.getSceneX();
+        double mouseY = s.getSceneY();
+        System.out.println("mouseX: " + mouseX + " mouseY: " + mouseY);
+
+        double orgTranslateX = mapImage.getTranslateX();
+        double orgTranslateY = mapImage.getTranslateY();
+        System.out.println("orgTranslate X: " + orgTranslateX + " orgTranslate Y: " + orgTranslateY);
+
+        double mouseAdjustX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE *(mouseX/1920.0)));
+        double mouseAdjustY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE *(mouseY/1080.0)));
+        System.out.println("mouse adjustX: " + mouseAdjustX + " mouse adjustY: " + mouseAdjustY);
+
+        double imageCenterX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE *0.5));
+        double imageCenterY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE *0.5));
+        System.out.println(" image centerx : " + imageCenterX + " image centery: " + imageCenterY);
+
+        double mouseChangeX = mouseAdjustX - imageCenterX;
+        double mouseChangeY = mouseAdjustY - imageCenterY;
+        System.out.println("Mouse ChangeX: " + mouseChangeX + " Mouse Change Y: " + mouseChangeY);
+
+        newTranslateX = (orgTranslateX * zoomSlider.getValue()/zoomForTranslate) - (change * mouseChangeX/8);
+        newTranslateY = (orgTranslateY * zoomSlider.getValue()/zoomForTranslate) - (change * mouseChangeY/8);
+        System.out.println("new translate x: " + newTranslateX + " new translate Y: " + newTranslateY);
+
         zoomSlider.setValue(newValue);
 
+        zoomForTranslate = zoomSlider.getValue();
 
         double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
         double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
@@ -530,19 +566,25 @@ public class MapScreenController {
                         nodeLongNameLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 0 10px;");
                         nodeBuildingLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
-//                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
                         popOver = new PopOver(popOverVBox);
                         popOver.show((javafx.scene.Node) event.getSource());
                         popOverHidden = false;
                         popOver.setCloseButtonEnabled(false);
-//                        popOver.setCornerRadius(20);
                         popOver.setAutoFix(true);
                         popOver.setDetachable(false);
+
+                        nodeDispSet.get(string).setFill(Color.rgb(150,150,255));
                     }
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
                 popOver.hide();
                 popOverHidden = true;
+                for(String string : nodeDispSet.keySet()) {
+                    if (nodeDispSet.get(string) == event.getSource()) {
+                        nodeDispSet.get(string).setFill(Color.DODGERBLUE);
+                    }
+
+                }
             }
             event.consume();
         }
@@ -569,6 +611,8 @@ public class MapScreenController {
                 double offsetY = event.getSceneY() - orgSceneY;
                 newTranslateX = orgTranslateX + offsetX;
                 newTranslateY = orgTranslateY + offsetY;
+
+                zoomForTranslate = zoomSlider.getValue();
 
                 double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
                 double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
@@ -664,8 +708,14 @@ public class MapScreenController {
             currentNode = n;
 
             if (!path.get(0).equals(n)) {
-                width = currentNode.getX() - pastNode.getX();
-                height = currentNode.getY() - pastNode.getY();
+                if(toggleOn) {
+                    width = currentNode.getxDisplay() - pastNode.getxDisplay();
+                    height = currentNode.getyDisplay() - pastNode.getyDisplay();
+                } else {
+                    width = currentNode.getX() - pastNode.getX();
+                    height = currentNode.getY() - pastNode.getY();
+                }
+
                 angle = Math.atan2(height , width);
 
                 //increment the distanceCounter
@@ -674,8 +724,15 @@ public class MapScreenController {
                 if(distanceCounter >= 175) {
                     distanceCounter = 0;
 
-                    drawTriangle(angle, pastNode.getX(), pastNode.getY());
+                    arrowFloorSet.add(currentNode.getFloor().toString());
+                    if(toggleOn) {
+                        drawTriangle(angle, pastNode.getxDisplay(), pastNode.getyDisplay());
+                    } else {
+                        drawTriangle(angle, pastNode.getX(), pastNode.getY());
+                    }
+
                 }
+
             }
             
             //nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
@@ -698,6 +755,19 @@ public class MapScreenController {
                 }
             }
         }
+
+
+        for(int i = 0; i < arrowDispSet.size(); i++) {
+            System.out.println(arrowFloorSet.get(i));
+            if(arrowFloorSet.get(i).equals(currentFloor.toString())) {
+                arrowDispSet.get(i).setOpacity(1.0);
+            } else {
+                arrowDispSet.get(i).setOpacity(0.3);
+            }
+        }
+
+
+
         minXCoord -= 200;
         minYCoord -= 400;
         maxXCoord += 200;
@@ -740,14 +810,14 @@ public class MapScreenController {
 
         //System.out.println("X:  " + initX + "  Y:  " + initY);
 
-        x1 = initX + (12 * Math.cos(angle));
-        y1 = initY + (12 * Math.sin(angle));
+        x1 = initX + (5 * Math.cos(angle));
+        y1 = initY + (5 * Math.sin(angle));
 
-        x2 = initX + (10 * Math.cos(angle - (2 * Math.PI / 3)));
-        y2 = initY + (10 * Math.sin(angle - (2 * Math.PI / 3)));
+        x2 = initX + (3 * Math.cos(angle - (2 * Math.PI / 3)));
+        y2 = initY + (3 * Math.sin(angle - (2 * Math.PI / 3)));
 
-        x3 = initX + (10 * Math.cos(angle + (2 * Math.PI / 3)));
-        y3 = initY + (10 * Math.sin(angle + (2 * Math.PI / 3)));
+        x3 = initX + (3 * Math.cos(angle + (2 * Math.PI / 3)));
+        y3 = initY + (3 * Math.sin(angle + (2 * Math.PI / 3)));
 
 
         arrow.getPoints().addAll(new Double[]{
@@ -755,7 +825,7 @@ public class MapScreenController {
                 x2, y2,
                 x1, y1,
                 x3, y3});
-        arrow.setFill(Color.rgb(250, 150, 0));
+        arrow.setFill(Color.rgb(250, 60, 0));
 
         nodesEdgesPane.getChildren().add(arrow);
 
@@ -792,6 +862,7 @@ public class MapScreenController {
                 p.setPickOnBounds(false);
             }
             arrowDispSet.clear();
+            arrowFloorSet.clear();
         }
     }
 

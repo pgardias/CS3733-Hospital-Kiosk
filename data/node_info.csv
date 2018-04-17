@@ -1,5 +1,5 @@
 nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName,teamAssigned,xcoord3d,ycoord3d,isActive
-ACONF00102,1580,2538,2,BTM,HALL,Hall1,Hall1,Team A,1106,2080,1
+ACONF00102,1580,2538,2,BTM,HALL,Hall,Hall1,Team A,1106,2080,1
 ACONF00103,1648,2968,3,BTM,CONF,BTM Conference Center,BTM Conference,Team A,1029,2246,1
 ADEPT00101,1401,2628,1,BTM,DEPT,Neuroscience Waiting Room,Neuro Waiting Room,Team A,938,2132,1
 ADEPT00102,1395,2674,2,BTM,DEPT,Orthopedics and Rhemutalogy,Orthopedics and Rhemutalogy,Team A,932,2095,1
