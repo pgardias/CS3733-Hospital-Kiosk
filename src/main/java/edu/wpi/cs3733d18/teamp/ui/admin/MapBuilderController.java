@@ -53,6 +53,7 @@ public class MapBuilderController implements Initializable {
     public int IMG_HEIGHT = 3400;
     private static final double ZOOM_3D_MIN = 1.013878875;
     private static final double ZOOM_2D_MIN = 1.208888889;
+    private double zoomForTranslate = 0;
 
     Circle newNodeCircle = new Circle();
 
@@ -217,6 +218,7 @@ public class MapBuilderController implements Initializable {
         currentFloor = Node.floorType.LEVEL_2;
         zoomSlider.setMin(ZOOM_2D_MIN);
         zoomSlider.setValue(ZOOM_2D_MIN);
+        zoomForTranslate = zoomSlider.getValue();
         Image newImage = new Image("/img/maps/2d/02_thesecondfloor.png");
         mapImage.setImage(newImage);
         mapImage.scaleXProperty().bind(zoomSlider.valueProperty());
@@ -352,8 +354,40 @@ public class MapBuilderController implements Initializable {
      */
     @FXML
     public void zoomScrollWheel(ScrollEvent s){
-        double newValue = (s.getDeltaY())/15 + zoomSlider.getValue();
+        double newValue = (s.getDeltaY()) / 200 + zoomSlider.getValue();
+        System.out.println("mouse scroll change: " + s.getDeltaY());
+        double change = 1;
+
+        if (s.getDeltaY() < 0 ) change  = -1;
+        if (s.getDeltaY() > 0 ) change = 1;
+
+        double mouseX = s.getSceneX();
+        double mouseY = s.getSceneY();
+        System.out.println("mouseX: " + mouseX + " mouseY: " + mouseY);
+
+        double orgTranslateX = mapImage.getTranslateX();
+        double orgTranslateY = mapImage.getTranslateY();
+        System.out.println("orgTranslate X: " + orgTranslateX + " orgTranslate Y: " + orgTranslateY);
+
+        double mouseAdjustX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE *(mouseX/1920.0)));
+        double mouseAdjustY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE *(mouseY/1080.0)));
+        System.out.println("mouse adjustX: " + mouseAdjustX + " mouse adjustY: " + mouseAdjustY);
+
+        double imageCenterX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE *0.5));
+        double imageCenterY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE *0.5));
+        System.out.println(" image centerx : " + imageCenterX + " image centery: " + imageCenterY);
+
+        double mouseChangeX = mouseAdjustX - imageCenterX;
+        double mouseChangeY = mouseAdjustY - imageCenterY;
+        System.out.println("Mouse ChangeX: " + mouseChangeX + " Mouse Change Y: " + mouseChangeY);
+
+        newTranslateX = (orgTranslateX * zoomSlider.getValue()/zoomForTranslate) - (change * mouseChangeX/8);
+        newTranslateY = (orgTranslateY * zoomSlider.getValue()/zoomForTranslate) - (change * mouseChangeY/8);
+        System.out.println("new translate x: " + newTranslateX + " new translate Y: " + newTranslateY);
+
         zoomSlider.setValue(newValue);
+
+        zoomForTranslate = zoomSlider.getValue();
 
         double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
         double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
@@ -366,6 +400,7 @@ public class MapBuilderController implements Initializable {
             newTranslateY = (translateSlopeY - 1080)/2;
         if(newTranslateY < -(translateSlopeY - 1080)/2)
             newTranslateY = -(translateSlopeY - 1080)/2;
+
         mapImage.setTranslateX(newTranslateX);
         mapImage.setTranslateY(newTranslateY);
         nodesEdgesPane.setTranslateX(newTranslateX);
@@ -889,6 +924,8 @@ public class MapBuilderController implements Initializable {
                 newTranslateX = orgTranslateX + offsetX;
                 newTranslateY = orgTranslateY + offsetY;
 
+                zoomForTranslate = zoomSlider.getValue();
+
                 double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
                 double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
 
@@ -958,6 +995,7 @@ public class MapBuilderController implements Initializable {
             ie.printStackTrace();
             return;
         }
+        nodeModify = null;
         clearCircles();
         firstSelect = null;
         secondSelect = null;
@@ -1470,6 +1508,7 @@ public class MapBuilderController implements Initializable {
             zoomSlider.setValue(ZOOM_2D_MIN);
             toggleOn = false;
         }
+        zoomForTranslate = zoomSlider.getValue();
         updateMap();
     }
 

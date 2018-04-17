@@ -605,6 +605,8 @@ public class MapScreenController {
                 newTranslateX = orgTranslateX + offsetX;
                 newTranslateY = orgTranslateY + offsetY;
 
+                zoomForTranslate = zoomSlider.getValue();
+
                 double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
                 double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
 
