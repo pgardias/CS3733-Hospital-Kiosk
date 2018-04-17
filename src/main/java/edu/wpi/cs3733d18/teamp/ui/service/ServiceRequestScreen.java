@@ -45,6 +45,9 @@ public class ServiceRequestScreen implements Initializable{
     JFXButton completeRequestButton;
 
     @FXML
+    JFXButton serviceAPIButton;
+
+    @FXML
     Label serviceRequestErrorLabel;
 
     @FXML
@@ -260,8 +263,6 @@ public class ServiceRequestScreen implements Initializable{
                 r.setCompleted(2);
                 r.setCompletedBy(firstAndLastName);
                 db.completeRequest(r);
-                db.handleRequest(r);
-
             }
             else {
                 serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
@@ -377,5 +378,17 @@ public class ServiceRequestScreen implements Initializable{
 
     }
 
+    @FXML
+    public void serviceAPIButtonOp(ActionEvent e) {
+        /*
+        FoodRequest foodRequest = new FoodRequest();
+        try {
+            foodRequest.run(0, 0, 1900, 1000, null, null, null);
+        } catch (Exception ex) {
+            System.out.println("Failed to run API");
+            ex.printStackTrace();
+        }
+        */
+    }
 }
 

@@ -3,18 +3,21 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../../css/common.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.service.RecordScreenController">
    <top>
       <GridPane prefHeight="100.0" BorderPane.alignment="CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
@@ -26,6 +29,11 @@
                   <Insets left="50.0" top="50.0" />
                </GridPane.margin>
             </JFXButton>
+            <Label fx:id="errorLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
          </children>
       </GridPane>
    </top>
@@ -41,11 +49,11 @@
          <children>
             <TableView fx:id="recordTable" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" GridPane.rowIndex="1">
               <columns>
-                <TableColumn fx:id="colRequestType" prefWidth="278.0000305175781" text="Request Type" />
-                <TableColumn fx:id="colSpecificType" minWidth="0.0" prefWidth="295.0" text="Specific Type" />
-                  <TableColumn fx:id="colTotalOfType" prefWidth="281.0" text="Total Requests of This Type" />
-                  <TableColumn fx:id="colTotalTime" prefWidth="282.0" text="Total Time to Complete All Requests" />
-                  <TableColumn fx:id="colAvgTime" prefWidth="303.0" text="Average Time to Complete All Requests" />
+                <TableColumn fx:id="colRequestType" prefWidth="278.0000305175781" resizable="false" text="Request Type" />
+                <TableColumn fx:id="colSpecificType" minWidth="0.0" prefWidth="295.0" resizable="false" text="Specific Type" />
+                  <TableColumn fx:id="colTotalOfType" prefWidth="281.0" resizable="false" text="Total Requests of This Type" />
+                  <TableColumn fx:id="colTotalTime" prefWidth="282.0" resizable="false" text="Total Time to Complete All Requests" />
+                  <TableColumn fx:id="colAvgTime" prefWidth="303.0" resizable="false" text="Average Time to Complete All Requests" />
               </columns>
             </TableView>
             <JFXComboBox fx:id="filterRecordComboBox" onAction="#filterRecordComboBoxOp" prefWidth="400.0" promptText="Filter Type" style="-jfx-focus-color: #F5BC3A; -fx-font-size: 18;" unFocusColor="BLACK" GridPane.halignment="RIGHT">
@@ -56,6 +64,23 @@
                   <Insets right="10.0" />
                </GridPane.margin></JFXComboBox>
          </children>
+         <BorderPane.margin>
+            <Insets bottom="50.0" />
+         </BorderPane.margin>
       </GridPane>
    </center>
+   <right>
+      <GridPane fx:id="statsGridPane" prefWidth="400.0" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <BorderPane.margin>
+            <Insets bottom="75.0" right="20.0" />
+         </BorderPane.margin>
+      </GridPane>
+   </right>
 </BorderPane>

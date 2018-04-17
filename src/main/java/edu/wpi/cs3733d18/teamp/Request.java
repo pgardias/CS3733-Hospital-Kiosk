@@ -51,20 +51,28 @@ public class Request {
         switch(this.getRequestType()) {
             case COMPUTER:
                 type = "Electronic Device \nRequest";
+                break;
             case HOLYPERSON:
                 type =  "Religious Request";
+                break;
             case LANGUAGEINTERP:
                 type = "Language Interpreter \nRequest";
+                break;
             case SECURITY:
                 type = "Security Request";
+                break;
             case MAINTENANCE:
                 type = "Maintenance Request";
+                break;
             case SANITATION:
                 type = "Sanitation Request";
+                break;
             case AV:
                 type = "Audio/Visual Request";
+                break;
             case GIFTS:
                 type = "Gift Delivery Request";
+                break;
         }
         return type;
     }

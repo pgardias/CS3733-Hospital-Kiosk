@@ -5,3 +5,9 @@ recordID,requestType,subType,totalOfType,totalTime,avgTime
 4,language interpreter,Spanish,2,3,1
 5,religion handler,Buddhism,1,0,0
 6,religion handler,Christianity,4,1,0
+8,computer service,Podium,2,8,4
+9,security,Rouge Employee,2,6,3
+10,maintenance,Piping,2,4,2
+11,sanitation,Clean Biohazard Spill,2,4,2
+12,audio+visual,Drawing Pad,2,2,1
+13,delivergift,A Dozen Flowers,2,2,1

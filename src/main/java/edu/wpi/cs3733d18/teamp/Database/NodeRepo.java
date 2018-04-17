@@ -1,5 +1,6 @@
 package edu.wpi.cs3733d18.teamp.Database;
 
+import edu.wpi.cs3733d18.teamp.Exceptions.DuplicateLongNameException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
@@ -170,10 +171,13 @@ public class NodeRepo {
      * @param node Node to add
      * @return true if Node was created, false if something went wrong
      */
-    Boolean createNode(Node node, Node connectedNode) {
+    Boolean createNode(Node node, Node connectedNode) throws DuplicateLongNameException {
         EdgeRepo edgeRepo = new EdgeRepo();
         try {
             conn = DriverManager.getConnection(DB_URL);
+
+            // Check database for other Nodes with user input long name
+            checkLongName(node, conn);
 
             // Prepare statement
             String sql = "INSERT INTO NODE_INFO " +
@@ -197,7 +201,6 @@ public class NodeRepo {
 
             int success = pstmt.executeUpdate();
 
-            //Node defaultNode = this.getOneNode("PKIOS00102");
             Edge defaultEdge = new Edge();
             // Node chosen by user
             defaultEdge.setStart(connectedNode);
@@ -223,12 +226,14 @@ public class NodeRepo {
      * @param node contains information to be updated
      * @return true if Node was updated, false if something went wrong
      */
-    Boolean modifyNode(Node node) {
+    Boolean modifyNode(Node node) throws DuplicateLongNameException{
         EdgeRepo edgeRepo = new EdgeRepo();
 
         try {
             conn = DriverManager.getConnection(DB_URL);
 
+            // Check database for other Nodes with user input long name
+            checkLongName(node, conn);
 
             // Prepare statement
             String sql = "UPDATE NODE_INFO " +
@@ -453,5 +458,23 @@ public class NodeRepo {
      */
     private String generateShortName(Node node, String id) {
         return node.getType().toString() + " " + id.substring(5,8) + " Floor " + node.getFloor();
+    }
+
+    private void checkLongName(Node node, Connection conn) throws DuplicateLongNameException{
+        try {
+            String sql = "SELECT nodeID FROM NODE_INFO " +
+                    "WHERE longName = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, node.getLongName());
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String id = rs.getString(1);
+                conn.close();
+                throw new DuplicateLongNameException(id);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
