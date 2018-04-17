@@ -328,6 +328,54 @@ public class EmployeeRepo {
         return employee;
     }
 
+    /**
+     * checkAdminLogin checks that the person logging into the
+     * Admin page is an Admin by verifying their access privileges
+     * @param id
+     * @return an Employee that is an Admin, and throws an exception if the employee is not an Admin
+     */
+    Employee checkLoginID(String id) throws LoginInvalidException {
+        Employee employee = new Employee();
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+
+            String sql = "SELECT * FROM EMPLOYEE_INFO WHERE employeeID = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, Integer.valueOf(id));
+            ResultSet results = pstmt.executeQuery();
+            if(!results.next()){
+                throw new LoginInvalidException();
+            }else {
+                do {
+                    employee.setUserName(results.getString("username"));
+                    employee.setPassword(results.getString("password"));
+                    employee.setFirstName(results.getString("firstName"));
+                    employee.setLastName(results.getString("lastName"));
+                    // Check if admin
+                    if (results.getInt("isAdmin") == 0) {
+                        employee.setIsAdmin(false);
+                    } else if (results.getInt("isAdmin") == 1) {
+                        employee.setIsAdmin(true);
+                    }
+                    employee.setEmployeeType(StringToEmployeeType(results.getString("employeeType")));
+                    employee.setSubType(results.getString("subType"));
+
+                } while (results.next());
+            }
+
+            results.close();
+            pstmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            throw new LoginInvalidException();
+        }
+
+        return employee;
+    }
+
     private int generateID(){
         int max;
         try {

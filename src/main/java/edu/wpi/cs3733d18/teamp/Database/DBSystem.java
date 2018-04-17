@@ -196,6 +196,10 @@ public class DBSystem {
     public Employee checkAdminLogin(String username, String password) throws LoginInvalidException, AccessNotAllowedException {
         return employeeRepo.checkAdminLogin(username, password);
     }
+
+    public Employee checkLoginID(String id) throws LoginInvalidException{
+        return employeeRepo.checkLoginID(id);
+    }
     // Record Repository Functions
 
     public ArrayList<Record> getAllRecords() throws RecordNotFoundException { return recordRepo.getAllRecords(); }
