@@ -10,22 +10,29 @@ import edu.wpi.cs3733d18.teamp.Exceptions.DuplicateLongNameException;
 import edu.wpi.cs3733d18.teamp.Exceptions.EdgeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
-import edu.wpi.cs3733d18.teamp.ui.admin.MapBuilderController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class MapBuilderNodeFormController implements Initializable{
+
+    DeletePopUpController deletePopUpController;
 
     public static final int FULL_WIDTH = 5000;
     public static final int FULL_HEIGHT = 3400;
@@ -357,14 +364,40 @@ public class MapBuilderNodeFormController implements Initializable{
      */
     @FXML
     public void deleteButtonOp(){
+
+        // Delete Node Popup
+        Stage stage;
+        Parent root;
+        FXMLLoader loader;
+
+        stage = new Stage();
+        loader = new FXMLLoader(getClass().getResource("/FXML/general/ConfirmationPopUp.fxml"));
+
         try {
-            db.deleteNode(editedNodeID);
-        } catch (NodeNotFoundException | EdgeNotFoundException ne) {
-            ne.printStackTrace();
+            root = loader.load();
+        } catch (IOException ie) {
+            ie.printStackTrace();
+            return;
         }
 
-        mapBuilderController.updateMap();
-        mapBuilderController.addOverlay();
+        deletePopUpController = loader.getController();
+        deletePopUpController.StartUp(this);
+        stage.setScene(new Scene(root, 600, 150));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(deleteButton.getScene().getWindow());
+        stage.showAndWait();
+
+        // If user confirms deletion, delete the node
+        if (deletePopUpController.getChoice()) {
+            try {
+                db.deleteNode(editedNodeID);
+            } catch (NodeNotFoundException | EdgeNotFoundException ne) {
+                ne.printStackTrace();
+            }
+
+            mapBuilderController.updateMap();
+            mapBuilderController.addOverlay();
+        }
     }
 
     public void setConnectingNodeTextBox(String nodeLongName){
