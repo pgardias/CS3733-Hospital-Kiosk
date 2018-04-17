@@ -14,7 +14,8 @@
 }
 
 .map-button:hover {
-
+    -fx-effect: dropshadow(gaussian, GRAY, 20, 0, 0, 0);
+    /*-fx-opacity: 90%;*/
 }
 
 .service-button {
