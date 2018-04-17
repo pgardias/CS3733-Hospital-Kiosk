@@ -46,3 +46,8 @@
     -fx-font-size: 18px;
 }
 
+.emergency-buttons {
+    -fx-background-color: RED;
+    -fx-text-fill: WHITE;
+    -fx-background-radius: 20;
+}
