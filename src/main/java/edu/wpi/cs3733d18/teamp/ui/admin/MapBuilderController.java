@@ -219,19 +219,19 @@ public class MapBuilderController implements Initializable {
 
     @FXML
     void aStarSetOp(ActionEvent event) {
-        Main.settings.setSettings(PathfindingContext.PathfindingSetting.AStar);
+        Main.settings.setPathfindingAlgorithm(PathfindingContext.PathfindingSetting.AStar);
         Main.pathfindingContext.setPathfindingContext(Main.settings.getPathfindingSettings());
     }
 
     @FXML
     void breadthFirstSetOp(ActionEvent event) {
-        Main.settings.setSettings(PathfindingContext.PathfindingSetting.BreadthFirst);
+        Main.settings.setPathfindingAlgorithm(PathfindingContext.PathfindingSetting.BreadthFirst);
         Main.pathfindingContext.setPathfindingContext(Main.settings.getPathfindingSettings());
     }
 
     @FXML
     void depthFirstSetOp(ActionEvent event) {
-        Main.settings.setSettings(PathfindingContext.PathfindingSetting.DepthFirst);
+        Main.settings.setPathfindingAlgorithm(PathfindingContext.PathfindingSetting.DepthFirst);
         Main.pathfindingContext.setPathfindingContext(Main.settings.getPathfindingSettings());
     }
 
