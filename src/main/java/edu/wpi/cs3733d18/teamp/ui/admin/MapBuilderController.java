@@ -237,7 +237,6 @@ public class MapBuilderController implements Initializable {
         nodesEdgesPane.getChildren().add(newNodeCircle);
         //newNodeCircle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
         addOverlay();
-
     }
 
 

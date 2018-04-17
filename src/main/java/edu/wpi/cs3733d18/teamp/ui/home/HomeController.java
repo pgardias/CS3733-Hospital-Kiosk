@@ -24,7 +24,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 
-public class MainController {
+public class HomeController {
 
     private DBSystem db = DBSystem.getInstance();
 
@@ -117,23 +117,21 @@ public class MainController {
 
         stage = (Stage) mapButton.getScene().getWindow();
         loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
+
         try {
             root = loader.load();
         } catch (IOException ie) {
-            ie.getMessage();
+            ie.printStackTrace();
             return false;
         }
         mapScreenController = loader.getController();
         mapScreenController.onStartUp();
-
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setFullScreen(true);
-        stage.show();
+        mapButton.getScene().setRoot(root);
         return true;
     }
 
     @FXML
     public void aboutButtonOp() {
-
+        System.out.println("ABOUT BUTTON CLICKED");
     }
 }
