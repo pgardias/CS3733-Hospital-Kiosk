@@ -260,8 +260,6 @@ public class ServiceRequestScreen implements Initializable{
                 r.setCompleted(2);
                 r.setCompletedBy(firstAndLastName);
                 db.completeRequest(r);
-                db.handleRequest(r);
-
             }
             else {
                 serviceRequestErrorLabel.setText("You are not authorized to claim this service request");

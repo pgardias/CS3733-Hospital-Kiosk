@@ -5,7 +5,6 @@ recordID,requestType,subType,totalOfType,totalTime,avgTime
 4,language interpreter,Spanish,2,3,1
 5,religion handler,Buddhism,1,0,0
 6,religion handler,Christianity,4,1,0
-7,language interpreter,German,2,6128,3064
 8,computer service,Podium,2,8,4
 9,security,Rouge Employee,2,6,3
 10,maintenance,Piping,2,4,2
