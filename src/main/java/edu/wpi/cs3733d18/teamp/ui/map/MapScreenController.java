@@ -869,8 +869,29 @@ public class MapScreenController {
         for (int i = 0; i < stairNodeSet.size(); i += 2) {
             for (String str : nodeDispSet.keySet()) {
                 if (str.equals(stairNodeSet.get(i).getID()) && stairNodeSet.get(i).getFloor().equals(currentFloor)) {
-                    createPopOver(nodeDispSet.get(str));
-                    break;
+                    nodeDispSet.get(str).setFill(Color.PURPLE);
+                    Label clickMeLabel = new Label("Click me to follow the path");
+                    clickMeLabel.setFont(font);
+                    nodesEdgesPane.getChildren().add(clickMeLabel);
+                    if (!toggleOn) {
+                        // 2d view
+                        double actualX = (stairNodeSet.get(i).getX() + 10 - X_OFFSET) * X_SCALE;
+                        double actualY = (stairNodeSet.get(i).getY() + 10 - Y_OFFSET) * Y_SCALE;
+                        clickMeLabel.setLayoutX(actualX + 20);
+                        clickMeLabel.setLayoutY(actualY + 20);
+                        Line line = new Line(actualX, actualY, actualX + 20, actualY + 20);
+                        nodesEdgesPane.getChildren().add(line);
+                        break;
+                    } else {
+                        // 3d view
+                        double actualX = (stairNodeSet.get(i).getxDisplay() + 10 - X_OFFSET) * X_SCALE;
+                        double actualY = (stairNodeSet.get(i).getyDisplay() + 10 - Y_OFFSET) * Y_SCALE;
+                        clickMeLabel.setLayoutX(actualX + 20);
+                        clickMeLabel.setLayoutY(actualY + 20);
+                        Line line = new Line(actualX, actualY, actualX + 20, actualY + 20);
+                        nodesEdgesPane.getChildren().add(line);
+                        break;
+                    }
                 }
             }
         }
@@ -895,28 +916,6 @@ public class MapScreenController {
         System.out.println(toggleOn.toString());
 
         pathDrawn = true;
-    }
-
-    public void createPopOver(javafx.scene.Node node) {
-        Label clickMeLabel = new Label("Click the circle to follow path.");
-        clickMeLabel.setStyle("-fx-font-size: 28px; -fx-text-fill: #0b2f5b; -fx-font-weight: 700; -fx-padding: 10px 10px 0 10px;");
-        popOver = new PopOver(clickMeLabel);
-//        if (event.getSceneX() < 960) {
-//            System.out.println(" Left side of screeNn: " + event.getSceneX() + " " + event.getSceneY());
-//            popOver.show(/*(javafx.scene.Node)  event.getSource() */labelPane, event.getSceneX() + 5, event.getSceneY());
-//            //popOver.setArrowLocation(ArrowLocation.LEFT_TOP);
-//        } else {
-//            System.out.println(" Right side of screen " + event.getSceneX() + " " + event.getSceneY());
-//            popOver.setArrowLocation(ArrowLocation.RIGHT_TOP);
-//            popOver.show((javafx.scene.Node) event.getSource(), -5);
-//            System.out.println("Popover X: " + popOver.getX() + " PopOver Y: " + popOver.getY());
-//            System.out.println("Popover length: " + popOver.getWidth() + " popover height: " + popOver.getHeight());
-//        }
-        popOver.show(node, -5);
-        popOverHidden = false;
-        popOver.setCloseButtonEnabled(false);
-        popOver.setAutoFix(true);
-        popOver.setDetachable(false);
     }
 
     /**
@@ -1001,6 +1000,9 @@ public class MapScreenController {
             pastNode = currentNode;
             currentNode = n;
             //nodeDispSet.get(n.getID()).setFill(Color.DODGERBLUE);
+            if (nodeDispSet.get(n.getID()).getFill().equals(Color.PURPLE)) {
+                nodeDispSet.get(n.getID()).setFill(Color.DODGERBLUE);
+            }
 
             for (Edge e : currentNode.getEdges()) {
                 if (pastNode != null) {
