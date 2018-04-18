@@ -8,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,6 +30,14 @@ public class AdminMenuController {
 
     @FXML
     JFXButton backButton;
+
+    @FXML
+    Label helloMessage;
+
+    @FXML
+    public void onStartup() {
+        helloMessage.setText("Hello " + Main.currentUser.getFirstName() + " " + Main.currentUser.getLastName() + ", ");
+    }
 
     @FXML
     public void employeeButtonOp(ActionEvent e) {
@@ -66,6 +76,7 @@ public class AdminMenuController {
     public void serviceRequestScreenButtonOp(ActionEvent e) {
         Parent root;
         FXMLLoader loader;
+        ServiceRequestScreen serviceRequestScreen;
 
         loader = new FXMLLoader(getClass().getResource("/FXML/service/ServiceRequestScreen.fxml"));
         try {
@@ -74,6 +85,8 @@ public class AdminMenuController {
             ioe.printStackTrace();
             return;
         }
+        serviceRequestScreen = loader.getController();
+        serviceRequestScreen.onStartup();
         serviceRequestScreenButton.getScene().setRoot(root);
     }
 

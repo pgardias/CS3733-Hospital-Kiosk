@@ -8,7 +8,9 @@ import edu.wpi.cs3733d18.teamp.Exceptions.AccessNotAllowedException;
 import edu.wpi.cs3733d18.teamp.Exceptions.EmployeeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.LoginInvalidException;
 import edu.wpi.cs3733d18.teamp.Main;
+import edu.wpi.cs3733d18.teamp.ui.admin.AdminMenuController;
 import edu.wpi.cs3733d18.teamp.ui.map.MapScreenController;
+import edu.wpi.cs3733d18.teamp.ui.service.ServiceRequestScreen;
 import javafx.application.Platform;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -129,6 +131,8 @@ public class HomeController {
 
         String username = usernameTxt.getText();
         String password = passwordTxt.getText();
+        AdminMenuController adminMenuController;
+
 
         try {
             Main.currentUser = db.checkEmployeeLogin(username, password);
@@ -155,12 +159,15 @@ public class HomeController {
                 ie.printStackTrace();
                 return;
             }
+            adminMenuController = loader.getController();
+            adminMenuController.onStartup();
             loginButton.getScene().setRoot(root);
         } else {
             System.out.println("Logging in Employee");
             FXMLLoader loader;
             Stage stage;
             Parent root;
+            ServiceRequestScreen serviceRequestScreen;
 
             loader = new FXMLLoader(getClass().getResource("/FXML/service/ServiceRequestScreen.fxml"));
             try {
@@ -169,6 +176,8 @@ public class HomeController {
                 ie.printStackTrace();
                 return;
             }
+            serviceRequestScreen = loader.getController();
+            serviceRequestScreen.onStartup();
             loginButton.getScene().setRoot(root);
         }
     }
