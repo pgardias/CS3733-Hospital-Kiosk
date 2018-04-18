@@ -13,73 +13,84 @@
 <?import javafx.scene.text.Font?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.admin.AdminMenuController">
-   <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0">
-         <children>
-            <Rectangle fill="#dadada" height="1050.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, GRAY, 5, 0.0, 0, 0);" width="1890.0" x="15.0" y="15.0" />
-         </children>
-      </AnchorPane>
-      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-         <center>
-            <GridPane alignment="CENTER" hgap="20.0" maxHeight="-Infinity" maxWidth="1400.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" BorderPane.alignment="TOP_CENTER">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
-              </columnConstraints>
-              <rowConstraints>
-                  <RowConstraints />
-                  <RowConstraints minHeight="10.0" prefHeight="600.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <JFXButton fx:id="employeeButton" buttonType="RAISED" maxHeight="250.0" maxWidth="350.0" onAction="#employeeButtonOp" style="-fx-background-color: WHITE;" text="Employees" textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                  </JFXButton>
-                  <JFXButton fx:id="mapManagementButton" buttonType="RAISED" maxHeight="250.0" maxWidth="350.0" onAction="#mapManagementButtonOp" style="-fx-background-color: WHITE;" text="Map Components" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </JFXButton>
-                  <Label text="Select an admin panel to access:" textAlignment="CENTER" textFill="#323232" GridPane.columnSpan="4" GridPane.halignment="CENTER">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                  </Label>
-                  <JFXButton fx:id="serviceRequestScreenButton" buttonType="RAISED" maxHeight="250.0" maxWidth="350.0" onAction="#serviceRequestScreenButtonOp" style="-fx-background-color: WHITE;" text="Service Requests" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </JFXButton>
-                  <JFXButton fx:id="settingsButton" buttonType="RAISED" maxHeight="250.0" maxWidth="350.0" onAction="#settingsButtonOp" style="-fx-background-color: WHITE;" text="Settings" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </JFXButton>
-               </children>
-               <BorderPane.margin>
-                  <Insets top="200.0" />
-               </BorderPane.margin>
-            </GridPane>
-         </center>
-         <top>
-            <JFXButton fx:id="backButton" buttonType="RAISED" onAction="#backButtonOp" prefHeight="100.0" prefWidth="100.0" ripplerFill="GRAY" styleClass="back-button" stylesheets="@../../css/common.css" text=" " BorderPane.alignment="CENTER_LEFT">
-               <BorderPane.margin>
-                  <Insets left="50.0" top="50.0" />
-               </BorderPane.margin>
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </JFXButton>
-         </top>
-      </BorderPane>
-   </children>
+    <children>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <children>
+                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#dadada" height="1050.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, GRAY, 5, 0.0, 0, 0);" width="1890.0" x="15.0" y="15.0" />
+                <Label prefWidth="100.0" text="Logout" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="150.0">
+                    <font>
+                        <Font size="30.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <center>
+                <GridPane alignment="CENTER" hgap="20.0" maxHeight="1.7976931348623157E308" maxWidth="1200.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="711.0" prefWidth="1176.0" BorderPane.alignment="TOP_CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="67.0" minHeight="23.36187744140625" prefHeight="52.676055908203125" />
+                        <RowConstraints maxHeight="85.89492797851562" minHeight="0.0" prefHeight="72.36184692382812" />
+                        <RowConstraints maxHeight="655.6381530761719" minHeight="10.0" prefHeight="605.6381530761719" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <JFXButton fx:id="employeeButton" buttonType="RAISED" maxHeight="250.0" maxWidth="350.0" onAction="#employeeButtonOp" style="-fx-background-color: WHITE;" text="Employees" textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                            <font>
+                                <Font size="40.0" />
+                            </font>
+                            <GridPane.margin>
+                                <Insets />
+                            </GridPane.margin>
+                        </JFXButton>
+                        <JFXButton fx:id="mapManagementButton" buttonType="RAISED" maxHeight="250.0" maxWidth="350.0" onAction="#mapManagementButtonOp" style="-fx-background-color: WHITE;" text="Map Components" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                            <font>
+                                <Font size="40.0" />
+                            </font>
+                        </JFXButton>
+                        <Label text="Select an admin panel to access:" textAlignment="CENTER" textFill="#323232" GridPane.columnSpan="4" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                            <font>
+                                <Font size="40.0" />
+                            </font>
+                            <GridPane.margin>
+                                <Insets />
+                            </GridPane.margin>
+                        </Label>
+                        <JFXButton fx:id="serviceRequestScreenButton" buttonType="RAISED" maxHeight="250.0" maxWidth="350.0" onAction="#serviceRequestScreenButtonOp" style="-fx-background-color: WHITE;" text="Service Requests" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                            <font>
+                                <Font size="40.0" />
+                            </font>
+                        </JFXButton>
+                        <JFXButton fx:id="settingsButton" buttonType="RAISED" maxHeight="250.0" maxWidth="350.0" onAction="#settingsButtonOp" style="-fx-background-color: WHITE;" text="Settings" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                            <font>
+                                <Font size="40.0" />
+                            </font>
+                        </JFXButton>
+                        <Label fx:id="helloMessage" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
+                            <font>
+                                <Font size="40.0" />
+                            </font>
+                        </Label>
+                    </children>
+                    <BorderPane.margin>
+                        <Insets top="200.0" />
+                    </BorderPane.margin>
+                </GridPane>
+            </center>
+            <top>
+                <JFXButton fx:id="backButton" buttonType="RAISED" onAction="#backButtonOp" prefHeight="100.0" prefWidth="100.0" ripplerFill="GRAY" styleClass="back-button" stylesheets="@../../css/common.css" text=" " BorderPane.alignment="CENTER_LEFT">
+                    <BorderPane.margin>
+                        <Insets left="50.0" top="50.0" />
+                    </BorderPane.margin>
+                    <font>
+                        <Font size="30.0" />
+                    </font>
+                </JFXButton>
+            </top>
+        </BorderPane>
+    </children>
 </StackPane>

@@ -100,9 +100,17 @@ public class ServiceRequestScreen implements Initializable{
     @FXML
     TableColumn<ServiceRequestTable, String> rType3;
 
+    @FXML
+    Label helloMessage;
+
     final ObservableList<ServiceRequestTable> newRequests = FXCollections.observableArrayList();
     final ObservableList<ServiceRequestTable> inProgRequests = FXCollections.observableArrayList();
     final ObservableList<ServiceRequestTable> completedRequests = FXCollections.observableArrayList();
+
+    @FXML
+    public void onStartup() {
+        helloMessage.setText("Hello, " + Main.currentUser.getFirstName() + " " + Main.currentUser.getLastName());
+    }
 
     /**
      * Gets the list of service requests from the database and puts them in the appropriate tables
@@ -301,7 +309,6 @@ public class ServiceRequestScreen implements Initializable{
             return false;
         }
 
-
         backButton.getScene().setRoot(root);
         return true;
     }
@@ -311,12 +318,10 @@ public class ServiceRequestScreen implements Initializable{
      */
     @FXML
     public Boolean recordsButtonOp(ActionEvent e) {
-        Stage stage;
         Parent root;
         FXMLLoader loader;
         RecordScreenController recordScreenController;
 
-        stage = (Stage) recordsButton.getScene().getWindow();
         loader = new FXMLLoader(getClass().getResource("/FXML/service/RecordScreen.fxml"));
 
         try {
@@ -327,9 +332,7 @@ public class ServiceRequestScreen implements Initializable{
         }
         recordScreenController = loader.getController();
         recordScreenController.onStartUp();
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setFullScreen(true);
-        stage.show();
+        recordsButton.getScene().setRoot(root);
         return true;
     }
 

@@ -35,6 +35,7 @@ public class Settings {
 
     public static void setPathfindingAlgorithm(PathfindingContext.PathfindingSetting pathfindingSettings){
         _pathfindingContext.setPathfindingContext(pathfindingSettings);
+        _pathfindingSettings = pathfindingSettings;
     }
 
     public static void setFeetPerPixel(double _feetPerPixel) {
