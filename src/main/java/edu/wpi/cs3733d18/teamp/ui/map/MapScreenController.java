@@ -29,6 +29,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.PopOver.ArrowLocation;
@@ -55,7 +56,6 @@ public class MapScreenController {
     private double zoomForTranslate = 0;
 
 
-
     private Node startNode;
     private Node endNode;
     private Edge selectedEdge;
@@ -69,10 +69,10 @@ public class MapScreenController {
     private Boolean toggleOn = false;
 
     private static HashMap<String, Circle> nodeDispSet = new HashMap<>();
-    private static ArrayList<Polygon> arrowDispSet = new ArrayList<Polygon>();
-    private static ArrayList<String> arrowFloorSet = new ArrayList<String>();
+    private static ArrayList<Polygon> arrowDispSet = new ArrayList<>();
+    private static ArrayList<String> arrowFloorSet = new ArrayList<>();
     private static HashMap<String, Line> edgeDispSet = new HashMap<>();
-
+    private static ArrayList<Label> labelDispSet = new ArrayList<>();
 
     DBSystem db = DBSystem.getInstance();
 
@@ -146,7 +146,6 @@ public class MapScreenController {
 
         zoomSlider.setMin(1.20888889);
         zoomSlider.setValue(zoomSlider.getMin());
-        zoomForTranslate = zoomSlider.getValue();
 
         Image newImage = new Image("/img/maps/2d/02_thesecondfloor.png");
         mapImage.setImage(newImage);
@@ -566,10 +565,12 @@ public class MapScreenController {
                         nodeLongNameLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 0 10px;");
                         nodeBuildingLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
+//                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
                         popOver = new PopOver(popOverVBox);
                         popOver.show((javafx.scene.Node) event.getSource());
                         popOverHidden = false;
                         popOver.setCloseButtonEnabled(false);
+//                        popOver.setCornerRadius(20);
                         popOver.setAutoFix(true);
                         popOver.setDetachable(false);
 
@@ -784,6 +785,46 @@ public class MapScreenController {
 
         autoTranslateZoom(desiredZoomX, desiredZoomY, centerX, centerY);
 
+        System.out.println(toggleOn.toString());
+
+        Font font = new Font("verdana", 10.0);
+
+        Label startLabel = new Label();
+        Label endLabel = new Label();
+
+        for(Node n : path) {
+            if(path.get(0).equals(n)) {
+                if (toggleOn) {
+                    startLabel.setLayoutX((n.getxDisplay() + 5 - X_OFFSET) * X_SCALE);
+                    startLabel.setLayoutY((n.getyDisplay() - 40 - Y_OFFSET) * Y_SCALE);
+                }
+                else {
+                    startLabel.setLayoutX((n.getX()+5- X_OFFSET)*X_SCALE);
+                    startLabel.setLayoutY((n.getY()-40- Y_OFFSET)*Y_SCALE);
+                }
+                startLabel.setText(n.getLongName());
+                startLabel.setFont(font);
+                startLabel.toFront();
+                labelDispSet.add(startLabel);
+                nodesEdgesPane.getChildren().add(startLabel);
+            }
+            if(path.get(path.size() - 1).equals(n)) {
+                if(toggleOn) {
+                    endLabel.setLayoutX((n.getxDisplay()+5- X_OFFSET)*X_SCALE);
+                    endLabel.setLayoutY((n.getyDisplay()-34- Y_OFFSET)*Y_SCALE);
+                }
+                else {
+                    endLabel.setLayoutX((n.getX()+5- X_OFFSET)*X_SCALE);
+                    endLabel.setLayoutY((n.getY()-34- Y_OFFSET)*Y_SCALE);
+                }
+                endLabel.setText(n.getLongName());
+                endLabel.setFont(font);
+                endLabel.toFront();
+                labelDispSet.add(endLabel);
+                nodesEdgesPane.getChildren().add(endLabel);
+            }
+        }
+
         pathDrawn = true;
     }
 
@@ -857,12 +898,18 @@ public class MapScreenController {
                     }
                 }
             }
-            for (Polygon p : arrowDispSet){
+            for (Polygon p : arrowDispSet) {
                 p.setVisible(false);
                 p.setPickOnBounds(false);
             }
             arrowDispSet.clear();
             arrowFloorSet.clear();
+            for(Label l : labelDispSet) {
+                l.setVisible(false);
+                l.setPickOnBounds(false);
+                nodesEdgesPane.getChildren().remove(l);
+            }
+            labelDispSet.clear();
         }
     }
 

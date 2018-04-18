@@ -106,7 +106,7 @@
                   <Insets left="20.0" />
                </GridPane.margin>
             </JFXComboBox>
-            <JFXTextField fx:id="maintenanceLocationTxt" focusColor="#f5bc3a" maxWidth="300.0" unFocusColor="BLACK" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <JFXTextField fx:id="maintenanceLocationTxt" focusColor="#f5bc3a" maxWidth="300.0" prefWidth="300.0" unFocusColor="BLACK" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>
