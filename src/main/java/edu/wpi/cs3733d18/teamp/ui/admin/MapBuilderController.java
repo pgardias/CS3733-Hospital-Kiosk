@@ -368,12 +368,15 @@ public class MapBuilderController implements Initializable {
      */
     @FXML
     public void zoomScrollWheel(ScrollEvent s) {
-        double newValue = (s.getDeltaY()) / 200 + zoomSlider.getValue();
+        double newValue = (s.getDeltaY()) / 200.0 + zoomSlider.getValue();
         System.out.println("mouse scroll change: " + s.getDeltaY());
-        double change = 1;
+        System.out.println("source: " + s.getSource().toString());
+        double change = 0;
 
-        if (s.getDeltaY() < 0) change = -1;
-        if (s.getDeltaY() > 0) change = 1;
+        if ((s.getDeltaY() < 0 ) && (zoomSlider.getValue() != zoomSlider.getMin())) change  = 1;
+        if ((s.getDeltaY() > 0 ) &&(zoomSlider.getValue() != zoomSlider.getMax())) change = 1;
+        System.out.println("s.getDeltaY: " + s.getDeltaY());
+        System.out.println("change: " + change);
 
         double mouseX = s.getSceneX();
         double mouseY = s.getSceneY();
@@ -383,37 +386,37 @@ public class MapBuilderController implements Initializable {
         double orgTranslateY = mapImage.getTranslateY();
         System.out.println("orgTranslate X: " + orgTranslateX + " orgTranslate Y: " + orgTranslateY);
 
-        double mouseAdjustX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE * (mouseX / 1920.0)));
-        double mouseAdjustY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE * (mouseY / 1080.0)));
+        double mouseAdjustX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE *(mouseX/1920.0)));
+        double mouseAdjustY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE *(mouseY/1080.0)));
         System.out.println("mouse adjustX: " + mouseAdjustX + " mouse adjustY: " + mouseAdjustY);
 
-        double imageCenterX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE * 0.5));
-        double imageCenterY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE * 0.5));
+        double imageCenterX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE *0.5));
+        double imageCenterY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE *0.5));
         System.out.println(" image centerx : " + imageCenterX + " image centery: " + imageCenterY);
 
         double mouseChangeX = mouseAdjustX - imageCenterX;
         double mouseChangeY = mouseAdjustY - imageCenterY;
         System.out.println("Mouse ChangeX: " + mouseChangeX + " Mouse Change Y: " + mouseChangeY);
 
-        newTranslateX = (orgTranslateX * zoomSlider.getValue() / zoomForTranslate) - (change * mouseChangeX / 8);
-        newTranslateY = (orgTranslateY * zoomSlider.getValue() / zoomForTranslate) - (change * mouseChangeY / 8);
+        newTranslateX = (orgTranslateX * zoomSlider.getValue()/zoomForTranslate) - (change * mouseChangeX * s.getDeltaY()/256.0);
+        newTranslateY = (orgTranslateY * zoomSlider.getValue()/zoomForTranslate) - (change * mouseChangeY * s.getDeltaY()/256.0);
         System.out.println("new translate x: " + newTranslateX + " new translate Y: " + newTranslateY);
 
         zoomSlider.setValue(newValue);
 
         zoomForTranslate = zoomSlider.getValue();
 
-        double translateSlopeX = X_SCALE * mapImage.getScaleX() * IMG_WIDTH;
-        double translateSlopeY = Y_SCALE * mapImage.getScaleX() * IMG_HEIGHT;
+        double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
+        double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
 
-        if (newTranslateX > (translateSlopeX - 1920) / 2)
-            newTranslateX = (translateSlopeX - 1920) / 2;
-        if (newTranslateX < -(translateSlopeX - 1920) / 2)
-            newTranslateX = -(translateSlopeX - 1920) / 2;
-        if (newTranslateY > (translateSlopeY - 1080) / 2)
-            newTranslateY = (translateSlopeY - 1080) / 2;
-        if (newTranslateY < -(translateSlopeY - 1080) / 2)
-            newTranslateY = -(translateSlopeY - 1080) / 2;
+        if(newTranslateX > (translateSlopeX - 1920)/2)
+            newTranslateX = (translateSlopeX - 1920)/2;
+        if(newTranslateX < -(translateSlopeX - 1920)/2)
+            newTranslateX = -(translateSlopeX - 1920)/2;
+        if(newTranslateY > (translateSlopeY - 1080)/2)
+            newTranslateY = (translateSlopeY - 1080)/2;
+        if(newTranslateY < -(translateSlopeY - 1080)/2)
+            newTranslateY = -(translateSlopeY - 1080)/2;
 
         mapImage.setTranslateX(newTranslateX);
         mapImage.setTranslateY(newTranslateY);

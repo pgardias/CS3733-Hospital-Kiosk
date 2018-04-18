@@ -8,6 +8,7 @@ import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -371,12 +372,15 @@ public class MapScreenController {
      */
     @FXML
     public void zoomScrollWheel(ScrollEvent s) {
-        double newValue = (s.getDeltaY()) / 200 + zoomSlider.getValue();
+        double newValue = (s.getDeltaY()) / 200.0 + zoomSlider.getValue();
         System.out.println("mouse scroll change: " + s.getDeltaY());
-        double change = 1;
+        System.out.println("source: " + s.getSource().toString());
+        double change = 0;
 
-        if (s.getDeltaY() < 0 ) change  = -1;
-        if (s.getDeltaY() > 0 ) change = 1;
+        if ((s.getDeltaY() < 0 ) && (zoomSlider.getValue() != zoomSlider.getMin())) change  = 1;
+        if ((s.getDeltaY() > 0 ) &&(zoomSlider.getValue() != zoomSlider.getMax())) change = 1;
+        System.out.println("s.getDeltaY: " + s.getDeltaY());
+        System.out.println("change: " + change);
 
         double mouseX = s.getSceneX();
         double mouseY = s.getSceneY();
@@ -398,8 +402,8 @@ public class MapScreenController {
         double mouseChangeY = mouseAdjustY - imageCenterY;
         System.out.println("Mouse ChangeX: " + mouseChangeX + " Mouse Change Y: " + mouseChangeY);
 
-        newTranslateX = (orgTranslateX * zoomSlider.getValue()/zoomForTranslate) - (change * mouseChangeX/8);
-        newTranslateY = (orgTranslateY * zoomSlider.getValue()/zoomForTranslate) - (change * mouseChangeY/8);
+        newTranslateX = (orgTranslateX * zoomSlider.getValue()/zoomForTranslate) - (change * mouseChangeX * s.getDeltaY()/256.0);
+        newTranslateY = (orgTranslateY * zoomSlider.getValue()/zoomForTranslate) - (change * mouseChangeY * s.getDeltaY()/256.0);
         System.out.println("new translate x: " + newTranslateX + " new translate Y: " + newTranslateY);
 
         zoomSlider.setValue(newValue);
@@ -459,6 +463,7 @@ public class MapScreenController {
                 circle.setFill(Color.GRAY);
             }
             circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
+            circle.setOnScroll(nodeScrollHandler);
 
 //                circle.setOnMouseClicked(clickCallback());
 
@@ -633,13 +638,21 @@ public class MapScreenController {
             } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
                 popOver.hide();
                 popOverHidden = true;
-                for(String string : nodeDispSet.keySet()) {
+                for (String string : nodeDispSet.keySet()) {
                     if (nodeDispSet.get(string) == event.getSource()) {
                         nodeDispSet.get(string).setStroke(Color.BLACK);
                     }
-
                 }
             }
+            event.consume();
+        }
+    };
+
+    EventHandler<ScrollEvent> nodeScrollHandler = new EventHandler<ScrollEvent>() {
+        @Override
+        public void handle(ScrollEvent event) {
+            System.out.println("handle node scroll event");
+            zoomScrollWheel(event);
             event.consume();
         }
     };
