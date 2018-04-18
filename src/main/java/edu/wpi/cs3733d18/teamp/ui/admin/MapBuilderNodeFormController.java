@@ -9,6 +9,7 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.DuplicateLongNameException;
 import edu.wpi.cs3733d18.teamp.Exceptions.EdgeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
+import edu.wpi.cs3733d18.teamp.Exceptions.OrphanNodeException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -421,6 +422,10 @@ public class MapBuilderNodeFormController implements Initializable{
                 db.deleteNode(editedNodeID);
             } catch (NodeNotFoundException | EdgeNotFoundException ne) {
                 ne.printStackTrace();
+            } catch (OrphanNodeException oe) {
+                nodeFormErrorLabel.setText("Deleting this node will orphan other nodes.");
+                nodeFormErrorLabel.setVisible(true);
+                return;
             }
 
             mapBuilderController.updateMap();

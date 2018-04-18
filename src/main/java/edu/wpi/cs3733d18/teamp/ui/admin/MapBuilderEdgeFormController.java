@@ -128,6 +128,11 @@ public class MapBuilderEdgeFormController {
         catch(EdgeNotFoundException enfe){
             enfe.printStackTrace();
         }
+        catch (OrphanNodeException oe) {
+            edgeFormErrorLabel.setText("Modifying Edge will orphan Node: " + oe.getNodeID());
+            edgeFormErrorLabel.setVisible(true);
+            return;
+        }
 
         mapBuilderController.updateMap();
         mapBuilderController.addOverlay();
@@ -175,15 +180,6 @@ public class MapBuilderEdgeFormController {
      */
     public void deleteButtonOp(){
 
-        // Check if deleting this edge will orphan a node
-        try {
-            db.willEdgeOrphanANode(editedEdgeID);
-        } catch (OrphanNodeException o) {
-            edgeFormErrorLabel.setText("Deleting Edge will orphan Node: " + o.getNodeID());
-            edgeFormErrorLabel.setVisible(true);
-            return;
-        }
-
         // Delete Node Popup if edge can be deleted
         Stage stage;
         Parent root;
@@ -206,12 +202,18 @@ public class MapBuilderEdgeFormController {
         stage.initOwner(deleteButton.getScene().getWindow());
         stage.showAndWait();
 
-        // If user confirms, delete edge
+        // If user confirms, delete edge if it will not orphan a node
         if (deletePopUpController.getChoice()) {
             try {
                 db.deleteEdge(editedEdgeID);
-            } catch (NodeNotFoundException | EdgeNotFoundException ne) {
+            }
+            catch (NodeNotFoundException | EdgeNotFoundException ne) {
                 ne.printStackTrace();
+            }
+            catch (OrphanNodeException oe) {
+                edgeFormErrorLabel.setText("Deleting Edge will orphan Node: " + oe.getNodeID());
+                edgeFormErrorLabel.setVisible(true);
+                return;
             }
             mapBuilderController.updateMap();
             mapBuilderController.addOverlay();
