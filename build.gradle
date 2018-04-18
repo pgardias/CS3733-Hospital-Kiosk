@@ -37,6 +37,7 @@ dependencies {
 	compile(
 		fileTree(dir: 'libs', include: '*.jar'),
 		[group: 'junit', name: 'junit', version: '4.12'],
+		fileTree(dir:'libs',include:"*.jar"),
 		[group: 'com.jfoenix', name: 'jfoenix', version: '8.0.3'],
 		[group: 'org.apache.derby', name: 'derby', version: '10.14.1.0'],
 		[group: 'org.apache.derby', name: 'derbyclient', version: '10.14.1.0'],
@@ -59,3 +60,5 @@ task run(type: JavaExec) {
 	main = 'edu.wpi.cs3733d18.teamp.Main'
 	classpath = sourceSets.main.runtimeClasspath
 }
+group 'groupIP'
+version '1.0-SNAPSHOT'

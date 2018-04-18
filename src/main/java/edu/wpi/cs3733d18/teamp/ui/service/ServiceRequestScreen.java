@@ -4,6 +4,8 @@ import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733d18.teamp.*;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.RequestNotFoundException;
+import edu.wpi.cs3733d18.teamp.api.Exceptions.ServiceException;
+import edu.wpi.cs3733d18.teamp.api.TransportationRequest;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -43,6 +45,9 @@ public class ServiceRequestScreen implements Initializable{
 
     @FXML
     JFXButton completeRequestButton;
+
+    @FXML
+    JFXButton serviceAPIButton;
 
     @FXML
     Label serviceRequestErrorLabel;
@@ -260,8 +265,6 @@ public class ServiceRequestScreen implements Initializable{
                 r.setCompleted(2);
                 r.setCompletedBy(firstAndLastName);
                 db.completeRequest(r);
-                db.handleRequest(r);
-
             }
             else {
                 serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
@@ -377,5 +380,25 @@ public class ServiceRequestScreen implements Initializable{
 
     }
 
+    /**
+     * Loads the service API
+     * @param e action event
+     */
+    @FXML
+    public void serviceAPIButtonOp(ActionEvent e) {
+
+        Stage stage;
+
+        TransportationRequest tr = new TransportationRequest();
+
+        try {
+            tr.run(0,0,0,0, null, null, null);
+            stage = (Stage) serviceAPIButton.getScene().getWindow();
+            stage.setFullScreen(true);
+        }
+        catch (ServiceException se) {
+            se.printStackTrace();
+        }
+    }
 }
 

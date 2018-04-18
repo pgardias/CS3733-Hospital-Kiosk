@@ -18,6 +18,7 @@
          <children>
             <ImageView fx:id="mapImage" fitHeight="1080.0" fitWidth="1920.0" onMouseClicked="#getMouseValue" onScroll="#zoomScrollWheel" pickOnBounds="true" preserveRatio="true" />
             <AnchorPane fx:id="nodesEdgesPane" onMousePressed="#getMouseValue" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" />
+            <AnchorPane fx:id="labelPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" />
          </children>
       </StackPane>
       <BorderPane fx:id="buttonOverlayPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0">
@@ -39,7 +40,7 @@
                   <Insets right="50.0" />
                </padding>
                <children>
-                  <Slider fx:id="zoomSlider" blockIncrement="0.1" max="10.0" maxHeight="-Infinity" maxWidth="-Infinity" min="1.0" orientation="VERTICAL" prefHeight="444.0" prefWidth="28.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
+                  <Slider fx:id="zoomSlider" blockIncrement="0.01" max="3.0" maxHeight="-Infinity" maxWidth="-Infinity" min="1.0" orientation="VERTICAL" prefHeight="444.0" prefWidth="28.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
                   <JFXButton fx:id="floor3Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor3ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="floor-buttons" text="3" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <font>
                         <Font size="36.0" />
@@ -68,7 +69,7 @@
                         <Insets />
                      </GridPane.margin>
                   </JFXButton>
-                  <JFXButton fx:id="floorL2Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floorL2ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="floor-buttons" text="L2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <JFXButton fx:id="floorL2Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floorL2ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="floor-buttons" stylesheets="@../../css/common.css" text="L2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <font>
                         <Font size="36.0" />
                      </font>

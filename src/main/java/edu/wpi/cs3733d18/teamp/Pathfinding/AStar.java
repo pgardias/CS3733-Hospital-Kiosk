@@ -12,7 +12,7 @@ public class AStar extends Pathfinder {
      * @return ArrayList<Node> that constitutes the path
      */
     @Override
-    public ArrayList<Node> findPath(Node srcNode, Node destNode) {
+    public void findPath(Node srcNode, Node destNode) {
         System.out.println("Astar");
         // Total cost from start node
         HashMap<String, Double> gScore = new HashMap<String, Double>();
@@ -64,8 +64,7 @@ public class AStar extends Pathfinder {
 
             // Check if we found the goal
             if (currentNode.equals(destNode)) {
-                path = getPath(currentNode);
-                return path;
+                return;
             }
 
             // Add neighbors to openSet
@@ -107,6 +106,6 @@ public class AStar extends Pathfinder {
             }
         }
         System.out.println("Path not found!");
-        return null;
+        return;
     }
 }

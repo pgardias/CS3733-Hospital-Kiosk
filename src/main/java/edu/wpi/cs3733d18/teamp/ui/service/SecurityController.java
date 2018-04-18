@@ -51,7 +51,7 @@ public class SecurityController implements Initializable {
     @FXML
     JFXTextArea securityInfoTxtArea;
 
-    ObservableList<String> situations = FXCollections.observableArrayList(
+    static ObservableList<String> situations = FXCollections.observableArrayList(
             "Patient Disrespecting Hospital Employees",
             "Patient Injuring Hospital Employees",
             "Patient Injuring Fellow Patients",
@@ -60,7 +60,7 @@ public class SecurityController implements Initializable {
             "Visitor Injuring Patients",
             "Visitor Injuring Hospital Employees",
             "Visitor Injuring Other Visitors",
-            "Rouge Employee"
+            "Rogue Employee"
     );
 
     /**
@@ -174,5 +174,4 @@ public class SecurityController implements Initializable {
 
         return aNode;
     }
-
 }

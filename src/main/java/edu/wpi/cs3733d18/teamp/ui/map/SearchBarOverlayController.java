@@ -1,8 +1,10 @@
 package edu.wpi.cs3733d18.teamp.ui.map;
 
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
+import edu.wpi.cs3733d18.teamp.ui.home.ShakeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -71,10 +74,10 @@ public class SearchBarOverlayController implements Initializable{
     Button goButton;
 
     @FXML
-    TextField sourceSearchBar;
+    JFXTextField sourceSearchBar;
 
     @FXML
-    TextField destinationSearchBar;
+    JFXTextField destinationSearchBar;
 
     @FXML
     ToggleButton mapToggleButton;
@@ -83,6 +86,7 @@ public class SearchBarOverlayController implements Initializable{
 
     public void startUp(MapScreenController mapScreenController){
         this.mapScreenController = mapScreenController;
+        mapToggleButtonOp();
     }
 
     public Boolean isSourceFocused(){
@@ -107,7 +111,7 @@ public class SearchBarOverlayController implements Initializable{
 
     Boolean toggledOn;
     @FXML
-    public void toggleButtonOp(){
+    public void mapToggleButtonOp(){
         if(mapToggleButton.isSelected())
             toggledOn = true;
         else
@@ -139,9 +143,10 @@ public class SearchBarOverlayController implements Initializable{
 
         nodeSet = db.getAllNodes();
 
-        int i = 0;
         for (Node node : nodeSet.values()) {
-            sourceWords.add(node.getLongName());
+            if (node.getType() != Node.nodeType.HALL) {
+                sourceWords.add(node.getLongName());
+            }
         }
         destinationWords.addAll(sourceWords);
         destinationWords.add("NEAREST HALLWAY");
@@ -171,50 +176,74 @@ public class SearchBarOverlayController implements Initializable{
         System.out.println("get path");
         //get all nodes
         HashMap<String, Node> nodeSet = db.getAllNodes();
+        System.out.println(" size: " + nodeSet.size());
 
         //Declare source node, destination node, and get the typed in inputs for both search boxes
         Node srcNode, dstNode;
         String src = sourceSearchBar.getText();
         String dst = destinationSearchBar.getText();
 
-//        System.out.println("test, " + src);
-
         // Check if the source node was input
-        if (src.length() > 0 && !src.equals("Primary Kiosk")) {
+        if (src.length() > 0 && !src.equals("Current Kiosk")) {
             // Source has been chosen by user, get Node entity from nodeID through NodeRepo
-//            System.out.println("Something typed in! " + src);
             srcNode = nodeSet.get(parseSourceInput(src).getID());
-//            System.out.println("Source node: " + srcNode);
         } else {
-            // Source is main.kiosk
+            // Source is main.kiosk by default
             srcNode = nodeSet.get("PKIOS00102");
-//            System.out.println("Nothing typed in! " + srcNode + " " + srcNode.getEdges());
         }
 
         // Check if the destination node was input
         if (dst.length() > 0) {
+            // Destination has been chosen by user, get Node entity from nodeID through NodeRepo
+            destinationSearchBar.setUnFocusColor(Color.rgb(245,188,58));
             dstNode = nodeSet.get(parseDestinationInput(srcNode, dst).getID());
-//            System.out.println("Something typed into destination! " + dst);
         } else {
-            dstNode = nodeSet.get(endNode.getID());
-//            System.out.println("Nothing typed in! " + dstNode);
+            // Destination has not been set, set search bar to red
+//            destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
+            ShakeTransition anim = new ShakeTransition(sourceSearchBar, destinationSearchBar);
+            anim.playFromStart();
+            return false;
+            //dstNode = nodeSet.get(endNode.getID());
         }
-//        System.out.println("destination: " + dstNode);
 
         Font font = new Font("verdana", 24.0);
-//        System.out.println("Source Node ID: "+srcNode.getID());
 
-        startLabel.setLayoutX((srcNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
-        startLabel.setLayoutY((srcNode.getyDisplay()-40- Y_OFFSET)*Y_SCALE);
-        startLabel.setText(srcNode.getLongName());
-        startLabel.setFont(font);
+//        System.out.println(toggledOn.toString());
+//
+//        if(toggledOn) {
+//            startLabel.setLayoutX((srcNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
+//            startLabel.setLayoutY((srcNode.getyDisplay()-40- Y_OFFSET)*Y_SCALE);
+//            startLabel.setText(srcNode.getLongName());
+//            startLabel.setFont(font);
+//            System.out.println("Starting location name:  " + startLabel.getText());
+//            System.out.println("Starting location X:  " + startLabel.getLayoutX());
+//            System.out.println("Starting location Y:  " + startLabel.getLayoutY());
+//
+//            startLabel.toFront();
+//
+//            endLabel.setLayoutX((dstNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
+//            endLabel.setLayoutY((dstNode.getyDisplay()-34- Y_OFFSET)*Y_SCALE);
+//            endLabel.setText(dstNode.getLongName());
+//            endLabel.setFont(font);
+//            System.out.println("Ending location name:  " + endLabel.getText());
+//            System.out.println("Ending location X:  " + endLabel.getLayoutX());
+//            System.out.println("Ending location Y:  " + endLabel.getLayoutY());
+//        } else {
+//            startLabel.setLayoutX((srcNode.getX()+5- X_OFFSET)*X_SCALE);
+//            startLabel.setLayoutY((srcNode.getY()-40- Y_OFFSET)*Y_SCALE);
+//            startLabel.setText(srcNode.getLongName());
+//            startLabel.setFont(font);
+//            System.out.println(startLabel.getText());
+//
+//            startLabel.toFront();
+//
+//            endLabel.setLayoutX((dstNode.getX()+5- X_OFFSET)*X_SCALE);
+//            endLabel.setLayoutY((dstNode.getY()-34- Y_OFFSET)*Y_SCALE);
+//            endLabel.setText(dstNode.getLongName());
+//            endLabel.setFont(font);
+//        }
 
-        startLabel.toFront();
 
-        endLabel.setLayoutX((dstNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
-        endLabel.setLayoutY((dstNode.getyDisplay()-34- Y_OFFSET)*Y_SCALE);
-        endLabel.setText(dstNode.getLongName());
-        endLabel.setFont(font);
 
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
         System.out.println(path);
@@ -602,6 +631,10 @@ public class SearchBarOverlayController implements Initializable{
             return true;
         }
         return false;
+    }
+
+    public void setSearchButtonFocus(){
+        goButton.requestFocus();
     }
 }
 
