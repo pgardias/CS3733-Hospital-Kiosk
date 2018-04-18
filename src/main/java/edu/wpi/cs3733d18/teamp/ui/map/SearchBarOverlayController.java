@@ -186,6 +186,7 @@ public class SearchBarOverlayController implements Initializable{
             mapScreenController.resetPath();
         }
         refresh();
+
         System.out.println("get path");
         //get all nodes
         HashMap<String, Node> nodeSet = db.getAllNodes();
