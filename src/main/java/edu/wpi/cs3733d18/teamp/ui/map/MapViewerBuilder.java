@@ -41,9 +41,9 @@ public class MapViewerBuilder implements Initializable{
 
     // Symbolic Constants
     private static final int VIEWPORT_SIZE = 800;
-    private int X_OFFSET = 500;
-    private int Y_OFFSET = 75;
-    private int Z_OFFSET = -2500;
+    private int X_OFFSET = 160;
+    private int Y_OFFSET = -15;
+    private int Z_OFFSET = -2720;
     private double X_SCALE = 1588.235294 / 5000.0;
     private double Y_SCALE = 1080.0 / 3400.0;
     private static final double NODE_RADIUS = 10.0;
@@ -181,34 +181,34 @@ public class MapViewerBuilder implements Initializable{
                     // Change Rotation Y
                     if (xChange < 0) {
                         curYRotation += ROTATION_SPEED;
-                        mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS)); // Rotate Map
-                        for (Sphere s : nodeDispSet.values()) {
+                        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS), new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+                        /*for (Sphere s : nodeDispSet.values()) {
                             s.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.Y_AXIS),
                                     new Rotate(curXRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.X_AXIS));
-                        }
+                        }*/
                     } else if (xChange > 0) {
                         curYRotation -= ROTATION_SPEED;
-                        mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS)); // Rotate Map
-                        for (Sphere s : nodeDispSet.values()) {
+                        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS), new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+                        /*for (Sphere s : nodeDispSet.values()) {
                             s.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.Y_AXIS),
                                     new Rotate(curXRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.X_AXIS));
-                        }
+                        }*/
                     }
                     // Change Rotation X
                     if (yChange < 0) {
                         curXRotation += ROTATION_SPEED;
-                        mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS)); // Rotate Map
-                        for (Sphere s : nodeDispSet.values()) {
+                        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS), new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+                        /*for (Sphere s : nodeDispSet.values()) {
                             s.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.Y_AXIS),
                                     new Rotate(curXRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.X_AXIS));
-                        }
+                        }*/
                     } else if (yChange > 0) {
                         curXRotation -= ROTATION_SPEED;
-                        mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS)); // Rotate Map
-                        for (Sphere s : nodeDispSet.values()) {
+                        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS), new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+                        /*for (Sphere s : nodeDispSet.values()) {
                             s.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.Y_AXIS),
                                     new Rotate(curXRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.X_AXIS));
-                        }
+                        }*/
                     }
                     mouseInSceneX = newMouseInSceneX;
                     mouseInSceneY = newMouseInSceneY;
@@ -235,22 +235,30 @@ public class MapViewerBuilder implements Initializable{
                     // Change Panning X
                     if (xChange < 0) { // Pan left
                         curXTranslation -= PAN_SPEED;
-                        mv.setTranslateX(curXTranslation); // Map panning
-                        nodeAnchorPane.setTranslateX(curXTranslation - 350);
+                        threeDAnchorPane.setTranslateX(curXTranslation); // Map panning
+                        /*for (Sphere s : nodeDispSet.values()) {
+                            s.setTranslateX(s.getTranslateX() - PAN_SPEED);
+                        }*/
                     } else if (xChange > 0) { // Pan right
                         curXTranslation += PAN_SPEED;
-                        mv.setTranslateX(curXTranslation); // Map panning
-                        nodeAnchorPane.setTranslateX(curXTranslation - 350);
+                        threeDAnchorPane.setTranslateX(curXTranslation); // Map panning
+                        /*for (Sphere s : nodeDispSet.values()) {
+                            s.setTranslateX(s.getTranslateX() + PAN_SPEED);
+                        }*/
                     }
                     // Change Panning Y
                     if (yChange < 0) { // Pan down
                         curYTranslation -= PAN_SPEED;
-                        mv.setTranslateY(curYTranslation); // Map panning
-                        nodeAnchorPane.setTranslateY(curYTranslation - 350);
+                        threeDAnchorPane.setTranslateY(curYTranslation); // Map panning
+                        /*for (Sphere s : nodeDispSet.values()) {
+                            s.setTranslateY(s.getTranslateY() - PAN_SPEED);
+                        }*/
                     } else if (yChange > 0) { // Pan up
                         curYTranslation += PAN_SPEED;
-                        mv.setTranslateY(curYTranslation); // Map panning
-                        nodeAnchorPane.setTranslateY(curYTranslation - 350);
+                        threeDAnchorPane.setTranslateY(curYTranslation); // Map panning
+                        /*for (Sphere s : nodeDispSet.values()) {
+                            s.setTranslateY(s.getTranslateY() + PAN_SPEED);
+                        }*/
                     }
 
                     mouseInSceneX = newMouseInSceneX;
@@ -424,13 +432,16 @@ public class MapViewerBuilder implements Initializable{
         System.out.println("drawing nodes");
         PhongMaterial phongMaterial = new PhongMaterial();
         phongMaterial.setDiffuseMap(new Image(getClass().getResource("/models/textures/node_standard.png").toExternalForm()));
+        MeshView mv = getMesh();
         for (Node node : nodeSet.values()) {
             if (node.getFloor() == currentFloor && node.getType() != Node.nodeType.HALL) {
                 Sphere sphere = new Sphere(NODE_RADIUS);
-                nodeAnchorPane.getChildren().add(sphere);
+                threeDAnchorPane.getChildren().add(sphere);
                 sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
-                sphere.setTranslateY(curYTranslation - Y_OFFSET);
+                sphere.setTranslateY(mv.getTranslateY() - Y_OFFSET);
                 sphere.setTranslateZ((-node.getY() - Z_OFFSET) * Y_SCALE);
+                sphere.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.Y_AXIS),
+                        new Rotate(curXRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.X_AXIS));
                 //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
                 sphere.setMaterial(phongMaterial);
                 //circle.setStroke(Color.BLACK);
@@ -455,7 +466,7 @@ public class MapViewerBuilder implements Initializable{
 //                }
             } else {
                 Sphere sphere = new Sphere(0);
-                nodeAnchorPane.getChildren().add(sphere);
+                threeDAnchorPane.getChildren().add(sphere);
                 sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
                 sphere.setTranslateY(curYTranslation);
                 sphere.setTranslateZ((-node.getY() - Z_OFFSET) * Y_SCALE);
