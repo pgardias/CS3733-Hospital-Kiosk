@@ -83,6 +83,7 @@ public class SearchBarOverlayController implements Initializable{
 
     public void startUp(MapScreenController mapScreenController){
         this.mapScreenController = mapScreenController;
+        mapToggleButtonOp();
     }
 
     public Boolean isSourceFocused(){
@@ -107,7 +108,7 @@ public class SearchBarOverlayController implements Initializable{
 
     Boolean toggledOn;
     @FXML
-    public void toggleButtonOp(){
+    public void mapToggleButtonOp(){
         if(mapToggleButton.isSelected())
             toggledOn = true;
         else
@@ -203,21 +204,45 @@ public class SearchBarOverlayController implements Initializable{
         }
 //        System.out.println("destination: " + dstNode);
 
-        Font font = new Font("verdana", 24.0);
+       // Font font = new Font("verdana", 24.0);
 //        System.out.println("Source Node ID: "+srcNode.getID());
 
-        //TODO set up proper labels when searching a node
-//        startLabel.setLayoutX((srcNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
-//        startLabel.setLayoutY((srcNode.getyDisplay()-40- Y_OFFSET)*Y_SCALE);
-//        startLabel.setText(srcNode.getLongName());
-//        startLabel.setFont(font);
+//        System.out.println(toggledOn.toString());
 //
-//        startLabel.toFront();
+//        if(toggledOn) {
+//            startLabel.setLayoutX((srcNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
+//            startLabel.setLayoutY((srcNode.getyDisplay()-40- Y_OFFSET)*Y_SCALE);
+//            startLabel.setText(srcNode.getLongName());
+//            startLabel.setFont(font);
+//            System.out.println("Starting location name:  " + startLabel.getText());
+//            System.out.println("Starting location X:  " + startLabel.getLayoutX());
+//            System.out.println("Starting location Y:  " + startLabel.getLayoutY());
 //
-//        endLabel.setLayoutX((dstNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
-//        endLabel.setLayoutY((dstNode.getyDisplay()-34- Y_OFFSET)*Y_SCALE);
-//        endLabel.setText(dstNode.getLongName());
-//        endLabel.setFont(font);
+//            startLabel.toFront();
+//
+//            endLabel.setLayoutX((dstNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
+//            endLabel.setLayoutY((dstNode.getyDisplay()-34- Y_OFFSET)*Y_SCALE);
+//            endLabel.setText(dstNode.getLongName());
+//            endLabel.setFont(font);
+//            System.out.println("Ending location name:  " + endLabel.getText());
+//            System.out.println("Ending location X:  " + endLabel.getLayoutX());
+//            System.out.println("Ending location Y:  " + endLabel.getLayoutY());
+//        } else {
+//            startLabel.setLayoutX((srcNode.getX()+5- X_OFFSET)*X_SCALE);
+//            startLabel.setLayoutY((srcNode.getY()-40- Y_OFFSET)*Y_SCALE);
+//            startLabel.setText(srcNode.getLongName());
+//            startLabel.setFont(font);
+//            System.out.println(startLabel.getText());
+//
+//            startLabel.toFront();
+//
+//            endLabel.setLayoutX((dstNode.getX()+5- X_OFFSET)*X_SCALE);
+//            endLabel.setLayoutY((dstNode.getY()-34- Y_OFFSET)*Y_SCALE);
+//            endLabel.setText(dstNode.getLongName());
+//            endLabel.setFont(font);
+//        }
+
+
 
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
         System.out.println(path);
@@ -605,6 +630,10 @@ public class SearchBarOverlayController implements Initializable{
             return true;
         }
         return false;
+    }
+
+    public void setSearchButtonFocus(){
+        goButton.requestFocus();
     }
 }
 

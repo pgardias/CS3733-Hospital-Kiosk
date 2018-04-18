@@ -51,7 +51,7 @@ public class MaintenanceController implements Initializable {
     @FXML
     JFXTextArea maintenanceInfoTxtArea;
 
-    ObservableList<String> machines = FXCollections.observableArrayList(
+    static ObservableList<String> machines = FXCollections.observableArrayList(
             "Elevator",
             "Door",
             "Kiosk",
