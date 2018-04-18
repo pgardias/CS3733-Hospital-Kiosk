@@ -34,9 +34,9 @@ public class PathfindingContext {
                 pathfinder = new Dijkstra();
                 break;
 
-            /*case BestFirst:
+            case BestFirst:
                 pathfinder = new BestFirst();
-                break;*/
+                break;
 
             default:
                 pathfinder = new AStar();

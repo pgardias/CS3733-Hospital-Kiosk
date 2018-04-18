@@ -3,6 +3,7 @@ package edu.wpi.cs3733d18.teamp.Pathfinding;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.PriorityQueue;
+import java.util.Vector;
 
 public class BestFirst extends Pathfinder{
 
@@ -25,18 +26,17 @@ public class BestFirst extends Pathfinder{
             }
         }
 
-        double currentWeight = Double.MAX_VALUE;
-        Node smallest = new Node();
         while(!nodes.isEmpty()){
-            for(Node n: nodes) {
-                if (node.getEdge(n).getWeight() < currentWeight) {
+            Node smallest = new Node();
+            double weight = Double.MAX_VALUE;
+            for (Node n:nodes){
+                if (n.getEdge(node).getWeight() < weight){
                     smallest = n;
-                    currentWeight = node.getEdge(n).getWeight();
                 }
             }
             sortedNodes.add(smallest);
-            smallest.setParent(node);
             nodes.remove(smallest);
+
         }
         return sortedNodes;
     }
@@ -45,30 +45,51 @@ public class BestFirst extends Pathfinder{
     public void findPath(Node startNode, Node endNode){
         System.out.println("Best first");
 
-        HashMap<Node, Double> lengths = new HashMap<>();
         ArrayList<Node> alreadyVisited = new ArrayList<>();
-        ArrayList<Node> children;
-        PriorityQueue<Node> queue = new PriorityQueue<>();
+        ArrayList<Node> children = new ArrayList<>();
+        Vector<Node> queue = new Vector<>();
+
         Node currentNode;
-
-
-
-
-        lengths.put(startNode, 0.0);
         queue.add(startNode);
+        while (!queue.isEmpty()){
+            currentNode = queue.firstElement();
 
-        if(!endNode.equals(startNode)){
+            queue.remove(currentNode);
+            if (queue.contains(endNode)){
+                return;
+            }
+            alreadyVisited.add(currentNode);
+            children = getChildren(currentNode);
+            for (Node n:children){
+                if (!alreadyVisited.contains(n)){
+                    queue.add(n);
+                    n.setParent(currentNode);
+                }
+            }
+        }
+
+
+    }
+}
+
+/*if(!endNode.equals(startNode)){
             while(!queue.isEmpty()){
-                currentNode = queue.poll();
+                currentNode = queue.firstElement();
+                queue.remove(currentNode);
+                System.out.println("current" + currentNode);
+                System.out.println("queue" + queue);
                 if(!alreadyVisited.contains(currentNode)){
-                    if(queue.contains(endNode)){
+                    if(currentNode.equals(endNode)){
                         return;
                     }
                     alreadyVisited.add(currentNode);
                     children = getChildren(currentNode);
-                    queue.addAll(children);
+                    System.out.println("children" + children);
+                    for (Node n: children){
+                        if (!alreadyVisited.contains(n)) {
+                            queue.add(n);
+                        }
+                    }
                 }
             }
-        }
-    }
-}
+        }*/
