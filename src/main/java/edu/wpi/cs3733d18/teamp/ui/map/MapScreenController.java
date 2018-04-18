@@ -90,6 +90,9 @@ public class MapScreenController {
     BorderPane searchBarOverlayPane;
 
     @FXML
+    AnchorPane labelPane;
+
+    @FXML
     JFXButton backButton;
 
     @FXML
@@ -605,7 +608,15 @@ public class MapScreenController {
                         nodeBuildingLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
                         popOver = new PopOver(popOverVBox);
-                        popOver.show((javafx.scene.Node) event.getSource(), -5);
+//                        popOver.show((javafx.scene.Node) event.getSource(), -5);
+                        if (event.getSceneX() < 960) {
+                            System.out.println(event.getSceneX() + " " + event.getSceneY());
+                            popOver.show(/*(javafx.scene.Node)  event.getSource() */labelPane, event.getSceneX() - 5, event.getSceneY());
+                            popOver.setArrowLocation(PopOver.ArrowLocation.RIGHT_TOP);
+                        } else {
+                            popOver.show(labelPane, event.getSceneX() + 5, event.getSceneY());
+                            popOver.setArrowLocation(PopOver.ArrowLocation.LEFT_TOP);
+                        }
                         popOverHidden = false;
                         popOver.setCloseButtonEnabled(false);
                         popOver.setAutoFix(true);

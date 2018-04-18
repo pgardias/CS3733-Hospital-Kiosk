@@ -2,6 +2,7 @@
 //
 //import com.jfoenix.controls.JFXButton;
 //import com.jfoenix.controls.JFXComboBox;
+//import com.jfoenix.controls.JFXTextField;
 //import edu.wpi.cs3733d18.teamp.Pathfinding.PathfindingContext;
 //import edu.wpi.cs3733d18.teamp.Settings;
 //import javafx.collections.FXCollections;
@@ -15,7 +16,7 @@
 //public class SettingsController {
 //
 //    @FXML
-//    JFXButton setAlgorithmButton;
+//    JFXTextField feetPerPixelTextField;
 //
 //    @FXML
 //    JFXComboBox algorithmComboBox;
@@ -51,23 +52,28 @@
 //
 //    }
 //
+//    /**
+//     * Sets the options entered on the admin screen based upon the current input.
+//     * @param e
+//     */
 //    @FXML
 //    public void submitmButtonOp(ActionEvent e) {
-//
 //        switch (algorithmComboBox.getValue().toString()) {
 //            case "A*":
-//                Settings.setSettings(PathfindingContext.PathfindingSetting.AStar);
+//                Settings.setPathfindingAlgorithm(PathfindingSetting.AStar);
 //                break;
 //            case "Depth-first":
-//                Settings.setSettings(PathfindingContext.PathfindingSetting.DepthFirst);
+//                Settings.setPathfindingAlgorithm(PathfindingSetting.DepthFirst);
 //                break;
 //            case "Breadth-first":
-//                Settings.setSettings(PathfindingContext.PathfindingSetting.BreadthFirst);
+//                Settings.setPathfindingAlgorithm(PathfindingSetting.BreadthFirst);
 //                break;
 //            case "Dijkstra's":
+//                Settings.setPathfindingAlgorithm(PathfindingSetting.Dijkstra);
 //                break;
 //            case "Best-first":
 //                break;
 //        }
+//        Settings.setFeetPerPixel(feetPerPixelTextField.getValue());
 //    }
 //}
