@@ -51,7 +51,7 @@ public class ComputerServiceController implements Initializable {
     @FXML
     JFXTextArea computerServiceInfoTxtArea;
 
-    ObservableList<String> devices = FXCollections.observableArrayList(
+    static ObservableList<String> devices = FXCollections.observableArrayList(
             "Desktop Computer",
             "Laptop",
             "Projector",

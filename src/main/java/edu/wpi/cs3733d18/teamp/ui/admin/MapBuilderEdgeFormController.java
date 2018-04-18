@@ -96,39 +96,42 @@ public class MapBuilderEdgeFormController {
     public void submitEdgeFormButtonOp(ActionEvent e) {
         Boolean isActive = isActiveEdgeCheckBox.isSelected();
         Node startNode, endNode;
+
+        // Validate both fields have been filled in by user
         try {
             startNode = db.getOneNode(startNodeTxt.getText());
             endNode = db.getOneNode(endNodeTxt.getText());
         } catch (NodeNotFoundException nnfe) {
-            nnfe.printStackTrace();
-            edgeFormErrorLabel.setText("Incompatible input for fields which require numbers.");
+            edgeFormErrorLabel.setText("Please choose two valid nodes.");
             edgeFormErrorLabel.setVisible(true);
+            System.out.println(nnfe.getNodeID());
             return;
         }
         Edge edge = new Edge(startNode, endNode, isActive);
 
-        if(editFlag){
-            edge.setID(editedEdgeID);
-            try {
+        // Validate an edge does not already exist between these nodes TODO probably not necessary
+
+        // After validation, create the edge
+        try {
+            if (editFlag) {
+                edge.setID(editedEdgeID);
                 db.modifyEdge(edge);
+                editedEdgeID = null;
             }
-            catch(NodeNotFoundException nnfe){
-                nnfe.printStackTrace();
-            }
-            catch(EdgeNotFoundException enfe){
-                enfe.printStackTrace();
-            }
-            editedEdgeID = null;
-        } else {
-            try {
+            else {
                 db.createEdge(edge);
             }
-            catch(NodeNotFoundException nnfe){
-                nnfe.printStackTrace();
-            }
-            catch(EdgeNotFoundException enfe){
-                enfe.printStackTrace();
-            }
+        }
+        catch(NodeNotFoundException nnfe){
+            nnfe.printStackTrace();
+        }
+        catch(EdgeNotFoundException enfe){
+            enfe.printStackTrace();
+        }
+        catch (OrphanNodeException oe) {
+            edgeFormErrorLabel.setText("Modifying Edge will orphan Node: " + oe.getNodeID());
+            edgeFormErrorLabel.setVisible(true);
+            return;
         }
 
         mapBuilderController.updateMap();
@@ -177,15 +180,6 @@ public class MapBuilderEdgeFormController {
      */
     public void deleteButtonOp(){
 
-        // Check if deleting this edge will orphan a node
-        try {
-            db.willEdgeOrphanANode(editedEdgeID);
-        } catch (OrphanNodeException o) {
-            edgeFormErrorLabel.setText("Deleting Edge will orphan Node: " + o.getNodeID());
-            edgeFormErrorLabel.setVisible(true);
-            return;
-        }
-
         // Delete Node Popup if edge can be deleted
         Stage stage;
         Parent root;
@@ -208,12 +202,18 @@ public class MapBuilderEdgeFormController {
         stage.initOwner(deleteButton.getScene().getWindow());
         stage.showAndWait();
 
-        // If user confirms, delete edge
+        // If user confirms, delete edge if it will not orphan a node
         if (deletePopUpController.getChoice()) {
             try {
                 db.deleteEdge(editedEdgeID);
-            } catch (NodeNotFoundException | EdgeNotFoundException ne) {
+            }
+            catch (NodeNotFoundException | EdgeNotFoundException ne) {
                 ne.printStackTrace();
+            }
+            catch (OrphanNodeException oe) {
+                edgeFormErrorLabel.setText("Deleting Edge will orphan Node: " + oe.getNodeID());
+                edgeFormErrorLabel.setVisible(true);
+                return;
             }
             mapBuilderController.updateMap();
             mapBuilderController.addOverlay();

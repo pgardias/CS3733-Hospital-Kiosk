@@ -64,10 +64,6 @@ public class HomeController {
     ImageView aboutButton;
 
     @FXML
-    Label loginErrorLabel;
-
-
-    @FXML
     public void initialize() {
         Platform.runLater(new Runnable() {
             @Override
@@ -92,26 +88,26 @@ public class HomeController {
         @Override
         public void handle(KeyEvent event) {
             if (!swipeDetected) {
-                System.out.println("no swipe");
+//                System.out.println("no swipe");
                 if (event.getCharacter().equals("%") || event.getCharacter().equals(";")) {
-                    System.out.println("new swipe!");
+//                    System.out.println("new swipe!");
                     swipeDetected = true;
                 } else {
                     System.out.println("still no swipe");
                     if (event.getSource().equals(usernameTxt)) {
-                        System.out.println("usernametxt: " + usernameTxt.getText() + " event text: " + event.getCharacter());
+//                        System.out.println("usernametxt: " + usernameTxt.getText() + " event text: " + event.getCharacter());
                         usernameTxt.setText(usernameTxt.getText() + event.getCharacter());
                         usernameTxt.positionCaret(usernameTxt.getLength());
                     }
                 }
                 if (event.getSource().equals(passwordTxt)) {
-                    System.out.println("usernametxt: " + passwordTxt.getText() + " event text: " + event.getCharacter());
+//                    System.out.println("usernametxt: " + passwordTxt.getText() + " event text: " + event.getCharacter());
                     passwordTxt.setText(passwordTxt.getText() + event.getCharacter());
                     passwordTxt.positionCaret(passwordTxt.getLength());
                 }
             }
             if (swipeDetected) {
-                System.out.println("swipe!");
+//                System.out.println("swipe!");
                 swipeLogin(event);
             }
             event.consume();
@@ -138,11 +134,6 @@ public class HomeController {
             Main.currentUser = db.checkEmployeeLogin(username, password);
         } catch (LoginInvalidException e1) {
 
-            usernameTxt.setPromptText("Username");
-            passwordTxt.setPromptText("Password");
-
-//            loginErrorLabel.setText("Login failed, invalid username or password");
-//            loginErrorLabel.setVisible(true);
             ShakeTransition anim = new ShakeTransition(usernameTxt, passwordTxt);
             anim.playFromStart();
             usernameTxt.clear();
@@ -192,11 +183,9 @@ public class HomeController {
     @FXML
     public Boolean mapButtonOp(ActionEvent e) {
         FXMLLoader loader;
-        Stage stage;
         Parent root;
         MapScreenController mapScreenController;
 
-        stage = (Stage) mapButton.getScene().getWindow();
         loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
 
         try {
@@ -214,7 +203,7 @@ public class HomeController {
     @FXML
     public void aboutButtonOp() {
         FXMLLoader loader;
-        Parent root = null;
+        Parent root;
         AboutScreenController aboutScreenController;
 
         loader = new FXMLLoader(getClass().getResource("/FXML/home/AboutScreen.fxml"));
@@ -223,6 +212,7 @@ public class HomeController {
             root = loader.load();
         } catch (IOException ie) {
             ie.printStackTrace();
+            return;
         }
 
         aboutScreenController = loader.getController();
@@ -316,8 +306,8 @@ public class HomeController {
                     Main.currentUser = db.checkLoginID(loginString);
                 } catch (LoginInvalidException le) {
                     le.printStackTrace();
-                    loginErrorLabel.setText("Login failed, please swipe again");
-                    loginErrorLabel.setVisible(true);
+                    ShakeTransition anim = new ShakeTransition(usernameTxt, passwordTxt);
+                    anim.playFromStart();
                     return;
                 }
 
@@ -326,8 +316,8 @@ public class HomeController {
 
                 loginButtonOp(new ActionEvent());
             } else if (invalidSwipe) {
-                loginErrorLabel.setText("Swipe failed, please swipe again");
-                loginErrorLabel.setVisible(true);
+                ShakeTransition anim = new ShakeTransition(usernameTxt, passwordTxt);
+                anim.playFromStart();
             }
         }
     }

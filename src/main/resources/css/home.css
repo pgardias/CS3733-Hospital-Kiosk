@@ -46,8 +46,17 @@
     -fx-font-size: 18px;
 }
 
-.emergency-buttons {
+.emergency-button {
     -fx-background-color: RED;
-    -fx-text-fill: WHITE;
-    -fx-background-radius: 20;
+    /*-fx-font-family: "Abyssinica SIL";*/
+    -fx-font-size: 48px;
+    -fx-text-fill: BLACK;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(gaussian, GRAY, 5, 0, 0, 0);
+}
+
+.emergency-button:hover {
+    -fx-background-color: #c60000;
+    /*-fx-font-family: "Abyssinica SIL";*/
+    /*-fx-font-size: 48px;*/
 }

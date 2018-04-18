@@ -9,16 +9,22 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.DuplicateLongNameException;
 import edu.wpi.cs3733d18.teamp.Exceptions.EdgeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
+import edu.wpi.cs3733d18.teamp.Exceptions.OrphanNodeException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
@@ -210,6 +216,25 @@ public class MapBuilderNodeFormController implements Initializable{
         floorComboBox.setItems(floorOptions);
 
         editFlag = true;
+
+        /*
+        submitFormButton.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                Task task = new Task() {
+                    @Override
+                    protected Integer call() {
+                        submitFormButton.getScene().setCursor(Cursor.WAIT); //Change cursor to wait style
+                        //scene.setCursor(Cursor.DEFAULT); //Change cursor to default style
+                        return 1;
+                    }
+                };
+                Thread th = new Thread(task);
+                th.setDaemon(true);
+                th.start();
+            }
+        });
+        */
     }
 
     /**
@@ -230,76 +255,103 @@ public class MapBuilderNodeFormController implements Initializable{
     @FXML
     public void submitNodeFormButtonOp(ActionEvent e) {
         double x, y, xDisplay, yDisplay;
-        String longName = longNameTxt.getText();
+
+        // No need for validation, floor type is set to current floor by default
         Node.floorType floor = Node.stringToFloorType(floorComboBox.getValue().toString());
-        Node.buildingType building = Node.stringToBuildingType(buildingComboBox.getValue().toString());
-        Node.nodeType type = Node.stringToNodeType(nodeTypeComboBox.getValue().toString());
+
+        // Validate that user has input a longName
+        String longName;
+        if (!(longNameTxt.getText() == null || longNameTxt.getText().trim().isEmpty())) {
+            longName = longNameTxt.getText();
+        }
+        else {
+            nodeFormErrorLabel.setText("Please enter a unique name for this node.");
+            nodeFormErrorLabel.setVisible(true);
+            return;
+        }
+
+        // Validate that user has chosen an option from the building combobox
+        Node.buildingType building;
+        if (!buildingComboBox.getSelectionModel().isEmpty()) {
+            building = Node.stringToBuildingType(buildingComboBox.getValue().toString());
+        }
+        else {
+            nodeFormErrorLabel.setText("Please choose a building from the dropdown.");
+            nodeFormErrorLabel.setVisible(true);
+            return;
+        }
+
+        // Validate that user has chosen an option from the node type combobox
+        Node.nodeType type;
+        if (!nodeTypeComboBox.getSelectionModel().isEmpty()) {
+            type = Node.stringToNodeType(nodeTypeComboBox.getValue().toString());
+        }
+        else {
+            nodeFormErrorLabel.setText("Please choose a node type from the dropdown.");
+            nodeFormErrorLabel.setVisible(true);
+            return;
+        }
+
         Boolean isActive = isActiveNodeCheckBox.isSelected();
-        System.out.println("Boolean is: " + isActive);
+
+        // Validate correct number input
         try {
             x = Double.parseDouble(nodex2Txt.getText());
             y = Double.parseDouble(nodey2Txt.getText());
             xDisplay = Double.parseDouble(nodex3Txt.getText());
             yDisplay = Double.parseDouble(nodey3Txt.getText());
         } catch (NumberFormatException ne) {
-            ne.printStackTrace();
             nodeFormErrorLabel.setText("Incompatible input for fields which require numbers.");
             nodeFormErrorLabel.setVisible(true);
             return;
         }
+
+        // Validate coordinates are within our specified bounds
         if (!checkCoordinateBounds(x, y, xDisplay, yDisplay)) {
             nodeFormErrorLabel.setText("Coordinates entered are not within bounds.");
             nodeFormErrorLabel.setVisible(true);
             return;
         }
+
+        // Validate connectingNode is selected and exists in the database if creating
         Node newNode = new Node(longName, isActive, x, y, xDisplay, yDisplay, floor, building, type);
         Node connectingNode = null;
         if (!editFlag) {
             try {
                 connectingNode = db.getOneNode(getNodeID(connectingNodeTextBox.getText()));
             } catch (NodeNotFoundException nnfe) {
-                nnfe.printStackTrace();
+                nodeFormErrorLabel.setText("Please choose a valid node to connect to this node.");
+                nodeFormErrorLabel.setVisible(true);
                 System.out.println(nnfe.getNodeID());
                 return;
             }
         }
-//        TODO fix when to edit node and when to create new node
-        if(editFlag){
-            newNode.setID(editedNodeID);
-            try {
+
+        // After validation, create or modify node (unless the user has input a duplicate longName)
+        try {
+            if (editFlag) {
+                newNode.setID(editedNodeID);
                 db.modifyNode(newNode);
+                editedNodeID = null;
             }
-            catch(NodeNotFoundException nnfe){
-                nnfe.printStackTrace();
-            }
-            catch(EdgeNotFoundException enfe){
-                enfe.printStackTrace();
-            }
-            catch (DuplicateLongNameException de) {
-                nodeFormErrorLabel.setText("Node " + de.getNodeID() + " already has this Long Name");
-                nodeFormErrorLabel.setVisible(true);
-                return;
-            }
-            editedNodeID = null;
-        } else {
-            try {
+            else {
                 db.createNode(newNode, connectingNode);
             }
-            catch(NodeNotFoundException nnfe){
-                nnfe.printStackTrace();
-            }
-            catch(EdgeNotFoundException enfe){
-                enfe.printStackTrace();
-            }
-            catch (DuplicateLongNameException de) {
-                nodeFormErrorLabel.setText("Node " + de.getNodeID() + " already has this Long Name");
-                nodeFormErrorLabel.setVisible(true);
-                return;
-            }
         }
+        catch(NodeNotFoundException nnfe){
+            nnfe.printStackTrace();
+        }
+        catch(EdgeNotFoundException enfe){
+            enfe.printStackTrace();
+        }
+        catch (DuplicateLongNameException de) {
+            nodeFormErrorLabel.setText("Node " + de.getNodeID() + " already has this Long Name.");
+            nodeFormErrorLabel.setVisible(true);
+            return;
+        }
+        
         mapBuilderController.addOverlay();
         mapBuilderController.updateMap();
-
     }
 
 
@@ -393,6 +445,10 @@ public class MapBuilderNodeFormController implements Initializable{
                 db.deleteNode(editedNodeID);
             } catch (NodeNotFoundException | EdgeNotFoundException ne) {
                 ne.printStackTrace();
+            } catch (OrphanNodeException oe) {
+                nodeFormErrorLabel.setText("Deleting this node will orphan other nodes.");
+                nodeFormErrorLabel.setVisible(true);
+                return;
             }
 
             mapBuilderController.updateMap();

@@ -42,7 +42,7 @@
                   <Insets bottom="15.0" right="20.0" />
                </GridPane.margin>
             </JFXButton>
-            <JFXTextField fx:id="sourceSearchBar" focusColor="#e6e6e6" maxWidth="700.0" promptText="Start Location" style="-fx-text-fill: #F5BC3A; -fx-prompt-text-fill: #e6e6e6;" unFocusColor="#f5bc3a">
+            <JFXTextField fx:id="sourceSearchBar" focusColor="#e6e6e6" maxWidth="700.0" prefWidth="700.0" promptText="Start Location" style="-fx-text-fill: #F5BC3A; -fx-prompt-text-fill: #e6e6e6;" unFocusColor="#f5bc3a">
                <GridPane.margin>
                   <Insets left="50.0" />
                </GridPane.margin>
@@ -56,7 +56,7 @@
                   <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
                </effect>
             </JFXTextField>
-            <JFXTextField fx:id="destinationSearchBar" focusColor="#e6e6e6" maxWidth="700.0" promptText="End Location" style="-fx-text-fill: #F5BC3A; -fx-prompt-text-fill: #e6e6e6;" unFocusColor="#f5bc3a" GridPane.rowIndex="1">
+            <JFXTextField fx:id="destinationSearchBar" focusColor="#e6e6e6" maxWidth="700.0" prefWidth="700.0" promptText="End Location" style="-fx-text-fill: #F5BC3A; -fx-prompt-text-fill: #e6e6e6;" unFocusColor="#f5bc3a" GridPane.rowIndex="1">
                <font>
                   <Font name="Marlett" size="25.0" />
                </font>
@@ -67,7 +67,7 @@
                   <DropShadow height="5.0" radius="2.0" width="5.0" />
                </effect>
             </JFXTextField>
-            <JFXToggleButton fx:id="mapToggleButton" maxHeight="54.0" onAction="#toggleButtonOp" prefHeight="66.0" prefWidth="179.0" styleClass="yellow-button" stylesheets="@../../css/map.css" text="3D Map" toggleColor="#eeda20" toggleLineColor="#0b2f5b" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+            <JFXToggleButton fx:id="mapToggleButton" maxHeight="54.0" onAction="#mapToggleButtonOp" prefHeight="66.0" prefWidth="179.0" styleClass="yellow-button" stylesheets="@../../css/map.css" text="3D Map" toggleColor="#eeda20" toggleLineColor="#0b2f5b" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                <font>
                   <Font size="24.0" />
                </font>
@@ -77,8 +77,11 @@
             </JFXToggleButton>
          </children>
          <GridPane.margin>
-            <Insets top="10.0" />
+            <Insets bottom="-10.0" />
          </GridPane.margin>
+         <padding>
+            <Insets bottom="5.0" />
+         </padding>
       </GridPane>
       <GridPane maxWidth="450.0" pickOnBounds="false" prefWidth="450.0" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
         <columnConstraints>
@@ -120,6 +123,6 @@
       </Label>
    </children>
    <padding>
-      <Insets top="10.0" />
+      <Insets top="5.0" />
    </padding>
 </GridPane>

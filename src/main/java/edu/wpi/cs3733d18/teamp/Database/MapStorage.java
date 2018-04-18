@@ -95,6 +95,12 @@ public class MapStorage {
         return edge;
     }
 
+    /**
+     * Throws an exception if the edge being deleted would orphan
+     * a node, otherwise returns false
+     * @param edgeID ID of edge to be deleted
+     * @throws OrphanNodeException
+     */
     Boolean willEdgeOrphanANode(String edgeID) throws OrphanNodeException {
         Edge edge = edges.get(edgeID);
         Node start = nodes.get(edge.getStart().getID());
@@ -105,6 +111,68 @@ public class MapStorage {
         else if (end.getEdges().size() == 1) {
             throw new OrphanNodeException(end.getID());
         }
-        return true;
+        return false;
+    }
+
+    /**
+     * Same as willEdgeOrphanNode, but doesnt check against
+     * the given nodeID
+     * @param edgeID
+     * @param nodeID
+     * @return
+     * @throws OrphanNodeException
+     */
+    Boolean willEdgeOrphanANode(String edgeID, String nodeID) throws OrphanNodeException {
+        Edge edge = edges.get(edgeID);
+        Node start = nodes.get(edge.getStart().getID());
+        Node end = nodes.get(edge.getEnd().getID());
+        if (start.getEdges().size() == 1) {
+            if (!nodeID.equals(start.getID())) {
+                throw new OrphanNodeException(start.getID());
+            }
+        }
+        else if (end.getEdges().size() == 1) {
+            if (!nodeID.equals(end.getID())) {
+                throw new OrphanNodeException(start.getID());
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Throws an exception if the node being deleted would orphan
+     * another node via its own edges
+     * @param nodeID
+     * @return
+     * @throws OrphanNodeException
+     */
+    Boolean willNodeOrphanOtherNodes(String nodeID) throws OrphanNodeException {
+        Boolean orphan = false;
+        Node node = nodes.get(nodeID);
+        for (int i = 0; i < node.getEdges().size(); i++) {
+            Edge e = node.getEdges().get(i);
+            orphan = willEdgeOrphanANode(e.getID(), nodeID);
+        }
+        return orphan;
+    }
+
+    /**
+     * I honestly don't even want to talk about why I had to make
+     * this function. It hurts me to write this code.
+     * @param newEdge
+     * @return
+     */
+    Boolean willModifyOrphanNodes(Edge newEdge) throws OrphanNodeException{
+        Edge oldEdge = edges.get(newEdge.getID());
+        if (newEdge.getStart().equals(oldEdge.getStart()) && newEdge.getEnd().equals(oldEdge.getEnd())) {
+            return false;
+        }
+        else if (newEdge.getStart().equals(oldEdge.getStart())) {
+            willEdgeOrphanANode(newEdge.getID(), newEdge.getStart().getID());
+        }
+        else if (newEdge.getEnd().equals(oldEdge.getEnd())){
+            willEdgeOrphanANode(newEdge.getID(), newEdge.getEnd().getID());
+        }
+        return false;
     }
 }

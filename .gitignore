@@ -12,6 +12,5 @@ settings.gradle
 screenshot.png
 *.log
 *.class
-*.jar
 *.lock
 scenicView\.properties

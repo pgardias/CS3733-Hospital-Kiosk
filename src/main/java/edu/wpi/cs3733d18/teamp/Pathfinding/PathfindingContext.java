@@ -14,7 +14,6 @@ public class PathfindingContext {
     public PathfindingContext(Pathfinder pathfinder) {
         this.pathfinder = pathfinder;
     }
-
     public void setPathfindingContext(PathfindingSetting pathfindingSetting) {
         Pathfinder pathfinder;
         switch (pathfindingSetting) {
