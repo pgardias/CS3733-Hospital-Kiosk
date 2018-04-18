@@ -3,39 +3,49 @@ package edu.wpi.cs3733d18.teamp.ui.map;
 import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
 import com.interactivemesh.jfx.importer.stl.StlMeshImporter;
 import com.jfoenix.controls.JFXButton;
+import edu.wpi.cs3733d18.teamp.Database.DBSystem;
+import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.*;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Mesh;
-import javafx.scene.shape.MeshView;
-import javafx.scene.shape.TriangleMesh;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import org.apache.commons.io.FileUtils;
+import org.controlsfx.control.PopOver;
+import org.controlsfx.control.PopOver;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class MapViewerBuilder implements Initializable{
 
-    // Static global variables
+    // Symbolic Constants
     private static final double MODEL_X_OFFSET = 0; // standard
     private static final double MODEL_Y_OFFSET = 0; // standard
     private static final int VIEWPORT_SIZE = 800;
+    private int X_OFFSET = -523;
+    private int Y_OFFSET = 0;
+    private double X_SCALE = 1588.235294 / 5000.0;
+    private double Y_SCALE = 1080.0 / 3400.0;
+    private static final double NODE_RADIUS = 10.0;
     private static final Color lightColor = Color.rgb(244, 255, 250);
     private static final Color buildingColor = Color.rgb(255, 255, 255);
 
@@ -61,6 +71,17 @@ public class MapViewerBuilder implements Initializable{
     SearchBarOverlayController searchBarOverlayController = null;
     MapScreenController mapScreenController;
 
+    // DB instance
+    DBSystem db = DBSystem.getInstance();
+
+    // Display hashmaps
+    private static HashMap<String, Sphere> nodeDispSet = new HashMap<>();
+    private static HashMap<String, Line> edgeDispSet = new HashMap<>();
+    private Boolean pathDrawn = false;
+    ArrayList<Node> pathMade;
+    Node.floorType currentFloor;
+    String floorState;
+
     // FXML variables
     @FXML
     AnchorPane threeDAnchorPane;
@@ -72,29 +93,19 @@ public class MapViewerBuilder implements Initializable{
     BorderPane searchbarBorderPane;
 
     @FXML
-    Button leftButton;
-
-    @FXML
-    Button rightButton;
-
-    @FXML
     JFXButton floorL2Button;
 
     @FXML
     JFXButton floorL1Button;
 
-
     @FXML
     JFXButton floorGButton;
-
 
     @FXML
     JFXButton floor1Button;
 
-
     @FXML
     JFXButton floor2Button;
-
 
     @FXML
     JFXButton floor3Button;
@@ -117,6 +128,9 @@ public class MapViewerBuilder implements Initializable{
 
         // Add searchbar overlay
         addOverlay();
+
+        // Draw nodes
+        draw3DNodes();
     }
 
     public void addOverlay() {
@@ -382,7 +396,192 @@ public class MapViewerBuilder implements Initializable{
      * Draws all of the nodes on the map depending on which map is loaded
      */
     public void draw3DNodes() {
+        HashMap<String, Node> nodeSet;
 
+        nodeSet = db.getAllNodes();
+        System.out.println("drawing nodes");
+        for (Node node : nodeSet.values()) {
+            if (node.getType() != Node.nodeType.HALL) {
+                Sphere sphere = new Sphere(NODE_RADIUS);
+                threeDAnchorPane.getChildren().add(sphere);
+                sphere.setTranslateX((node.getX() - X_OFFSET) + X_SCALE);
+                sphere.setTranslateY((node.getY() - Y_OFFSET) * Y_SCALE);
+                //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
+                //.setFill(Color.DODGERBLUE);
+                //circle.setStroke(Color.BLACK);
+                //circle.setStrokeType(StrokeType.INSIDE);
+                if (!node.getActive()) {
+                    sphere.setOpacity(0.5);
+                    //circle.setFill(Color.GRAY);
+                }
+                sphere.addEventHandler(MouseEvent.ANY, nodeClickHandler);
+//                circle.setOnMouseClicked(clickCallback());
+
+                String label = node.getID();
+                nodeDispSet.put(label, sphere);
+
+//                if(node.getType() == Node.nodeType.KIOS) {
+//                    File file = new File("main/kiosk/resources/img/pip.png");
+//                    Image pip = new Image(file.toURI().toString());
+//                    ImageView position = new ImageView(pip);
+//                    position.setX((node.getX() - X_OFFSET) * X_SCALE);
+//                    position.setY((node.getY() - Y_OFFSET - 10) * Y_SCALE);
+//                    kioskPip = position;
+//                }
+            } else {
+                Sphere sphere = new Sphere(0);
+                threeDAnchorPane.getChildren().add(sphere);
+                sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
+                sphere.setTranslateZ((node.getY() - Y_OFFSET) * Y_SCALE);
+                //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
+                //circle.setFill(Color.DODGERBLUE);
+                //circle.setStroke(Color.BLACK);
+                //circle.setStrokeType(StrokeType.INSIDE);
+                //circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
+
+                String label = node.getID();
+                nodeDispSet.put(label, sphere);
+            }
+        }
+        System.out.println("Printed All Nodes");
+    }
+
+    /**
+     * this handles all mouse events related to nodes that exist in the database
+     * and have been drawn
+     */
+    Boolean firstSelected = false;
+    Boolean secondSelected = false;
+    EventHandler<MouseEvent> nodeClickHandler = new EventHandler<MouseEvent>() {
+        Boolean isDragging = false;
+        double orgMouseX;
+        double orgMouseY;
+        double orgCenterX;
+        double orgCenterY;
+        double newCenterX;
+        double newCenterY;
+
+        @Override
+        public void handle(MouseEvent event) {
+            HashMap<String, Node> nodeSet;
+            nodeSet = db.getAllNodes();
+            if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
+                if (searchBarOverlayController.isSourceFocused()) {
+                    clearStartNode();
+                    for (String string : nodeDispSet.keySet()) {
+                        if (nodeDispSet.get(string) == event.getSource()) {
+                            Node node = nodeSet.get(string);
+                            //nodeDispSet.get(string).setFill(Color.GREEN);
+                            searchBarOverlayController.setSourceSearchBar(node.getLongName());
+                        }
+                    }
+                } else if (searchBarOverlayController.isDestinationFocused()) {
+                    clearEndNode();
+                    for (String string : nodeDispSet.keySet()) {
+                        if (nodeDispSet.get(string) == event.getSource()) {
+                            Node node = nodeSet.get(string);
+                            //nodeDispSet.get(string).setFill(Color.RED);
+                            searchBarOverlayController.setDestinationSearchBar(node.getLongName());
+                        }
+                    }
+                } else if (!firstSelected) {
+                    clearStartNode();
+                    for (String string : nodeDispSet.keySet()) {
+                        if (nodeDispSet.get(string) == event.getSource()) {
+                            Node node = nodeSet.get(string);
+                            //nodeDispSet.get(string).setFill(Color.GREEN);
+                            searchBarOverlayController.setSourceSearchBar(node.getLongName());
+                        }
+                    }
+                    firstSelected = true;
+                } else {
+                    clearEndNode();
+                    for (String string : nodeDispSet.keySet()) {
+                        if (nodeDispSet.get(string) == event.getSource()) {
+                            Node node = nodeSet.get(string);
+                            //nodeDispSet.get(string).setFill(Color.RED);
+                            searchBarOverlayController.setDestinationSearchBar(node.getLongName());
+                        }
+                    }
+                    firstSelected = false;
+                }
+            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED) { // TODO Check zoom level to prevent graphical glitches
+                System.out.println("MOUSE_ENTERED event at " + event.getSource());
+                for (String string : nodeDispSet.keySet()) {
+                    if (nodeDispSet.get(string) == event.getSource()) {
+                        /*if (popOver != null && popOver.getOpacity() == 0) {
+                            popOver.hide();
+                            popOver = null;
+                        }*/
+                        Node node = nodeSet.get(string);
+                        Label nodeTypeLabel = new Label(node.getType().toString().toUpperCase());
+                        Label nodeLongNameLabel = new Label("Name: " + node.getLongName());
+                        Label nodeBuildingLabel = new Label("Building: "+ node.getBuilding().toString());
+                        nodeTypeLabel.setStyle("-fx-font-size: 28px; -fx-text-fill: #0b2f5b; -fx-font-weight: 700; -fx-padding: 10px 10px 0 10px;");
+                        nodeTypeLabel.setAlignment(Pos.CENTER);
+                        nodeLongNameLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 0 10px;");
+                        nodeBuildingLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
+                        VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
+//                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
+                        //popOver = new PopOver(popOverVBox);
+                        //popOver.show((javafx.scene.Node) event.getSource());
+                        //popOverHidden = false;
+                        //popOver.setCloseButtonEnabled(false);
+//                        popOver.setCornerRadius(20);
+                        //popOver.setAutoFix(true);
+                        //popOver.setDetachable(false);
+                    }
+                }
+            } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
+                //popOver.hide();
+                //popOverHidden = true;
+            }
+            event.consume();
+        }
+    };
+
+    /**
+     * Used to draw the list of nodes returned by AStar
+     */
+    public void resetPath() {
+        Node currentNode = null, pastNode = null;
+        Circle waypoint;
+        Line line;
+        for (Node n : pathMade) {
+            pastNode = currentNode;
+            currentNode = n;
+            //nodeDispSet.get(n.getID()).setFill(Color.DODGERBLUE);
+
+            for (Edge e : currentNode.getEdges()) {
+                if (pastNode != null) {
+                    if (e.contains(pastNode)) {
+                        edgeDispSet.get(e.getID()).setStroke(Color.BLACK);
+                        edgeDispSet.get(e.getID()).setStrokeWidth(0);
+                        if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
+                            edgeDispSet.get(e.getID()).setStrokeWidth(0);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void clearStartNode() {
+        if (pathDrawn) resetPath();
+        for (Sphere s: nodeDispSet.values()) {
+            /*if (c.getFill().equals(Color.GREEN)) {
+                c.setFill(Color.DODGERBLUE);
+            }*/
+        }
+    }
+
+    public void clearEndNode() {
+        if (pathDrawn) resetPath();
+        for (Sphere s : nodeDispSet.values()) {
+            /*if (s.getFill().equals(Color.RED)) {
+                s.setFill(Color.DODGERBLUE);
+            }*/
+        }
     }
 
 }

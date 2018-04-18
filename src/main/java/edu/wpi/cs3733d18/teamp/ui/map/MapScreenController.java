@@ -96,18 +96,14 @@ public class MapScreenController {
     @FXML
     JFXButton floorL1Button;
 
-
     @FXML
     JFXButton floorGButton;
-
 
     @FXML
     JFXButton floor1Button;
 
-
     @FXML
     JFXButton floor2Button;
-
 
     @FXML
     JFXButton floor3Button;
@@ -789,7 +785,6 @@ public class MapScreenController {
             if (c.getFill().equals(Color.RED)) {
                 c.setFill(Color.DODGERBLUE);
             }
-
         }
     }
 }
