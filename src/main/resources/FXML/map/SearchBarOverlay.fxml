@@ -4,7 +4,8 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -93,36 +94,57 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <JFXButton fx:id="directionsButton" buttonType="RAISED" onAction="#directionsButtonOp" prefHeight="150.0" prefWidth="100.0" style="-fx-background-color: LIGHTGRAY;" stylesheets="@../../css/common.css" text="Directions" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+            <JFXButton fx:id="directionsButton" buttonType="RAISED" onAction="#directionsButtonOp" prefHeight="95.0" prefWidth="185.0" styleClass="yellow-button" stylesheets="@../../css/map.css" text="Directions" textAlignment="CENTER" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="TOP">
                <font>
-                  <Font size="15.0" />
+                  <Font size="20.0" />
                </font>
                <GridPane.margin>
-                  <Insets top="-10.0" />
+                  <Insets top="40.0" />
                </GridPane.margin>
             </JFXButton>
-            <JFXButton fx:id="phoneButton" buttonType="RAISED" onAction="#phoneButtonOp" prefHeight="100.0" prefWidth="100.0" styleClass="mobile" stylesheets="@../../css/common.css" text=" " GridPane.columnIndex="1" GridPane.halignment="CENTER" />
-            <JFXButton fx:id="emailButton" buttonType="RAISED" onAction="#emailButtonOp" prefHeight="100.0" prefWidth="100.0" styleClass="envelope" stylesheets="@../../css/common.css" text=" " GridPane.columnIndex="2" GridPane.halignment="CENTER" />
          </children>
       </GridPane>
-      <Rectangle fx:id="directionsRectangle" arcHeight="5.0" arcWidth="5.0" fill="#bbc3c9" height="780.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="280.0">
+      <Rectangle fx:id="directionsRectangle" arcHeight="5.0" arcWidth="5.0" fill="#bbc3c9" height="1400.0" stroke="BLACK" strokeType="INSIDE" visible="false" width="290.0">
          <GridPane.margin>
-            <Insets left="30.0" top="900.0" />
+            <Insets left="25.0" top="1500.0" />
          </GridPane.margin>
       </Rectangle>
-      <Label fx:id="directionsLabel" alignment="TOP_LEFT" maxHeight="780.0" maxWidth="280.0" minHeight="780.0" pickOnBounds="false" prefHeight="780.0" prefWidth="280.0">
+      <TableView fx:id="directionsTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="790.0" prefWidth="280.0">
          <GridPane.margin>
-            <Insets left="30.0" top="900.0" />
+            <Insets left="30.0" top="1000.0" />
          </GridPane.margin>
-         <padding>
+         <columns>
+            <TableColumn fx:id="directionsTableViewColumn" editable="false" maxWidth="-1.0" minWidth="279.0" prefWidth="279.0" resizable="false" sortable="false" text="Directions" />
+         </columns>
+      </TableView>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
          <font>
             <Font name="Arial" size="24.0" />
-         </font>
       </Label>
+      <GridPane maxWidth="-Infinity" prefWidth="450.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="230.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="220.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+         <children>
+            <JFXButton fx:id="emailButton" buttonType="RAISED" minHeight="-Infinity" minWidth="-Infinity" onAction="#emailButtonOp" prefHeight="100.0" prefWidth="100.0" styleClass="envelope" stylesheets="@../../css/common.css" text=" " GridPane.columnIndex="1" GridPane.halignment="CENTER">
+               <GridPane.margin>
+                  <Insets left="-120.0" top="1800.0" />
+               </GridPane.margin>
+            </JFXButton>
+            <JFXButton fx:id="phoneButton" buttonType="RAISED" minHeight="-Infinity" minWidth="-Infinity" onAction="#phoneButtonOp" prefHeight="100.0" prefWidth="100.0" styleClass="mobile" stylesheets="@../../css/common.css" text=" " GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+               <GridPane.margin>
+                  <Insets left="30.0" top="1800.0" />
+               </GridPane.margin></JFXButton>
+         </children>
+      </GridPane>
    </children>
    <padding>
       <Insets top="5.0" />
    </padding>
-</GridPane>

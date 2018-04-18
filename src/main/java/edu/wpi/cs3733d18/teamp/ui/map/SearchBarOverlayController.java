@@ -2,14 +2,19 @@ package edu.wpi.cs3733d18.teamp.ui.map;
 
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
+import edu.wpi.cs3733d18.teamp.Directions;
 import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -51,6 +56,7 @@ public class SearchBarOverlayController implements Initializable{
     private ArrayList<String> pathDirections; // The actual directions
     private Boolean directionsVisible = false; // Whether the box for directions are visible or not
 
+    private Directions directionsList = new Directions();
     DBSystem db = DBSystem.getInstance();
     private Node endNode;
 
@@ -58,7 +64,12 @@ public class SearchBarOverlayController implements Initializable{
     Rectangle directionsRectangle;
 
     @FXML
-    Label directionsLabel;
+    TableView<DirectionsTable> directionsTableView;
+
+    @FXML
+    TableColumn<DirectionsTable,String> directionsTableViewColumn;
+
+    ObservableList<DirectionsTable> directions = FXCollections.observableArrayList();
 
     @FXML
     Button directionsButton;
@@ -85,6 +96,8 @@ public class SearchBarOverlayController implements Initializable{
 
     public void startUp(MapScreenController mapScreenController){
         this.mapScreenController = mapScreenController;
+        directionsTableView.setVisible(false);
+        directionsButton.setVisible(false);
         mapToggleButtonOp();
     }
 
@@ -172,6 +185,7 @@ public class SearchBarOverlayController implements Initializable{
         if (pathDrawn) {
             mapScreenController.resetPath();
         }
+        refresh();
         System.out.println("get path");
         //get all nodes
         HashMap<String, Node> nodeSet = db.getAllNodes();
@@ -248,13 +262,15 @@ public class SearchBarOverlayController implements Initializable{
         System.out.println(path);
         pathDrawn = true;
 
-        ArrayList<String> directions = generateTextDirections(path);
+        directionsList.generateTextDirections(path);
+        ArrayList<String> directions = directionsList.getDirections();
         pathDirections = directions;
         for (String s : directions) {
             System.out.println(s);
         }
 
         pathDrawn = true;
+        directionsButton.setVisible(true);
         return true;
     }
 
@@ -444,30 +460,32 @@ public class SearchBarOverlayController implements Initializable{
      *
      */
     public Boolean directionsButtonOp(ActionEvent e) {
-        String fullStr = "";
         if (directionsVisible){
-            directionsLabel.setText("");
-            directionsRectangle.setVisible(false);
+            directions.removeAll(directions);
+            directionsTableView.setItems(directions);
+            directionsList.clearDirections();
+            directionsTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("directions"));
+            directionsTableView.setVisible(false);
             directionsButton.setText("Directions >");
             directionsVisible = false;
         }
         else {
-            if (pathDirections == null) {
-                directionsRectangle.setVisible(true);
-                directionsRectangle.toFront();
-                directionsLabel.setText("Path needs to be\nset first!");
-                directionsLabel.toFront();
+            if (directionsList.getDirections() == null) {
+                directionsTableView.setVisible(true);
+                directions.add(new DirectionsTable("Path needs to be set first!"));
+                directionsTableView.setItems(directions);
+                directionsTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("directions"));
                 directionsButton.setText("Directions X");
                 directionsVisible = true;
             }
             else {
-                for (String line : pathDirections) {
-                    fullStr = fullStr.concat(line + "\n");
+                directionsTableView.setVisible(true);
+                for (String line : directionsList.getDirections()) {
+                    directions.add(new DirectionsTable(line));
                 }
-                directionsRectangle.setVisible(true);
-                directionsRectangle.toFront();
-                directionsLabel.setText(fullStr);
-                directionsLabel.toFront();
+                directionsTableView.setItems(directions);
+                directionsTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("directions"));
+
                 directionsButton.setText("Directions X");
                 directionsVisible = true;
             }
@@ -494,7 +512,7 @@ public class SearchBarOverlayController implements Initializable{
         Node lastChangeNode = new Node();
         boolean changeDirections = false;
         boolean firstTime = true;
-        double feetPerPixel = 85./260.; // Measured on the west wing of the hospital with Google maps and paint
+        double feetPerPixel = 85. / 260.; // Measured on the west wing of the hospital with Google maps and paint
 
         directions.add("Starting Route!");
 
@@ -514,106 +532,48 @@ public class SearchBarOverlayController implements Initializable{
 //                System.out.println("Past node: " + pastNode + " current node: " + node + " Distance since last change: " + distance);
 //                System.out.println("Angle: " + Math.toDegrees(angle) + " pastAngle: " + Math.toDegrees(pastAngle) + " angleDif: " + angleDiff);
 
-                if (angleDiff <= -TURN_AROUND_BOUNDS) {
-                    // Wow you messed up
 
-                } else if (angleDiff <= -HARD_BOUNDS && angleDiff > -TURN_AROUND_BOUNDS) {
-                    // Turn around
-                    words = "Turn around";
-//                    directions.add(words);
-                    changeDirections = true;
-
-                } else if (angleDiff <= -NORMAL_BOUNDS && angleDiff > -HARD_BOUNDS) {
-                    // Hard left
-                    words = "Make a hard left";
-//                    directions.add(words);
-                    changeDirections = true;
-
-                } else if (angleDiff <= -SLIGHT_BOUNDS && angleDiff > -NORMAL_BOUNDS) {
-                    // Normal left
-                    words = "Make a left";
-//                    directions.add(words);
-                    changeDirections = true;
-
-                } else if (angleDiff <= -STRAIGHT_BOUNDS && angleDiff > -SLIGHT_BOUNDS) {
-                    // Slight left
-                    words = "Make a slight left";
-//                    directions.add(words);
-                    changeDirections = true;
-
-                } else if (angleDiff <= STRAIGHT_BOUNDS && angleDiff >= -STRAIGHT_BOUNDS) {
-                    // Straight, so add distance
-                    words = "Straight";
-//                    distance += pastNode.distanceBetweenNodes(node);
-                    changeDirections = false;
-
-                } else if (angleDiff <= SLIGHT_BOUNDS && angleDiff > STRAIGHT_BOUNDS) {
-                    // Slight right
-                    words = "Make a slight right";
-//                    directions.add(words);
-                    changeDirections = true;
-
-                } else if (angleDiff <= NORMAL_BOUNDS && angleDiff > SLIGHT_BOUNDS) {
-                    // Normal right
-                    words = "Make a right";
-//                    directions.add(words);
-                    changeDirections = true;
-
-                } else if (angleDiff <= HARD_BOUNDS && angleDiff > NORMAL_BOUNDS) {
-                    // Hard right
-                    words = "Make a hard right";
-//                    directions.add(words);
-                    changeDirections = true;
-
-                } else if (angleDiff <= TURN_AROUND_BOUNDS && angleDiff > HARD_BOUNDS) {
-                    // Turn around
-                    words = "Turn around";
-//                    directions.add(words);
-                    changeDirections = true;
-
-                } else if (node.getType() == Node.nodeType.STAI && pastNode.getType() == Node.nodeType.STAI) {
-                    words = "Take the stairs " + node.floorsBetweenNodes(pastNode);
+                // todo figure out how to not add "Go forward 0ft"
+//                if (changeDirections) {
+//                    if (firstTime) {
+////                        directions.add(words);
+//                        firstTime = false;
+//                    } else if (roundToNearest(feetPerPixel*lastChangeNode.distanceBetweenNodes(pastNode), 10) != 0) {
+//                        directions.add("Go forward " + roundToNearest(feetPerPixel*lastChangeNode.distanceBetweenNodes(pastNode), 10) + ft);
 //                        directions.add(words);
-                    changeDirections = true;
-                } else if (node.getType() == Node.nodeType.ELEV && pastNode.getType() == Node.nodeType.ELEV) {
-                    words = "Take the stairs " + node.floorsBetweenNodes(pastNode);
+//                    }else{
 //                        directions.add(words);
-                    changeDirections = true;
-                }else {
-                    // Wow you messed up
-
-                }
-
-//                System.out.println("words: " + words + " distance: " + distance + " pastDistance: " + pastDistance + " changeDirections: " + changeDirections   );
-//                System.out.println("pastNode: " + pastNode + " lastChangeNode: " + lastChangeNode);
-
-                if (changeDirections) {
-                    if (firstTime) {
-//                        directions.add(words);
-                        firstTime = false;
-                    } else {
-                        directions.add("Go forward " + roundToNearest(feetPerPixel*lastChangeNode.distanceBetweenNodes(pastNode), 10) + ft);
-                        directions.add(words);
-                    }
-
-                    pastDistance = distance;
-                    distance = 0;
-                    changeDirections = false;
-                    lastChangeNode = pastNode;
-                } else {
-
-                }
-                distance += pastNode.distanceBetweenNodes(node);
-
-//                System.out.println();
+////                    }
+//
+//                    pastDistance = distance;
+//                    distance = 0;
+//                    changeDirections = false;
+//                    lastChangeNode = pastNode;
+//                } else {
+//
+//                }
+//                distance += pastNode.distanceBetweenNodes(node);
+//
+////                System.out.println();
+//            }
+//            pastWords = words;
+//            pastAngle = angle;
+//            pastNode = node;
+////            directions.add("------------");
+//        }
+//        //directions.add("Go forward " + roundToNearest(feetPerPixel*lastChangeNode.distanceBetweenNodes(pastNode), 10) + ft);
+//        directions.add("You have arrived at your destination!");
+//        return directions;
             }
-            pastWords = words;
-            pastAngle = angle;
-            pastNode = node;
-//            directions.add("------------");
+
         }
-        directions.add("Go forward " + roundToNearest(feetPerPixel*lastChangeNode.distanceBetweenNodes(pastNode), 10) + ft);
-        return directions;
+        return null;
+    }
+
+    public void refresh() {
+        for (int i = 0; i < directionsTableView.getItems().size(); i++) {
+            directionsTableView.getItems().clear();
+        }
     }
 
     public int roundToNearest(double value, int roundTo) {
