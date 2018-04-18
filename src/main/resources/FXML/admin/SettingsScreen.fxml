@@ -65,7 +65,7 @@
                         <Font size="30.0" />
                      </font>
                   </JFXButton>
-                  <JFXComboBox fx:id="algorithmComboBox" editable="true" focusColor="#f5bc3a" prefHeight="50.0" prefWidth="310.0" unFocusColor="#0b2f5b" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <JFXComboBox fx:id="algorithmComboBox" focusColor="#f5bc3a" prefHeight="50.0" prefWidth="310.0" style="-fx-font-size: 36px;" unFocusColor="#0b2f5b" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <JFXTextField fx:id="feetPerPixelTextField" maxWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <font>
                         <Font size="36.0" />

@@ -43,42 +43,42 @@ public class SettingsController {
      */
     @FXML
     public void onStartUp() {
-//        algorithmComboBox.setItems(algorithmTypes);
-//        switch (Settings.getPathfindingSettings()) {
-//            case AStar: {
-//                algorithmComboBox.setValue("A*");
-//                break;
-//            }
-//            case DepthFirst: {
-//                algorithmComboBox.setValue("Depth-first");
-//                break;
-//            }
-//            case BreadthFirst: {
-//                algorithmComboBox.setValue("Breadth-first");
-//                break;
-//            }
-//            case Dijkstra: {
-//                algorithmComboBox.setValue("Dijkstra's");
-//                break;
-//            }
-//            case BestFirst: {
-//                algorithmComboBox.setValue("BestFirst");
-//                break;
-//            }
-//            default: {
-//                System.out.println("Admin Settings Panel was unable to set the current Pathfinding Algorithm Context");
-//                break;
-//            }
-//        }
+        algorithmComboBox.setItems(algorithmTypes);
+        switch (Settings.getPathfindingSettings()) {
+            case AStar: {
+                algorithmComboBox.setValue("A*");
+                break;
+            }
+            case DepthFirst: {
+                algorithmComboBox.setValue("Depth-first");
+                break;
+            }
+            case BreadthFirst: {
+                algorithmComboBox.setValue("Breadth-first");
+                break;
+            }
+            case Dijkstra: {
+                algorithmComboBox.setValue("Dijkstra's");
+                break;
+            }
+            case BestFirst: {
+                algorithmComboBox.setValue("BestFirst");
+                break;
+            }
+            default: {
+                System.out.println("Admin Settings Panel was unable to set the current Pathfinding Algorithm Context");
+                break;
+            }
+        }
+        feetPerPixelTextField.setText(Double.toString(Settings.getFeetPerPixel()));
     }
 
     /**
      * Sets the settings singleton based upon the current inputs when the
      * submit button is pressed.
-     * @param e
      */
     @FXML
-    public void submitButtonOp(ActionEvent e) {
+    public void submitButtonOp() {
         switch (algorithmComboBox.getValue().toString()) {
             case "A*":
                 Settings.setPathfindingAlgorithm(PathfindingSetting.AStar);
@@ -106,7 +106,7 @@ public class SettingsController {
     }
 
     @FXML
-    public void backButtonOp(ActionEvent e) {
+    public void backButtonOp() {
         Parent root;
         FXMLLoader loader;
 
