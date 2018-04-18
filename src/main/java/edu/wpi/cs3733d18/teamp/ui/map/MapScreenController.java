@@ -270,21 +270,27 @@ public class MapScreenController {
             switch(floorState) {
                 case "3":
                     image = new Image("/img/maps/3d/3-ICONS.png"); //TODO use this bit of information for image drawing
+                    floor3Button.setFocusTraversable(true);
                     break;
                 case "2":
                     image = new Image("/img/maps/3d/2-ICONS.png");
+                    floor2Button.setFocusTraversable(true);
                     break;
                 case "1":
                     image = new Image("/img/maps/3d/1-ICONS.png");
+                    floor1Button.setFocusTraversable(true);
                     break;
                 case "G":
                     image = new Image("/img/maps/3d/1-ICONS.png");
+                    floorGButton.setFocusTraversable(true);
                     break;
                 case "L1":
                     image = new Image("/img/maps/3d/L1-ICONS.png");
+                    floorL1Button.setFocusTraversable(true);
                     break;
                 default:
                     image = new Image("/img/maps/3d/L2-ICONS.png");
+                    floorL2Button.setFocusTraversable(true);
                     break;
             }
         } else {
@@ -299,21 +305,27 @@ public class MapScreenController {
             switch (floorState) {
                 case "3":
                     image = new Image("/img/maps/2d/03_thethirdfloor.png");
+                    floor3Button.setFocusTraversable(true);
                     break;
                 case "2":
                     image = new Image("/img/maps/2d/02_thesecondfloor.png");
+                    floor2Button.setFocusTraversable(true);
                     break;
                 case "1":
                     image = new Image("/img/maps/2d/01_thefirstfloor.png");
+                    floor1Button.setFocusTraversable(true);
                     break;
                 case "G":
                     image = new Image("/img/maps/2d/00_thegroundfloor.png");
+                    floorGButton.setFocusTraversable(true);
                     break;
                 case "L1":
                     image = new Image("/img/maps/2d/00_thelowerlevel1.png");
+                    floorL1Button.setFocusTraversable(true);
                     break;
                 default:
                     image = new Image("/img/maps/2d/00_thelowerlevel2.png");
+                    floorL2Button.setFocusTraversable(true);
                     break;
             }
         }
