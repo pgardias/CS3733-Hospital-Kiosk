@@ -6,6 +6,7 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.Pathfinding.PathfindingContext;
+import edu.wpi.cs3733d18.teamp.ui.home.ShakeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -1309,6 +1310,8 @@ public class MapBuilderController implements Initializable {
         } else {
             // Destination has not been set, set search bar to red
             destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
+            ShakeTransition anim = new ShakeTransition(destinationSearchBar);
+            anim.playFromStart();
             return false;
             //dstNode = nodeSet.get(endNode.getID());
         }

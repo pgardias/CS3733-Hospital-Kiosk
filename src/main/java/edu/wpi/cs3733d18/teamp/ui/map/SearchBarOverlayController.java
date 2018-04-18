@@ -198,9 +198,9 @@ public class SearchBarOverlayController implements Initializable{
             destinationSearchBar.setUnFocusColor(Color.rgb(245,188,58));
             dstNode = nodeSet.get(parseDestinationInput(srcNode, dst).getID());
         } else {
-            // Destination has not been set, set search bar to red
-//            destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
-            ShakeTransition anim = new ShakeTransition(sourceSearchBar, destinationSearchBar);
+            // Destination has not been set, set search bar to red and shake
+            destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
+            ShakeTransition anim = new ShakeTransition(destinationSearchBar);
             anim.playFromStart();
             return false;
             //dstNode = nodeSet.get(endNode.getID());
