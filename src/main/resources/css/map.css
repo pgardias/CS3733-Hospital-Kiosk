@@ -16,11 +16,7 @@
     -fx-background-radius: 0 0 75 75;
 }
 
-.popover {
-    -fx-background-color: YELLOW;
+.alg-combo-box {
     -fx-font-color: WHITE;
-    -fx-font-size: 24px;
-}
-.popover > .border {
-    -fx-border-style: none;
+    -fx-font-size: 18px;
 }
