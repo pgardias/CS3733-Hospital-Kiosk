@@ -269,13 +269,13 @@ public class MapScreenController {
         if (toggleOn) {
             X_OFFSET = 0;
             Y_OFFSET = -19;
-            X_SCALE = 1920.0/5000.0;
-            Y_SCALE = 1065.216/2774.0;
+            X_SCALE = 1920.0 / 5000.0;
+            Y_SCALE = 1065.216 / 2774.0;
             IMG_HEIGHT = 2774;
             zoomSlider.setMin(ZOOM_3D_MIN);
             zoomSlider.setValue(ZOOM_3D_MIN);
             zoomForTranslate = zoomSlider.getValue();
-            switch(floorState) {
+            switch (floorState) {
                 case "3":
                     image = new Image("/img/maps/3d/3-ICONS.png"); //TODO use this bit of information for image drawing
                     setFloorStyleClass(Node.floorType.LEVEL_3);
@@ -304,8 +304,8 @@ public class MapScreenController {
         } else {
             X_OFFSET = -523;
             Y_OFFSET = 0;
-            X_SCALE = 1588.235294/5000.0;
-            Y_SCALE = 1080.0/3400.0;
+            X_SCALE = 1588.235294 / 5000.0;
+            Y_SCALE = 1080.0 / 3400.0;
             IMG_HEIGHT = 3400;
             zoomSlider.setMin(ZOOM_2D_MIN);
             zoomSlider.setValue(ZOOM_2D_MIN);
@@ -377,8 +377,8 @@ public class MapScreenController {
         System.out.println("source: " + s.getSource().toString());
         double change = 0;
 
-        if ((s.getDeltaY() < 0 ) && (zoomSlider.getValue() != zoomSlider.getMin())) change  = 1;
-        if ((s.getDeltaY() > 0 ) &&(zoomSlider.getValue() != zoomSlider.getMax())) change = 1;
+        if ((s.getDeltaY() < 0) && (zoomSlider.getValue() != zoomSlider.getMin())) change = 1;
+        if ((s.getDeltaY() > 0) && (zoomSlider.getValue() != zoomSlider.getMax())) change = 1;
         System.out.println("s.getDeltaY: " + s.getDeltaY());
         System.out.println("change: " + change);
 
@@ -390,37 +390,37 @@ public class MapScreenController {
         double orgTranslateY = mapImage.getTranslateY();
         System.out.println("orgTranslate X: " + orgTranslateX + " orgTranslate Y: " + orgTranslateY);
 
-        double mouseAdjustX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE *(mouseX/1920.0)));
-        double mouseAdjustY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE *(mouseY/1080.0)));
+        double mouseAdjustX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE * (mouseX / 1920.0)));
+        double mouseAdjustY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE * (mouseY / 1080.0)));
         System.out.println("mouse adjustX: " + mouseAdjustX + " mouse adjustY: " + mouseAdjustY);
 
-        double imageCenterX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE *0.5));
-        double imageCenterY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE *0.5));
+        double imageCenterX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE * 0.5));
+        double imageCenterY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE * 0.5));
         System.out.println(" image centerx : " + imageCenterX + " image centery: " + imageCenterY);
 
         double mouseChangeX = mouseAdjustX - imageCenterX;
         double mouseChangeY = mouseAdjustY - imageCenterY;
         System.out.println("Mouse ChangeX: " + mouseChangeX + " Mouse Change Y: " + mouseChangeY);
 
-        newTranslateX = (orgTranslateX * zoomSlider.getValue()/zoomForTranslate) - (change * mouseChangeX * s.getDeltaY()/256.0);
-        newTranslateY = (orgTranslateY * zoomSlider.getValue()/zoomForTranslate) - (change * mouseChangeY * s.getDeltaY()/256.0);
+        newTranslateX = (orgTranslateX * zoomSlider.getValue() / zoomForTranslate) - (change * mouseChangeX * s.getDeltaY() / 256.0);
+        newTranslateY = (orgTranslateY * zoomSlider.getValue() / zoomForTranslate) - (change * mouseChangeY * s.getDeltaY() / 256.0);
         System.out.println("new translate x: " + newTranslateX + " new translate Y: " + newTranslateY);
 
         zoomSlider.setValue(newValue);
 
         zoomForTranslate = zoomSlider.getValue();
 
-        double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
-        double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
+        double translateSlopeX = X_SCALE * mapImage.getScaleX() * IMG_WIDTH;
+        double translateSlopeY = Y_SCALE * mapImage.getScaleX() * IMG_HEIGHT;
 
-        if(newTranslateX > (translateSlopeX - 1920)/2)
-            newTranslateX = (translateSlopeX - 1920)/2;
-        if(newTranslateX < -(translateSlopeX - 1920)/2)
-            newTranslateX = -(translateSlopeX - 1920)/2;
-        if(newTranslateY > (translateSlopeY - 1080)/2)
-            newTranslateY = (translateSlopeY - 1080)/2;
-        if(newTranslateY < -(translateSlopeY - 1080)/2)
-            newTranslateY = -(translateSlopeY - 1080)/2;
+        if (newTranslateX > (translateSlopeX - 1920) / 2)
+            newTranslateX = (translateSlopeX - 1920) / 2;
+        if (newTranslateX < -(translateSlopeX - 1920) / 2)
+            newTranslateX = -(translateSlopeX - 1920) / 2;
+        if (newTranslateY > (translateSlopeY - 1080) / 2)
+            newTranslateY = (translateSlopeY - 1080) / 2;
+        if (newTranslateY < -(translateSlopeY - 1080) / 2)
+            newTranslateY = -(translateSlopeY - 1080) / 2;
 
         mapImage.setTranslateX(newTranslateX);
         mapImage.setTranslateY(newTranslateY);
@@ -458,7 +458,7 @@ public class MapScreenController {
             circle.setFill(Color.DODGERBLUE);
             circle.setStroke(Color.BLACK);
             circle.setStrokeType(StrokeType.INSIDE);
-            if(!node.getActive()) {
+            if (!node.getActive()) {
                 circle.setOpacity(0.5);
                 circle.setFill(Color.GRAY);
             }
@@ -606,7 +606,7 @@ public class MapScreenController {
                         }
                         Label nodeTypeLabel = new Label(type);
                         Label nodeLongNameLabel = new Label("Name: " + node.getLongName());
-                        Label nodeBuildingLabel = new Label("Building: "+ node.getBuilding().toString());
+                        Label nodeBuildingLabel = new Label("Building: " + node.getBuilding().toString());
                         nodeTypeLabel.setStyle("-fx-font-size: 28px; -fx-text-fill: #0b2f5b; -fx-font-weight: 700; -fx-padding: 10px 10px 0 10px;");
                         nodeTypeLabel.setAlignment(Pos.CENTER);
                         nodeLongNameLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 0 10px;");
@@ -619,8 +619,7 @@ public class MapScreenController {
                             System.out.println(" Left side of screeNn: " + event.getSceneX() + " " + event.getSceneY());
                             popOver.show(/*(javafx.scene.Node)  event.getSource() */labelPane, event.getSceneX() + 5, event.getSceneY());
                             //popOver.setArrowLocation(ArrowLocation.LEFT_TOP);
-                        }
-                       else {
+                        } else {
                             System.out.println(" Right side of screen " + event.getSceneX() + " " + event.getSceneY());
                             popOver.setArrowLocation(ArrowLocation.RIGHT_TOP);
                             popOver.show((javafx.scene.Node) event.getSource(), -5);
@@ -681,18 +680,18 @@ public class MapScreenController {
 
                 zoomForTranslate = zoomSlider.getValue();
 
-                double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
-                double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
+                double translateSlopeX = X_SCALE * mapImage.getScaleX() * IMG_WIDTH;
+                double translateSlopeY = Y_SCALE * mapImage.getScaleX() * IMG_HEIGHT;
 
                 System.out.println("Offset X: " + offsetX + " Offset Y: " + offsetY);
-                if(newTranslateX > (translateSlopeX - 1920)/2)
-                    newTranslateX = (translateSlopeX - 1920)/2;
-                if(newTranslateX < -(translateSlopeX - 1920)/2)
-                    newTranslateX = -(translateSlopeX - 1920)/2;
-                if(newTranslateY > (translateSlopeY - 1080)/2)
-                    newTranslateY = (translateSlopeY - 1080)/2;
-                if(newTranslateY < -(translateSlopeY - 1080)/2)
-                    newTranslateY = -(translateSlopeY - 1080)/2;
+                if (newTranslateX > (translateSlopeX - 1920) / 2)
+                    newTranslateX = (translateSlopeX - 1920) / 2;
+                if (newTranslateX < -(translateSlopeX - 1920) / 2)
+                    newTranslateX = -(translateSlopeX - 1920) / 2;
+                if (newTranslateY > (translateSlopeY - 1080) / 2)
+                    newTranslateY = (translateSlopeY - 1080) / 2;
+                if (newTranslateY < -(translateSlopeY - 1080) / 2)
+                    newTranslateY = -(translateSlopeY - 1080) / 2;
 
                 mapImage.setTranslateX(newTranslateX);
                 mapImage.setTranslateY(newTranslateY);
@@ -744,7 +743,6 @@ public class MapScreenController {
         double distanceCounter = 0;
 
 
-
         Node currentNode = null, pastNode = null;
         if (pathMade != null) {
             resetPath();
@@ -784,28 +782,28 @@ public class MapScreenController {
 
             //Draws the arrows
             if (!path.get(0).equals(n)) {
-                if(toggleOn) {
+                if (toggleOn) {
                     width = currentNode.getxDisplay() - pastNode.getxDisplay();
                     height = currentNode.getyDisplay() - pastNode.getyDisplay();
                 } else {
                     width = currentNode.getX() - pastNode.getX();
                     height = currentNode.getY() - pastNode.getY();
                 }
-                angle = Math.atan2(height , width);
+                angle = Math.atan2(height, width);
                 //increment the distanceCounter
                 distanceCounter += currentNode.distanceBetweenNodes(pastNode);
-                if(distanceCounter >= 175) {
+                if (distanceCounter >= 175) {
                     distanceCounter = 0;
 
                     arrowFloorSet.add(currentNode.getFloor().toString());
-                    if(toggleOn) {
+                    if (toggleOn) {
                         drawTriangle(angle, pastNode.getxDisplay(), pastNode.getyDisplay());
                     } else {
                         drawTriangle(angle, pastNode.getX(), pastNode.getY());
                     }
                 }
             }
-            
+
             //set start node to Green and end node to red
             if (path.get(0).equals(n)) {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.GREEN);
@@ -813,10 +811,9 @@ public class MapScreenController {
                 if (toggleOn) {
                     startLabel.setLayoutX((n.getxDisplay() + 5 - X_OFFSET) * X_SCALE);
                     startLabel.setLayoutY((n.getyDisplay() - 40 - Y_OFFSET) * Y_SCALE);
-                }
-                else {
-                    startLabel.setLayoutX((n.getX()+5- X_OFFSET)*X_SCALE);
-                    startLabel.setLayoutY((n.getY()-40- Y_OFFSET)*Y_SCALE);
+                } else {
+                    startLabel.setLayoutX((n.getX() + 5 - X_OFFSET) * X_SCALE);
+                    startLabel.setLayoutY((n.getY() - 40 - Y_OFFSET) * Y_SCALE);
                 }
                 startLabel.setText(n.getLongName());
                 startLabel.setFont(font);
@@ -824,19 +821,18 @@ public class MapScreenController {
                 labelDispSet.add(startLabel);
                 nodesEdgesPane.getChildren().add(startLabel);
 
-            } else if (path.get(path.size()-1).equals(n)) {
+            } else if (path.get(path.size() - 1).equals(n)) {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.RED);
                 //if the last node was a stair or an elevator then it should check the else in the checkStairNode function
-                if (currentNode.getType().equals(Node.nodeType.ELEV) || currentNode.getType().equals(Node.nodeType.STAI)){
+                if (currentNode.getType().equals(Node.nodeType.ELEV) || currentNode.getType().equals(Node.nodeType.STAI)) {
                     addToStairNodeSet();
                 }
-                if(toggleOn) {
-                    endLabel.setLayoutX((n.getxDisplay()+5- X_OFFSET)*X_SCALE);
-                    endLabel.setLayoutY((n.getyDisplay()-34- Y_OFFSET)*Y_SCALE);
-                }
-                else {
-                    endLabel.setLayoutX((n.getX()+5- X_OFFSET)*X_SCALE);
-                    endLabel.setLayoutY((n.getY()-34- Y_OFFSET)*Y_SCALE);
+                if (toggleOn) {
+                    endLabel.setLayoutX((n.getxDisplay() + 5 - X_OFFSET) * X_SCALE);
+                    endLabel.setLayoutY((n.getyDisplay() - 34 - Y_OFFSET) * Y_SCALE);
+                } else {
+                    endLabel.setLayoutX((n.getX() + 5 - X_OFFSET) * X_SCALE);
+                    endLabel.setLayoutY((n.getY() - 34 - Y_OFFSET) * Y_SCALE);
                 }
                 endLabel.setText(n.getLongName());
                 endLabel.setFont(font);
@@ -850,22 +846,32 @@ public class MapScreenController {
                     if (e.contains(pastNode)) {
                         edgeDispSet.get(e.getID()).setStroke(Color.rgb(250, 150, 0));
                         edgeDispSet.get(e.getID()).setVisible(true);
-                        if(e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor){
+                        if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
                             edgeDispSet.get(e.getID()).setOpacity(1.0);
                         } else {
-                          edgeDispSet.get(e.getID()).setOpacity(0.3);
+                            edgeDispSet.get(e.getID()).setOpacity(0.3);
                         }
                     }
                 }
             }
         }
         //this sets the proper opacity for the arrows based on floor
-        for(int i = 0; i < arrowDispSet.size(); i++) {
+        for (int i = 0; i < arrowDispSet.size(); i++) {
             System.out.println(arrowFloorSet.get(i));
-            if(arrowFloorSet.get(i).equals(currentFloor.toString())) {
+            if (arrowFloorSet.get(i).equals(currentFloor.toString())) {
                 arrowDispSet.get(i).setOpacity(1.0);
             } else {
                 arrowDispSet.get(i).setOpacity(0.3);
+            }
+        }
+
+        // Create PopOver for Stair or Elevator nodes
+        for (int i = 0; i < stairNodeSet.size(); i += 2) {
+            for (String str : nodeDispSet.keySet()) {
+                if (str.equals(stairNodeSet.get(i).getID()) && stairNodeSet.get(i).getFloor().equals(currentFloor)) {
+                    createPopOver(nodeDispSet.get(str));
+                    break;
+                }
             }
         }
 
@@ -877,12 +883,12 @@ public class MapScreenController {
         double rangeX = maxXCoord - minXCoord;
         double rangeY = maxYCoord - minYCoord;
 
-        double desiredZoomX = 1920/(rangeX * X_SCALE);
-        double desiredZoomY = 1080/(rangeY * Y_SCALE);
-        System.out.println("desired X zoom: " + desiredZoomX +  " desired Zoom Y: " + desiredZoomY);
+        double desiredZoomX = 1920 / (rangeX * X_SCALE);
+        double desiredZoomY = 1080 / (rangeY * Y_SCALE);
+        System.out.println("desired X zoom: " + desiredZoomX + " desired Zoom Y: " + desiredZoomY);
 
-        double centerX = (maxXCoord + minXCoord)/2;
-        double centerY = (maxYCoord + minYCoord)/2;
+        double centerX = (maxXCoord + minXCoord) / 2;
+        double centerY = (maxYCoord + minYCoord) / 2;
 
         autoTranslateZoom(desiredZoomX, desiredZoomY, centerX, centerY);
 
@@ -891,6 +897,27 @@ public class MapScreenController {
         pathDrawn = true;
     }
 
+    public void createPopOver(javafx.scene.Node node) {
+        Label clickMeLabel = new Label("Click the circle to follow path.");
+        clickMeLabel.setStyle("-fx-font-size: 28px; -fx-text-fill: #0b2f5b; -fx-font-weight: 700; -fx-padding: 10px 10px 0 10px;");
+        popOver = new PopOver(clickMeLabel);
+//        if (event.getSceneX() < 960) {
+//            System.out.println(" Left side of screeNn: " + event.getSceneX() + " " + event.getSceneY());
+//            popOver.show(/*(javafx.scene.Node)  event.getSource() */labelPane, event.getSceneX() + 5, event.getSceneY());
+//            //popOver.setArrowLocation(ArrowLocation.LEFT_TOP);
+//        } else {
+//            System.out.println(" Right side of screen " + event.getSceneX() + " " + event.getSceneY());
+//            popOver.setArrowLocation(ArrowLocation.RIGHT_TOP);
+//            popOver.show((javafx.scene.Node) event.getSource(), -5);
+//            System.out.println("Popover X: " + popOver.getX() + " PopOver Y: " + popOver.getY());
+//            System.out.println("Popover length: " + popOver.getWidth() + " popover height: " + popOver.getHeight());
+//        }
+        popOver.show(node, -5);
+        popOverHidden = false;
+        popOver.setCloseButtonEnabled(false);
+        popOver.setAutoFix(true);
+        popOver.setDetachable(false);
+    }
 
     /**
      * drawTriangle is the function that draws directional arrows for the function
@@ -906,7 +933,6 @@ public class MapScreenController {
 
 
         Polygon arrow = new Polygon();
-
 
 
         initX = (initX - X_OFFSET) * X_SCALE;
@@ -937,25 +963,24 @@ public class MapScreenController {
     }
 
 
+    public void checkStairNodeSet(Node currentNode) {
 
-    public void checkStairNodeSet(Node currentNode){
-
-        if (currentNode.getType().equals(Node.nodeType.STAI)){
+        if (currentNode.getType().equals(Node.nodeType.STAI)) {
             recentElevNodeSet.clear();
             recentStairNodeSet.add(currentNode);
-        } else if (currentNode.getType().equals(Node.nodeType.ELEV)){
+        } else if (currentNode.getType().equals(Node.nodeType.ELEV)) {
             recentStairNodeSet.clear();
             recentElevNodeSet.add(currentNode);
-        } else{
+        } else {
             addToStairNodeSet();
         }
     }
 
-    public void addToStairNodeSet(){
-        if (recentStairNodeSet.size() > 1){
+    public void addToStairNodeSet() {
+        if (recentStairNodeSet.size() > 1) {
             stairNodeSet.add(recentStairNodeSet.get(0));
             stairNodeSet.add(recentStairNodeSet.get(recentStairNodeSet.size() - 1));
-        } else if (recentElevNodeSet.size() > 1){
+        } else if (recentElevNodeSet.size() > 1) {
             stairNodeSet.add(recentElevNodeSet.get(0));
             stairNodeSet.add(recentElevNodeSet.get(recentElevNodeSet.size() - 1));
         }
@@ -991,7 +1016,7 @@ public class MapScreenController {
             }
             arrowDispSet.clear();
             arrowFloorSet.clear();
-            for(Label l : labelDispSet) {
+            for (Label l : labelDispSet) {
                 l.setVisible(false);
                 l.setPickOnBounds(false);
                 nodesEdgesPane.getChildren().remove(l);
@@ -1030,12 +1055,12 @@ public class MapScreenController {
         }
     }
 
-    public void removeFocus(){
+    public void removeFocus() {
         searchBarOverlayController.setSearchButtonFocus();
     }
 
 
-    public void autoTranslateZoom(double zoomX, double zoomY, double centerX, double centerY){
+    public void autoTranslateZoom(double zoomX, double zoomY, double centerX, double centerY) {
 
         double zoom;
         if (zoomX > zoomY)
@@ -1051,8 +1076,8 @@ public class MapScreenController {
         zoomSlider.setValue(zoom);
 
         System.out.println("Center X: " + centerX + " Center Y: " + centerY);
-        double screenX = (centerX - X_OFFSET)*X_SCALE;
-        double screenY = (centerY - Y_OFFSET)*Y_SCALE;
+        double screenX = (centerX - X_OFFSET) * X_SCALE;
+        double screenY = (centerY - Y_OFFSET) * Y_SCALE;
         System.out.println("Screen x: " + screenX + " Screen Y: " + screenY);
 
         double translateX = 960 - screenX;
@@ -1061,16 +1086,16 @@ public class MapScreenController {
         double screenTranslateY = (translateY * zoom);
         System.out.println("translate X: " + translateX + " translate Y: " + translateY);
 
-        double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
-        double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
-        if(screenTranslateX > (translateSlopeX - 1920)/2)
-            screenTranslateX = (translateSlopeX - 1920)/2;
-        if(screenTranslateX < -(translateSlopeX - 1920)/2)
-            screenTranslateX = -(translateSlopeX - 1920)/2;
-        if(screenTranslateY > (translateSlopeY - 1080)/2)
-            screenTranslateY = (translateSlopeY - 1080)/2;
-        if(screenTranslateY < -(translateSlopeY - 1080)/2)
-            screenTranslateY = -(translateSlopeY - 1080)/2;
+        double translateSlopeX = X_SCALE * mapImage.getScaleX() * IMG_WIDTH;
+        double translateSlopeY = Y_SCALE * mapImage.getScaleX() * IMG_HEIGHT;
+        if (screenTranslateX > (translateSlopeX - 1920) / 2)
+            screenTranslateX = (translateSlopeX - 1920) / 2;
+        if (screenTranslateX < -(translateSlopeX - 1920) / 2)
+            screenTranslateX = -(translateSlopeX - 1920) / 2;
+        if (screenTranslateY > (translateSlopeY - 1080) / 2)
+            screenTranslateY = (translateSlopeY - 1080) / 2;
+        if (screenTranslateY < -(translateSlopeY - 1080) / 2)
+            screenTranslateY = -(translateSlopeY - 1080) / 2;
 
         System.out.println("Chosen translate X: " + screenTranslateX + " Chosen translate Y: " + screenTranslateY);
         mapImage.setTranslateX(screenTranslateX);
@@ -1080,9 +1105,9 @@ public class MapScreenController {
     }
 
 
-    public void setFloorStyleClass(Node.floorType floor){
+    public void setFloorStyleClass(Node.floorType floor) {
 
-        switch(floor){
+        switch (floor) {
             case LEVEL_1:
                 floor1Button.getStyleClass().removeAll("floor-button");
                 floor1Button.getStyleClass().add("highlight-floor-button");
