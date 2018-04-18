@@ -609,13 +609,18 @@ public class MapScreenController {
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
                         popOver = new PopOver(popOverVBox);
 //                        popOver.show((javafx.scene.Node) event.getSource(), -5);
+                        System.out.println("Popover width: " + nodeLongNameLabel.getWidth());
                         if (event.getSceneX() < 960) {
-                            System.out.println(event.getSceneX() + " " + event.getSceneY());
-                            popOver.show(/*(javafx.scene.Node)  event.getSource() */labelPane, event.getSceneX() - 5, event.getSceneY());
-                            popOver.setArrowLocation(PopOver.ArrowLocation.RIGHT_TOP);
-                        } else {
-                            popOver.show(labelPane, event.getSceneX() + 5, event.getSceneY());
-                            popOver.setArrowLocation(PopOver.ArrowLocation.LEFT_TOP);
+                            System.out.println(" Left side of screeNn: " + event.getSceneX() + " " + event.getSceneY());
+                            popOver.show(/*(javafx.scene.Node)  event.getSource() */labelPane, event.getSceneX() + 5, event.getSceneY());
+                            //popOver.setArrowLocation(ArrowLocation.LEFT_TOP);
+                        }
+                       else {
+                            System.out.println(" Right side of screen " + event.getSceneX() + " " + event.getSceneY());
+                            popOver.setArrowLocation(ArrowLocation.RIGHT_TOP);
+                            popOver.show((javafx.scene.Node) event.getSource(), -5);
+                            System.out.println("Popover X: " + popOver.getX() + " PopOver Y: " + popOver.getY());
+                            System.out.println("Popover length: " + popOver.getWidth() + " popover height: " + popOver.getHeight());
                         }
                         popOverHidden = false;
                         popOver.setCloseButtonEnabled(false);
