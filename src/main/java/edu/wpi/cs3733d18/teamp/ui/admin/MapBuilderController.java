@@ -661,7 +661,7 @@ public class MapBuilderController implements Initializable {
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
                 if (isDragging && !isNewNode && !edgeSelected) {
                     clearCircles();
-                    modifyingNode = true;
+
                     nodeModify = dragNodeOrg;
                     ArrayList<Edge> dragEdges = dragNodeOrg.getEdges();
 
@@ -689,10 +689,12 @@ public class MapBuilderController implements Initializable {
                             edgeDispSet.get(edge.getID()).setEndY(newCenterY);
                         }
                     }
-
-                    newNodeForm(dragNodeOrg.getID(), dragNodeOrg.getLongName(), dragNodeOrg.getX(), dragNodeOrg.getY(),
-                            dragNodeOrg.getxDisplay(), dragNodeOrg.getyDisplay(), dragNodeOrg.getFloor().toString(),
-                            dragNodeOrg.getBuilding().toString(), dragNodeOrg.getType().toString(), dragNodeOrg.getActive());
+                    if (!modifyingNode) {
+                        newNodeForm(dragNodeOrg.getID(), dragNodeOrg.getLongName(), dragNodeOrg.getX(), dragNodeOrg.getY(),
+                                dragNodeOrg.getxDisplay(), dragNodeOrg.getyDisplay(), dragNodeOrg.getFloor().toString(),
+                                dragNodeOrg.getBuilding().toString(), dragNodeOrg.getType().toString(), dragNodeOrg.getActive());
+                    }
+                    modifyingNode = true;
                     if (!toggleOn) {
                         mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorState);
                     } else {
