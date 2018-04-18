@@ -98,6 +98,9 @@ public class SearchBarOverlayController implements Initializable{
         this.mapScreenController = mapScreenController;
         directionsTableView.setVisible(false);
         directionsButton.setVisible(false);
+        emailButton.setVisible(false);
+        phoneButton.setVisible(false);
+        directionsRectangle.setVisible(false);
         mapToggleButtonOp();
     }
 
@@ -467,10 +470,17 @@ public class SearchBarOverlayController implements Initializable{
             directionsList.clearDirections();
             directionsTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("directions"));
             directionsTableView.setVisible(false);
+            emailButton.setVisible(false);
+            phoneButton.setVisible(false);
+            directionsRectangle.setVisible(false);
             directionsButton.setText("Directions >");
             directionsVisible = false;
         }
         else {
+            emailButton.setVisible(true);
+            phoneButton.setVisible(true);
+            directionsRectangle.setVisible(true);
+
             if (directionsList.getDirections() == null) {
                 directionsTableView.setVisible(true);
                 directions.add(new DirectionsTable("Path needs to be set first!"));
