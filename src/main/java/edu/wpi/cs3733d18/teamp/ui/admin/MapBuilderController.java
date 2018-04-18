@@ -818,7 +818,7 @@ public class MapBuilderController implements Initializable {
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
 //                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
                         popOver = new PopOver(popOverVBox);
-                        popOver.show((javafx.scene.Node) event.getSource());
+                        popOver.show((javafx.scene.Node) event.getSource(), -5);
                         popOverHidden = false;
                         popOver.setCloseButtonEnabled(false);
 //                        popOver.setCornerRadius(20);
