@@ -75,7 +75,7 @@ public class SettingsController {
      * @param e
      */
     @FXML
-    public void submitmButtonOp(ActionEvent e) {
+    public void submitButtonOp(ActionEvent e) {
         switch (algorithmComboBox.getValue().toString()) {
             case "A*":
                 Settings.setPathfindingAlgorithm(PathfindingSetting.AStar);

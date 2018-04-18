@@ -199,6 +199,7 @@ public class SearchBarOverlayController implements Initializable{
         } else {
             // Destination has not been set, set search bar to red
             destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
+
             return false;
             //dstNode = nodeSet.get(endNode.getID());
         }
