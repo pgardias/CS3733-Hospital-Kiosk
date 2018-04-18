@@ -177,7 +177,7 @@ public class NodeRepo {
             conn = DriverManager.getConnection(DB_URL);
 
             // Check database for other Nodes with user input long name
-            checkLongName(node, conn);
+            checkLongName(node, conn, false);
 
             // Prepare statement
             String sql = "INSERT INTO NODE_INFO " +
@@ -233,7 +233,7 @@ public class NodeRepo {
             conn = DriverManager.getConnection(DB_URL);
 
             // Check database for other Nodes with user input long name
-            checkLongName(node, conn);
+            checkLongName(node, conn, true);
 
             // Prepare statement
             String sql = "UPDATE NODE_INFO " +
@@ -460,7 +460,7 @@ public class NodeRepo {
         return node.getType().toString() + " " + id.substring(5,8) + " Floor " + node.getFloor();
     }
 
-    private void checkLongName(Node node, Connection conn) throws DuplicateLongNameException{
+    private void checkLongName(Node node, Connection conn, Boolean isModify) throws DuplicateLongNameException{
         try {
             String sql = "SELECT nodeID FROM NODE_INFO " +
                     "WHERE longName = ?";
@@ -470,6 +470,9 @@ public class NodeRepo {
 
             if (rs.next()) {
                 String id = rs.getString(1);
+                if (isModify && id.equals(node.getID())) {
+                    return;
+                }
                 conn.close();
                 throw new DuplicateLongNameException(id);
             }

@@ -43,10 +43,7 @@ public class HomeController {
     private boolean swipeDetected = false;
 
     @FXML
-    JFXButton adminButton;
-
-    @FXML
-    JFXButton serviceButton;
+    JFXButton emergencyButton;
 
     @FXML
     JFXButton mapButton;
@@ -104,11 +101,13 @@ public class HomeController {
                     if (event.getSource().equals(usernameTxt)) {
                         System.out.println("usernametxt: " + usernameTxt.getText() + " event text: " + event.getCharacter());
                         usernameTxt.setText(usernameTxt.getText() + event.getCharacter());
+                        usernameTxt.positionCaret(usernameTxt.getLength());
                     }
                 }
                 if (event.getSource().equals(passwordTxt)) {
                     System.out.println("usernametxt: " + passwordTxt.getText() + " event text: " + event.getCharacter());
                     passwordTxt.setText(passwordTxt.getText() + event.getCharacter());
+                    passwordTxt.positionCaret(passwordTxt.getLength());
                 }
             }
             if (swipeDetected) {
@@ -331,5 +330,28 @@ public class HomeController {
                 loginErrorLabel.setVisible(true);
             }
         }
+    }
+
+    @FXML
+    public Boolean emergencyButtonOp(ActionEvent e) {
+        FXMLLoader loader;
+        Scene scene;
+        Parent root;
+        EmergencyRequestButtonScreenController emergencyRequestButtonScreenController;
+
+        scene =  emergencyButton.getScene();
+        loader = new FXMLLoader(getClass().getResource("/FXML/home/EmergencyRequestButtonScreen.fxml"));
+        try {
+            root = loader.load();
+        } catch (IOException ie) {
+            ie.getMessage();
+            ie.printStackTrace();
+            return false;
+        }
+        emergencyRequestButtonScreenController = loader.getController();
+        emergencyRequestButtonScreenController.onStartUp(this);
+
+        scene.setRoot(root);
+        return true;
     }
 }
