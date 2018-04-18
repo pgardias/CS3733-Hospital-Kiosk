@@ -534,7 +534,7 @@ public class MapScreenController {
                         }
                     }
                 }
-            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED && popOverHidden) { // TODO Check zoom level to prevent graphical glitches
+            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED && popOverHidden) {
                 System.out.println("MOUSE_ENTERED event at " + event.getSource());
                 for (String string : nodeDispSet.keySet()) {
                     if (nodeDispSet.get(string) == event.getSource()) {
@@ -567,12 +567,11 @@ public class MapScreenController {
                         nodeBuildingLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
                         popOver = new PopOver(popOverVBox);
-                        popOver.show((javafx.scene.Node) event.getSource());
+                        popOver.show((javafx.scene.Node) event.getSource(), -5);
                         popOverHidden = false;
                         popOver.setCloseButtonEnabled(false);
                         popOver.setAutoFix(true);
                         popOver.setDetachable(false);
-
                         nodeDispSet.get(string).setFill(Color.rgb(150,150,255));
                     }
                 }
