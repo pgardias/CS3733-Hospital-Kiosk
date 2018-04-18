@@ -606,6 +606,10 @@ public class SearchBarOverlayController implements Initializable{
         }
         return false;
     }
+
+    public void setSearchButtonFocus(){
+        goButton.requestFocus();
+    }
 }
 
 
