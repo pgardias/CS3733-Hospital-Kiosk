@@ -23,10 +23,9 @@
 .popover > .border {
     -fx-border-style: none;
 }
-
-
-
-.floor-buttons:focused{
+.highlight-floor-button{
     -fx-background-color: #F5BC3A;
     -fx-text-fill: #0b2f5b;
+    -jfx-button-type: RAISED;
+    -fx-background-radius: 20;
 }

@@ -258,42 +258,64 @@ public class MapBuilderController implements Initializable {
             switch (floorState) {
                 case "3":
                     image = new Image("/img/maps/3d/3-ICONS.png");
+                    setFloorStyleClass(Node.floorType.LEVEL_3);
+
                     break;
                 case "2":
                     image = new Image("/img/maps/3d/2-ICONS.png");
+                    setFloorStyleClass(Node.floorType.LEVEL_2);
+
                     break;
                 case "1":
                     image = new Image("/img/maps/3d/1-ICONS.png");
+                    setFloorStyleClass(Node.floorType.LEVEL_1);
                     break;
                 case "G":
                     image = new Image("/img/maps/3d/1-ICONS.png");
+                    setFloorStyleClass(Node.floorType.LEVEL_G);
+
                     break;
                 case "L1":
                     image = new Image("/img/maps/3d/L1-ICONS.png");
+                    setFloorStyleClass(Node.floorType.LEVEL_L1);
+
                     break;
                 default:
                     image = new Image("/img/maps/3d/L2-ICONS.png");
+                    setFloorStyleClass(Node.floorType.LEVEL_L2);
+
                     break;
             }
         } else {
             switch (floorState) {
                 case "3":
                     image = new Image("/img/maps/2d/03_thethirdfloor.png");
+                    setFloorStyleClass(Node.floorType.LEVEL_3);
+
                     break;
                 case "2":
                     image = new Image("/img/maps/2d/02_thesecondfloor.png");
+                    setFloorStyleClass(Node.floorType.LEVEL_2);
+
                     break;
                 case "1":
                     image = new Image("/img/maps/2d/01_thefirstfloor.png");
+                    setFloorStyleClass(Node.floorType.LEVEL_1);
+
                     break;
                 case "G":
                     image = new Image("/img/maps/2d/00_thegroundfloor.png");
+                    setFloorStyleClass(Node.floorType.LEVEL_G);
+
                     break;
                 case "L1":
                     image = new Image("/img/maps/2d/00_thelowerlevel1.png");
+                    setFloorStyleClass(Node.floorType.LEVEL_L1);
+
                     break;
                 default:
                     image = new Image("/img/maps/2d/00_thelowerlevel2.png");
+                    setFloorStyleClass(Node.floorType.LEVEL_L2);
                     break;
             }
         }
@@ -1243,39 +1265,37 @@ public class MapBuilderController implements Initializable {
             resetPath();
         }
         System.out.println("get path");
-        //get all nodes
+        // Get all nodes
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
-        //Declare source node, destination node, and get the typed in inputs for both search boxes
+        // Declare source node, destination node, and get the typed in inputs for both search boxes
         Node srcNode, dstNode;
         String src = sourceSearchBar.getText();
         String dst = destinationSearchBar.getText();
 
-//        System.out.println("test, " + src);
-
         // Check if the source node was input
         if (src.length() > 0 && !src.equals("Current Kiosk")) {
             // Source has been chosen by user, get Node entity from nodeID through NodeRepo
-//            System.out.println("Something typed in! " + src);
             srcNode = nodeSet.get(parseSourceInput(src).getID());
-//            System.out.println("Source node: " + srcNode);
         } else {
-            // Source is main.kiosk
+            // Source is main.kiosk by default
             srcNode = nodeSet.get("PKIOS00102");
-//            System.out.println("Nothing typed in! " + srcNode + " " + srcNode.getEdges());
         }
 
         // Check if the destination node was input
         if (dst.length() > 0) {
+            // Destination has been chosen by user, get Node entity from nodeID through NodeRepo
+            destinationSearchBar.setUnFocusColor(Color.rgb(245,188,58));
             dstNode = nodeSet.get(parseDestinationInput(srcNode, dst).getID());
-//            System.out.println("Something typed into destination! " + dst);
         } else {
-            dstNode = nodeSet.get(endNode.getID());
-//            System.out.println("Nothing typed in! " + dstNode);
+            // Destination has not been set, set search bar to red
+            destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
+            return false;
+            //dstNode = nodeSet.get(endNode.getID());
         }
-//        System.out.println("destination: " + dstNode);
 
         Font font = new Font("verdana", 24.0);
+        
 //        System.out.println("Source Node ID: "+srcNode.getID());
 
 //        startLabel.setLayoutX((srcNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
@@ -1610,5 +1630,107 @@ public class MapBuilderController implements Initializable {
         mapImage.setTranslateY(screenTranslateY);
         nodesEdgesPane.setTranslateX(screenTranslateX);
         nodesEdgesPane.setTranslateY(screenTranslateY);
+    }
+
+    public void setFloorStyleClass(Node.floorType floor){
+
+        switch(floor) {
+            case LEVEL_1:
+                floor1Button.getStyleClass().removeAll("floor-button");
+                floor1Button.getStyleClass().add("highlight-floor-button");
+
+                floor2Button.getStyleClass().removeAll("highlight-floor-button");
+                floor2Button.getStyleClass().add("floor-button");
+                floor3Button.getStyleClass().removeAll("highlight-floor-button");
+                floor3Button.getStyleClass().add("floor-button");
+                floorGButton.getStyleClass().removeAll("highlight-floor-button");
+                floorGButton.getStyleClass().add("floor-button");
+                floorL1Button.getStyleClass().removeAll("highlight-floor-button");
+                floorL1Button.getStyleClass().add("floor-button");
+                floorL2Button.getStyleClass().removeAll("highlight-floor-button");
+                floorL2Button.getStyleClass().add("floor-button");
+                break;
+
+            case LEVEL_2:
+                floor2Button.getStyleClass().removeAll("floor-button");
+                floor2Button.getStyleClass().add("highlight-floor-button");
+
+
+                floor1Button.getStyleClass().removeAll("highlight-floor-button");
+                floor1Button.getStyleClass().add("floor-button");
+                floor3Button.getStyleClass().removeAll("highlight-floor-button");
+                floor3Button.getStyleClass().add("floor-button");
+                floorGButton.getStyleClass().removeAll("highlight-floor-button");
+                floorGButton.getStyleClass().add("floor-button");
+                floorL1Button.getStyleClass().removeAll("highlight-floor-button");
+                floorL1Button.getStyleClass().add("floor-button");
+                floorL2Button.getStyleClass().removeAll("highlight-floor-button");
+                floorL2Button.getStyleClass().add("floor-button");
+                break;
+
+            case LEVEL_3:
+                floor3Button.getStyleClass().removeAll("floor-button");
+                floor3Button.getStyleClass().add("highlight-floor-button");
+
+                floor1Button.getStyleClass().removeAll("highlight-floor-button");
+                floor1Button.getStyleClass().add("floor-button");
+                floor2Button.getStyleClass().removeAll("highlight-floor-button");
+                floor2Button.getStyleClass().add("floor-button");
+                floorGButton.getStyleClass().removeAll("highlight-floor-button");
+                floorGButton.getStyleClass().add("floor-button");
+                floorL1Button.getStyleClass().removeAll("highlight-floor-button");
+                floorL1Button.getStyleClass().add("floor-button");
+                floorL2Button.getStyleClass().removeAll("highlight-floor-button");
+                floorL2Button.getStyleClass().add("floor-button");
+                break;
+
+            case LEVEL_G:
+                floorGButton.getStyleClass().removeAll("floor-button");
+                floorGButton.getStyleClass().add("highlight-floor-button");
+
+                floor1Button.getStyleClass().removeAll("highlight-floor-button");
+                floor1Button.getStyleClass().add("floor-button");
+                floor2Button.getStyleClass().removeAll("highlight-floor-button");
+                floor2Button.getStyleClass().add("floor-button");
+                floor3Button.getStyleClass().removeAll("highlight-floor-button");
+                floor3Button.getStyleClass().add("floor-button");
+                floorL1Button.getStyleClass().removeAll("highlight-floor-button");
+                floorL1Button.getStyleClass().add("floor-button");
+                floor2Button.getStyleClass().removeAll("highlight-floor-button");
+                floorL2Button.getStyleClass().add("floor-button");
+                break;
+
+            case LEVEL_L1:
+                floorL1Button.getStyleClass().removeAll("floor_button");
+                floorL1Button.getStyleClass().add("highlight-floor-button");
+
+                floor1Button.getStyleClass().removeAll("highlight-floor-button");
+                floor1Button.getStyleClass().add("floor-button");
+                floor2Button.getStyleClass().removeAll("highlight-floor-button");
+                floor2Button.getStyleClass().add("floor-button");
+                floor3Button.getStyleClass().removeAll("highlight-floor-button");
+                floor3Button.getStyleClass().add("floor-button");
+                floorGButton.getStyleClass().removeAll("highlight-floor-button");
+                floorGButton.getStyleClass().add("floor-button");
+                floorL2Button.getStyleClass().removeAll("highlight-floor-button");
+                floorL2Button.getStyleClass().add("floor-button");
+                break;
+
+            case LEVEL_L2:
+                floorL2Button.getStyleClass().removeAll("floor_button");
+                floorL2Button.getStyleClass().add("highlight-floor-button");
+
+                floor1Button.getStyleClass().removeAll("highlight-floor-button");
+                floor1Button.getStyleClass().add("floor-button");
+                floor2Button.getStyleClass().removeAll("highlight-floor-button");
+                floor2Button.getStyleClass().add("floor-button");
+                floor3Button.getStyleClass().removeAll("highlight-floor-button");
+                floor3Button.getStyleClass().add("floor-button");
+                floorGButton.getStyleClass().removeAll("highlight-floor-button");
+                floorGButton.getStyleClass().add("floor-button");
+                floorL1Button.getStyleClass().removeAll("highlight-floor-button");
+                floorL1Button.getStyleClass().add("floor-button");
+                break;
+        }
     }
 }
