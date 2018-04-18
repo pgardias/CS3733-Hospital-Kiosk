@@ -1,0 +1,6 @@
+requestID,requestType,subType,location,endLocation,additionalInfo,madeBy,completedBy,timeMade,timeCompleted,completed,priority
+1,transportation,Gurney,15 Francis Security Desk Floor 2,Abrams Conference Room,Mode of Transportation: Gurney Additional Info: test,admin,BuildingOwner,2018-04-16 16:42:57.907,2018-04-16 16:55:32.085,2,0
+2,transportation,Wheelchair,15 Lobby Entrance Floor 2,Abrams Conference Room,Mode of Transportation: Wheelchair Additional Info: test,admin,BuildingOwner,2018-04-16 16:44:15.939,2018-04-16 18:34:03.147,2,0
+3,transportation,Ambulance,15 Francis Security Desk Floor 2,15 Francis Security Desk Floor 2,Mode of Transportation: Ambulance Additional Info: test,admin,BuildingOwner,2018-04-16 18:34:39.239,2018-04-16 18:34:43.27,2,0
+4,transportation,Car,15 Lobby Entrance Floor 2,ATM MapNode 23 Floor 1,Mode of Transportation: Car Additional Info: test,admin,BuildingOwner,2018-04-16 18:37:32.194,2018-04-16 18:37:36.672,2,0
+5,transportation,Helicopter,Anesthesia Conf Floor L1,Au Bon Pain,Mode of Transportation: Helicopter Additional Info: tst,admin,BuildingOwner,2018-04-16 18:39:56.68,2018-04-16 18:40:02.147,2,0

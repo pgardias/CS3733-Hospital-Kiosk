@@ -40,7 +40,7 @@ public class DepthFirst extends Pathfinder {
      * @return ArrayList<Node> that constitutes the path
      */
     @Override
-    public ArrayList<Node> findPath(Node srcNode, Node destNode) {
+    public void findPath(Node srcNode, Node destNode) {
         System.out.println("depth first");
         Stack<Node> stack = new Stack<Node>();
         ArrayList<Node> visited = new ArrayList<Node>();
@@ -50,12 +50,10 @@ public class DepthFirst extends Pathfinder {
         // or we find the destination and return the path
         while (!stack.isEmpty()) {
             Node currentNode = stack.pop();
-            System.out.println(currentNode + " " + destNode);
 
             // checks if it is the destination node
             if (currentNode.equals(destNode)) {
-                System.out.println(currentNode.getParent());
-                return this.getPath(currentNode);
+                return;
 
             // if it is not the destination node it adds it to the visited nodes
             // and checks its children
@@ -72,6 +70,6 @@ public class DepthFirst extends Pathfinder {
                 }
             }
         }
-        return null;
+        return;
     }
 }

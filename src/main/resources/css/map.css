@@ -1,7 +1,7 @@
 .floor-buttons {
     -jfx-button-type: RAISED;
     -fx-background-color: #0b2f5b;
-    -fx-text-fill: WHITE;
+    -fx-text-fill: #F5BC3A;
     -fx-background-radius: 20;
 }
 
@@ -16,11 +16,17 @@
     -fx-background-radius: 0 0 75 75;
 }
 
-.popover {
-    -fx-background-color: YELLOW;
+.alg-combo-box {
     -fx-font-color: WHITE;
-    -fx-font-size: 24px;
+    -fx-font-size: 18px;
 }
 .popover > .border {
     -fx-border-style: none;
+}
+
+
+
+.floor-buttons:focused{
+    -fx-background-color: #F5BC3A;
+    -fx-text-fill: #0b2f5b;
 }

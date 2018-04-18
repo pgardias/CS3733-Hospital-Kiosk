@@ -51,7 +51,7 @@ public class AudioVisualController implements Initializable {
     @FXML
     JFXTextArea AVInfoTxtArea;
 
-    ObservableList<String> AVDevices = FXCollections.observableArrayList(
+    static ObservableList<String> AVDevices = FXCollections.observableArrayList(
             "Hearing Aid",
             "Projector",
             "TV",
