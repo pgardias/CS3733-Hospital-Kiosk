@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -179,32 +180,28 @@ public class SearchBarOverlayController implements Initializable{
         String src = sourceSearchBar.getText();
         String dst = destinationSearchBar.getText();
 
-//        System.out.println("test, " + src);
-
         // Check if the source node was input
-        if (src.length() > 0 && !src.equals("Primary Kiosk")) {
+        if (src.length() > 0 && !src.equals("Current Kiosk")) {
             // Source has been chosen by user, get Node entity from nodeID through NodeRepo
-//            System.out.println("Something typed in! " + src);
             srcNode = nodeSet.get(parseSourceInput(src).getID());
-//            System.out.println("Source node: " + srcNode);
         } else {
-            // Source is main.kiosk
+            // Source is main.kiosk by default
             srcNode = nodeSet.get("PKIOS00102");
-//            System.out.println("Nothing typed in! " + srcNode + " " + srcNode.getEdges());
         }
 
         // Check if the destination node was input
         if (dst.length() > 0) {
+            // Destination has been chosen by user, get Node entity from nodeID through NodeRepo
+            //destinationSearchBar.setUnFocusColor(Color.rgb(245,188,58));
             dstNode = nodeSet.get(parseDestinationInput(srcNode, dst).getID());
-//            System.out.println("Something typed into destination! " + dst);
         } else {
-            dstNode = nodeSet.get(endNode.getID());
-//            System.out.println("Nothing typed in! " + dstNode);
+            // Destination has not been set, set search bar to red
+            //destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
+            return false;
+            //dstNode = nodeSet.get(endNode.getID());
         }
-//        System.out.println("destination: " + dstNode);
 
         Font font = new Font("verdana", 24.0);
-//        System.out.println("Source Node ID: "+srcNode.getID());
 
         //TODO set up proper labels when searching a node
 //        startLabel.setLayoutX((srcNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
