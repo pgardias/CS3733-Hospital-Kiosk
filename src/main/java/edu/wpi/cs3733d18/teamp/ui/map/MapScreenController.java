@@ -1016,13 +1016,13 @@ public class MapScreenController {
      */
     public void resetPath() {
 
-        searchBarOverlayController.directionsButton.setVisible(false);
-        searchBarOverlayController.emailButton.setVisible(false);
-        searchBarOverlayController.phoneButton.setVisible(false);
-        searchBarOverlayController.directionsRectangle.setVisible(false);
-        searchBarOverlayController.directionsTableView.setVisible(false);
-        searchBarOverlayController.directionsButton.setText("Directions >");
-        searchBarOverlayController.setDirectionsVisible(false);
+//        searchBarOverlayController.directionsButton.setVisible(false);
+//        searchBarOverlayController.emailButton.setVisible(false);
+//        searchBarOverlayController.phoneButton.setVisible(false);
+//        searchBarOverlayController.directionsRectangle.setVisible(false);
+//        searchBarOverlayController.directionsTableView.setVisible(false);
+//        searchBarOverlayController.directionsButton.setText("Directions >");
+//        searchBarOverlayController.setDirectionsVisible(false);
 
         Node currentNode = null, pastNode = null;
         Circle waypoint;
@@ -1148,6 +1148,10 @@ public class MapScreenController {
         mapImage.setTranslateY(screenTranslateY);
         nodesEdgesPane.setTranslateX(screenTranslateX);
         nodesEdgesPane.setTranslateY(screenTranslateY);
+    }
+
+    public Boolean getPathDrawn(){
+        return this.pathDrawn;
     }
 
 
