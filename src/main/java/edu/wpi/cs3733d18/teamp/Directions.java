@@ -20,11 +20,11 @@ public class Directions {
     private static final int ELEVATORS = 8;
     private static final int STAIRS = 9;
     private static final int TURN_AROUND = 10;
-    double feetPerPixel = 85. / 260.; // Measured on the west wing of the hospital with Google maps and paint
 
     private ArrayList<String> directions;
 
     public Directions(){
+
         this.directions = new ArrayList<>();
     }
 
@@ -140,7 +140,7 @@ public class Directions {
 
                 if (changeDirections && !floorChange) {
                     System.out.println("direction changes!");
-                    System.out.println("distance: " + distance * feetPerPixel);
+                    System.out.println("distance: " + distance * Main.settings.getFeetPerPixel());
                     directions.add(getDistanceString(distance, node, pastNode));
                     directions.add(words);
                     distance = 0;
@@ -156,7 +156,7 @@ public class Directions {
 
     private String getDistanceString(double distance, Node node, Node pastNode) {
         distance += node.distanceBetweenNodes(pastNode);
-        return ("Go straight " + roundToNearest(distance * feetPerPixel, 10) + " ft to " + node.getLongName());
+        return ("Go straight " + roundToNearest(distance * Main.settings.getFeetPerPixel(), 10) + " ft to " + node.getLongName());
     }
 
 
