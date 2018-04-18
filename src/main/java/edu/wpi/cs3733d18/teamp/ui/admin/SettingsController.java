@@ -9,8 +9,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 import edu.wpi.cs3733d18.teamp.Pathfinding.PathfindingContext.PathfindingSetting;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 
 public class SettingsController {
 
@@ -40,33 +43,33 @@ public class SettingsController {
      */
     @FXML
     public void onStartUp() {
-        switch (Settings.getPathfindingSettings()) {
-            case AStar: {
-                algorithmComboBox.setValue("A*");
-                break;
-            }
-            case DepthFirst: {
-                algorithmComboBox.setValue("Depth-first");
-                break;
-            }
-            case BreadthFirst: {
-                algorithmComboBox.setValue("Breadth-first");
-                break;
-            }
-            case Dijkstra: {
-                algorithmComboBox.setValue("Dijkstra's");
-                break;
-            }
-            case BestFirst: {
-                algorithmComboBox.setValue("BestFirst");
-                break;
-            }
-            default: {
-                System.out.println("Admin Settings Panel was unable to set the current Pathfinding Algorithm Context");
-                break;
-            }
-        }
-
+//        algorithmComboBox.setItems(algorithmTypes);
+//        switch (Settings.getPathfindingSettings()) {
+//            case AStar: {
+//                algorithmComboBox.setValue("A*");
+//                break;
+//            }
+//            case DepthFirst: {
+//                algorithmComboBox.setValue("Depth-first");
+//                break;
+//            }
+//            case BreadthFirst: {
+//                algorithmComboBox.setValue("Breadth-first");
+//                break;
+//            }
+//            case Dijkstra: {
+//                algorithmComboBox.setValue("Dijkstra's");
+//                break;
+//            }
+//            case BestFirst: {
+//                algorithmComboBox.setValue("BestFirst");
+//                break;
+//            }
+//            default: {
+//                System.out.println("Admin Settings Panel was unable to set the current Pathfinding Algorithm Context");
+//                break;
+//            }
+//        }
     }
 
     /**
@@ -100,5 +103,20 @@ public class SettingsController {
             // TODO Set error label appropriately
             return;
         }
+    }
+
+    @FXML
+    public void backButtonOp(ActionEvent e) {
+        Parent root;
+        FXMLLoader loader;
+
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
+        try {
+            root = loader.load();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return;
+        }
+        backButton.getScene().setRoot(root);
     }
 }
