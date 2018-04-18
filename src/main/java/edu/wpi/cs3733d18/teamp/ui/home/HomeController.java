@@ -93,7 +93,7 @@ public class HomeController {
 //                    System.out.println("new swipe!");
                     swipeDetected = true;
                 } else {
-                    System.out.println("still no swipe");
+                    //System.out.println("still no swipe");
                     if (event.getSource().equals(usernameTxt)) {
 //                        System.out.println("usernametxt: " + usernameTxt.getText() + " event text: " + event.getCharacter());
                         usernameTxt.setText(usernameTxt.getText() + event.getCharacter());

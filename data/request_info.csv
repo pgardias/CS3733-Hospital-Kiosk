@@ -6,3 +6,4 @@ requestID,requestType,subType,location,additionalInfo,madeBy,completedBy,timeMad
 5,sanitation,Clean Biohazard Spill,AmbExit 1,Mess Type: Clean Biohazard Spill Additional Info: test,BuildingOwner,BuildingOwner,2018-04-16 16:18:17.481,2018-04-16 16:20:04.921,2,0
 6,audio+visual,Drawing Pad,Bathroom Lobby,Audio or Visual Device: Drawing Pad Additional Info: tw,BuildingOwner,BuildingOwner,2018-04-16 16:19:09.582,2018-04-16 16:20:06.203,2,0
 7,delivergift,A Dozen Flowers,Bretholtz WR,Gift: A Dozen Flowers Additional Info: test,BuildingOwner,BuildingOwner,2018-04-16 16:19:32.66,2018-04-16 16:20:07.309,2,0
+8,emergency,ACTIVE SHOOTER,PKIOS00102,Emergency: ACTIVE SHOOTER,CurrentUser, ,2018-04-18 09:39:00.622,null,0,1
