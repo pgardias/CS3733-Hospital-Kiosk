@@ -1,5 +1,6 @@
 package edu.wpi.cs3733d18.teamp.ui.map;
 
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
@@ -72,10 +73,10 @@ public class SearchBarOverlayController implements Initializable{
     Button goButton;
 
     @FXML
-    TextField sourceSearchBar;
+    JFXTextField sourceSearchBar;
 
     @FXML
-    TextField destinationSearchBar;
+    JFXTextField destinationSearchBar;
 
     @FXML
     ToggleButton mapToggleButton;
@@ -192,11 +193,11 @@ public class SearchBarOverlayController implements Initializable{
         // Check if the destination node was input
         if (dst.length() > 0) {
             // Destination has been chosen by user, get Node entity from nodeID through NodeRepo
-            //destinationSearchBar.setUnFocusColor(Color.rgb(245,188,58));
+            destinationSearchBar.setUnFocusColor(Color.rgb(245,188,58));
             dstNode = nodeSet.get(parseDestinationInput(srcNode, dst).getID());
         } else {
             // Destination has not been set, set search bar to red
-            //destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
+            destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
             return false;
             //dstNode = nodeSet.get(endNode.getID());
         }
