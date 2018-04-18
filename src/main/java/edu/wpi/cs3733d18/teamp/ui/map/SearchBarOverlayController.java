@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
+import edu.wpi.cs3733d18.teamp.ui.home.ShakeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -198,8 +199,9 @@ public class SearchBarOverlayController implements Initializable{
             dstNode = nodeSet.get(parseDestinationInput(srcNode, dst).getID());
         } else {
             // Destination has not been set, set search bar to red
-            destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
-
+//            destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
+            ShakeTransition anim = new ShakeTransition(sourceSearchBar, destinationSearchBar);
+            anim.playFromStart();
             return false;
             //dstNode = nodeSet.get(endNode.getID());
         }

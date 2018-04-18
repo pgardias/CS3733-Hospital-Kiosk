@@ -64,10 +64,6 @@ public class HomeController {
     ImageView aboutButton;
 
     @FXML
-    Label loginErrorLabel;
-
-
-    @FXML
     public void initialize() {
         Platform.runLater(new Runnable() {
             @Override
@@ -137,9 +133,6 @@ public class HomeController {
         try {
             Main.currentUser = db.checkEmployeeLogin(username, password);
         } catch (LoginInvalidException e1) {
-
-            usernameTxt.setPromptText("Username");
-            passwordTxt.setPromptText("Password");
 
 //            loginErrorLabel.setText("Login failed, invalid username or password");
 //            loginErrorLabel.setVisible(true);
@@ -315,8 +308,8 @@ public class HomeController {
                     Main.currentUser = db.checkLoginID(loginString);
                 } catch (LoginInvalidException le) {
                     le.printStackTrace();
-                    loginErrorLabel.setText("Login failed, please swipe again");
-                    loginErrorLabel.setVisible(true);
+                    ShakeTransition anim = new ShakeTransition(usernameTxt, passwordTxt);
+                    anim.playFromStart();
                     return;
                 }
 
@@ -325,8 +318,8 @@ public class HomeController {
 
                 loginButtonOp(new ActionEvent());
             } else if (invalidSwipe) {
-                loginErrorLabel.setText("Swipe failed, please swipe again");
-                loginErrorLabel.setVisible(true);
+                ShakeTransition anim = new ShakeTransition(usernameTxt, passwordTxt);
+                anim.playFromStart();
             }
         }
     }
