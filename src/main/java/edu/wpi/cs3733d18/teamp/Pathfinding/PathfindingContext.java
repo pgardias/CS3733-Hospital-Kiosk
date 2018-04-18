@@ -9,7 +9,8 @@ public class PathfindingContext {
         AStar, BreadthFirst, DepthFirst, Dijkstra, BestFirst
     }
 
-    public PathfindingContext() { }
+    public PathfindingContext() {
+    }
 
     public PathfindingContext(Pathfinder pathfinder) {
         this.pathfinder = pathfinder;
@@ -33,9 +34,9 @@ public class PathfindingContext {
                 pathfinder = new Dijkstra();
                 break;
 
-            /*case BestFirst:
+            case BestFirst:
                 pathfinder = new BestFirst();
-                break;*/
+                break;
 
             default:
                 pathfinder = new AStar();

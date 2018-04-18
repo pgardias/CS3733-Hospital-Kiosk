@@ -36,7 +36,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <JFXButton fx:id="serviceAPIButton" buttonType="RAISED" onAction="#serviceAPIButtonOp" styleClass="blue-button" text="Service API" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+                  <JFXButton fx:id="serviceAPIButton" buttonType="RAISED" onAction="#serviceAPIButtonOp" styleClass="blue-button" text="Transport" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                      <font>
                         <Font size="25.0" />
                      </font>

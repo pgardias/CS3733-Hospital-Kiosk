@@ -1,5 +1,4 @@
 package edu.wpi.cs3733d18.teamp;
-import edu.wpi.cs3733d18.teamp.Employee;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.EdgeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
@@ -38,6 +37,7 @@ public class Main extends Application {
         primaryStage.setFullScreen(true);
         primaryStage.show();
 
+        settings.setPathfindingContext(pathfindingContext);
         pathfindingContext.setPathfindingContext(settings.getPathfindingSettings());
     }
     //Logs out the current user, employee, or admin so they are no longer the currentUser at the kiosk
@@ -68,6 +68,7 @@ public class Main extends Application {
             System.out.println(n.getNodeID());
         } catch (EdgeNotFoundException e) {
             e.printStackTrace();
+            System.out.println();
         }
 
 

@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.admin.AdminMenuController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.admin.SettingsController">
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
@@ -45,7 +45,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Settings:" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
+                  <Label text="Program Settings:" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
                      <font>
                         <Font size="64.0" />
                      </font>
@@ -60,13 +60,13 @@
                         <Font size="48.0" />
                      </font>
                   </Label>
-                  <JFXButton buttonType="RAISED" ripplerFill="GREY" text="Submit" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                  <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#submitButtonOp" ripplerFill="GREY" styleClass="yellow-button" stylesheets="@../../css/map.css" text="Submit" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                      <font>
                         <Font size="30.0" />
                      </font>
                   </JFXButton>
-                  <JFXComboBox editable="true" prefHeight="50.0" prefWidth="310.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <JFXTextField maxWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <JFXComboBox fx:id="algorithmComboBox" focusColor="#f5bc3a" prefHeight="50.0" prefWidth="310.0" style="-fx-font-size: 36px;" unFocusColor="#0b2f5b" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <JFXTextField fx:id="feetPerPixelTextField" maxWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <font>
                         <Font size="36.0" />
                      </font>

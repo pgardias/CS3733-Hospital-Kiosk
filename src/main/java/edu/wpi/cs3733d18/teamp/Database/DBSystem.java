@@ -85,10 +85,6 @@ public class DBSystem {
         return storage.getOneEdge(edgeID);
     }
 
-    public Boolean willEdgeOrphanANode(String edgeID) throws OrphanNodeException{
-        return storage.willEdgeOrphanANode(edgeID);
-    }
-
     // Node Repository Functions
 
     public Boolean createNode(Node node, Node connectedNode) throws NodeNotFoundException, EdgeNotFoundException, DuplicateLongNameException {
@@ -103,7 +99,8 @@ public class DBSystem {
         return success;
     }
 
-    public Boolean deleteNode(String nodeID) throws NodeNotFoundException, EdgeNotFoundException {
+    public Boolean deleteNode(String nodeID) throws NodeNotFoundException, EdgeNotFoundException, OrphanNodeException {
+        storage.willNodeOrphanOtherNodes(nodeID);
         Boolean success = nodeRepo.deleteNode(nodeID);
         storage.update();
         return success;
@@ -125,13 +122,15 @@ public class DBSystem {
         return nodeRepo.generateNodeID(node, handler.getConn());
     }
 
-    public Boolean modifyEdge(Edge edge) throws NodeNotFoundException, EdgeNotFoundException {
+    public Boolean modifyEdge(Edge edge) throws NodeNotFoundException, EdgeNotFoundException, OrphanNodeException {
+        storage.willModifyOrphanNodes(edge);
         Boolean success = edgeRepo.modifyEdge(edge);
         storage.update();
         return success;
     }
 
-    public Boolean deleteEdge(String edgeID) throws NodeNotFoundException, EdgeNotFoundException {
+    public Boolean deleteEdge(String edgeID) throws NodeNotFoundException, EdgeNotFoundException, OrphanNodeException {
+        storage.willEdgeOrphanANode(edgeID);
         Boolean success = edgeRepo.deleteEdge(edgeID);
         storage.update();
         return success;

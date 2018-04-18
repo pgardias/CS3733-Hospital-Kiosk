@@ -41,6 +41,7 @@ public class DepthFirst extends Pathfinder {
      */
     @Override
     public void findPath(Node srcNode, Node destNode) {
+        System.out.println("ASTAR");
         System.out.println("depth first");
         Stack<Node> stack = new Stack<Node>();
         ArrayList<Node> visited = new ArrayList<Node>();
