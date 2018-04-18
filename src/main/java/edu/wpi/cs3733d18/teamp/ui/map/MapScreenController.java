@@ -73,6 +73,10 @@ public class MapScreenController {
     private static ArrayList<String> arrowFloorSet = new ArrayList<>();
     private static HashMap<String, Line> edgeDispSet = new HashMap<>();
     private static ArrayList<Label> labelDispSet = new ArrayList<>();
+    private ArrayList<Node> stairNodeSet = new ArrayList<Node>();
+    private ArrayList<Node> recentStairNodeSet = new ArrayList<Node>();
+    private ArrayList<Node> recentElevNodeSet = new ArrayList<Node>();
+
 
     DBSystem db = DBSystem.getInstance();
 
@@ -146,6 +150,7 @@ public class MapScreenController {
 
         zoomSlider.setMin(1.20888889);
         zoomSlider.setValue(zoomSlider.getMin());
+        zoomForTranslate = zoomSlider.getValue();
 
         Image newImage = new Image("/img/maps/2d/02_thesecondfloor.png");
         mapImage.setImage(newImage);
@@ -269,21 +274,27 @@ public class MapScreenController {
             switch(floorState) {
                 case "3":
                     image = new Image("/img/maps/3d/3-ICONS.png"); //TODO use this bit of information for image drawing
+                    floor3Button.setFocusTraversable(true);
                     break;
                 case "2":
                     image = new Image("/img/maps/3d/2-ICONS.png");
+                    floor2Button.setFocusTraversable(true);
                     break;
                 case "1":
                     image = new Image("/img/maps/3d/1-ICONS.png");
+                    floor1Button.setFocusTraversable(true);
                     break;
                 case "G":
                     image = new Image("/img/maps/3d/1-ICONS.png");
+                    floorGButton.setFocusTraversable(true);
                     break;
                 case "L1":
                     image = new Image("/img/maps/3d/L1-ICONS.png");
+                    floorL1Button.setFocusTraversable(true);
                     break;
                 default:
                     image = new Image("/img/maps/3d/L2-ICONS.png");
+                    floorL2Button.setFocusTraversable(true);
                     break;
             }
         } else {
@@ -298,21 +309,27 @@ public class MapScreenController {
             switch (floorState) {
                 case "3":
                     image = new Image("/img/maps/2d/03_thethirdfloor.png");
+                    floor3Button.setFocusTraversable(true);
                     break;
                 case "2":
                     image = new Image("/img/maps/2d/02_thesecondfloor.png");
+                    floor2Button.setFocusTraversable(true);
                     break;
                 case "1":
                     image = new Image("/img/maps/2d/01_thefirstfloor.png");
+                    floor1Button.setFocusTraversable(true);
                     break;
                 case "G":
                     image = new Image("/img/maps/2d/00_thegroundfloor.png");
+                    floorGButton.setFocusTraversable(true);
                     break;
                 case "L1":
                     image = new Image("/img/maps/2d/00_thelowerlevel1.png");
+                    floorL1Button.setFocusTraversable(true);
                     break;
                 default:
                     image = new Image("/img/maps/2d/00_thelowerlevel2.png");
+                    floorL2Button.setFocusTraversable(true);
                     break;
             }
         }
@@ -514,6 +531,7 @@ public class MapScreenController {
                             searchBarOverlayController.setSourceSearchBar(node.getLongName());
                         }
                     }
+                    removeFocus();
                 } else if (searchBarOverlayController.isDestinationFocused()) {
                     clearEndNode();
                     for (String string : nodeDispSet.keySet()) {
@@ -521,6 +539,27 @@ public class MapScreenController {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setFill(Color.RED);
                             searchBarOverlayController.setDestinationSearchBar(node.getLongName());
+                        }
+                    }
+                    removeFocus();
+                } else if (pathDrawn){
+                    for (String string: nodeDispSet.keySet()){
+                        System.out.println("looking through every circle");
+                        if (nodeDispSet.get(string).equals(event.getSource())){
+                            System.out.println("this circles ID is the source");
+                            for (int i = 0; i < stairNodeSet.size(); i += 2) {
+                                if (stairNodeSet.get(i).getID().equals(string)) {
+                                    System.out.println("choose floor");
+                                    currentFloor = stairNodeSet.get(i + 1).getFloor();
+                                    floorState = currentFloor.toString();
+                                    updateMap();
+                                    if (pathDrawn) {
+                                        drawPath(pathMade);
+                                    }
+                                    break;
+                                }
+                            }
+                            break;
                         }
                     }
                 } else {
@@ -565,16 +604,14 @@ public class MapScreenController {
                         nodeLongNameLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 0 10px;");
                         nodeBuildingLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
-//                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
                         popOver = new PopOver(popOverVBox);
                         popOver.show((javafx.scene.Node) event.getSource());
                         popOverHidden = false;
                         popOver.setCloseButtonEnabled(false);
-//                        popOver.setCornerRadius(20);
                         popOver.setAutoFix(true);
                         popOver.setDetachable(false);
 
-                        nodeDispSet.get(string).setFill(Color.rgb(150,150,255));
+                        nodeDispSet.get(string).setStroke(Color.YELLOW);
                     }
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
@@ -582,7 +619,7 @@ public class MapScreenController {
                 popOverHidden = true;
                 for(String string : nodeDispSet.keySet()) {
                     if (nodeDispSet.get(string) == event.getSource()) {
-                        nodeDispSet.get(string).setFill(Color.DODGERBLUE);
+                        nodeDispSet.get(string).setStroke(Color.BLACK);
                     }
 
                 }
@@ -684,6 +721,7 @@ public class MapScreenController {
             resetPath();
         }
 
+        stairNodeSet.clear();
         this.pathMade = path;
 
         double maxXCoord = 0;
@@ -708,6 +746,10 @@ public class MapScreenController {
             pastNode = currentNode;
             currentNode = n;
 
+            //checks if if the current node should go in stair set
+            checkStairNodeSet(currentNode);
+
+            //Draws the arrows
             if (!path.get(0).equals(n)) {
                 if(toggleOn) {
                     width = currentNode.getxDisplay() - pastNode.getxDisplay();
@@ -716,12 +758,9 @@ public class MapScreenController {
                     width = currentNode.getX() - pastNode.getX();
                     height = currentNode.getY() - pastNode.getY();
                 }
-
                 angle = Math.atan2(height , width);
-
                 //increment the distanceCounter
                 distanceCounter += currentNode.distanceBetweenNodes(pastNode);
-
                 if(distanceCounter >= 175) {
                     distanceCounter = 0;
 
@@ -731,17 +770,20 @@ public class MapScreenController {
                     } else {
                         drawTriangle(angle, pastNode.getX(), pastNode.getY());
                     }
-
                 }
-
             }
             
-            //nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
+            //set start node to Green and end node to red
             if (path.get(0).equals(n)) {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.GREEN);
             } else if (path.get(path.size()-1).equals(n)) {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.RED);
+                //if the last node was a stair or an elevator then it should check the else in the checkStairNode function
+                if (currentNode.getType().equals(Node.nodeType.ELEV) || currentNode.getType().equals(Node.nodeType.STAI)){
+                    addToStairNodeSet();
+                }
             }
+            //Color in the path appropriately
             for (Edge e : currentNode.getEdges()) {
                 if (pastNode != null) {
                     if (e.contains(pastNode)) {
@@ -756,8 +798,7 @@ public class MapScreenController {
                 }
             }
         }
-
-
+        //this sets the proper opacity for the arrows based on floor
         for(int i = 0; i < arrowDispSet.size(); i++) {
             System.out.println(arrowFloorSet.get(i));
             if(arrowFloorSet.get(i).equals(currentFloor.toString())) {
@@ -875,7 +916,30 @@ public class MapScreenController {
 
 
 
+    public void checkStairNodeSet(Node currentNode){
 
+        if (currentNode.getType().equals(Node.nodeType.STAI)){
+            recentElevNodeSet.clear();
+            recentStairNodeSet.add(currentNode);
+        } else if (currentNode.getType().equals(Node.nodeType.ELEV)){
+            recentStairNodeSet.clear();
+            recentElevNodeSet.add(currentNode);
+        } else{
+            addToStairNodeSet();
+        }
+    }
+
+    public void addToStairNodeSet(){
+        if (recentStairNodeSet.size() > 1){
+            stairNodeSet.add(recentStairNodeSet.get(0));
+            stairNodeSet.add(recentStairNodeSet.get(recentStairNodeSet.size() - 1));
+        } else if (recentElevNodeSet.size() > 1){
+            stairNodeSet.add(recentElevNodeSet.get(0));
+            stairNodeSet.add(recentElevNodeSet.get(recentElevNodeSet.size() - 1));
+        }
+        recentElevNodeSet.clear();
+        recentStairNodeSet.clear();
+    }
 
 
     /**
@@ -885,10 +949,11 @@ public class MapScreenController {
         Node currentNode = null, pastNode = null;
         Circle waypoint;
         Line line;
+        stairNodeSet.clear();
         for (Node n : pathMade) {
             pastNode = currentNode;
             currentNode = n;
-            nodeDispSet.get(n.getID()).setFill(Color.DODGERBLUE);
+            //nodeDispSet.get(n.getID()).setFill(Color.DODGERBLUE);
 
             for (Edge e : currentNode.getEdges()) {
                 if (pastNode != null) {
@@ -941,6 +1006,10 @@ public class MapScreenController {
             }
 
         }
+    }
+
+    public void removeFocus(){
+        searchBarOverlayController.setSearchButtonFocus();
     }
 
 
