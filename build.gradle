@@ -1,6 +1,3 @@
-plugins {
-	id "com.eriwen.gradle.css" version "2.14.0"
-}
 apply plugin: 'java'
 apply plugin: 'idea'
 
@@ -10,7 +7,7 @@ version = '3.0'
 buildDir = 'build'
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 sourceSets {
@@ -20,52 +17,46 @@ sourceSets {
         }
         resources {
             srcDirs = ["src/main/resources"]
-			//includes = ["css/*.css"]
         }
     }
 }
 
 
 dependencies {
-	testCompile(
-		[group: 'junit', name: 'junit', version: '4.12'],
-		[group: 'com.jfoenix', name: 'jfoenix', version: '8.0.3'],
-		[group: 'org.apache.derby', name: 'derby', version: '10.14.1.0'],
-		[group: 'org.apache.derby', name: 'derbyclient', version: '10.14.1.0'],
-		[group: 'org.apache.derby', name: 'derbytools', version: '10.14.1.0'],
-		[group: 'org.controlsfx', name: 'controlsfx', version: '8.40.14'],
-		[group: 'javax.mail', name: 'mail', version: '1.4.7'],
-		[group: 'com.eriwen', name: 'gradle-css-plugin', version: '1.11.1'],
-		[group: 'org.testfx', name: 'testfx-junit', version: '4.0.13-alpha'],
-		[group: 'org.testfx', name: 'testfx-core', version: '4.0.13-alpha']
-	)
-	compile(
-		[group: 'junit', name: 'junit', version: '4.12'],
-		fileTree(dir:'libs',include:"*.jar"),
-		[group: 'com.jfoenix', name: 'jfoenix', version: '8.0.3'],
-		[group: 'org.apache.derby', name: 'derby', version: '10.14.1.0'],
-		[group: 'org.apache.derby', name: 'derbyclient', version: '10.14.1.0'],
-		[group: 'org.apache.derby', name: 'derbytools', version: '10.14.1.0'],
-		[group: 'org.controlsfx', name: 'controlsfx', version: '8.40.14'],
-		[group: 'javax.mail', name: 'mail', version: '1.4.7'],
-		[group: 'com.eriwen', name: 'gradle-css-plugin', version: '1.11.1']
-	)
+    testCompile(
+            [group: 'junit', name: 'junit', version: '4.12'],
+            [group: 'com.jfoenix', name: 'jfoenix', version: '8.0.3'],
+            [group: 'org.apache.derby', name: 'derby', version: '10.14.1.0'],
+            [group: 'org.apache.derby', name: 'derbyclient', version: '10.14.1.0'],
+            [group: 'org.apache.derby', name: 'derbytools', version: '10.14.1.0'],
+            [group: 'org.controlsfx', name: 'controlsfx', version: '8.40.14'],
+            [group: 'javax.mail', name: 'mail', version: '1.4.7'],
+            [group: 'org.testfx', name: 'testfx-junit', version: '4.0.13-alpha'],
+            [group: 'org.testfx', name: 'testfx-core', version: '4.0.13-alpha']
+    )
+    compile(
+            [group: 'junit', name: 'junit', version: '4.12'],
+            fileTree(dir: 'libs', include: "*.jar"),
+            [group: 'com.jfoenix', name: 'jfoenix', version: '8.0.3'],
+            [group: 'org.apache.derby', name: 'derby', version: '10.14.1.0'],
+            [group: 'org.apache.derby', name: 'derbyclient', version: '10.14.1.0'],
+            [group: 'org.apache.derby', name: 'derbytools', version: '10.14.1.0'],
+            [group: 'org.controlsfx', name: 'controlsfx', version: '8.40.14'],
+            [group: 'javax.mail', name: 'mail', version: '1.4.7']
+    )
 }
 
 jar {
 
-	manifest {
-		attributes 'Main-Class': 'edu.wpi.cs3733d18.teamp.Main'
-	}
-	from configurations.runtime.collect { zipTree(it) }
-	//from('src/main/java/resources') {
-	//	include '**/*.css'
-	//}
+    manifest {
+        attributes 'Main-Class': 'edu.wpi.cs3733d18.teamp.Main'
+    }
+    from configurations.runtime.collect { zipTree(it) }
 }
 
 task run(type: JavaExec) {
-	main = 'Main'
-	classpath = sourceSets.main.runtimeClasspath
+    main = 'Main'
+    classpath = sourceSets.main.runtimeClasspath
 }
 group 'groupIP'
 version '1.0-SNAPSHOT'
