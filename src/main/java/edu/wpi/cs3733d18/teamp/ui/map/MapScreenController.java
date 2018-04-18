@@ -822,7 +822,7 @@ public class MapScreenController {
                 nodeDispSet.get(currentNode.getID()).setVisible(true);
                 if (!currentNode.getFloor().equals(currentFloor))
                     nodeDispSet.get(currentNode.getID()).setOpacity(0.5);
-                
+
                 if (toggleOn) {
                     startLabel.setLayoutX((n.getxDisplay() + 5 - X_OFFSET) * X_SCALE);
                     startLabel.setLayoutY((n.getyDisplay() - 40 - Y_OFFSET) * Y_SCALE);
@@ -992,7 +992,11 @@ public class MapScreenController {
         for (Node n : pathMade) {
             pastNode = currentNode;
             currentNode = n;
-            //nodeDispSet.get(n.getID()).setFill(Color.DODGERBLUE);
+            if (n.getFloor().equals(currentFloor)) {
+                nodeDispSet.get(n.getID()).setOpacity(1.0);
+            } else {
+                nodeDispSet.get(n.getID()).setVisible(false);
+            }
 
             for (Edge e : currentNode.getEdges()) {
                 if (pastNode != null) {
@@ -1015,6 +1019,7 @@ public class MapScreenController {
             }
             labelDispSet.clear();
         }
+        pathDrawn = false;
     }
 
     public void setToggleOn(Boolean toggleOn) {
