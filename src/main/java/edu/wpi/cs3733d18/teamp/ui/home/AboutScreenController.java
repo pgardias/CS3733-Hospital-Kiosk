@@ -31,18 +31,18 @@ public class AboutScreenController {
                 "We are a team of ten WPI students. This application is our project for the course CS3733-D18 Software Engineering. \nHere is our team:"
         );
         teamLabel.setText(
-                "Professor Wilson Wong - Instructor \n" +
-                        "Kyle Corry - Team Coach \n" +
+                "Professor Wilson Wong - Instructor\n" +
+                        "Kyle Corry - Team Coach\n" +
                         "Kyle Savell - Lead Developer \n" +
-                        "Ben Titus - Assistant Lead Developer \n" +
-                        "Przemek Gardias - Assistant Lead Developer \n" +
-                        "Jason King - Assistant Lead Developer \n" +
-                        "Cem Alemdar - Project Manager \n" +
-                        "Jarod Thompson - Assistant Project Manager, Scrum Master \n" +
-                        "Nick Pacheco - UI Developer \n" +
-                        "Marc McFatter - UI Developer \n" +
-                        "Harry Saperstein - Test Engineer \n" +
-                        "Eoin O’Connell - Documentation Analyst \n"
+                        "Ben Titus - Assistant Lead Developer\n" +
+                        "Przemek Gardias - Assistant Lead Developer\n" +
+                        "Jason King - Assistant Lead Developer\n" +
+                        "Cem Alemdar - Project Manager\n" +
+                        "Jarod Thompson - Assistant Project Manager\n" +
+                        "Nick Pacheco - Product Owner\n" +
+                        "Marc McFatter - UI/UX Engineer\n" +
+                        "Harry Saperstein - Test Engineer\n" +
+                        "Eoin O’Connell - Documentation Analyst\n"
         );
         finalLabel.setText(
                 "Special Thanks To:\n" +
