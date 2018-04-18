@@ -13,7 +13,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.*;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -38,11 +40,10 @@ import java.util.ResourceBundle;
 public class MapViewerBuilder implements Initializable{
 
     // Symbolic Constants
-    private static final double MODEL_X_OFFSET = 0; // standard
-    private static final double MODEL_Y_OFFSET = 0; // standard
     private static final int VIEWPORT_SIZE = 800;
-    private int X_OFFSET = -523;
-    private int Y_OFFSET = 0;
+    private int X_OFFSET = 500;
+    private int Y_OFFSET = 75;
+    private int Z_OFFSET = -2500;
     private double X_SCALE = 1588.235294 / 5000.0;
     private double Y_SCALE = 1080.0 / 3400.0;
     private static final double NODE_RADIUS = 10.0;
@@ -131,9 +132,6 @@ public class MapViewerBuilder implements Initializable{
 
         // Add searchbar overlay
         addOverlay();
-
-        // Draw nodes
-        draw3DNodes();
     }
 
     public void addOverlay() {
@@ -183,22 +181,34 @@ public class MapViewerBuilder implements Initializable{
                     // Change Rotation Y
                     if (xChange < 0) {
                         curYRotation += ROTATION_SPEED;
-                        mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
+                        mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS)); // Rotate Map
+                        for (Sphere s : nodeDispSet.values()) {
+                            s.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.Y_AXIS),
+                                    new Rotate(curXRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.X_AXIS));
+                        }
                     } else if (xChange > 0) {
                         curYRotation -= ROTATION_SPEED;
-                        mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
+                        mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS)); // Rotate Map
+                        for (Sphere s : nodeDispSet.values()) {
+                            s.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.Y_AXIS),
+                                    new Rotate(curXRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.X_AXIS));
+                        }
                     }
                     // Change Rotation X
                     if (yChange < 0) {
-                        //if (180 > (curXRotation + ROTATION_SPEED)) {
-                            curXRotation += ROTATION_SPEED;
-                            mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
-                        //}
+                        curXRotation += ROTATION_SPEED;
+                        mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS)); // Rotate Map
+                        for (Sphere s : nodeDispSet.values()) {
+                            s.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.Y_AXIS),
+                                    new Rotate(curXRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.X_AXIS));
+                        }
                     } else if (yChange > 0) {
-                        //if (0 < (curXRotation - ROTATION_SPEED)) {
-                            curXRotation -= ROTATION_SPEED;
-                            mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS));
-                        //}
+                        curXRotation -= ROTATION_SPEED;
+                        mv.getTransforms().setAll(new Rotate(curYRotation, Rotate.Y_AXIS), new Rotate(curXRotation, Rotate.X_AXIS)); // Rotate Map
+                        for (Sphere s : nodeDispSet.values()) {
+                            s.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.Y_AXIS),
+                                    new Rotate(curXRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.X_AXIS));
+                        }
                     }
                     mouseInSceneX = newMouseInSceneX;
                     mouseInSceneY = newMouseInSceneY;
@@ -225,18 +235,22 @@ public class MapViewerBuilder implements Initializable{
                     // Change Panning X
                     if (xChange < 0) { // Pan left
                         curXTranslation -= PAN_SPEED;
-                        mv.setTranslateX(curXTranslation);
+                        mv.setTranslateX(curXTranslation); // Map panning
+                        nodeAnchorPane.setTranslateX(curXTranslation - 350);
                     } else if (xChange > 0) { // Pan right
                         curXTranslation += PAN_SPEED;
-                        mv.setTranslateX(curXTranslation);
+                        mv.setTranslateX(curXTranslation); // Map panning
+                        nodeAnchorPane.setTranslateX(curXTranslation - 350);
                     }
                     // Change Panning Y
                     if (yChange < 0) { // Pan down
                         curYTranslation -= PAN_SPEED;
-                        mv.setTranslateY(curYTranslation);
+                        mv.setTranslateY(curYTranslation); // Map panning
+                        nodeAnchorPane.setTranslateY(curYTranslation - 350);
                     } else if (yChange > 0) { // Pan up
                         curYTranslation += PAN_SPEED;
-                        mv.setTranslateY(curYTranslation);
+                        mv.setTranslateY(curYTranslation); // Map panning
+                        nodeAnchorPane.setTranslateY(curYTranslation - 350);
                     }
 
                     mouseInSceneX = newMouseInSceneX;
@@ -249,43 +263,49 @@ public class MapViewerBuilder implements Initializable{
     @FXML
     public void floorL2ButtonOp(ActionEvent e) {
         URL pathName = getClass().getResource("/models/B&WL2Floor.obj");
-        //switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WL2Floor.obj");
         switchMesh(pathName);
+        currentFloor = Node.floorType.LEVEL_L2;
+        updateMap();
     }
 
     @FXML
     public void floorL1ButtonOp(ActionEvent e) {
         URL pathName = getClass().getResource("/models/B&WL1Floor.obj");
-        //switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WL1Floor.obj");
         switchMesh(pathName);
+        currentFloor = Node.floorType.LEVEL_L1;
+        updateMap();
     }
 
     @FXML
     public void floorGButtonOp(ActionEvent e) {
         URL pathName = getClass().getResource("/models/B&WGFloor.obj");
-        //switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&WGFloor.obj");
         switchMesh(pathName);
+        currentFloor = Node.floorType.LEVEL_G;
+        updateMap();
     }
 
     @FXML
     public void floor1ButtonOp(ActionEvent e) {
         URL pathName = getClass().getResource("/models/B&W1stFloor.obj");
-        //switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W1stFloor.obj");
         switchMesh(pathName);
+        currentFloor = Node.floorType.LEVEL_1;
+        updateMap();
     }
 
     @FXML
     public void floor2ButtonOp(ActionEvent e) {
         URL pathName = getClass().getResource("/models/B&W2ndFloor.obj");
-        //switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W2ndFloor.obj");
         switchMesh(pathName);
+        currentFloor = Node.floorType.LEVEL_2;
+        updateMap();
     }
 
     @FXML
     public void floor3ButtonOp(ActionEvent e) {
         URL pathName = getClass().getResource("/models/B&W3rdFloor.obj");
-        //switchMesh("C:/Users/Kyle/Documents/Iteration3/src/main/resources/models/B&W3rdFloor.obj");
         switchMesh(pathName);
+        currentFloor = Node.floorType.LEVEL_3;
+        updateMap();
     }
 
     /**
@@ -322,8 +342,8 @@ public class MapViewerBuilder implements Initializable{
     private Group buildScene(URL fileName) {
         MeshView[] meshViews = loadMeshView(fileName);
         for (int i = 0; i < meshViews.length; i++) {
-            curXTranslation = (VIEWPORT_SIZE / 2 + MODEL_X_OFFSET);
-            curYTranslation = (VIEWPORT_SIZE / 2 + MODEL_Y_OFFSET);
+            curXTranslation = (VIEWPORT_SIZE / 2);
+            curYTranslation = (VIEWPORT_SIZE / 2);
             curZTranslation = (VIEWPORT_SIZE / 2);
             curScale = 15;
             meshViews[i].setTranslateX(curXTranslation);
@@ -402,15 +422,17 @@ public class MapViewerBuilder implements Initializable{
 
         nodeSet = db.getAllNodes();
         System.out.println("drawing nodes");
+        PhongMaterial phongMaterial = new PhongMaterial();
+        phongMaterial.setDiffuseMap(new Image(getClass().getResource("/models/textures/node_standard.png").toExternalForm()));
         for (Node node : nodeSet.values()) {
-            if (node.getType() != Node.nodeType.HALL) {
+            if (node.getFloor() == currentFloor && node.getType() != Node.nodeType.HALL) {
                 Sphere sphere = new Sphere(NODE_RADIUS);
                 nodeAnchorPane.getChildren().add(sphere);
-                sphere.setTranslateX((node.getX() - X_OFFSET) + X_SCALE);
-                sphere.setTranslateY(500);
-                sphere.setTranslateZ((node.getY() - Y_OFFSET) * Y_SCALE);
+                sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
+                sphere.setTranslateY(curYTranslation - Y_OFFSET);
+                sphere.setTranslateZ((-node.getY() - Z_OFFSET) * Y_SCALE);
                 //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-                //.setFill(Color.DODGERBLUE);
+                sphere.setMaterial(phongMaterial);
                 //circle.setStroke(Color.BLACK);
                 //circle.setStrokeType(StrokeType.INSIDE);
                 if (!node.getActive()) {
@@ -435,7 +457,8 @@ public class MapViewerBuilder implements Initializable{
                 Sphere sphere = new Sphere(0);
                 nodeAnchorPane.getChildren().add(sphere);
                 sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
-                sphere.setTranslateZ((node.getY() - Y_OFFSET) * Y_SCALE);
+                sphere.setTranslateY(curYTranslation);
+                sphere.setTranslateZ((-node.getY() - Z_OFFSET) * Y_SCALE);
                 //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
                 //circle.setFill(Color.DODGERBLUE);
                 //circle.setStroke(Color.BLACK);
@@ -542,6 +565,16 @@ public class MapViewerBuilder implements Initializable{
             event.consume();
         }
     };
+
+    /**
+     * this clears the anchor pane, draws the edges and the nodes and loads in the new map
+     * this also brings in the basic overlays
+     */
+    public void updateMap() {
+        nodeDispSet.clear();
+        nodeAnchorPane.getChildren().clear();
+        draw3DNodes();
+    }
 
     /**
      * Used to draw the list of nodes returned by AStar
