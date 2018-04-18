@@ -465,9 +465,8 @@ public class SearchBarOverlayController implements Initializable{
      */
     public Boolean directionsButtonOp(ActionEvent e) {
         if (directionsVisible){
-            directions.removeAll(directions);
-            directionsTableView.setItems(directions);
-            directionsList.clearDirections();
+            refresh();
+
             directionsTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("directions"));
             directionsTableView.setVisible(false);
             emailButton.setVisible(false);
@@ -480,9 +479,8 @@ public class SearchBarOverlayController implements Initializable{
             emailButton.setVisible(true);
             phoneButton.setVisible(true);
             directionsRectangle.setVisible(true);
-
+            directionsTableView.setVisible(true);
             if (directionsList.getDirections() == null) {
-                directionsTableView.setVisible(true);
                 directions.add(new DirectionsTable("Path needs to be set first!"));
                 directionsTableView.setItems(directions);
                 directionsTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("directions"));
@@ -490,7 +488,6 @@ public class SearchBarOverlayController implements Initializable{
                 directionsVisible = true;
             }
             else {
-                directionsTableView.setVisible(true);
                 for (String line : directionsList.getDirections()) {
                     directions.add(new DirectionsTable(line));
                 }
@@ -603,6 +600,10 @@ public class SearchBarOverlayController implements Initializable{
 
     public void setSearchButtonFocus(){
         goButton.requestFocus();
+    }
+
+    public void setDirectionsVisible(Boolean directionsVisible) {
+        this.directionsVisible = directionsVisible;
     }
 }
 

@@ -167,6 +167,7 @@ public class MapScreenController {
 
         searchBarOverlayController.setSourceSearchBar("Primary Kiosk");
         nodeDispSet.get("PKIOS00102").setFill(Color.GREEN);
+
     }
 
     @FXML
@@ -951,7 +952,15 @@ public class MapScreenController {
      * Used to draw the list of nodes returned by AStar
      */
     public void resetPath() {
+
         searchBarOverlayController.directionsButton.setVisible(false);
+        searchBarOverlayController.emailButton.setVisible(false);
+        searchBarOverlayController.phoneButton.setVisible(false);
+        searchBarOverlayController.directionsRectangle.setVisible(false);
+        searchBarOverlayController.directionsTableView.setVisible(false);
+        searchBarOverlayController.directionsButton.setText("Directions >");
+        searchBarOverlayController.setDirectionsVisible(false);
+
         Node currentNode = null, pastNode = null;
         Circle waypoint;
         Line line;
