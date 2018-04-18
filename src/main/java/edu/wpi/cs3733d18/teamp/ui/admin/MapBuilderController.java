@@ -843,19 +843,33 @@ public class MapBuilderController implements Initializable {
                         nodeLongNameLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 0 10px;");
                         nodeBuildingLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
-//                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
                         popOver = new PopOver(popOverVBox);
-                        popOver.show((javafx.scene.Node) event.getSource(), -5);
+
+                        if (event.getSceneX() < 960) {
+                            popOver.setArrowLocation(PopOver.ArrowLocation.LEFT_TOP);
+                        }
+                        else {
+                            popOver.setArrowLocation(PopOver.ArrowLocation.RIGHT_TOP);
+                        }
+
+                        popOver.show((javafx.scene.Node) event.getSource(), -6);
+
                         popOverHidden = false;
                         popOver.setCloseButtonEnabled(false);
-//                        popOver.setCornerRadius(20);
                         popOver.setAutoFix(true);
                         popOver.setDetachable(false);
+
+                        nodeDispSet.get(string).setStroke(Color.YELLOW);
                     }
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
                 popOver.hide();
                 popOverHidden = true;
+                for (String string : nodeDispSet.keySet()) {
+                    if (nodeDispSet.get(string) == event.getSource()) {
+                        nodeDispSet.get(string).setStroke(Color.BLACK);
+                    }
+                }
             }
             event.consume();
         }

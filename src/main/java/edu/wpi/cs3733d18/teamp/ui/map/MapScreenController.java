@@ -613,20 +613,16 @@ public class MapScreenController {
                         nodeBuildingLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
                         popOver = new PopOver(popOverVBox);
-//                        popOver.show((javafx.scene.Node) event.getSource(), -5);
-                        System.out.println("Popover width: " + nodeLongNameLabel.getWidth());
+
                         if (event.getSceneX() < 960) {
-                            System.out.println(" Left side of screeNn: " + event.getSceneX() + " " + event.getSceneY());
-                            popOver.show(/*(javafx.scene.Node)  event.getSource() */labelPane, event.getSceneX() + 5, event.getSceneY());
-                            //popOver.setArrowLocation(ArrowLocation.LEFT_TOP);
+                            popOver.setArrowLocation(ArrowLocation.LEFT_TOP);
                         }
                        else {
-                            System.out.println(" Right side of screen " + event.getSceneX() + " " + event.getSceneY());
                             popOver.setArrowLocation(ArrowLocation.RIGHT_TOP);
-                            popOver.show((javafx.scene.Node) event.getSource(), -5);
-                            System.out.println("Popover X: " + popOver.getX() + " PopOver Y: " + popOver.getY());
-                            System.out.println("Popover length: " + popOver.getWidth() + " popover height: " + popOver.getHeight());
                         }
+
+                        popOver.show((javafx.scene.Node) event.getSource(), -6);
+
                         popOverHidden = false;
                         popOver.setCloseButtonEnabled(false);
                         popOver.setAutoFix(true);
