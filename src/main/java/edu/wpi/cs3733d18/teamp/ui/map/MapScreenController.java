@@ -819,7 +819,10 @@ public class MapScreenController {
             //set start node to Green and end node to red
             if (path.get(0).equals(n)) {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.GREEN);
-
+                nodeDispSet.get(currentNode.getID()).setVisible(true);
+                if (!currentNode.getFloor().equals(currentFloor))
+                    nodeDispSet.get(currentNode.getID()).setOpacity(0.5);
+                
                 if (toggleOn) {
                     startLabel.setLayoutX((n.getxDisplay() + 5 - X_OFFSET) * X_SCALE);
                     startLabel.setLayoutY((n.getyDisplay() - 40 - Y_OFFSET) * Y_SCALE);
@@ -836,6 +839,10 @@ public class MapScreenController {
 
             } else if (path.get(path.size()-1).equals(n)) {
                 nodeDispSet.get(currentNode.getID()).setFill(Color.RED);
+                nodeDispSet.get(currentNode.getID()).setVisible(true);
+                if (!currentNode.getFloor().equals(currentFloor))
+                    nodeDispSet.get(currentNode.getID()).setOpacity(0.5);
+
                 //if the last node was a stair or an elevator then it should check the else in the checkStairNode function
                 if (currentNode.getType().equals(Node.nodeType.ELEV) || currentNode.getType().equals(Node.nodeType.STAI)){
                     addToStairNodeSet();
