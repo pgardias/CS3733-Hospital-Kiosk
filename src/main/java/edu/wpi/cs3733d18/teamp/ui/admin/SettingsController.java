@@ -78,7 +78,7 @@ public class SettingsController {
      * @param e
      */
     @FXML
-    public void submitButtonOp(ActionEvent e) {
+    public void submitButtonOp() {
         switch (algorithmComboBox.getValue().toString()) {
             case "A*":
                 Settings.setPathfindingAlgorithm(PathfindingSetting.AStar);
@@ -106,7 +106,7 @@ public class SettingsController {
     }
 
     @FXML
-    public void backButtonOp(ActionEvent e) {
+    public void backButtonOp() {
         Parent root;
         FXMLLoader loader;
 
