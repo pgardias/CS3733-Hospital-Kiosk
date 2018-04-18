@@ -90,6 +90,7 @@ public class SettingsController {
                 Settings.setPathfindingAlgorithm(PathfindingSetting.Dijkstra);
                 break;
             case "Best-first":
+                Settings.setPathfindingAlgorithm(PathfindingSetting.BestFirst);
                 break;
         }
         try {
