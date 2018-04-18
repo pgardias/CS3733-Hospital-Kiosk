@@ -136,7 +136,7 @@
                               <DropShadow height="5.0" radius="2.0" width="5.0" />
                            </effect>
                         </JFXTextField>
-                        <JFXToggleButton fx:id="mapToggleButton" maxHeight="54.0" onAction="#toggleButtonOp" prefHeight="66.0" prefWidth="179.0" styleClass="yellow-button" stylesheets="@../../css/map.css" text="3D Map" toggleColor="#eeda20" toggleLineColor="#0b2f5b" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                        <JFXToggleButton fx:id="mapToggleButton" maxHeight="54.0" onAction="#mapToggleButtonOp" prefHeight="66.0" prefWidth="179.0" styleClass="yellow-button" stylesheets="@../../css/map.css" text="3D Map" toggleColor="#eeda20" toggleLineColor="#0b2f5b" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -145,8 +145,14 @@
                            </GridPane.margin>
                         </JFXToggleButton>
                      </children>
+                     <padding>
+                        <Insets bottom="5.0" top="-10.0" />
+                     </padding>
                   </GridPane>
                     </children>
+               <BorderPane.margin>
+                  <Insets top="5.0" />
+               </BorderPane.margin>
                 </AnchorPane>
             </top>
         </BorderPane>
