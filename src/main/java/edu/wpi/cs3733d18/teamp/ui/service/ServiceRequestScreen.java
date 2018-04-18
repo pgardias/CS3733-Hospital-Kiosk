@@ -309,7 +309,6 @@ public class ServiceRequestScreen implements Initializable{
             return false;
         }
 
-
         backButton.getScene().setRoot(root);
         return true;
     }
@@ -319,12 +318,10 @@ public class ServiceRequestScreen implements Initializable{
      */
     @FXML
     public Boolean recordsButtonOp(ActionEvent e) {
-        Stage stage;
         Parent root;
         FXMLLoader loader;
         RecordScreenController recordScreenController;
 
-        stage = (Stage) recordsButton.getScene().getWindow();
         loader = new FXMLLoader(getClass().getResource("/FXML/service/RecordScreen.fxml"));
 
         try {
@@ -335,9 +332,7 @@ public class ServiceRequestScreen implements Initializable{
         }
         recordScreenController = loader.getController();
         recordScreenController.onStartUp();
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setFullScreen(true);
-        stage.show();
+        recordsButton.getScene().setRoot(root);
         return true;
     }
 
