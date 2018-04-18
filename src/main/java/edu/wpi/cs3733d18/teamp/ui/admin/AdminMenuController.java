@@ -90,6 +90,7 @@ public class AdminMenuController {
             return;
         }
         serviceRequestScreen = loader.getController();
+        serviceRequestScreen.onStartup();
         serviceRequestScreenButton.getScene().setRoot(root);
     }
 

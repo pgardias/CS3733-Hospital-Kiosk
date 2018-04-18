@@ -100,9 +100,17 @@ public class ServiceRequestScreen implements Initializable{
     @FXML
     TableColumn<ServiceRequestTable, String> rType3;
 
+    @FXML
+    Label helloMessage;
+
     final ObservableList<ServiceRequestTable> newRequests = FXCollections.observableArrayList();
     final ObservableList<ServiceRequestTable> inProgRequests = FXCollections.observableArrayList();
     final ObservableList<ServiceRequestTable> completedRequests = FXCollections.observableArrayList();
+
+    @FXML
+    public void onStartup() {
+        helloMessage.setText("Hello " + Main.currentUser.getFirstName() + " " + Main.currentUser.getLastName());
+    }
 
     /**
      * Gets the list of service requests from the database and puts them in the appropriate tables
