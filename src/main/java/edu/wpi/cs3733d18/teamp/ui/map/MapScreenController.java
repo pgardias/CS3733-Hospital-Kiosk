@@ -568,6 +568,20 @@ public class MapScreenController {
                                     break;
                                 }
                             }
+                            for (int i = 1; i < stairNodeSet.size(); i += 2) {
+                                System.out.println("entered for loop for stair nodes");
+                                if (stairNodeSet.get(i).getID().equals(string)) {
+                                    System.out.println("choose floor");
+                                    currentFloor = stairNodeSet.get(i - 1).getFloor();
+                                    floorState = currentFloor.toString();
+                                    foundStair = true;
+                                    updateMap();
+                                    if (pathDrawn) {
+                                        drawPath(pathMade);
+                                    }
+                                    break;
+                                }
+                            }
                             System.out.println("found stair state" + foundStair.toString());
                             if (!foundStair) {
                                 clearEndNode();
