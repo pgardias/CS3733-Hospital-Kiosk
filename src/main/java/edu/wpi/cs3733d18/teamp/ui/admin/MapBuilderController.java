@@ -1531,7 +1531,7 @@ public class MapBuilderController implements Initializable {
     }
 
     @FXML
-    public void toggleButtonOp(){
+    public void mapToggleButtonOp(){
         if (mapToggleButton.isSelected()){
             X_OFFSET = 0;
             Y_OFFSET = -19;

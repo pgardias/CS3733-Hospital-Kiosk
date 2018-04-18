@@ -83,7 +83,7 @@ public class SearchBarOverlayController implements Initializable{
 
     public void startUp(MapScreenController mapScreenController){
         this.mapScreenController = mapScreenController;
-        toggleButtonOp();
+        mapToggleButtonOp();
     }
 
     public Boolean isSourceFocused(){
@@ -108,7 +108,7 @@ public class SearchBarOverlayController implements Initializable{
 
     Boolean toggledOn;
     @FXML
-    public void toggleButtonOp(){
+    public void mapToggleButtonOp(){
         if(mapToggleButton.isSelected())
             toggledOn = true;
         else
