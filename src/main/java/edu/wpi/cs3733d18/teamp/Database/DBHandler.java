@@ -98,8 +98,8 @@ public class DBHandler {
             if (!rs.next()) {
                 sql = "CREATE TABLE REQUEST_INFO " +
                         "(requestID INT not NULL, " +
-                        " requestType VARCHAR(25), " +
-                        " subType VARCHAR(25), " +
+                        " requestType VARCHAR(50), " +
+                        " subType VARCHAR(255), " +
                         " location VARCHAR(255), " +
                         " additionalInfo VARCHAR(255), " +
                         " madeBy VARCHAR(50)," +
