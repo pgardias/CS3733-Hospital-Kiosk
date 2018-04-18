@@ -55,9 +55,6 @@ public class MapScreenController {
     private static final double ZOOM_2D_MIN = 1.208888889;
 
 
-    Label startLabel = new Label();
-    Label endLabel = new Label();
-
     private Node startNode;
     private Node endNode;
     private Edge selectedEdge;
@@ -719,15 +716,16 @@ public class MapScreenController {
 
         System.out.println(toggleOn.toString());
 
-        Font font = new Font("verdana", 16.0);
+        Font font = new Font("verdana", 10.0);
+
+        Label startLabel = new Label();
+        Label endLabel = new Label();
 
         for(Node n : path) {
             if(path.get(0).equals(n)) {
                 if (toggleOn) {
                     startLabel.setLayoutX((n.getxDisplay() + 5 - X_OFFSET) * X_SCALE);
                     startLabel.setLayoutY((n.getyDisplay() - 40 - Y_OFFSET) * Y_SCALE);
-                    System.out.println("Starting location X:  " + startLabel.getLayoutX());
-                    System.out.println("Starting location Y:  " + startLabel.getLayoutY());
                 }
                 else {
                     startLabel.setLayoutX((n.getX()+5- X_OFFSET)*X_SCALE);
@@ -755,28 +753,6 @@ public class MapScreenController {
                 nodesEdgesPane.getChildren().add(endLabel);
             }
         }
-//        if(toggleOn) {
-//            startLabel.setLayoutX((srcNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
-//            startLabel.setLayoutY((srcNode.getyDisplay()-40- Y_OFFSET)*Y_SCALE);
-//            startLabel.setText(srcNode.getLongName());
-//            //startLabel.setFont(font);
-//            System.out.println("Starting location name:  " + startLabel.getText());
-//            System.out.println("Starting location X:  " + startLabel.getLayoutX());
-//            System.out.println("Starting location Y:  " + startLabel.getLayoutY());
-//
-//            startLabel.toFront();
-//
-//
-//            //endLabel.setFont(font);
-//
-//        } else {
-//
-//
-//            startLabel.toFront();
-//
-//
-//            //endLabel.setFont(font);
-//        }
 
         pathDrawn = true;
     }
@@ -859,10 +835,9 @@ public class MapScreenController {
             for(Label l : labelDispSet) {
                 l.setVisible(false);
                 l.setPickOnBounds(false);
+                nodesEdgesPane.getChildren().remove(l);
             }
             labelDispSet.clear();
-            nodesEdgesPane.getChildren().remove(startLabel);
-            nodesEdgesPane.getChildren().remove(endLabel);
         }
     }
 

@@ -114,7 +114,7 @@
                                         <Insets bottom="25.0" />
                                     </GridPane.margin>
                                 </JFXButton>
-                                <JFXTextField fx:id="sourceSearchBar" focusColor="#e6e6e6" maxWidth="700.0" promptText="SOURCE" style="-fx-text-fill: #F5BC3A; -fx-prompt-text-fill: #e6e6e6;" unFocusColor="#f5bc3a">
+                                <JFXTextField fx:id="sourceSearchBar" focusColor="#e6e6e6" maxWidth="700.0" prefWidth="700.0" promptText="SOURCE" style="-fx-text-fill: #F5BC3A; -fx-prompt-text-fill: #e6e6e6;" unFocusColor="#f5bc3a">
                                     <effect>
                                         <DropShadow color="BLACK" offsetX="2.0" offsetY="2.0" />
                                     </effect>
@@ -128,7 +128,7 @@
                                         <Insets />
                                     </opaqueInsets>
                                 </JFXTextField>
-                                <JFXTextField fx:id="destinationSearchBar" focusColor="#e6e6e6" maxWidth="700.0" promptText="DESTINATION" style="-fx-text-fill: #F5BC3A; -fx-prompt-text-fill: #e6e6e6;" unFocusColor="#f5bc3a" GridPane.rowIndex="1">
+                                <JFXTextField fx:id="destinationSearchBar" focusColor="#e6e6e6" maxWidth="700.0" prefWidth="700.0" promptText="DESTINATION" style="-fx-text-fill: #F5BC3A; -fx-prompt-text-fill: #e6e6e6;" unFocusColor="#f5bc3a" GridPane.rowIndex="1">
                                     <effect>
                                         <DropShadow color="BLACK" offsetX="2.0" offsetY="2.0" />
                                     </effect>
