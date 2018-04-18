@@ -74,6 +74,7 @@ public class MapScreenController {
     private static ArrayList<String> arrowFloorSet = new ArrayList<>();
     private static HashMap<String, Line> edgeDispSet = new HashMap<>();
     private static ArrayList<Label> labelDispSet = new ArrayList<>();
+    private static ArrayList<Line> lineDispSet = new ArrayList<>();
     private ArrayList<Node> stairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentStairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentElevNodeSet = new ArrayList<Node>();
@@ -890,6 +891,7 @@ public class MapScreenController {
                     nodeDispSet.get(str).setFill(Color.PURPLE);
                     Label clickMeLabel = new Label("Click me to follow the path");
                     clickMeLabel.setFont(font);
+                    labelDispSet.add(clickMeLabel);
                     nodesEdgesPane.getChildren().add(clickMeLabel);
                     if (!toggleOn) {
                         // 2d view
@@ -899,6 +901,7 @@ public class MapScreenController {
                         clickMeLabel.setLayoutY(actualY + 20);
                         Line line = new Line(actualX, actualY, actualX + 20, actualY + 20);
                         nodesEdgesPane.getChildren().add(line);
+                        lineDispSet.add(line);
                         break;
                     } else {
                         // 3d view
@@ -908,6 +911,7 @@ public class MapScreenController {
                         clickMeLabel.setLayoutY(actualY + 20);
                         Line line = new Line(actualX, actualY, actualX + 20, actualY + 20);
                         nodesEdgesPane.getChildren().add(line);
+                        lineDispSet.add(line);
                         break;
                     }
                 }
@@ -1047,6 +1051,12 @@ public class MapScreenController {
                 nodesEdgesPane.getChildren().remove(l);
             }
             labelDispSet.clear();
+            for (Line l : lineDispSet) {
+                l.setVisible(false);
+                l.setPickOnBounds(false);
+                nodesEdgesPane.getChildren().remove(l);
+            }
+            lineDispSet.clear();
         }
         pathDrawn = false;
     }
