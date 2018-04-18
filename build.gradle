@@ -1,3 +1,6 @@
+plugins {
+	id "com.eriwen.gradle.css" version "2.14.0"
+}
 apply plugin: 'java'
 apply plugin: 'idea'
 
@@ -17,9 +20,11 @@ sourceSets {
         }
         resources {
             srcDirs = ["src/main/resources"]
+			//includes = ["css/*.css"]
         }
     }
 }
+
 
 dependencies {
 	testCompile(
@@ -30,6 +35,7 @@ dependencies {
 		[group: 'org.apache.derby', name: 'derbytools', version: '10.14.1.0'],
 		[group: 'org.controlsfx', name: 'controlsfx', version: '8.40.14'],
 		[group: 'javax.mail', name: 'mail', version: '1.4.7'],
+		[group: 'com.eriwen', name: 'gradle-css-plugin', version: '1.11.1'],
 		[group: 'org.testfx', name: 'testfx-junit', version: '4.0.13-alpha'],
 		[group: 'org.testfx', name: 'testfx-core', version: '4.0.13-alpha']
 	)
@@ -41,7 +47,8 @@ dependencies {
 		[group: 'org.apache.derby', name: 'derbyclient', version: '10.14.1.0'],
 		[group: 'org.apache.derby', name: 'derbytools', version: '10.14.1.0'],
 		[group: 'org.controlsfx', name: 'controlsfx', version: '8.40.14'],
-		[group: 'javax.mail', name: 'mail', version: '1.4.7']
+		[group: 'javax.mail', name: 'mail', version: '1.4.7'],
+		[group: 'com.eriwen', name: 'gradle-css-plugin', version: '1.11.1']
 	)
 }
 
@@ -51,6 +58,9 @@ jar {
 		attributes 'Main-Class': 'edu.wpi.cs3733d18.teamp.Main'
 	}
 	from configurations.runtime.collect { zipTree(it) }
+	//from('src/main/java/resources') {
+	//	include '**/*.css'
+	//}
 }
 
 task run(type: JavaExec) {

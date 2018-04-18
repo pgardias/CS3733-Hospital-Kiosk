@@ -29,6 +29,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+        //String path = this.getClass().getResource("/css/home.css").toExternalForm();
+        root.getStylesheets().add("/css/home.css");
         primaryStage.setTitle("Brigham & Women's Hospital Kiosk");
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream( "/img/icons/favicon-16x16.png")));
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream( "/img/icons/favicon-32x32.png")));
