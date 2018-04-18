@@ -1,4 +1,4 @@
-/*
+
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import org.junit.Before;
@@ -102,4 +102,17 @@ public class NodeTesting {
     }
 
 
-}*/
+
+    @Test
+    public void testFloorsBetweenNodes(){
+        Node nodeTest1 = new Node();
+        nodeTest1.setFloor(Node.floorType.LEVEL_3);
+
+        Node nodeTest2 = new Node();
+        nodeTest2.setFloor(Node.floorType.LEVEL_L2);
+
+        assertEquals("down 5 floors to floor L2.", nodeTest1.floorsBetweenNodes(nodeTest2));
+    }
+
+
+}

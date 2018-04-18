@@ -9,7 +9,8 @@ public class PathfindingContext {
         AStar, BreadthFirst, DepthFirst, Dijkstra, BestFirst
     }
 
-    public PathfindingContext() { }
+    public PathfindingContext() {
+    }
 
     public PathfindingContext(Pathfinder pathfinder) {
         this.pathfinder = pathfinder;

@@ -15,6 +15,7 @@ public class BreadthFirst extends Pathfinder {
 
     @Override
     public void findPath(Node srcNode, Node destNode) {
+        System.out.println("breadthfirst");
         //System.out.println("breadth first");
         Queue<Node> openSet = new LinkedList<>();
         HashSet<Node> closedSet = new HashSet<>();

@@ -42,6 +42,7 @@ public class Dijkstra extends Pathfinder{
      */
     // Dijkstra's algorithm to find shortest path from s to all other nodes
     public void findPath (Node strNode, Node destNode) {
+        
         System.out.println("dijkstra");
         HashMap<Node, Double> dist = new HashMap<>();  // shortest known distance from "s"
         ArrayList<Node> visited = new ArrayList<>(); // all false initially

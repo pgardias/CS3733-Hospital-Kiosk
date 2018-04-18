@@ -15,14 +15,14 @@
 }
 
 .mobile {
-    -fx-background-color: WHITE;
+    -fx-background-color: #F5BC3A;
     -fx-background-image: url(../img/icons/mobile.png) no-repeat center center fixed;
     -fx-background-size: cover;
     background-size: cover;
 }
 
 .envelope {
-    -fx-background-color: WHITE;
+    -fx-background-color: #F5BC3A;
     -fx-background-image: url(../img/icons/envelope.png) no-repeat center center fixed;
     -fx-background-size: cover;
     background-size: cover;
