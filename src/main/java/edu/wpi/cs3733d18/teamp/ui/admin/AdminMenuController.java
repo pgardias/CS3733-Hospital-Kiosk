@@ -8,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.stage.Stage;
 
 import javax.swing.*;
@@ -26,6 +28,14 @@ public class AdminMenuController {
 
     @FXML
     JFXButton backButton;
+
+    @FXML
+    Label helloMessage;
+
+    @FXML
+    public void onStartup() {
+        helloMessage.setText("Hello " + Main.currentUser.getFirstName() + " " + Main.currentUser.getLastName() + ", ");
+    }
 
     @FXML
     public void employeeButtonOp(ActionEvent e) {
