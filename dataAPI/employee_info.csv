@@ -1,0 +1,3 @@
+employeeID,username,firstName,lastName,password,isAdmin,employeeType,subtype
+1,admin,Building,Owner,admin,1,DEFAULT,DEFAULT
+2,staff,Building,Owner,staff,0,DEFAULT,DEFAULT

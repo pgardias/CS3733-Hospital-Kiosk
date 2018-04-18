@@ -1,0 +1,6 @@
+recordID,requestType,subType,totalOfType,totalTime,avgTime
+1,transportation,Gurney,2,26,13
+2,transportation,Wheelchair,2,220,110
+3,transportation,Ambulance,2,0,0
+4,transportation,Car,2,0,0
+5,transportation,Helicopter,1,1,1
