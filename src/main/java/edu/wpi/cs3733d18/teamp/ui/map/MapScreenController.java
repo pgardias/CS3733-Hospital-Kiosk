@@ -810,14 +810,14 @@ public class MapScreenController {
 
         //System.out.println("X:  " + initX + "  Y:  " + initY);
 
-        x1 = initX + (5 * Math.cos(angle));
-        y1 = initY + (5 * Math.sin(angle));
+        x1 = initX + (9 * Math.cos(angle));
+        y1 = initY + (9 * Math.sin(angle));
 
-        x2 = initX + (3 * Math.cos(angle - (2 * Math.PI / 3)));
-        y2 = initY + (3 * Math.sin(angle - (2 * Math.PI / 3)));
+        x2 = initX + (4 * Math.cos(angle - (2 * Math.PI / 3)));
+        y2 = initY + (4 * Math.sin(angle - (2 * Math.PI / 3)));
 
-        x3 = initX + (3 * Math.cos(angle + (2 * Math.PI / 3)));
-        y3 = initY + (3 * Math.sin(angle + (2 * Math.PI / 3)));
+        x3 = initX + (4 * Math.cos(angle + (2 * Math.PI / 3)));
+        y3 = initY + (4 * Math.sin(angle + (2 * Math.PI / 3)));
 
 
         arrow.getPoints().addAll(new Double[]{
@@ -825,7 +825,7 @@ public class MapScreenController {
                 x2, y2,
                 x1, y1,
                 x3, y3});
-        arrow.setFill(Color.rgb(250, 60, 0));
+        arrow.setFill(Color.rgb(200, 30, 0));
 
         nodesEdgesPane.getChildren().add(arrow);
 
