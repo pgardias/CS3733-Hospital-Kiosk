@@ -48,7 +48,7 @@
 
 .emergency-button {
     -fx-background-color: RED;
-    -fx-font-family: "Abyssinica SIL";
+    /*-fx-font-family: "Abyssinica SIL";*/
     -fx-font-size: 48px;
     -fx-text-fill: BLACK;
     -fx-background-radius: 10;
@@ -57,6 +57,6 @@
 
 .emergency-button:hover {
     -fx-background-color: #c60000;
-    -fx-font-family: "Abyssinica SIL";
-    -fx-font-size: 48px;
+    /*-fx-font-family: "Abyssinica SIL";*/
+    /*-fx-font-size: 48px;*/
 }
