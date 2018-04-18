@@ -87,6 +87,9 @@ public class MapViewerBuilder implements Initializable{
     AnchorPane threeDAnchorPane;
 
     @FXML
+    AnchorPane nodeAnchorPane;
+
+    @FXML
     BorderPane buttonOverlayPane;
 
     @FXML
@@ -311,7 +314,6 @@ public class MapViewerBuilder implements Initializable{
 
     static MeshView[] loadMeshView(URL fileName) {
         ObjModelImporter importer = new ObjModelImporter();
-        System.out.println(fileName);
         importer.read(fileName);
 
         return importer.getImport();
@@ -403,9 +405,10 @@ public class MapViewerBuilder implements Initializable{
         for (Node node : nodeSet.values()) {
             if (node.getType() != Node.nodeType.HALL) {
                 Sphere sphere = new Sphere(NODE_RADIUS);
-                threeDAnchorPane.getChildren().add(sphere);
+                nodeAnchorPane.getChildren().add(sphere);
                 sphere.setTranslateX((node.getX() - X_OFFSET) + X_SCALE);
-                sphere.setTranslateY((node.getY() - Y_OFFSET) * Y_SCALE);
+                sphere.setTranslateY(500);
+                sphere.setTranslateZ((node.getY() - Y_OFFSET) * Y_SCALE);
                 //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
                 //.setFill(Color.DODGERBLUE);
                 //circle.setStroke(Color.BLACK);
@@ -430,7 +433,7 @@ public class MapViewerBuilder implements Initializable{
 //                }
             } else {
                 Sphere sphere = new Sphere(0);
-                threeDAnchorPane.getChildren().add(sphere);
+                nodeAnchorPane.getChildren().add(sphere);
                 sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
                 sphere.setTranslateZ((node.getY() - Y_OFFSET) * Y_SCALE);
                 //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
