@@ -134,8 +134,6 @@ public class HomeController {
             Main.currentUser = db.checkEmployeeLogin(username, password);
         } catch (LoginInvalidException e1) {
 
-//            loginErrorLabel.setText("Login failed, invalid username or password");
-//            loginErrorLabel.setVisible(true);
             ShakeTransition anim = new ShakeTransition(usernameTxt, passwordTxt);
             anim.playFromStart();
             usernameTxt.clear();

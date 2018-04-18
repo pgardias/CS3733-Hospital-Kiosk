@@ -10,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.io.IOException;
 
 public class AdminMenuController {
@@ -25,15 +24,16 @@ public class AdminMenuController {
     JFXButton serviceRequestScreenButton;
 
     @FXML
+    JFXButton settingsButton;
+
+    @FXML
     JFXButton backButton;
 
     @FXML
     public void employeeButtonOp(ActionEvent e) {
-        Stage stage;
         Parent root;
         FXMLLoader loader;
 
-        stage = (Stage) employeeButton.getScene().getWindow();
         loader = new FXMLLoader(getClass().getResource("/FXML/admin/ManageEmployeeScreen.fxml"));
         try {
             root = loader.load();
@@ -46,12 +46,10 @@ public class AdminMenuController {
 
     @FXML
     public void mapManagementButtonOp(ActionEvent e) {
-        Stage stage;
         Parent root;
         FXMLLoader loader;
         MapBuilderController mapBuilderController;
 
-        stage = (Stage) mapManagementButton.getScene().getWindow();
         loader = new FXMLLoader(getClass().getResource("/FXML/admin/MapBuilder.fxml"));
         try {
             root = loader.load();
@@ -66,12 +64,9 @@ public class AdminMenuController {
 
     @FXML
     public void serviceRequestScreenButtonOp(ActionEvent e) {
-        Stage stage;
         Parent root;
         FXMLLoader loader;
-        ServiceRequestScreen serviceRequestScreen;
 
-        stage = (Stage) serviceRequestScreenButton.getScene().getWindow();
         loader = new FXMLLoader(getClass().getResource("/FXML/service/ServiceRequestScreen.fxml"));
         try {
             root = loader.load();
@@ -79,17 +74,14 @@ public class AdminMenuController {
             ioe.printStackTrace();
             return;
         }
-        serviceRequestScreen = loader.getController();
         serviceRequestScreenButton.getScene().setRoot(root);
     }
 
     @FXML
     public void backButtonOp(ActionEvent e) {
-        Stage stage;
         Parent root;
         FXMLLoader loader;
 
-        stage = (Stage) backButton.getScene().getWindow();
         loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
         try {
             root = loader.load();
@@ -103,6 +95,19 @@ public class AdminMenuController {
 
     @FXML
     public void settingsButtonOp(ActionEvent e) {
+        Parent root;
+        FXMLLoader loader;
+        SettingsController settingsController;
 
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/SettingsScreen.fxml"));
+        try {
+            root = loader.load();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return;
+        }
+        settingsController = loader.getController();
+        settingsController.onStartUp();
+        settingsButton.getScene().setRoot(root);
     }
 }
