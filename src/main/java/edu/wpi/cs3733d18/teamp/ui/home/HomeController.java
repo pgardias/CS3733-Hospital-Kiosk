@@ -192,11 +192,9 @@ public class HomeController {
     @FXML
     public Boolean mapButtonOp(ActionEvent e) {
         FXMLLoader loader;
-        Stage stage;
         Parent root;
         MapScreenController mapScreenController;
 
-        stage = (Stage) mapButton.getScene().getWindow();
         loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
 
         try {
@@ -214,7 +212,7 @@ public class HomeController {
     @FXML
     public void aboutButtonOp() {
         FXMLLoader loader;
-        Parent root = null;
+        Parent root;
         AboutScreenController aboutScreenController;
 
         loader = new FXMLLoader(getClass().getResource("/FXML/home/AboutScreen.fxml"));
@@ -223,6 +221,7 @@ public class HomeController {
             root = loader.load();
         } catch (IOException ie) {
             ie.printStackTrace();
+            return;
         }
 
         aboutScreenController = loader.getController();
