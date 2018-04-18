@@ -13,13 +13,18 @@ import edu.wpi.cs3733d18.teamp.Exceptions.OrphanNodeException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
@@ -211,6 +216,25 @@ public class MapBuilderNodeFormController implements Initializable{
         floorComboBox.setItems(floorOptions);
 
         editFlag = true;
+
+        /*
+        submitFormButton.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                Task task = new Task() {
+                    @Override
+                    protected Integer call() {
+                        submitFormButton.getScene().setCursor(Cursor.WAIT); //Change cursor to wait style
+                        //scene.setCursor(Cursor.DEFAULT); //Change cursor to default style
+                        return 1;
+                    }
+                };
+                Thread th = new Thread(task);
+                th.setDaemon(true);
+                th.start();
+            }
+        });
+        */
     }
 
     /**
@@ -328,7 +352,6 @@ public class MapBuilderNodeFormController implements Initializable{
         
         mapBuilderController.addOverlay();
         mapBuilderController.updateMap();
-
     }
 
 
