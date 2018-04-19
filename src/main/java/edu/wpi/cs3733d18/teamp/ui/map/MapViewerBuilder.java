@@ -297,7 +297,13 @@ public class MapViewerBuilder implements Initializable{
     @FXML
     public void zoomScrollWheel(ScrollEvent s){
         double newZoom = (s.getDeltaY()); // Get value from scroll wheel
-        if (newZoom > 0 && curScale + 5 <= 100) { // Zoom in (already zoomed in)
+        if (newZoom > 0 && curScale < 5) { // Zoom in (already zoomed out)
+            curScale += 0.2;
+            threeDAnchorPane.setScaleX(curScale);
+            threeDAnchorPane.setScaleY(curScale);
+            threeDAnchorPane.setScaleZ(curScale);
+        }
+        else if (newZoom > 0 && curScale + 5 <= 100) { // Zoom in (already zoomed in)
             curScale += 5;
             threeDAnchorPane.setScaleX(curScale);
             threeDAnchorPane.setScaleY(curScale);
@@ -305,6 +311,12 @@ public class MapViewerBuilder implements Initializable{
         }
         else if (newZoom < 0 && curScale - 5 > 0) { // Zoomed out (already zoomed in)
             curScale -= 5;
+            threeDAnchorPane.setScaleX(curScale);
+            threeDAnchorPane.setScaleY(curScale);
+            threeDAnchorPane.setScaleZ(curScale);
+        }
+        else if (newZoom < 0 && curScale - 0.2 > 0) { // Zoomed out (already zoomed out)
+            curScale -= 0.2;
             threeDAnchorPane.setScaleX(curScale);
             threeDAnchorPane.setScaleY(curScale);
             threeDAnchorPane.setScaleZ(curScale);
@@ -350,7 +362,7 @@ public class MapViewerBuilder implements Initializable{
         pointLight.setTranslateY(VIEWPORT_SIZE/2);
         pointLight.setTranslateZ(VIEWPORT_SIZE/2);
         PointLight pointLight2 = new PointLight(lightColor);
-        pointLight2.setTranslateX(VIEWPORT_SIZE*1/4);
+        pointLight2.setTranslateX(VIEWPORT_SIZE/4);
         pointLight2.setTranslateY(VIEWPORT_SIZE*3/4);
         pointLight2.setTranslateZ(VIEWPORT_SIZE*3/4);
         PointLight pointLight3 = new PointLight(lightColor);
@@ -383,7 +395,7 @@ public class MapViewerBuilder implements Initializable{
      * Loads in a new mesh when switching floors
      */
     @FXML
-    public void switchMesh(URL fileName) {
+    private void switchMesh(URL fileName) {
         threeDAnchorPane.getChildren().remove(0);
         Group newRoot = buildScene(fileName);
         newRoot.setScaleX(2);
@@ -440,7 +452,7 @@ public class MapViewerBuilder implements Initializable{
                 Sphere sphere = new Sphere(0);
                 threeDAnchorPane.getChildren().add(sphere);
                 sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
-                sphere.setTranslateY(curYTranslation);
+                sphere.setTranslateY(mv.getTranslateY() - Y_OFFSET);
                 sphere.setTranslateZ((-node.getY() - Z_OFFSET) * Y_SCALE);
                 //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
                 //circle.setFill(Color.DODGERBLUE);
