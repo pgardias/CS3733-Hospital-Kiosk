@@ -13,6 +13,7 @@ public class AStar extends Pathfinder {
      */
     @Override
     public void findPath(Node srcNode, Node destNode) {
+        System.out.println("ASTAR");
         System.out.println("Astar");
         // Total cost from start node
         HashMap<String, Double> gScore = new HashMap<String, Double>();

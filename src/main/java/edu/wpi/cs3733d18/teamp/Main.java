@@ -1,5 +1,4 @@
 package edu.wpi.cs3733d18.teamp;
-import edu.wpi.cs3733d18.teamp.Employee;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.EdgeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
@@ -30,6 +29,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+        //String path = this.getClass().getResource("/css/home.css").toExternalForm();
+        root.getStylesheets().add("/css/home.css");
         primaryStage.setTitle("Brigham & Women's Hospital Kiosk");
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream( "/img/icons/favicon-16x16.png")));
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream( "/img/icons/favicon-32x32.png")));
@@ -38,6 +39,7 @@ public class Main extends Application {
         primaryStage.setFullScreen(true);
         primaryStage.show();
 
+        settings.setPathfindingContext(pathfindingContext);
         pathfindingContext.setPathfindingContext(settings.getPathfindingSettings());
     }
     //Logs out the current user, employee, or admin so they are no longer the currentUser at the kiosk
@@ -68,6 +70,7 @@ public class Main extends Application {
             System.out.println(n.getNodeID());
         } catch (EdgeNotFoundException e) {
             e.printStackTrace();
+            System.out.println();
         }
 
 

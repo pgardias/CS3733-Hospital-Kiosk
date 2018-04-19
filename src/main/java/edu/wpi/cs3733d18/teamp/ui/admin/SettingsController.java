@@ -6,11 +6,14 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.cs3733d18.teamp.Settings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
-import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 import edu.wpi.cs3733d18.teamp.Pathfinding.PathfindingContext.PathfindingSetting;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 
 public class SettingsController {
 
@@ -40,6 +43,7 @@ public class SettingsController {
      */
     @FXML
     public void onStartUp() {
+        algorithmComboBox.setItems(algorithmTypes);
         switch (Settings.getPathfindingSettings()) {
             case AStar: {
                 algorithmComboBox.setValue("A*");
@@ -66,16 +70,15 @@ public class SettingsController {
                 break;
             }
         }
-
+        feetPerPixelTextField.setText(Double.toString(Settings.getFeetPerPixel()));
     }
 
     /**
      * Sets the settings singleton based upon the current inputs when the
      * submit button is pressed.
-     * @param e
      */
     @FXML
-    public void submitButtonOp(ActionEvent e) {
+    public void submitButtonOp() {
         switch (algorithmComboBox.getValue().toString()) {
             case "A*":
                 Settings.setPathfindingAlgorithm(PathfindingSetting.AStar);
@@ -100,5 +103,20 @@ public class SettingsController {
             // TODO Set error label appropriately
             return;
         }
+    }
+
+    @FXML
+    public void backButtonOp() {
+        Parent root;
+        FXMLLoader loader;
+
+        loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
+        try {
+            root = loader.load();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return;
+        }
+        backButton.getScene().setRoot(root);
     }
 }

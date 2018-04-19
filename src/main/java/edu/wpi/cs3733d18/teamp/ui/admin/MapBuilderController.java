@@ -6,6 +6,7 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.Pathfinding.PathfindingContext;
+import edu.wpi.cs3733d18.teamp.ui.home.ShakeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -843,19 +844,33 @@ public class MapBuilderController implements Initializable {
                         nodeLongNameLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 0 10px;");
                         nodeBuildingLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
-//                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
                         popOver = new PopOver(popOverVBox);
-                        popOver.show((javafx.scene.Node) event.getSource(), -5);
+
+                        if (event.getSceneX() < 960) {
+                            popOver.setArrowLocation(PopOver.ArrowLocation.LEFT_TOP);
+                        }
+                        else {
+                            popOver.setArrowLocation(PopOver.ArrowLocation.RIGHT_TOP);
+                        }
+
+                        popOver.show((javafx.scene.Node) event.getSource(), -6);
+
                         popOverHidden = false;
                         popOver.setCloseButtonEnabled(false);
-//                        popOver.setCornerRadius(20);
                         popOver.setAutoFix(true);
                         popOver.setDetachable(false);
+
+                        nodeDispSet.get(string).setStroke(Color.YELLOW);
                     }
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
                 popOver.hide();
                 popOverHidden = true;
+                for (String string : nodeDispSet.keySet()) {
+                    if (nodeDispSet.get(string) == event.getSource()) {
+                        nodeDispSet.get(string).setStroke(Color.BLACK);
+                    }
+                }
             }
             event.consume();
         }
@@ -1295,6 +1310,8 @@ public class MapBuilderController implements Initializable {
         } else {
             // Destination has not been set, set search bar to red
             destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
+            ShakeTransition anim = new ShakeTransition(destinationSearchBar);
+            anim.playFromStart();
             return false;
             //dstNode = nodeSet.get(endNode.getID());
         }

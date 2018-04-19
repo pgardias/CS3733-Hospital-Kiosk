@@ -4,6 +4,7 @@ classes/
 build/
 out/
 KioskDB/
+TeamPDB/
 mockups/
 gradle/
 gradlew

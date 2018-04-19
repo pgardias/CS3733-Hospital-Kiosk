@@ -1,7 +1,6 @@
 package edu.wpi.cs3733d18.teamp.ui.map;
 
 import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
-import com.interactivemesh.jfx.importer.stl.StlMeshImporter;
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
@@ -13,7 +12,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.*;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
@@ -147,7 +145,7 @@ public class MapViewerBuilder implements Initializable{
             return;
         }
         searchBarOverlayController = loader.getController();
-        searchBarOverlayController.startUp(mapScreenController);
+        //searchBarOverlayController.startUp(mapScreenController);
         searchbarBorderPane.setTop(root);
     }
 
@@ -179,36 +177,24 @@ public class MapViewerBuilder implements Initializable{
 
                     //System.out.println("Previous getSceneX: "+mouseInSceneX+" xChange: "+xChange);
                     // Change Rotation Y
-                    if (xChange < 0) {
+                    if (xChange < 0) { // Rotate clockwise
                         curYRotation += ROTATION_SPEED;
-                        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS), new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
-                        /*for (Sphere s : nodeDispSet.values()) {
-                            s.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.Y_AXIS),
-                                    new Rotate(curXRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.X_AXIS));
-                        }*/
-                    } else if (xChange > 0) {
+                        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+                    } else if (xChange > 0) { // Rotate counterclockwise
                         curYRotation -= ROTATION_SPEED;
-                        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS), new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
-                        /*for (Sphere s : nodeDispSet.values()) {
-                            s.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.Y_AXIS),
-                                    new Rotate(curXRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.X_AXIS));
-                        }*/
+                        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
                     }
                     // Change Rotation X
                     if (yChange < 0) {
                         curXRotation += ROTATION_SPEED;
-                        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS), new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
-                        /*for (Sphere s : nodeDispSet.values()) {
-                            s.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.Y_AXIS),
-                                    new Rotate(curXRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.X_AXIS));
-                        }*/
+                        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
                     } else if (yChange > 0) {
                         curXRotation -= ROTATION_SPEED;
-                        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS), new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
-                        /*for (Sphere s : nodeDispSet.values()) {
-                            s.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.Y_AXIS),
-                                    new Rotate(curXRotation, mv.getTranslateX() - s.getTranslateX(), mv.getTranslateY() - s.getTranslateY(), mv.getTranslateZ() - s.getTranslateZ(), Rotate.X_AXIS));
-                        }*/
+                        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
                     }
                     mouseInSceneX = newMouseInSceneX;
                     mouseInSceneY = newMouseInSceneY;
@@ -236,29 +222,17 @@ public class MapViewerBuilder implements Initializable{
                     if (xChange < 0) { // Pan left
                         curXTranslation -= PAN_SPEED;
                         threeDAnchorPane.setTranslateX(curXTranslation); // Map panning
-                        /*for (Sphere s : nodeDispSet.values()) {
-                            s.setTranslateX(s.getTranslateX() - PAN_SPEED);
-                        }*/
                     } else if (xChange > 0) { // Pan right
                         curXTranslation += PAN_SPEED;
                         threeDAnchorPane.setTranslateX(curXTranslation); // Map panning
-                        /*for (Sphere s : nodeDispSet.values()) {
-                            s.setTranslateX(s.getTranslateX() + PAN_SPEED);
-                        }*/
                     }
                     // Change Panning Y
                     if (yChange < 0) { // Pan down
                         curYTranslation -= PAN_SPEED;
                         threeDAnchorPane.setTranslateY(curYTranslation); // Map panning
-                        /*for (Sphere s : nodeDispSet.values()) {
-                            s.setTranslateY(s.getTranslateY() - PAN_SPEED);
-                        }*/
                     } else if (yChange > 0) { // Pan up
                         curYTranslation += PAN_SPEED;
                         threeDAnchorPane.setTranslateY(curYTranslation); // Map panning
-                        /*for (Sphere s : nodeDispSet.values()) {
-                            s.setTranslateY(s.getTranslateY() + PAN_SPEED);
-                        }*/
                     }
 
                     mouseInSceneX = newMouseInSceneX;
@@ -323,19 +297,17 @@ public class MapViewerBuilder implements Initializable{
     @FXML
     public void zoomScrollWheel(ScrollEvent s){
         double newZoom = (s.getDeltaY()); // Get value from scroll wheel
-        MeshView mv = getMesh();
-        //System.out.println("SCROLLING ZOOM. OLD DELTA: "+curZoom+" NEW DELTA: "+newZoom);
-        if (newZoom > 0 && curScale + 5 <= 100) {
+        if (newZoom > 0 && curScale + 5 <= 100) { // Zoom in (already zoomed in)
             curScale += 5;
-            mv.setScaleX(curScale);
-            mv.setScaleY(curScale);
-            mv.setScaleZ(curScale);
+            threeDAnchorPane.setScaleX(curScale);
+            threeDAnchorPane.setScaleY(curScale);
+            threeDAnchorPane.setScaleZ(curScale);
         }
-        else if (newZoom < 0 && curScale - 5 > 0) {
+        else if (newZoom < 0 && curScale - 5 > 0) { // Zoomed out (already zoomed in)
             curScale -= 5;
-            mv.setScaleX(curScale);
-            mv.setScaleY(curScale);
-            mv.setScaleZ(curScale);
+            threeDAnchorPane.setScaleX(curScale);
+            threeDAnchorPane.setScaleY(curScale);
+            threeDAnchorPane.setScaleZ(curScale);
         }
         curZoom = newZoom; // Set next zoom value to compare to
     }
