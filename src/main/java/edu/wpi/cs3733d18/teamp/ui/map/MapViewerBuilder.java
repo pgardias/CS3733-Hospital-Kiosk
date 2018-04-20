@@ -39,14 +39,25 @@ public class MapViewerBuilder implements Initializable{
 
     // Symbolic Constants
     private static final int VIEWPORT_SIZE = 800;
-    private int X_OFFSET = 160;
-    private int Y_OFFSET = -15;
-    private int Z_OFFSET = -2720;
     private double X_SCALE = 1588.235294 / 5000.0;
     private double Y_SCALE = 1080.0 / 3400.0;
-    private static final double NODE_RADIUS = 10.0;
+    private static final double NODE_RADIUS = 5.0;
     private static final Color lightColor = Color.rgb(244, 255, 250);
     private static final Color buildingColor = Color.rgb(255, 255, 255);
+
+    private int X_OFFSET_3 = -50;
+    private int Z_OFFSET_3 = -2720;
+    private int X_OFFSET_2 = 160;
+    private int Z_OFFSET_2 = -2720;
+    private int X_OFFSET_1 = 160;
+    private int Z_OFFSET_1 = -2720;
+    private int X_OFFSET_G = 160;
+    private int Z_OFFSET_G = -2720;
+    private int X_OFFSET_L1 = 160;
+    private int Z_OFFSET_L1 = -2720;
+    private int X_OFFSET_L2 = 160;
+    private int Z_OFFSET_L2 = -2720;
+    private int Y_OFFSET = -30;
 
     private Group root;
     private PointLight pointLight;
@@ -65,6 +76,8 @@ public class MapViewerBuilder implements Initializable{
     private double curZTranslation;
     private double curScale;
     private double curZoom;
+    private int curXOffset;
+    private int curZOffset;
 
     // Searchbar overlay controller
     SearchBarOverlayController searchBarOverlayController = null;
@@ -145,7 +158,7 @@ public class MapViewerBuilder implements Initializable{
             return;
         }
         searchBarOverlayController = loader.getController();
-        //searchBarOverlayController.startUp(mapScreenController);
+        searchBarOverlayController.startUp3D(mapScreenController);
         searchbarBorderPane.setTop(root);
     }
 
@@ -245,36 +258,48 @@ public class MapViewerBuilder implements Initializable{
     @FXML
     public void floorL2ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_L2;
+        curXOffset = X_OFFSET_L2;
+        curZOffset = Z_OFFSET_L2;
         updateMap("/models/B&WL2Floor.obj", "/models/textures/3rdFloor_UV.png");
     }
 
     @FXML
     public void floorL1ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_L1;
+        curXOffset = X_OFFSET_L1;
+        curZOffset = Z_OFFSET_L1;
         updateMap("/models/B&WL1Floor.obj", "/models/textures/3rdFloor_UV.png");
     }
 
     @FXML
     public void floorGButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_G;
+        curXOffset = X_OFFSET_G;
+        curZOffset = Z_OFFSET_G;
         updateMap("/models/B&WGFloor.obj", "/models/textures/3rdFloor_UV.png");
     }
 
     @FXML
     public void floor1ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_1;
+        curXOffset = X_OFFSET_1;
+        curZOffset = Z_OFFSET_1;
         updateMap("/models/B&W1stFloor.obj", "/models/textures/3rdFloor_UV.png");
     }
 
     @FXML
     public void floor2ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_2;
-        updateMap("/models/B&W2ndFloor.obj", "/models/textures/3rdFloor_UV.png");
+        curXOffset = X_OFFSET_2;
+        curZOffset = Z_OFFSET_2;
+        updateMap("/models/B&W2ndFloor.obj", "/models/textures/2ndFloor_UV.png");
     }
 
     @FXML
     public void floor3ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_3;
+        curXOffset = X_OFFSET_3;
+        curZOffset = Z_OFFSET_3;
         updateMap("/models/B&W3rdFloor.obj", "/models/textures/3rdFloor_UV.png");
     }
 
@@ -322,13 +347,13 @@ public class MapViewerBuilder implements Initializable{
     private Group buildScene(URL fileName) {
         MeshView[] meshViews = loadMeshView(fileName);
         for (int i = 0; i < meshViews.length; i++) {
-            curXTranslation = (VIEWPORT_SIZE / 2);
+            /*curXTranslation = (VIEWPORT_SIZE / 2);
             curYTranslation = (VIEWPORT_SIZE / 2);
-            curZTranslation = (VIEWPORT_SIZE / 2);
+            curZTranslation = (VIEWPORT_SIZE / 2);*/
             curScale = 15;
-            meshViews[i].setTranslateX(curXTranslation);
-            meshViews[i].setTranslateY(curYTranslation);
-            meshViews[i].setTranslateZ(curZTranslation);
+            meshViews[i].setTranslateX(VIEWPORT_SIZE / 2);
+            meshViews[i].setTranslateY(VIEWPORT_SIZE / 2);
+            meshViews[i].setTranslateZ(VIEWPORT_SIZE / 2);
             meshViews[i].setScaleX(curScale);
             meshViews[i].setScaleY(curScale);
             meshViews[i].setScaleZ(curScale);
@@ -341,7 +366,7 @@ public class MapViewerBuilder implements Initializable{
             curXRotation = 20;
             curYRotation = 0;
             curZRotation = 0;
-            meshViews[i].getTransforms().setAll(/*new Rotate(38, Rotate.Z_AXIS),*/ new Rotate(curXRotation, Rotate.X_AXIS));
+            meshViews[i].getTransforms().setAll(/*new Rotate(38, Rotate.Z_AXIS),*/ new Rotate(curXRotation, Rotate.X_AXIS), new Rotate(curYRotation, Rotate.Y_AXIS));
         }
 
 
@@ -375,7 +400,7 @@ public class MapViewerBuilder implements Initializable{
      * @return The MeshView we are looking for
      */
     private MeshView getMesh() {
-        Group group = (Group)threeDAnchorPane.getChildren().get(0); // TODO index needs to be incremented whenever a new element is added to the pane
+        Group group = (Group)threeDAnchorPane.getChildren().get(0); // Main Mesh should always be first node in pane
         return (MeshView)group.getChildren().get(0);
     }
 
@@ -408,9 +433,9 @@ public class MapViewerBuilder implements Initializable{
             if (node.getFloor() == currentFloor && node.getType() != Node.nodeType.HALL) {
                 Sphere sphere = new Sphere(NODE_RADIUS);
                 threeDAnchorPane.getChildren().add(sphere);
-                sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
+                sphere.setTranslateX((node.getX() - curXOffset) * X_SCALE);
                 sphere.setTranslateY(mv.getTranslateY() - Y_OFFSET);
-                sphere.setTranslateZ((-node.getY() - Z_OFFSET) * Y_SCALE);
+                sphere.setTranslateZ((-node.getY() - curZOffset) * Y_SCALE);
                 sphere.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.Y_AXIS),
                         new Rotate(curXRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.X_AXIS));
                 //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
@@ -438,9 +463,9 @@ public class MapViewerBuilder implements Initializable{
             } else {
                 Sphere sphere = new Sphere(0);
                 threeDAnchorPane.getChildren().add(sphere);
-                sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
+                sphere.setTranslateX((node.getX() - curXOffset) * X_SCALE);
                 sphere.setTranslateY(mv.getTranslateY() - Y_OFFSET);
-                sphere.setTranslateZ((-node.getY() - Z_OFFSET) * Y_SCALE);
+                sphere.setTranslateZ((-node.getY() - curZOffset) * Y_SCALE);
                 //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
                 //circle.setFill(Color.DODGERBLUE);
                 //circle.setStroke(Color.BLACK);
@@ -555,6 +580,15 @@ public class MapViewerBuilder implements Initializable{
     public void updateMap(String model, String texture) {
         nodeDispSet.clear();
         threeDAnchorPane.getChildren().clear();
+        threeDAnchorPane.setTranslateX(0);
+        threeDAnchorPane.setTranslateY(0);
+        threeDAnchorPane.setTranslateZ(0);
+        threeDAnchorPane.getTransforms().setAll(new Rotate(0, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(0, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+        int tempXRotation = curXRotation;
+        int tempYRotaton = curYRotation;
+        int tempZRotation = curZRotation;
+
         URL pathName = getClass().getResource(model);
         switchMesh(pathName);
         PhongMaterial phongMaterial = new PhongMaterial();
@@ -562,6 +596,13 @@ public class MapViewerBuilder implements Initializable{
         MeshView mv = getMesh();
         mv.setMaterial(phongMaterial);
         draw3DNodes();
+        curXRotation = tempXRotation;
+        curYRotation = tempYRotaton;
+        curZRotation = tempZRotation;
+        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+        threeDAnchorPane.setTranslateX(curXTranslation); // Map panning
+        threeDAnchorPane.setTranslateY(curYTranslation); // Map panning
     }
 
     /**

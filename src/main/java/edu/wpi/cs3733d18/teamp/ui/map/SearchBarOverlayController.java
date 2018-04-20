@@ -108,6 +108,19 @@ public class SearchBarOverlayController implements Initializable{
         mapToggleButtonOp();
     }
 
+    public void startUp3D(MapScreenController mapScreenController){
+        this.mapScreenController = mapScreenController;
+        //if (!mapScreenController.getPathDrawn()) { // TODO uncomment when map is integrated with the rest of the app
+            directionsTableView.setVisible(false);
+            directionsButton.setVisible(false);
+            emailButton.setVisible(false);
+            phoneButton.setVisible(false);
+            directionsRectangle.setVisible(false);
+        //}
+
+        //mapToggleButtonOp();
+    }
+
     public Boolean isSourceFocused(){
         return sourceSearchBar.isFocused();
     }
