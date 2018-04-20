@@ -32,6 +32,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import jdk.nashorn.internal.runtime.regexp.joni.constants.NodeType;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.PopOver.ArrowLocation;
 
@@ -757,8 +758,13 @@ public class MapScreenController {
 
 
         Node currentNode = null, pastNode = null;
-        if (pathMade != null) {
+        if (pathDrawn) {
             resetPath();
+        } else {
+            Node.floorType floor = path.get(0).getFloor();
+            floorState = floor.toString();
+            currentFloor = floor;
+            updateMap();
         }
 
         stairNodeSet.clear();
