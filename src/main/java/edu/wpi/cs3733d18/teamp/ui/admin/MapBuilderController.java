@@ -364,17 +364,21 @@ public class MapBuilderController implements Initializable {
     /**
      * this lets the user scroll the wheel to move the zoom slider
      * This also readjusts the screen based on the bounds
-     *
+     * this will also zoom in the direction of the mouse
      * @param s
      */
     @FXML
     public void zoomScrollWheel(ScrollEvent s) {
+        //get the change in the scroll wheel, scale it and add it to the current zoom
         double newValue = (s.getDeltaY()) / 200.0 + zoomSlider.getValue();
-        System.out.println("mouse scroll change: " + s.getDeltaY());
-        System.out.println("source: " + s.getSource().toString());
+//        System.out.println("mouse scroll change: " + s.getDeltaY());
+//        System.out.println("source: " + s.getSource().toString());
+        //initialize change to 0 which means the map will zoom in on its center
         double change = 0;
 
+        // if the scroll wheel was a negative change and the app is not zoomed out all the way activate change
         if ((s.getDeltaY() < 0 ) && (zoomSlider.getValue() != zoomSlider.getMin())) change  = 1;
+        // if the scroll wheel was positive change and the app is not zoomed in all the way activate change
         if ((s.getDeltaY() > 0 ) &&(zoomSlider.getValue() != zoomSlider.getMax())) change = 1;
         System.out.println("s.getDeltaY: " + s.getDeltaY());
         System.out.println("change: " + change);
@@ -387,18 +391,22 @@ public class MapBuilderController implements Initializable {
         double orgTranslateY = mapImage.getTranslateY();
         System.out.println("orgTranslate X: " + orgTranslateX + " orgTranslate Y: " + orgTranslateY);
 
+        // adjusts the mouse based on the image width the zoom slider and the x scale as well as its position on the scene
         double mouseAdjustX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE *(mouseX/1920.0)));
         double mouseAdjustY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE *(mouseY/1080.0)));
         System.out.println("mouse adjustX: " + mouseAdjustX + " mouse adjustY: " + mouseAdjustY);
 
+        //Get the image center
         double imageCenterX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE *0.5));
         double imageCenterY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE *0.5));
         System.out.println(" image centerx : " + imageCenterX + " image centery: " + imageCenterY);
 
+        //find out how far off hte mosue is from the center
         double mouseChangeX = mouseAdjustX - imageCenterX;
         double mouseChangeY = mouseAdjustY - imageCenterY;
         System.out.println("Mouse ChangeX: " + mouseChangeX + " Mouse Change Y: " + mouseChangeY);
 
+        //translate based off of mouse distance from center and the amount scrolled
         newTranslateX = (orgTranslateX * zoomSlider.getValue()/zoomForTranslate) - (change * mouseChangeX * s.getDeltaY()/256.0);
         newTranslateY = (orgTranslateY * zoomSlider.getValue()/zoomForTranslate) - (change * mouseChangeY * s.getDeltaY()/256.0);
         System.out.println("new translate x: " + newTranslateX + " new translate Y: " + newTranslateY);
@@ -410,6 +418,7 @@ public class MapBuilderController implements Initializable {
         double translateSlopeX = X_SCALE*mapImage.getScaleX()*IMG_WIDTH;
         double translateSlopeY = Y_SCALE*mapImage.getScaleX()*IMG_HEIGHT;
 
+        // keeps the translation within particular bounds
         if(newTranslateX > (translateSlopeX - 1920)/2)
             newTranslateX = (translateSlopeX - 1920)/2;
         if(newTranslateX < -(translateSlopeX - 1920)/2)
@@ -434,14 +443,16 @@ public class MapBuilderController implements Initializable {
 
         nodeSet = db.getAllNodes();
 
+        // if we are currently adding a new node get circle position based on form fields
         if (isNewNode) {
-            if (!toggleOn) {
+            if (!toggleOn) { // 2D map
                 newNodeCircle.setCenterX((mapBuilderNodeFormController.getNode2XCoord() - X_OFFSET) * X_SCALE);
                 newNodeCircle.setCenterY((mapBuilderNodeFormController.getNode2YCoord() - Y_OFFSET) * Y_SCALE);
-            } else {
+            } else {  // 3D map
                 newNodeCircle.setCenterX((mapBuilderNodeFormController.getNode3XCoord() - X_OFFSET) * X_SCALE);
                 newNodeCircle.setCenterY((mapBuilderNodeFormController.getNode3YCoord() - Y_OFFSET) * Y_SCALE);
             }
+            //checks to make sure we are making the node visible on the rihgt floor
             if (newNodeFloor.equals(currentFloor)) {
                 newNodeCircle.setRadius(NODE_RADIUS);
                 newNodeCircle.setVisible(true);
@@ -452,27 +463,28 @@ public class MapBuilderController implements Initializable {
                 newNodeCircle.setDisable(true);
             }
         }
-
+        // iterate through ever node in the database
         for (Node node : nodeSet.values()) {
             Circle circle = new Circle();
             circle.setRadius(NODE_RADIUS);
-            if (node.getFloor() != currentFloor) {
+            if (node.getFloor() != currentFloor) { //if node circle is not on current floor
                 circle.setVisible(false);
                 circle.setDisable(true);
                 circle.setPickOnBounds(false);
             }
             nodesEdgesPane.getChildren().add(circle);
 
-            if (modifyingNode && node.getID() == nodeModify.getID()) {
-                if (!toggleOn) {
+            // if we are currentlfy modifying a node and node we are on in the list matches the modifynode id
+            if (modifyingNode && node.getID() == nodeModify.getID()) { //reads from form labels
+                if (!toggleOn) { //2D map
                     circle.setCenterX((mapBuilderNodeFormController.getNode2XCoord() - X_OFFSET) * X_SCALE);
                     circle.setCenterY((mapBuilderNodeFormController.getNode2YCoord() - Y_OFFSET) * Y_SCALE);
-                } else {
+                } else { //3D map
                     circle.setCenterX((mapBuilderNodeFormController.getNode3XCoord() - X_OFFSET) * X_SCALE);
                     circle.setCenterY((mapBuilderNodeFormController.getNode3YCoord() - Y_OFFSET) * Y_SCALE);
                 }
                 circle.setFill(Color.RED);
-            } else {
+            } else { //if we are not modifying a node, just add circle based off of map coordinates
                 if (!toggleOn) {
                     circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
                     circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
@@ -488,12 +500,12 @@ public class MapBuilderController implements Initializable {
 
             circle.setStroke(Color.BLACK);
             circle.setStrokeType(StrokeType.INSIDE);
-            if (!node.getActive()) {
+            if (!node.getActive()) { //if node is inactive make it gray and opaque
                 circle.setOpacity(0.5);
                 circle.setFill(Color.GRAY);
             }
+
             circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
-//                circle.setOnMouseClicked(clickCallback());
 
             String label = node.getID();
             nodeDispSet.put(label, circle);
@@ -512,45 +524,48 @@ public class MapBuilderController implements Initializable {
         edgeSet = db.getAllEdges();
         Boolean fixEdgeStart = false;
         Boolean fixEdgeEnd = false;
+        //iterates through the database of edges
         for (Edge edge : edgeSet.values()) {
 
             Line line = new Line();
             nodesEdgesPane.getChildren().add(line);
 
+
             if (modifyingNode) {
+                //modifying a node so we need to change either the start or end of the line
                 ArrayList<Edge> dragEdges = nodeModify.getEdges();
 
                 for (Edge modifyEdge : dragEdges) {
                     if (modifyEdge.equals(edge)) {
                         System.out.println("modify edge equals the edge");
-                        if (modifyEdge.getStart() == nodeModify) fixEdgeStart = true;
-                        if (modifyEdge.getEnd() == nodeModify) fixEdgeEnd = true;
+                        if (modifyEdge.getStart() == nodeModify) fixEdgeStart = true; // fix the start of the line
+                        if (modifyEdge.getEnd() == nodeModify) fixEdgeEnd = true; // fix the end of the line
                         break;
                     }
                 }
             }
 
-            if (!toggleOn) {
+            if (!toggleOn) { //2D
                 line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
                 line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
                 line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
                 line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
-                if (fixEdgeEnd) {
+                if (fixEdgeEnd) { //fixing the start of the line based off of the node form label
                     line.setEndX((mapBuilderNodeFormController.getNode2XCoord() - X_OFFSET) * X_SCALE);
                     line.setEndY((mapBuilderNodeFormController.getNode2YCoord() - Y_OFFSET) * Y_SCALE);
-                } else if (fixEdgeStart) {
+                } else if (fixEdgeStart) { //fixing the end of the line
                     line.setStartX((mapBuilderNodeFormController.getNode2XCoord() - X_OFFSET) * X_SCALE);
                     line.setStartY((mapBuilderNodeFormController.getNode2YCoord() - Y_OFFSET) * Y_SCALE);
                 }
-            } else {
+            } else {//3D
                 line.setStartX((edge.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
                 line.setStartY((edge.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);
                 line.setEndX((edge.getEnd().getxDisplay() - X_OFFSET) * X_SCALE);
                 line.setEndY((edge.getEnd().getyDisplay() - Y_OFFSET) * Y_SCALE);
-                if (fixEdgeEnd) {
+                if (fixEdgeEnd) { // fixing the start of the line
                     line.setEndX((mapBuilderNodeFormController.getNode3XCoord() - X_OFFSET) * X_SCALE);
                     line.setEndY((mapBuilderNodeFormController.getNode3YCoord() - Y_OFFSET) * Y_SCALE);
-                } else if (fixEdgeStart) {
+                } else if (fixEdgeStart) { //fixing the end of the line
                     line.setStartX((mapBuilderNodeFormController.getNode3XCoord() - X_OFFSET) * X_SCALE);
                     line.setStartY((mapBuilderNodeFormController.getNode3YCoord() - Y_OFFSET) * Y_SCALE);
                 }
@@ -564,6 +579,7 @@ public class MapBuilderController implements Initializable {
             }
             line.setOnMouseClicked(edgeClickHandler);
             if (edge.getStart().getFloor() != currentFloor || edge.getEnd().getFloor() != currentFloor) {
+                //we are not on the floor of the edge, disable it and make it invisible
                 line.setVisible(false);
                 line.setDisable(true);
                 line.setPickOnBounds(false);
@@ -577,7 +593,7 @@ public class MapBuilderController implements Initializable {
     }
 
     /**
-     * This handles all mouse events related to dragging around a cirlce
+     * This handles all mouse events related to dragging around a circle
      * that is not yet a node but a node in development
      */
     EventHandler<MouseEvent> dragCircleHandler = new EventHandler<MouseEvent>() {
@@ -592,6 +608,8 @@ public class MapBuilderController implements Initializable {
         public void handle(MouseEvent event) {
 
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+                //the mouse was pressed so we get where in the scene it was pressed and the location of the circle that
+                //that was pressed on relative to the nodeEdgesPane
                 orgMouseX = event.getSceneX();
                 orgMouseY = event.getSceneY();
                 orgCenterX = newNodeCircle.getCenterX();
@@ -599,7 +617,7 @@ public class MapBuilderController implements Initializable {
                 //System.out.println("Original Mouse X: " + orgMouseX + " New Mouse Y: " + orgMouseY);
                 //System.out.println("Original Center X: " + newCenterX + " New Original Y: " + newCenterX);
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-
+                // the mouse was dragged; using the information we got from mouse pressed we move the circle
                 double offsetX = event.getSceneX() - orgMouseX;
                 double offsetY = event.getSceneY() - orgMouseY;
 
@@ -610,11 +628,13 @@ public class MapBuilderController implements Initializable {
                 newCenterX = orgCenterX + scaledx2Offset;
                 newCenterY = orgCenterY + scaledy2Offset;
 
+                //takes the new center and finds out where the actual coordinates are based on its position in the
+                // node edge pane
                 double nodex2Coord = newCenterX / X_SCALE + X_OFFSET;
                 double nodey2Coord = newCenterY / Y_SCALE + Y_OFFSET;
-                if (!toggleOn) {
+                if (!toggleOn) {//2D
                     mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorState);
-                } else {
+                } else {//3D
                     mapBuilderNodeFormController.set3XYCoords(nodex2Coord, nodey2Coord);
                 }
 
@@ -632,6 +652,7 @@ public class MapBuilderController implements Initializable {
     /**
      * this handles all mouse events related to nodes that exist in the database
      * and have been drawn
+     * this includes dragging nodes, hovering over nodes and clicking on nodes
      */
     EventHandler<MouseEvent> nodeClickHandler = new EventHandler<MouseEvent>() {
         Boolean isDragging = false;
@@ -647,7 +668,8 @@ public class MapBuilderController implements Initializable {
             HashMap<String, Node> dragNodeSet;
             dragNodeSet = db.getAllNodes();
             for (String string : nodeDispSet.keySet()) {
-                if (nodeDispSet.get(string) == (Circle) event.getSource()) {
+                if (nodeDispSet.get(string) == event.getSource()) {
+                    //the circle that caused the event is the node that will be dragged
                     Node dragNode = dragNodeSet.get(string);
                     dragNodeOrg = dragNode;
                     dragNodeID = dragNode.getID();
@@ -655,6 +677,7 @@ public class MapBuilderController implements Initializable {
                 }
             }
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+                //the mouse was pressed so we get its location and the location of the circle it was pressed on
                 orgMouseX = event.getSceneX();
                 orgMouseY = event.getSceneY();
                 orgCenterX = nodeDispSet.get(dragNodeID).getCenterX();
@@ -663,50 +686,63 @@ public class MapBuilderController implements Initializable {
             } else if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
                 isDragging = true;
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+                //the circle is being dragged
                 if (isDragging && !isNewNode && !edgeSelected) {
+                    // we are not creating a new node and an edge has not been selected
+                    // so we go ahead and move the circles location in both 2D and 3D
                     clearCircles();
 
                     nodeModify = dragNodeOrg;
                     ArrayList<Edge> dragEdges = dragNodeOrg.getEdges();
-
+                    //change in mouse since it was pressed
                     double offsetX = event.getSceneX() - orgMouseX;
                     double offsetY = event.getSceneY() - orgMouseY;
-
+                    // scale the mouse change based on the zoom of the map
                     double scaledx2Offset = (offsetX) / nodesEdgesPane.getScaleX();
                     double scaledy2Offset = (offsetY) / nodesEdgesPane.getScaleY();
 
+                    // the new center is the offset + the original center
                     newCenterX = orgCenterX + scaledx2Offset;
                     newCenterY = orgCenterY + scaledy2Offset;
+                    // mark the drag node red and actually set its new center
                     nodeDispSet.get(dragNodeOrg.getID()).setFill(Color.rgb(205, 35, 0, 0.99));
                     nodeDispSet.get(dragNodeID).setCenterX(newCenterX);
                     nodeDispSet.get(dragNodeID).setCenterY(newCenterY);
 
+                    // inverse calculate the coordinates based on its position in the node pane
                     double nodex2Coord = newCenterX / X_SCALE + X_OFFSET;
                     double nodey2Coord = newCenterY / Y_SCALE + Y_OFFSET;
 
+                    // for each edge attached to the drag node we move them as well
                     for (Edge edge : dragEdges) {
                         if (edge.getStart() == dragNodeOrg) {
+                            //the drag node is the edges start node
                             edgeDispSet.get(edge.getID()).setStartX(newCenterX);
                             edgeDispSet.get(edge.getID()).setStartY(newCenterY);
                         } else {
+                            // the drag node is the edges end node
                             edgeDispSet.get(edge.getID()).setEndX(newCenterX);
                             edgeDispSet.get(edge.getID()).setEndY(newCenterY);
                         }
                     }
                     if (!modifyingNode) {
+                        // if its not the first time through this loop open the new node form with fields filled in
+                        //based on the drag node
                         newNodeForm(dragNodeOrg.getID(), dragNodeOrg.getLongName(), dragNodeOrg.getX(), dragNodeOrg.getY(),
                                 dragNodeOrg.getxDisplay(), dragNodeOrg.getyDisplay(), dragNodeOrg.getFloor().toString(),
                                 dragNodeOrg.getBuilding().toString(), dragNodeOrg.getType().toString(), dragNodeOrg.getActive());
                     }
                     modifyingNode = true;
-                    if (!toggleOn) {
+                    if (!toggleOn) { //2D
+                        //sets the 2D coordinates of the from and generates 3D
                         mapBuilderNodeFormController.set2XYCoords(nodex2Coord, nodey2Coord, floorState);
-                    } else {
+                    } else {//3D
                         mapBuilderNodeFormController.set3XYCoords(nodex2Coord, nodey2Coord);
                     }
 
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
+                //node was clicked ot be modified
                 popOver.hide();
                 popOverHidden = true;
                 if (!isDragging) {
@@ -737,6 +773,7 @@ public class MapBuilderController implements Initializable {
                             }
                         }
                     } else if (isNewNode) {
+                        // if we are creating a new node, put the added node in its connecting node
                         for (String string : nodeDispSet.keySet()) {
                             if (nodeDispSet.get(string) == event.getSource()) {
                                 Node node = nodeSet.get(string);
@@ -770,7 +807,7 @@ public class MapBuilderController implements Initializable {
                         if (mapBuilderEdgeFormController.checkEndNodeBar()) nodeState = 1;
                         if (mapBuilderEdgeFormController.checkStartNodeBar()) nodeState = 0;
                         switch (nodeState) {
-                            case 0:
+                            case 0: // the first node in the field will be modified
                                 if (firstSelect != null) {
                                     nodeDispSet.get(firstSelect.getID()).setFill(Color.DODGERBLUE);
                                 }
@@ -789,7 +826,7 @@ public class MapBuilderController implements Initializable {
                                 }
                                 nodeState = 1;
                                 break;
-                            case 1:
+                            case 1: // the second node in the field will be modified
                                 if (secondSelect != null) {
                                     nodeDispSet.get(secondSelect.getID()).setFill(Color.DODGERBLUE);
                                 }
@@ -812,6 +849,7 @@ public class MapBuilderController implements Initializable {
                     }
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED && popOverHidden && !isDragging) {
+                // puts the popOver shown on mouse entered
                 HashMap<String, Node> nodeSet = db.getAllNodes();
                 System.out.println("MOUSE_ENTERED event at " + event.getSource());
                 for (String string : nodeDispSet.keySet()) {
@@ -879,7 +917,7 @@ public class MapBuilderController implements Initializable {
     String floorState;
 
     /**
-     * this just updates the map if the spinner is clicked
+     * this just updates the map if the floor L2 button is clicked
      */
     @FXML
     public void floorL2ButtonOp(ActionEvent e) {
@@ -887,33 +925,34 @@ public class MapBuilderController implements Initializable {
         currentFloor = Node.floorType.LEVEL_L2;
 
         updateMap();
-        if (pathDrawn) {
-            drawPath(pathMade);
-        }
+
     }
 
+    /**
+     * this just updates the map if the floor L1 button is clicked
+     */
     @FXML
     public void floorL1ButtonOp(ActionEvent e) {
         floorState = floorL1Button.getText();
         currentFloor = Node.floorType.LEVEL_L1;
 
         updateMap();
-        if (pathDrawn) {
-            drawPath(pathMade);
-        }
     }
 
+    /**
+     * this just updates the map if the floor G button is clicked
+     */
     @FXML
     public void floorGButtonOp(ActionEvent e) {
         floorState = floorGButton.getText();
         currentFloor = Node.floorType.LEVEL_G;
 
         updateMap();
-        if (pathDrawn) {
-            drawPath(pathMade);
-        }
     }
 
+    /**
+     * this just updates the map if the floor 1 button is clicked
+     */
     @FXML
     public void floor1ButtonOp(ActionEvent e) {
         floorState = floor1Button.getText();
@@ -921,31 +960,30 @@ public class MapBuilderController implements Initializable {
 
         updateMap();
     }
-
+    /**
+     * this just updates the map if the floor 2 button is clicked
+     */
     @FXML
     public void floor2ButtonOp(ActionEvent e) {
         floorState = floor2Button.getText();
         currentFloor = Node.floorType.LEVEL_2;
 
         updateMap();
-        if (pathDrawn) {
-            drawPath(pathMade);
-        }
     }
-
+    /**
+     * this just updates the map if the floor 3 button is clicked
+     */
     @FXML
     public void floor3ButtonOp(ActionEvent e) {
         floorState = floor3Button.getText();
         currentFloor = Node.floorType.LEVEL_3;
 
         updateMap();
-        if (pathDrawn) {
-            drawPath(pathMade);
-        }
     }
 
     /**
-     * this is the event handler for clicking on edges
+     * this is the event handler for clicking on edges which will
+     * open up the edge form with the start and end node filled in
      */
     EventHandler<MouseEvent> edgeClickHandler = new EventHandler<MouseEvent>() {
         @Override
@@ -964,12 +1002,8 @@ public class MapBuilderController implements Initializable {
                 if (edgeDispSet.get(string) == event.getSource()) {
                     Edge edge = edgeSet.get(string);
                     selectedEdge = edge;
-
                     edgeDispSet.get(edge.getID()).setStroke(Color.rgb(205, 35, 0, 0.99));
-
                     edgeID = selectedEdge.getID();
-
-
                     System.out.println(selectedEdge.getID());
                     newEdgeForm(selectedEdge.getID(), selectedEdge.getStart(), selectedEdge.getEnd(),
                             selectedEdge.getActive());
@@ -983,6 +1017,7 @@ public class MapBuilderController implements Initializable {
     double newTranslateY = 0;
     /**
      * this is the event handler for clicking on the map to create a node
+     * as well as panning the map
      */
     EventHandler<MouseEvent> mouseEventEventHandler = new EventHandler<MouseEvent>() {
         Boolean isDragging;
@@ -1020,15 +1055,19 @@ public class MapBuilderController implements Initializable {
                 nodesEdgesPane.setTranslateX(newTranslateX);
                 nodesEdgesPane.setTranslateY(newTranslateY);
             } else if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
+                //creates a new node at the location the mouse was clicked based
                 System.out.println("ready to click");
                 if (!isDragging) {
                     System.out.println("Mouse Clicked");
                     clearCircles();
+                    //get the position the mouse was clicked
                     double x2Coord = event.getSceneX();
                     double y2Coord = event.getSceneY();
+                    //scale it based on the zoom and add it too the translation of the nodes and edges pane descaled
                     double scaledx2Coord = (x2Coord - 960) / nodesEdgesPane.getScaleX() + (960 - newTranslateX / nodesEdgesPane.getScaleX());
                     double scaledy2Coord = (y2Coord - 540) / nodesEdgesPane.getScaleY() + (540 - newTranslateY / nodesEdgesPane.getScaleY());
                     System.out.println("x: " + x2Coord + " y: " + y2Coord);
+                    //create the new node circle
                     newNodeCircle.setCenterX(scaledx2Coord);
                     newNodeCircle.setCenterY(scaledy2Coord);
                     newNodeCircle.setRadius(NODE_RADIUS);
@@ -1041,6 +1080,7 @@ public class MapBuilderController implements Initializable {
                     newNodeCircle.setDisable(false);
                     newNodeFloor = currentFloor;
 
+                    // get the coordinates from the nodesEdgesPane location
                     double nodex2Coord = scaledx2Coord / X_SCALE + X_OFFSET;
                     double nodey2Coord = scaledy2Coord / Y_SCALE + Y_OFFSET;
                     if (!isNewNode) {
@@ -1058,7 +1098,8 @@ public class MapBuilderController implements Initializable {
     };
 
     /**
-     * this brings the basic leftbar overlays back in and resets some values
+     * this brings the basic add Edge/addNod/back buttons back to the screen
+     * it also resets the nodeModify, firstSelect,secondSelect, edgeSelected, and modifyingNode
      */
     public void addOverlay() {
         Parent root;
@@ -1229,28 +1270,30 @@ public class MapBuilderController implements Initializable {
     public void clearCircles() {
         if (pathDrawn) resetPath();
         if (nodeModify != null) {
+            //if we were modifying a new node
             nodeDispSet.get(nodeModify.getID()).setFill(Color.DODGERBLUE);
-            if (toggleOn) {
+            if (toggleOn) { //resets 3D position
                 nodeDispSet.get(nodeModify.getID()).setCenterX((nodeModify.getxDisplay() - X_OFFSET) * X_SCALE);
                 nodeDispSet.get(nodeModify.getID()).setCenterY((nodeModify.getyDisplay() - Y_OFFSET) * Y_SCALE);
-            } else {
+            } else { //resets 2D position
                 nodeDispSet.get(nodeModify.getID()).setCenterX((nodeModify.getX() - X_OFFSET) * X_SCALE);
                 nodeDispSet.get(nodeModify.getID()).setCenterY((nodeModify.getY() - Y_OFFSET) * Y_SCALE);
             }
             for (Edge modifiedEdge : nodeModify.getEdges()) {
-                if (modifiedEdge.getStart().equals(nodeModify)) {
-                    if (toggleOn) {
+                //resets the edges
+                if (modifiedEdge.getStart().equals(nodeModify)) { // node was a start node
+                    if (toggleOn) { //3D
                         edgeDispSet.get(modifiedEdge.getID()).setStartX((nodeModify.getxDisplay() - X_OFFSET) * X_SCALE);
                         edgeDispSet.get(modifiedEdge.getID()).setStartY((nodeModify.getyDisplay() - Y_OFFSET) * Y_SCALE);
-                    } else {
+                    } else { //2D
                         edgeDispSet.get(modifiedEdge.getID()).setStartX((nodeModify.getX() - X_OFFSET) * X_SCALE);
                         edgeDispSet.get(modifiedEdge.getID()).setStartY((nodeModify.getY() - Y_OFFSET) * Y_SCALE);
                     }
-                } else if (modifiedEdge.getEnd().equals(nodeModify)) {
-                    if (toggleOn) {
+                } else if (modifiedEdge.getEnd().equals(nodeModify)) { //node was an end node
+                    if (toggleOn) { //3D
                         edgeDispSet.get(modifiedEdge.getID()).setEndX((nodeModify.getxDisplay() - X_OFFSET) * X_SCALE);
                         edgeDispSet.get(modifiedEdge.getID()).setEndY((nodeModify.getyDisplay() - Y_OFFSET) * Y_SCALE);
-                    } else {
+                    } else { //2D
                         edgeDispSet.get(modifiedEdge.getID()).setEndX((nodeModify.getX() - X_OFFSET) * X_SCALE);
                         edgeDispSet.get(modifiedEdge.getID()).setEndY((nodeModify.getY() - Y_OFFSET) * Y_SCALE);
                     }
@@ -1258,15 +1301,19 @@ public class MapBuilderController implements Initializable {
             }
         }
         if (firstSelect != null) {
+            //resets first edge selected color
             nodeDispSet.get(firstSelect.getID()).setFill(Color.DODGERBLUE);
         }
         if (secondSelect != null) {
+            //resets second edge selected color
             nodeDispSet.get(secondSelect.getID()).setFill(Color.DODGERBLUE);
         }
         if (selectedEdge != null) {
+            //resets selected Edge color
             edgeDispSet.get(selectedEdge.getID()).setStroke(Color.BLACK);
         }
         if (newNodeCircle != null) {
+            //removes the new Node circle
             newNodeCircle.setVisible(false);
             newNodeCircle.setDisable(true);
             isNewNode = false;
@@ -1275,6 +1322,8 @@ public class MapBuilderController implements Initializable {
 
     /**
      * Handles the pathfinding operation given destination and source.
+     * this method reads the two search bars, then calls the algorithm, then calls
+     * draw path with the returned path
      *
      * @param e ActionEvent instance passed by JavaFX used to get source information
      * @return true if successful otherwise false
@@ -1317,20 +1366,6 @@ public class MapBuilderController implements Initializable {
         }
 
         Font font = new Font("verdana", 24.0);
-        
-//        System.out.println("Source Node ID: "+srcNode.getID());
-
-//        startLabel.setLayoutX((srcNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
-//        startLabel.setLayoutY((srcNode.getyDisplay()-40- Y_OFFSET)*Y_SCALE);
-//        startLabel.setText(srcNode.getShortName());
-//        startLabel.setFont(font);
-//
-//        startLabel.toFront();
-//
-//        endLabel.setLayoutX((dstNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
-//        endLabel.setLayoutY((dstNode.getyDisplay()-34- Y_OFFSET)*Y_SCALE);
-//        endLabel.setText(dstNode.getShortName());
-//        endLabel.setFont(font);
 
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
         System.out.println(path);
@@ -1431,7 +1466,7 @@ public class MapBuilderController implements Initializable {
     }
 
     /**
-     * Looks through entries in node database that math the type of input enum,
+     * Looks through entries in node database that match the type of input enum,
      * compares the distances to node,
      * returns the shortest one
      *
@@ -1463,7 +1498,7 @@ public class MapBuilderController implements Initializable {
     ArrayList<Node> pathMade;
 
     /**
-     * Used to draw the list of nodes returned by AStar
+     * Used to draw the list of nodes returned by the Algorithm
      *
      * @param path List of Nodes to be drawn
      */
@@ -1482,13 +1517,13 @@ public class MapBuilderController implements Initializable {
         double minYCoord = 3400;
 
         for (Node n : path) {
-
-            if (toggleOn) {
+            //this gets the max and min x,y coordinates based on all the nodes in the path
+            if (toggleOn) { //3D
                 if (n.getxDisplay() < minXCoord) minXCoord = n.getxDisplay();
                 if (n.getxDisplay() > maxXCoord) maxXCoord = n.getxDisplay();
                 if (n.getyDisplay() < minYCoord) minYCoord = n.getyDisplay();
                 if (n.getyDisplay() > maxYCoord) maxYCoord = n.getyDisplay();
-            } else {
+            } else { //2D
                 if (n.getX() < minXCoord) minXCoord = n.getX();
                 if (n.getX() > maxXCoord) maxXCoord = n.getX();
                 if (n.getY() < minYCoord) minYCoord = n.getY();
@@ -1499,12 +1534,15 @@ public class MapBuilderController implements Initializable {
             currentNode = n;
             //nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
             if (path.get(0).equals(n)) {
+                //start node is green
                 nodeDispSet.get(currentNode.getID()).setFill(Color.GREEN);
             }
             if (path.get(path.size() - 1).equals(n)) {
+                //end node is red
                 nodeDispSet.get(currentNode.getID()).setFill(Color.RED);
             }
             for (Edge e : currentNode.getEdges()) {
+                //color in all the edges and increase their width
                 if (pastNode != null) {
                     if (e.contains(pastNode)) {
                         edgeDispSet.get(e.getID()).setStroke(Color.rgb(250, 150, 0));
@@ -1525,6 +1563,7 @@ public class MapBuilderController implements Initializable {
         maxXCoord += 200;
         maxYCoord += 100;
 
+        //math to put in the auto translator
         System.out.println("MaxX: " + maxXCoord + "Min X: " + minXCoord
                 + "Max Y: " + maxYCoord + "Min Y: " + minYCoord);
         double rangeX = maxXCoord - minXCoord;
@@ -1537,14 +1576,14 @@ public class MapBuilderController implements Initializable {
 
         double centerX = (maxXCoord + minXCoord) / 2;
         double centerY = (maxYCoord + minYCoord) / 2;
-
+        //zooms in on path
         autoTranslateZoom(desiredZoomX, desiredZoomY, centerX, centerY);
 
         pathDrawn = true;
     }
 
     /**
-     * Used to draw the list of nodes returned by AStar
+     * Resets the path drawn based on the pathMade by going and decoloring the edges
      */
     public void resetPath() {
         Node currentNode = null, pastNode = null;
@@ -1569,12 +1608,16 @@ public class MapBuilderController implements Initializable {
                 }
             }
         }
-//        path = new ArrayList<>();
+        pathDrawn = false;
     }
 
+    /**
+     * changes constants based off of whether we have a 2D map or a 3D map
+     */
     @FXML
     public void mapToggleButtonOp(){
         if (mapToggleButton.isSelected()){
+            //3D
             X_OFFSET = 0;
             Y_OFFSET = -19;
             X_SCALE = 1920.0 / 5000.0;
@@ -1584,6 +1627,7 @@ public class MapBuilderController implements Initializable {
             zoomSlider.setValue(ZOOM_3D_MIN);
             toggleOn = true;
         } else {
+            //2D
             X_OFFSET = -523;
             Y_OFFSET = 0;
             X_SCALE = 1588.235294 / 5000.0;
@@ -1610,6 +1654,14 @@ public class MapBuilderController implements Initializable {
     }
 
 
+    /**
+     * autotranslates the map and zooms in based on the coordinates it needs to fit between and a
+     * desired zoom in the x and y directions
+     * @param zoomX
+     * @param zoomY
+     * @param centerX
+     * @param centerY
+     */
     public void autoTranslateZoom(double zoomX, double zoomY, double centerX, double centerY) {
 
         double zoom;

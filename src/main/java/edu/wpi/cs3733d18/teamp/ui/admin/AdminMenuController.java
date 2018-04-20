@@ -34,11 +34,19 @@ public class AdminMenuController {
     @FXML
     Label helloMessage;
 
+    /**
+     * initializes welcome label
+     */
     @FXML
     public void onStartup() {
+        //displays name of user on startup
         helloMessage.setText("Hello " + Main.currentUser.getFirstName() + " " + Main.currentUser.getLastName() + ", ");
     }
 
+    /**
+     * loads the manage employees screen
+     * @param e
+     */
     @FXML
     public void employeeButtonOp(ActionEvent e) {
         Parent root;
@@ -54,6 +62,10 @@ public class AdminMenuController {
         employeeButton.getScene().setRoot(root);
     }
 
+    /**
+     * loads the map management screen
+     * @param e
+     */
     @FXML
     public void mapManagementButtonOp(ActionEvent e) {
         Parent root;
@@ -72,6 +84,10 @@ public class AdminMenuController {
         mapManagementButton.getScene().setRoot(root);
     }
 
+    /**
+     * loads the service request screen
+     * @param e
+     */
     @FXML
     public void serviceRequestScreenButtonOp(ActionEvent e) {
         Parent root;
@@ -90,6 +106,10 @@ public class AdminMenuController {
         serviceRequestScreenButton.getScene().setRoot(root);
     }
 
+    /**
+     * brings you back to the home page
+     * @param e
+     */
     @FXML
     public void backButtonOp(ActionEvent e) {
         Parent root;
@@ -106,6 +126,10 @@ public class AdminMenuController {
         backButton.getScene().setRoot(root);
     }
 
+    /**
+     * brings you to the settings page
+     * @param e
+     */
     @FXML
     public void settingsButtonOp(ActionEvent e) {
         Parent root;
