@@ -12,6 +12,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -77,6 +78,7 @@ public class MapScreenController {
     private ArrayList<Node> recentStairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentElevNodeSet = new ArrayList<Node>();
     private ArrayList<Node.floorType> floorsList = new ArrayList<>();
+    private ArrayList<Label> floorSequenceList = new ArrayList<>();
 
 
     DBSystem db = DBSystem.getInstance();
@@ -209,6 +211,7 @@ public class MapScreenController {
 
     @FXML
     public void floorL1ButtonOp(ActionEvent e) {
+        System.out.println("level L1");
         floorState = floorL1Button.getText();
         currentFloor = Node.floorType.LEVEL_L1;
 
@@ -716,6 +719,44 @@ public class MapScreenController {
         }
     };
 
+    EventHandler<MouseEvent> labelEventHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            System.out.println("mouseEvent: " + event.getEventType().toString());
+            if (event.getEventType() == MouseEvent.MOUSE_CLICKED){
+                System.out.println("Label Clicked");
+                String floor = "";
+                for (Label label: floorSequenceList){
+                    if (event.getSource().equals(label)) {
+                        System.out.println("label chosen: " + label.getText());
+                        floor = label.getText();
+                        break;
+                    }
+                }
+                switch (floor){
+                    case "3":
+                        floor3ButtonOp(null);
+                        break;
+                    case "2":
+                        floor2ButtonOp(null);
+                        break;
+                    case "1":
+                        floor1ButtonOp(null);
+                        break;
+                    case "G":
+                        floorGButtonOp(null);
+                        break;
+                    case "L1":
+                        floorL1ButtonOp(null);
+                        break;
+                    case "L2":
+                        floorL2ButtonOp(null);
+                        break;
+                }
+            }
+        }
+    };
+
     public void addOverlay() {
         Parent root;
         Stage stage;
@@ -1180,10 +1221,17 @@ public class MapScreenController {
      */
     public void createFloorSequence(){
         clearFloorSequenceHBox();
+        floorSequenceList.clear();
         if (!floorsList.equals(null)) {
             for (Node.floorType floor : floorsList) {
                 System.out.println("Created new LabeL");
                 Label label = new Label(floor.toString());
+                label.setPadding(new Insets(10));
+                label.addEventHandler(MouseEvent.ANY, labelEventHandler);
+                label.setStyle("-fx-border-width: 10px");
+                label.setStyle("-fx-background-color: red");
+                floorSequenceList.add(label);
+                System.out.println("Label added to the list");
                 floorSequenceHBox.getChildren().add(label);
             }
         }
