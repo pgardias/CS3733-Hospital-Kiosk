@@ -244,50 +244,38 @@ public class MapViewerBuilder implements Initializable{
 
     @FXML
     public void floorL2ButtonOp(ActionEvent e) {
-        URL pathName = getClass().getResource("/models/B&WL2Floor.obj");
-        switchMesh(pathName);
         currentFloor = Node.floorType.LEVEL_L2;
-        updateMap();
+        updateMap("/models/B&WL2Floor.obj", "/models/textures/3rdFloor_UV.png");
     }
 
     @FXML
     public void floorL1ButtonOp(ActionEvent e) {
-        URL pathName = getClass().getResource("/models/B&WL1Floor.obj");
-        switchMesh(pathName);
         currentFloor = Node.floorType.LEVEL_L1;
-        updateMap();
+        updateMap("/models/B&WL1Floor.obj", "/models/textures/3rdFloor_UV.png");
     }
 
     @FXML
     public void floorGButtonOp(ActionEvent e) {
-        URL pathName = getClass().getResource("/models/B&WGFloor.obj");
-        switchMesh(pathName);
         currentFloor = Node.floorType.LEVEL_G;
-        updateMap();
+        updateMap("/models/B&WGFloor.obj", "/models/textures/3rdFloor_UV.png");
     }
 
     @FXML
     public void floor1ButtonOp(ActionEvent e) {
-        URL pathName = getClass().getResource("/models/B&W1stFloor.obj");
-        switchMesh(pathName);
         currentFloor = Node.floorType.LEVEL_1;
-        updateMap();
+        updateMap("/models/B&W1stFloor.obj", "/models/textures/3rdFloor_UV.png");
     }
 
     @FXML
     public void floor2ButtonOp(ActionEvent e) {
-        URL pathName = getClass().getResource("/models/B&W2ndFloor.obj");
-        switchMesh(pathName);
         currentFloor = Node.floorType.LEVEL_2;
-        updateMap();
+        updateMap("/models/B&W2ndFloor.obj", "/models/textures/3rdFloor_UV.png");
     }
 
     @FXML
     public void floor3ButtonOp(ActionEvent e) {
-        URL pathName = getClass().getResource("/models/B&W3rdFloor.obj");
-        switchMesh(pathName);
         currentFloor = Node.floorType.LEVEL_3;
-        updateMap();
+        updateMap("/models/B&W3rdFloor.obj", "/models/textures/3rdFloor_UV.png");
     }
 
     /**
@@ -396,7 +384,6 @@ public class MapViewerBuilder implements Initializable{
      */
     @FXML
     private void switchMesh(URL fileName) {
-        threeDAnchorPane.getChildren().remove(0);
         Group newRoot = buildScene(fileName);
         newRoot.setScaleX(2);
         newRoot.setScaleY(2);
@@ -565,9 +552,15 @@ public class MapViewerBuilder implements Initializable{
      * this clears the anchor pane, draws the edges and the nodes and loads in the new map
      * this also brings in the basic overlays
      */
-    public void updateMap() {
+    public void updateMap(String model, String texture) {
         nodeDispSet.clear();
-        nodeAnchorPane.getChildren().clear();
+        threeDAnchorPane.getChildren().clear();
+        URL pathName = getClass().getResource(model);
+        switchMesh(pathName);
+        PhongMaterial phongMaterial = new PhongMaterial();
+        phongMaterial.setDiffuseMap(new Image(getClass().getResource(texture).toExternalForm()));
+        MeshView mv = getMesh();
+        mv.setMaterial(phongMaterial);
         draw3DNodes();
     }
 
