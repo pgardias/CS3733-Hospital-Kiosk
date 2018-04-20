@@ -20,10 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -79,6 +76,7 @@ public class MapScreenController {
     private ArrayList<Node> stairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentStairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentElevNodeSet = new ArrayList<Node>();
+    private ArrayList<Node.floorType> floorsList = new ArrayList<>();
 
 
     DBSystem db = DBSystem.getInstance();
@@ -109,6 +107,9 @@ public class MapScreenController {
 
     @FXML
     AnchorPane nodesEdgesPane;
+
+    @FXML
+    HBox floorSequenceHBox;
 
     @FXML
     JFXButton floorL2Button;
@@ -413,7 +414,7 @@ public class MapScreenController {
         zoomForTranslate = zoomSlider.getValue();
 
         double translateSlopeX = X_SCALE * mapImage.getScaleX() * IMG_WIDTH;
-        double translateSlopeY = Y_SCALE * mapImage.getScaleX() * IMG_HEIGHT;
+        double translateSlopeY = Y_SCALE * mapImage.getScaleY() * IMG_HEIGHT;
 
         if (newTranslateX > (translateSlopeX - 1920) / 2)
             newTranslateX = (translateSlopeX - 1920) / 2;
@@ -695,7 +696,7 @@ public class MapScreenController {
                 zoomForTranslate = zoomSlider.getValue();
 
                 double translateSlopeX = X_SCALE * mapImage.getScaleX() * IMG_WIDTH;
-                double translateSlopeY = Y_SCALE * mapImage.getScaleX() * IMG_HEIGHT;
+                double translateSlopeY = Y_SCALE * mapImage.getScaleY() * IMG_HEIGHT;
 
                 System.out.println("Offset X: " + offsetX + " Offset Y: " + offsetY);
                 if (newTranslateX > (translateSlopeX - 1920) / 2)
@@ -748,7 +749,8 @@ public class MapScreenController {
 
     /**
      * Used to draw the list of nodes returned by AStar
-     *
+     * it will also create the start and end labels, color the path, change the color of certain nodes
+     * (end = red, start = green, stair = blue) and it will create the label for the stairs
      * @param path List of Nodes to be drawn
      */
     //removed static hope it didn't break anything
@@ -924,6 +926,8 @@ public class MapScreenController {
                 }
             }
         }
+        getFloors();
+        createFloorSequence();
 
         System.out.println("list of stair nodes: " + stairNodeSet.toString());
         minXCoord -= 200;
@@ -1029,7 +1033,7 @@ public class MapScreenController {
 //        searchBarOverlayController.directionsTableView.setVisible(false);
 //        searchBarOverlayController.directionsButton.setText("Directions >");
 //        searchBarOverlayController.setDirectionsVisible(false);
-
+        clearFloorSequenceHBox();
         Node currentNode = null, pastNode = null;
         Circle waypoint;
         Line line;
@@ -1139,7 +1143,7 @@ public class MapScreenController {
         System.out.println("translate X: " + translateX + " translate Y: " + translateY);
 
         double translateSlopeX = X_SCALE * mapImage.getScaleX() * IMG_WIDTH;
-        double translateSlopeY = Y_SCALE * mapImage.getScaleX() * IMG_HEIGHT;
+        double translateSlopeY = Y_SCALE * mapImage.getScaleY() * IMG_HEIGHT;
         if (screenTranslateX > (translateSlopeX - 1920) / 2)
             screenTranslateX = (translateSlopeX - 1920) / 2;
         if (screenTranslateX < -(translateSlopeX - 1920) / 2)
@@ -1158,6 +1162,36 @@ public class MapScreenController {
 
     public Boolean getPathDrawn(){
         return this.pathDrawn;
+    }
+
+    /**
+     * this method will determin what floors the path goes on
+     */
+    public void getFloors(){
+        floorsList.clear();
+        for (Node node: stairNodeSet){
+            if (!floorsList.contains(node.getFloor()))
+                floorsList.add(node.getFloor());
+        }
+    }
+
+    /**
+     * creates the labels and puts them in the hbox
+     */
+    public void createFloorSequence(){
+        clearFloorSequenceHBox();
+        if (!floorsList.equals(null)) {
+            for (Node.floorType floor : floorsList) {
+                System.out.println("Created new LabeL");
+                Label label = new Label(floor.toString());
+                floorSequenceHBox.getChildren().add(label);
+            }
+        }
+
+    }
+
+    public void clearFloorSequenceHBox(){
+        floorSequenceHBox.getChildren().clear();
     }
 
 
