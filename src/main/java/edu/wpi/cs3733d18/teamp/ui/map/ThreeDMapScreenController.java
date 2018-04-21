@@ -89,6 +89,8 @@ public class ThreeDMapScreenController implements Initializable{
     DBSystem db = DBSystem.getInstance();
 
     // Display hashmaps
+    private static ArrayList<MeshView[]> allModels = new ArrayList<>();
+    private static HashMap<String, MeshView> modelDispSet = new HashMap<>();
     private static HashMap<String, Sphere> nodeDispSet = new HashMap<>();
     private static ArrayList<Polygon> arrowDispSet = new ArrayList<>();
     private static ArrayList<String> arrowFloorSet = new ArrayList<>();
@@ -145,14 +147,14 @@ public class ThreeDMapScreenController implements Initializable{
     public void initialize(URL url, ResourceBundle rb) {
 
         // Load initial model
-        URL pathName = getClass().getResource("/models/B&WWholeFloor.obj");
-        Group group = buildScene(pathName);
+        /*URL pathName = getClass().getResource("/models/B&WWholeFloor.obj");
+        Group group = buildScene();
         group.setScaleX(2);
         group.setScaleY(2);
         group.setScaleZ(2);
         group.setTranslateX(500);
         group.setTranslateY(100);
-        threeDAnchorPane.getChildren().add(group);
+        threeDAnchorPane.getChildren().add(group);*/
 
         // Add mouse handler
         threeDAnchorPane.addEventHandler(MouseEvent.ANY, mouseEventEventHandler);
@@ -171,9 +173,36 @@ public class ThreeDMapScreenController implements Initializable{
         fillOrange.setDiffuseMap(new Image(getClass().getResource("/models/textures/node_path.png").toExternalForm()));
         fillPurple = new PhongMaterial();
         fillPurple.setDiffuseMap(new Image(getClass().getResource("/models/textures/node_stair.png").toExternalForm()));
+
+        // Load all models
+        curScale = 1;
+        URL pathName = getClass().getResource("/models/B&WL2Floor.obj");
+        allModels.add(loadMeshView(pathName));
+        pathName = getClass().getResource("/models/B&WL1Floor.obj");
+        allModels.add(loadMeshView(pathName));
+        pathName = getClass().getResource("/models/B&WGFloor.obj");
+        allModels.add(loadMeshView(pathName));
+        pathName = getClass().getResource("/models/B&W1stFloor.obj");
+        allModels.add(loadMeshView(pathName));
+        pathName = getClass().getResource("/models/B&W2ndFloor.obj");
+        allModels.add(loadMeshView(pathName));
+        pathName = getClass().getResource("/models/B&W3rdFloor.obj");
+        allModels.add(loadMeshView(pathName));
+
+        // Build scene
+        Group group = buildScene();
+        group.setScaleX(2);
+        group.setScaleY(2);
+        group.setScaleZ(2);
+        group.setTranslateX(500);
+        group.setTranslateY(100);
+        threeDAnchorPane.getChildren().add(group);
+        currentFloor = Node.floorType.LEVEL_L2;
+        draw3DNodes();
+        drawEdges();
     }
 
-    public void addOverlay() {
+    private void addOverlay() {
         Parent root;
         Stage stage;
         FXMLLoader loader;
@@ -193,7 +222,7 @@ public class ThreeDMapScreenController implements Initializable{
     /**
      * this is the event handler for clicking on the map to create a node
      */
-    EventHandler<MouseEvent> mouseEventEventHandler = new EventHandler<MouseEvent>() {
+    private EventHandler<MouseEvent> mouseEventEventHandler = new EventHandler<MouseEvent>() {
         Boolean isDragging;
         @Override
         public void handle(MouseEvent event) {
@@ -379,6 +408,7 @@ public class ThreeDMapScreenController implements Initializable{
             threeDAnchorPane.setScaleY(curScale);
             threeDAnchorPane.setScaleZ(curScale);
         }
+        System.out.println(curScale);
         curZoom = newZoom; // Set next zoom value to compare to
     }
 
@@ -389,29 +419,29 @@ public class ThreeDMapScreenController implements Initializable{
         return importer.getImport();
     }
 
-    private Group buildScene(URL fileName) {
-        MeshView[] meshViews = loadMeshView(fileName);
-        for (int i = 0; i < meshViews.length; i++) {
-            /*curXTranslation = (VIEWPORT_SIZE / 2);
-            curYTranslation = (VIEWPORT_SIZE / 2);
-            curZTranslation = (VIEWPORT_SIZE / 2);*/
-            curScale = 15;
-            meshViews[i].setTranslateX(VIEWPORT_SIZE / 2);
-            meshViews[i].setTranslateY(VIEWPORT_SIZE / 2);
-            meshViews[i].setTranslateZ(VIEWPORT_SIZE / 2);
-            meshViews[i].setScaleX(curScale);
-            meshViews[i].setScaleY(curScale);
-            meshViews[i].setScaleZ(curScale);
+    private Group buildScene() {
+        root = new Group();
+        int height = 0;
+        PhongMaterial phongMaterial = new PhongMaterial();
+        phongMaterial.setDiffuseMap(new Image(getClass().getResource("/models/textures/3rdFloor_UV.png").toExternalForm()));
+        for (MeshView[] model : allModels) {
+            for (int i = 0; i < model.length; i++) {
+                curScale = 15;
+                model[i].setTranslateX(VIEWPORT_SIZE / 2);
+                model[i].setTranslateY((VIEWPORT_SIZE / 2) + height);
+                model[i].setTranslateZ(VIEWPORT_SIZE / 2);
+                model[i].setScaleX(curScale);
+                model[i].setScaleY(curScale);
+                model[i].setScaleZ(curScale);
 
-            /*PhongMaterial sample = new PhongMaterial(buildingColor);
-            sample.setSpecularColor(lightColor);
-            sample.setSpecularPower(16);
-            meshViews[i].setMaterial(sample);*/
-
-            curXRotation = 20;
-            curYRotation = 0;
-            curZRotation = 0;
-            meshViews[i].getTransforms().setAll(/*new Rotate(38, Rotate.Z_AXIS),*/ new Rotate(curXRotation, Rotate.X_AXIS), new Rotate(curYRotation, Rotate.Y_AXIS));
+                curXRotation = 20;
+                curYRotation = 0;
+                curZRotation = 0;
+                model[i].getTransforms().setAll(new Rotate(curXRotation, Rotate.X_AXIS), new Rotate(curYRotation, Rotate.Y_AXIS));
+                model[i].setMaterial(phongMaterial);
+            }
+            root.getChildren().add(model[0]);
+            height -= 50;
         }
 
 
@@ -431,7 +461,6 @@ public class ThreeDMapScreenController implements Initializable{
         Color ambientColor = Color.rgb(80, 80, 80, 0);
         AmbientLight ambient = new AmbientLight(ambientColor);
 
-        root = new Group(meshViews);
         root.getChildren().add(pointLight);
         root.getChildren().add(pointLight2);
         root.getChildren().add(pointLight3);
@@ -454,7 +483,7 @@ public class ThreeDMapScreenController implements Initializable{
      */
     @FXML
     private void switchMesh(URL fileName) {
-        Group newRoot = buildScene(fileName);
+        Group newRoot = buildScene();
         newRoot.setScaleX(2);
         newRoot.setScaleY(2);
         newRoot.setScaleZ(2);
@@ -523,11 +552,14 @@ public class ThreeDMapScreenController implements Initializable{
 
             // Node is on other floor
             else {
-                Sphere sphere = new Sphere(0);
+                Sphere sphere = new Sphere(NODE_RADIUS);
                 threeDAnchorPane.getChildren().add(sphere);
                 sphere.setTranslateX((node.getX() - curXOffset) * X_SCALE);
                 sphere.setTranslateY(mv.getTranslateY() - yPos);
                 sphere.setTranslateZ((-node.getY() - curZOffset) * Y_SCALE);
+                sphere.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.Y_AXIS),
+                        new Rotate(curXRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.X_AXIS));
+                sphere.setMaterial(fillBlue);
                 //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
                 //circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
 
@@ -699,7 +731,7 @@ public class ThreeDMapScreenController implements Initializable{
         int tempZRotation = curZRotation;
         double tempScale = curScale;
 
-        // Get new floor mesh and it texture
+        // Get new floor mesh and texture it
         URL pathName = getClass().getResource(model);
         switchMesh(pathName);
         PhongMaterial phongMaterial = new PhongMaterial();
@@ -710,6 +742,7 @@ public class ThreeDMapScreenController implements Initializable{
         // Redraw the nodes and edges
         draw3DNodes();
         drawEdges();
+        mv.toBack();
 
         // Reset rotation to what it was for teh previous floor
         curXRotation = tempXRotation;
