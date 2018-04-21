@@ -80,7 +80,7 @@ public class AStar extends Pathfinder {
                 } else {
                     neighbor = e.getStart();
                 }
-                if (!closedSet.contains(neighbor)) {
+                if (!closedSet.contains(neighbor) && neighbor.getActive()) {
 
                     // Add neighbor gScore value to gScore
                     tempGScore = gScore.get(currentNode.getID()) + e.getWeight();

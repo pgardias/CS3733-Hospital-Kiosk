@@ -61,7 +61,7 @@ public class BestFirst extends Pathfinder{
             alreadyVisited.add(currentNode);
             children = getChildren(currentNode);
             for (Node n:children){
-                if (!alreadyVisited.contains(n)){
+                if (!alreadyVisited.contains(n) && n.getActive()){
                     queue.add(n);
                     n.setParent(currentNode);
                 }

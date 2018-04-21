@@ -64,7 +64,7 @@ public class DepthFirst extends Pathfinder {
                 List<Node> children = getChildren(currentNode);
                 for (int i = 0; i < children.size(); i++) {
                     Node n = children.get(i);
-                    if (n != null && !visited.contains(n)) {
+                    if (n != null && !visited.contains(n) && n.getActive()) {
                         stack.add(n);
                         n.setParent(currentNode);
                     }

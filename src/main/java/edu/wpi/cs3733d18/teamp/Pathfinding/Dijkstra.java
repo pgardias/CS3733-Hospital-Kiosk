@@ -24,9 +24,10 @@ public class Dijkstra extends Pathfinder{
             Node nextNode;
             if (e.getStart() == root) {
                 nextNode = e.getEnd();
-                    children.add(nextNode);
             } else {
                 nextNode = e.getStart();
+            }
+            if (nextNode.getActive()) {
                 children.add(nextNode);
             }
         }

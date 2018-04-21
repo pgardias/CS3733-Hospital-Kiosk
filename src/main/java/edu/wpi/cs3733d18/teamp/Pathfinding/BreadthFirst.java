@@ -36,13 +36,19 @@ public class BreadthFirst extends Pathfinder {
             ArrayList<Edge> edges = currentNode.getEdges();
 
             for (Edge e : edges) {
+                Node neighbor = new Node();
                 if (!closedSet.contains(e.getStart())) {
-                    e.getStart().setParent(currentNode);
-                    openSet.add(e.getStart());
+                    neighbor = e.getStart();
+                    neighbor.setParent(currentNode);
                 }
+
                 if (!closedSet.contains(e.getEnd())) {
-                    e.getEnd().setParent(currentNode);
-                    openSet.add(e.getEnd());
+                    neighbor = e.getEnd();
+                    neighbor.setParent(currentNode);
+                }
+
+                if (neighbor.getActive()) {
+                    openSet.add(neighbor);
                 }
             }
         }
