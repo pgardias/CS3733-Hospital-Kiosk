@@ -344,6 +344,7 @@ public class MapScreenController {
             }
         }
         mapImage.setImage(image);
+        autoTranslateZoom(zoomSlider.getMin(), zoomSlider.getMin(), 0, 0);
     }
 
 
