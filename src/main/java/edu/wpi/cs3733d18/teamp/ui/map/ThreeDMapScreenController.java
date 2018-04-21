@@ -557,9 +557,13 @@ public class ThreeDMapScreenController implements Initializable{
                 edgeDispSet.put(label, line);
             }
         }
+
+        // Set translations and move edges to behind nodes
         edgeGroup.getTransforms().setAll(new Rotate(curXRotation, mv.getTranslateX() - edgeGroup.getTranslateX(), mv.getTranslateY() - edgeGroup.getTranslateY(), mv.getTranslateZ() - edgeGroup.getTranslateZ(), Rotate.X_AXIS),
                         new Rotate(curYRotation, mv.getTranslateX() - edgeGroup.getTranslateX(), mv.getTranslateY() - edgeGroup.getTranslateY(), mv.getTranslateZ() - edgeGroup.getTranslateZ(), Rotate.Y_AXIS));
         threeDAnchorPane.getChildren().add(edgeGroup);
+        /*edgeGroup.toBack(); //TODO get edges behind nodes
+        mv.toBack();*/
     }
 
     /**
@@ -675,6 +679,7 @@ public class ThreeDMapScreenController implements Initializable{
         int tempXRotation = curXRotation;
         int tempYRotaton = curYRotation;
         int tempZRotation = curZRotation;
+        double tempScale = curScale;
 
         // Get new floor mesh and it texture
         URL pathName = getClass().getResource(model);
@@ -692,10 +697,14 @@ public class ThreeDMapScreenController implements Initializable{
         curXRotation = tempXRotation;
         curYRotation = tempYRotaton;
         curZRotation = tempZRotation;
+        curScale = tempScale;
         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
                 new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
         threeDAnchorPane.setTranslateX(curXTranslation); // Map panning
         threeDAnchorPane.setTranslateY(curYTranslation); // Map panning
+        threeDAnchorPane.setScaleX(curScale);
+        threeDAnchorPane.setScaleY(curScale);
+        threeDAnchorPane.setScaleZ(curScale);
     }
 
     /**
@@ -703,8 +712,6 @@ public class ThreeDMapScreenController implements Initializable{
      */
     public void resetPath() {
         Node currentNode = null, pastNode = null;
-        Sphere waypoint;
-        Cylinder line;
         for (Node n : pathMade) {
             pastNode = currentNode;
             currentNode = n;
