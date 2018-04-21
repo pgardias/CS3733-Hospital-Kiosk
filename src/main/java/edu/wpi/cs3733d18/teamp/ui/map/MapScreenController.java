@@ -2,6 +2,8 @@ package edu.wpi.cs3733d18.teamp.ui.map;
 
 import com.jfoenix.controls.JFXButton;
 import com.sun.scenario.effect.Effect;
+import de.jensd.fx.glyphs.materialicons.MaterialIcon;
+import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
@@ -25,6 +27,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -56,6 +59,7 @@ public class MapScreenController {
     private static final double ZOOM_3D_MIN = 1.013878875;
     private static final double ZOOM_2D_MIN = 1.208888889;
     private double zoomForTranslate = 0;
+    private static int MAP_ICON_SIZE = 20;
 
 
     private Node startNode;
@@ -71,6 +75,7 @@ public class MapScreenController {
     private Boolean toggleOn = false;
 
     private static HashMap<String, Circle> nodeDispSet = new HashMap<>();
+    private static HashMap<String, javafx.scene.Node> iconDispSet = new HashMap<>();
     private static ArrayList<Polygon> arrowDispSet = new ArrayList<>();
     private static ArrayList<String> arrowFloorSet = new ArrayList<>();
     private static HashMap<String, Line> edgeDispSet = new HashMap<>();
@@ -471,7 +476,50 @@ public class MapScreenController {
 
             String label = node.getID();
             nodeDispSet.put(label, circle);
+        }
 
+        for (Node node : nodeSet.values()) {
+            if (node.getType() != Node.nodeType.HALL) {
+                Rectangle iconShape = new Rectangle(MAP_ICON_SIZE, MAP_ICON_SIZE);
+                iconShape.setStyle("-fx-fill: ORANGE;");
+                iconShape.setArcHeight(5);
+                iconShape.setArcWidth(5);
+                Polygon iconArrow = new Polygon();
+                iconArrow.getPoints().addAll(new Double[]{
+                        5.0, 0.0,
+                        15.0, 0.0,
+                        10.0, 5.0
+                });
+                iconArrow.setStyle("-fx-fill: ORANGE;");
+                VBox iconShapeVBox = new VBox(iconShape, iconArrow);
+                iconShapeVBox.setAlignment(Pos.CENTER);
+                iconShapeVBox.setSpacing(-1);
+                MaterialIconView icon = new MaterialIconView(MaterialIcon.HOME);
+                icon.setStyleClass("map-icon");
+                icon.setStroke(Paint.valueOf("WHITE"));
+                icon.setStrokeWidth(1);
+//                MaterialDesignIconView icon = new MaterialDesignIconView(MaterialIcon.ACCOUNT_BOX);
+//                icon.setSize(Integer.toString(MAP_ICON_SIZE));
+//                icon.setStyle("-fx-fill: linear-gradient(-icons-color 0%, derive(WHITE, 100%) 30%, derive(LIGHTBLUE, 30%) 85%); -fx-font-size: " + Integer.toString(MAP_ICON_SIZE) + ";");
+                icon.setStyle("-icons-color: WHITE;");
+                icon.setSize(Integer.toString(MAP_ICON_SIZE));
+                icon.setTranslateY(-2);
+                StackPane container = new StackPane(iconShapeVBox, icon);
+
+                if (!toggleOn) {
+                    container.setLayoutX(((node.getX() - X_OFFSET) * X_SCALE) - MAP_ICON_SIZE / 2);
+                    container.setLayoutY(((node.getY() - Y_OFFSET) * Y_SCALE) - MAP_ICON_SIZE / 2);
+                } else {
+                    container.setLayoutX(((node.getxDisplay() - X_OFFSET) * X_SCALE) - MAP_ICON_SIZE / 2);
+                    container.setLayoutY(((node.getyDisplay() - Y_OFFSET) * Y_SCALE) - MAP_ICON_SIZE / 2);
+                }
+                nodesEdgesPane.getChildren().add(container);
+
+//                container.addEventHandler(MouseEvent.ANY, nodeClickHandler);
+//                container.setOnScroll(nodeScrollHandler);
+
+                iconDispSet.put(node.getID(), container);
+            }
         }
     }
 
