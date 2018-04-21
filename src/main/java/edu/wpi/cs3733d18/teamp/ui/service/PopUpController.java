@@ -63,7 +63,10 @@ public class PopUpController {
      * @param serviceRequestScreen
      */
     public void StartUp(ServiceRequestScreen serviceRequestScreen) {
+
         this.serviceRequestScreen = serviceRequestScreen;
+
+
     }
 
     /**
@@ -82,8 +85,6 @@ public class PopUpController {
         String formName = selectedForm.getText().replaceAll(regex, "");
         formName = formName.replaceAll("\\s", "");
         requestType = formName;
-
-        System.out.println(requestType);
 
         //loads the appropriate scene depending on the option selected
         serviceRequestMenu.setText(selectedForm.getText());

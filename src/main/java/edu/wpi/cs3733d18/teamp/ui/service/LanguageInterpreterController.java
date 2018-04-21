@@ -88,7 +88,6 @@ public class LanguageInterpreterController implements Initializable {
 
         destBinding.setPrefWidth(languageInterpreterLocationTxt.getPrefWidth());
 
-        languageInterpreterComboBox.setValue("Choose a language");
         languageInterpreterComboBox.setItems(languages);
     }
 
@@ -139,8 +138,8 @@ public class LanguageInterpreterController implements Initializable {
             return;
         }
         try {
-            language = languageInterpreterComboBox.getValue().toString();
-            if (language.equals("Choose a language")) {
+            language = languageInterpreterComboBox.getPromptText();
+            if (language.equals("Select a language")) {
                 throw new NothingSelectedException();
             }
         } catch (NothingSelectedException nse) {

@@ -87,7 +87,6 @@ public class SanitationController implements Initializable {
 
         destBinding.setPrefWidth(sanitationLocationTxt.getPrefWidth());
 
-        sanitationComboBox.setValue("Choose a mess");
         sanitationComboBox.setItems(messes);
     }
 
@@ -138,12 +137,12 @@ public class SanitationController implements Initializable {
             return;
         }
         try {
-            mess = sanitationComboBox.getValue().toString();
-            if (mess.equals("Choose a mess")) {
+            mess = sanitationComboBox.getPromptText();
+            if (mess.equals("Select a spill")) {
                 throw new NothingSelectedException();
             }
         } catch (NothingSelectedException nse) {
-            sanitationErrorLabel.setText("Please select a mess.");
+            sanitationErrorLabel.setText("Please select a spill.");
             sanitationErrorLabel.setVisible(true);
             return;
         }

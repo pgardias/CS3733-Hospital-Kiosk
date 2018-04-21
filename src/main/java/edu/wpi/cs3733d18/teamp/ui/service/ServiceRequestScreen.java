@@ -28,7 +28,6 @@ public class ServiceRequestScreen implements Initializable{
     PopUpController popUpController;
     DBSystem db = DBSystem.getInstance();
     ArrayList<Request> requests;
-    int requestSize;
 
 
     @FXML
@@ -119,7 +118,6 @@ public class ServiceRequestScreen implements Initializable{
         try {
             serviceRequestErrorLabel.setText("");
             requests = db.getAllRequests();
-            requestSize = requests.size();
 
             for (Request r: requests) {
                 if (r.isCompleted() == 0) {

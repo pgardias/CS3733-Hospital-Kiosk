@@ -88,7 +88,6 @@ public class ComputerServiceController implements Initializable {
 
         destBinding.setPrefWidth(computerServiceLocationTxt.getPrefWidth());
 
-        computerServiceComboBox.setValue("Choose a device");
         computerServiceComboBox.setItems(devices);
     }
 
@@ -139,12 +138,12 @@ public class ComputerServiceController implements Initializable {
             return;
         }
         try {
-            device = computerServiceComboBox.getValue().toString();
-            if (device.equals("Choose a device")) {
+            device = computerServiceComboBox.getPromptText();
+            if (device.equals("Select an electronic device")) {
                 throw new NothingSelectedException();
             }
         } catch (NothingSelectedException nse) {
-            computerServiceErrorLabel.setText("Please select a device.");
+            computerServiceErrorLabel.setText("Please select an electronic device.");
             computerServiceErrorLabel.setVisible(true);
             return;
         }
