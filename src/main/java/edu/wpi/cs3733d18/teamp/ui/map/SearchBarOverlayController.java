@@ -18,7 +18,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -93,7 +92,9 @@ public class SearchBarOverlayController implements Initializable{
     @FXML
     ToggleButton mapToggleButton;
 
-    MapScreenController mapScreenController;
+    private MapScreenController mapScreenController;
+    private ThreeDMapScreenController threeDMapScreenController;
+    private Boolean is3D = false;
 
     public void startUp(MapScreenController mapScreenController){
         this.mapScreenController = mapScreenController;
@@ -108,14 +109,15 @@ public class SearchBarOverlayController implements Initializable{
         mapToggleButtonOp();
     }
 
-    public void startUp3D(MapScreenController mapScreenController){
-        this.mapScreenController = mapScreenController;
+    public void startUp3D(ThreeDMapScreenController threeDMapScreenController){
+        this.threeDMapScreenController = threeDMapScreenController;
         //if (!mapScreenController.getPathDrawn()) { // TODO uncomment when map is integrated with the rest of the app
             directionsTableView.setVisible(false);
             directionsButton.setVisible(false);
             emailButton.setVisible(false);
             phoneButton.setVisible(false);
             directionsRectangle.setVisible(false);
+            is3D = true;
         //}
 
         //mapToggleButtonOp();
@@ -202,8 +204,11 @@ public class SearchBarOverlayController implements Initializable{
      * @return true if successful otherwise false
      */
     public Boolean searchButtonOp(ActionEvent e) {
-        if (pathDrawn) {
+        if (pathDrawn && !is3D) {
             mapScreenController.resetPath();
+        }
+        else if (pathDrawn) {
+            threeDMapScreenController.resetPath();
         }
         refresh();
 
@@ -242,46 +247,14 @@ public class SearchBarOverlayController implements Initializable{
 
         Font font = new Font("verdana", 24.0);
 
-//        System.out.println(toggledOn.toString());
-//
-//        if(toggledOn) {
-//            startLabel.setLayoutX((srcNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
-//            startLabel.setLayoutY((srcNode.getyDisplay()-40- Y_OFFSET)*Y_SCALE);
-//            startLabel.setText(srcNode.getLongName());
-//            startLabel.setFont(font);
-//            System.out.println("Starting location name:  " + startLabel.getText());
-//            System.out.println("Starting location X:  " + startLabel.getLayoutX());
-//            System.out.println("Starting location Y:  " + startLabel.getLayoutY());
-//
-//            startLabel.toFront();
-//
-//            endLabel.setLayoutX((dstNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
-//            endLabel.setLayoutY((dstNode.getyDisplay()-34- Y_OFFSET)*Y_SCALE);
-//            endLabel.setText(dstNode.getLongName());
-//            endLabel.setFont(font);
-//            System.out.println("Ending location name:  " + endLabel.getText());
-//            System.out.println("Ending location X:  " + endLabel.getLayoutX());
-//            System.out.println("Ending location Y:  " + endLabel.getLayoutY());
-//        } else {
-//            startLabel.setLayoutX((srcNode.getX()+5- X_OFFSET)*X_SCALE);
-//            startLabel.setLayoutY((srcNode.getY()-40- Y_OFFSET)*Y_SCALE);
-//            startLabel.setText(srcNode.getLongName());
-//            startLabel.setFont(font);
-//            System.out.println(startLabel.getText());
-//
-//            startLabel.toFront();
-//
-//            endLabel.setLayoutX((dstNode.getX()+5- X_OFFSET)*X_SCALE);
-//            endLabel.setLayoutY((dstNode.getY()-34- Y_OFFSET)*Y_SCALE);
-//            endLabel.setText(dstNode.getLongName());
-//            endLabel.setFont(font);
-//        }
-
-
-
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
         System.out.println(path);
-        mapScreenController.drawPath(path);
+        if (!is3D) {
+            mapScreenController.drawPath(path);
+        }
+        else {
+            threeDMapScreenController.drawPath(path);
+        }
         System.out.println(path);
         pathDrawn = true;
 
@@ -304,7 +277,6 @@ public class SearchBarOverlayController implements Initializable{
      */
     public Node parseSourceInput(String string) {
         Node aNode = new Node();
-//        System.out.println("Input string: " + string);
 
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
