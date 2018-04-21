@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -47,14 +48,6 @@
                         <Insets right="400.0" top="50.0" />
                     </GridPane.margin>
                 </JFXButton>
-                <JFXButton fx:id="newRequestButton" onAction="#newRequestButtonOp" styleClass="blue-button" text="Create New Request" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
-                    <font>
-                        <Font size="25.0" />
-                    </font>
-                    <GridPane.margin>
-                        <Insets right="50.0" top="50.0" />
-                    </GridPane.margin>
-                </JFXButton>
                 <Label fx:id="serviceRequestErrorLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                     <font>
                         <Font size="20.0" />
@@ -67,6 +60,11 @@
                   <Insets top="50.0" />
                </GridPane.margin>
                 </Label>
+            <JFXComboBox fx:id="newRequestComboBox" maxWidth="350.0" onAction="#selectNewRequestOp" prefHeight="52.0" prefWidth="295.0" promptText=" Create New Service Request" style="-fx-border-width: 1; -fx-border-color: black;" unFocusColor="BLACK" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
+               <GridPane.margin>
+                  <Insets bottom="25.0" right="10.0" />
+               </GridPane.margin>
+            </JFXComboBox>
             </children>
         </GridPane>
     </top>

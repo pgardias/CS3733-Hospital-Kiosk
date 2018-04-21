@@ -24,7 +24,7 @@
                   <Font size="30.0" />
                </font>
             </Label>
-            <JFXComboBox fx:id="selectFormComboBox" maxWidth="500.0" onAction="#serviceRequestFormSelectOp" prefWidth="300.0" promptText="Choose Service Request" unFocusColor="BLACK" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <JFXComboBox fx:id="selectFormComboBox" maxWidth="500.0" onAction="#serviceRequestFormSelectOp" prefWidth="300.0" promptText=" Choose Service Request" style="-fx-border-width: 1; -fx-border-color: black;" unFocusColor="BLACK" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </top>

@@ -1,6 +1,7 @@
 package edu.wpi.cs3733d18.teamp.ui.service;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import edu.wpi.cs3733d18.teamp.*;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.RequestNotFoundException;
@@ -32,9 +33,6 @@ public class ServiceRequestScreen implements Initializable{
 
     @FXML
     JFXButton backButton;
-
-    @FXML
-    JFXButton newRequestButton;
 
     @FXML
     JFXButton claimRequestButton;
@@ -73,6 +71,9 @@ public class ServiceRequestScreen implements Initializable{
     Label additionalInfoLabel;
 
     @FXML
+    Label helloMessage;
+
+    @FXML
     TableView<ServiceRequestTable> newRequestTable;
 
     @FXML
@@ -100,11 +101,22 @@ public class ServiceRequestScreen implements Initializable{
     TableColumn<ServiceRequestTable, String> rType3;
 
     @FXML
-    Label helloMessage;
+    JFXComboBox newRequestComboBox;
 
     final ObservableList<ServiceRequestTable> newRequests = FXCollections.observableArrayList();
     final ObservableList<ServiceRequestTable> inProgRequests = FXCollections.observableArrayList();
     final ObservableList<ServiceRequestTable> completedRequests = FXCollections.observableArrayList();
+    static ObservableList<String> requestTypes = FXCollections.observableArrayList(
+            "Create New Service Request",
+            "Language Interpreter Request",
+            "Religious Request",
+            "Computer Service Request",
+            "Security Request",
+            "Maintenance Request",
+            "Sanitation Request",
+            "Audio or Visual Help Request",
+            "Gift Delivery Request"
+    );
 
     @FXML
     public void onStartup() {
@@ -155,6 +167,8 @@ public class ServiceRequestScreen implements Initializable{
         rType3.setCellValueFactory(new PropertyValueFactory<ServiceRequestTable, String>("requestType"));
 
         populateTableViews();
+
+        newRequestComboBox.setItems(requestTypes);
     }
 
     /**
@@ -339,28 +353,36 @@ public class ServiceRequestScreen implements Initializable{
      * @param e action event
      */
     @FXML
-    public Boolean newRequestButtonOp(ActionEvent e) {
+    public Boolean selectNewRequestOp(ActionEvent e) {
         Stage stage;
         Parent root;
         FXMLLoader loader;
+        String selection = newRequestComboBox.getSelectionModel().getSelectedItem().toString();
 
-        stage = new Stage();
-        loader = new FXMLLoader(getClass().getResource("/FXML/service/FormContainer.fxml"));
-
-        try {
-            root = loader.load();
-        } catch (IOException ie) {
-            ie.printStackTrace();
+        if (selection.equals("Create New Service Request")) {
             return false;
         }
+        else {
+            stage = new Stage();
+            loader = new FXMLLoader(getClass().getResource("/FXML/service/FormContainer.fxml"));
 
-        popUpController = loader.getController();
-        popUpController.StartUp(this);
-        stage.setScene(new Scene(root, 1000, 950));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(newRequestButton.getScene().getWindow());
-        stage.show();
-        return true;
+            try {
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return false;
+            }
+
+
+            popUpController = loader.getController();
+            popUpController.StartUp(this, selection);
+            stage.setScene(new Scene(root, 1000, 950));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(newRequestComboBox.getScene().getWindow());
+            stage.show();
+            newRequestComboBox.setValue("Create New Service Request");
+            return true;
+        }
     }
 
     /**
@@ -378,7 +400,6 @@ public class ServiceRequestScreen implements Initializable{
             completedRequestTable.getItems().clear();
         }
         populateTableViews();
-
     }
 
     /**

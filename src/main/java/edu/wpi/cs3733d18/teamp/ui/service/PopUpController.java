@@ -57,8 +57,67 @@ public class PopUpController implements Initializable {
      * Allows the two .java files to communicate to each other
      * @param serviceRequestScreen
      */
-    public void StartUp(ServiceRequestScreen serviceRequestScreen) {
+    public void StartUp(ServiceRequestScreen serviceRequestScreen, String selection) {
         this.serviceRequestScreen = serviceRequestScreen;
+
+        selectFormComboBox.setValue(selection);
+        String requestType;
+        Parent root = null;
+        FXMLLoader loader;
+        Scene scene;
+        //removes the word request from the MenuItem as well as the spaces
+        String regex = "\\s*\\bRequest\\b\\s*";
+        String formName = selection.replaceAll(regex, "");
+        formName = formName.replaceAll("\\s", "");
+        requestType = formName;
+
+
+
+        //loads the appropriate scene depending on the option selected
+        loader = new FXMLLoader(getClass().getResource("/FXML/service/" + requestType + "Form.fxml"));
+
+        try {
+            root = loader.load();
+        } catch (IOException ie) {
+            ie.printStackTrace();
+        }
+
+        switch(requestType) {
+            case "LanguageInterpreter":
+                languageInterpreterController = loader.getController();
+                languageInterpreterController.StartUp(serviceRequestScreen, this);
+                break;
+            case "Religious":
+                religiousServiceController = loader.getController();
+                religiousServiceController.StartUp(serviceRequestScreen, this);
+                break;
+            case "ComputerService":
+                computerServiceController = loader.getController();
+                computerServiceController.StartUp(serviceRequestScreen, this);
+                break;
+            case "Security":
+                securityController = loader.getController();
+                securityController.StartUp(serviceRequestScreen, this);
+                break;
+            case "Maintenance":
+                maintenanceController = loader.getController();
+                maintenanceController.StartUp(serviceRequestScreen,this);
+                break;
+            case "Sanitation":
+                sanitationController = loader.getController();
+                sanitationController.StartUp(serviceRequestScreen, this);
+                break;
+            case "AudioorVisualHelp":
+                audioVisualController = loader.getController();
+                audioVisualController.StartUp(serviceRequestScreen,this);
+                break;
+            case "GiftDelivery":
+                giftDeliveryController = loader.getController();
+                giftDeliveryController.StartUp(serviceRequestScreen,this);
+                break;
+
+        }
+        serviceRequestPopup.setCenter(root);
     }
 
     /**
