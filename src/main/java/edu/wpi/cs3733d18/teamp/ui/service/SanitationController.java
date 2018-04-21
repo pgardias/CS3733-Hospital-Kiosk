@@ -137,7 +137,7 @@ public class SanitationController implements Initializable {
             return;
         }
         try {
-            mess = sanitationComboBox.getPromptText();
+            mess = sanitationComboBox.getSelectionModel().getSelectedItem().toString();
             if (mess.equals("Select a spill")) {
                 throw new NothingSelectedException();
             }

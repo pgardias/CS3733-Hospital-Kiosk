@@ -138,7 +138,7 @@ public class ComputerServiceController implements Initializable {
             return;
         }
         try {
-            device = computerServiceComboBox.getPromptText();
+            device = computerServiceComboBox.getSelectionModel().getSelectedItem().toString();
             if (device.equals("Select an electronic device")) {
                 throw new NothingSelectedException();
             }

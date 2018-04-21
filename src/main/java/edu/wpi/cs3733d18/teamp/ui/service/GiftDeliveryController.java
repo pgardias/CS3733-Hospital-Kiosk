@@ -138,7 +138,7 @@ public class GiftDeliveryController implements Initializable {
             return;
         }
         try {
-            gift = giftComboBox.getPromptText();
+            gift = giftComboBox.getSelectionModel().getSelectedItem().toString();
             if (gift.equals("Select a gift")) {
                 throw new NothingSelectedException();
             }

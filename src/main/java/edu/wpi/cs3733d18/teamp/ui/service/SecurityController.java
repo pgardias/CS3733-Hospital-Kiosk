@@ -139,7 +139,7 @@ public class SecurityController implements Initializable {
             return;
         }
         try {
-            situation = securityComboBox.getPromptText();
+            situation = securityComboBox.getSelectionModel().getSelectedItem().toString();
             if (situation.equals("Select a situation")) {
                 throw new NothingSelectedException();
             }

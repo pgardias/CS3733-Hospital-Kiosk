@@ -137,7 +137,7 @@ public class AudioVisualController implements Initializable {
             return;
         }
         try {
-            AVDevice = AVComboBox.getPromptText();
+            AVDevice = AVComboBox.getSelectionModel().getSelectedItem().toString();
             if (AVDevice.equals("Select an audio/visual device")) {
                 throw new NothingSelectedException();
             }

@@ -138,7 +138,7 @@ public class LanguageInterpreterController implements Initializable {
             return;
         }
         try {
-            language = languageInterpreterComboBox.getPromptText();
+            language = languageInterpreterComboBox.getSelectionModel().getSelectedItem().toString();
             if (language.equals("Select a language")) {
                 throw new NothingSelectedException();
             }

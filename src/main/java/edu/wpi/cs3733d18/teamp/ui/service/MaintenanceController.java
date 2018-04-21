@@ -139,7 +139,7 @@ public class MaintenanceController implements Initializable {
             return;
         }
         try {
-            machine = maintenanceComboBox.getPromptText();
+            machine = maintenanceComboBox.getSelectionModel().getSelectedItem().toString();
             if (machine.equals("Select a broken machine")) {
                 throw new NothingSelectedException();
             }

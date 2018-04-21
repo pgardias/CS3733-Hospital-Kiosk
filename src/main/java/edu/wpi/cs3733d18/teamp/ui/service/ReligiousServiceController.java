@@ -132,7 +132,7 @@ public class ReligiousServiceController implements Initializable {
             return;
         }
         try {
-            religion = religiousRequestComboBox.getPromptText();
+            religion = religiousRequestComboBox.getSelectionModel().getSelectedItem().toString();
             if(religion.equals("Select a religion")) {
                 throw new NothingSelectedException();
             }
