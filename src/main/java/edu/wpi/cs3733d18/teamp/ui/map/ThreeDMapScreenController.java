@@ -288,6 +288,9 @@ public class ThreeDMapScreenController implements Initializable{
         curXOffset = X_OFFSET_L2;
         curZOffset = Z_OFFSET_L2;
         updateMap("/models/B&WL2Floor.obj", "/models/textures/3rdFloor_UV.png");
+        if (pathDrawn) {
+            drawPath(pathMade);
+        }
     }
 
     @FXML
@@ -296,6 +299,9 @@ public class ThreeDMapScreenController implements Initializable{
         curXOffset = X_OFFSET_L1;
         curZOffset = Z_OFFSET_L1;
         updateMap("/models/B&WL1Floor.obj", "/models/textures/3rdFloor_UV.png");
+        if (pathDrawn) {
+            drawPath(pathMade);
+        }
     }
 
     @FXML
@@ -304,6 +310,9 @@ public class ThreeDMapScreenController implements Initializable{
         curXOffset = X_OFFSET_G;
         curZOffset = Z_OFFSET_G;
         updateMap("/models/B&WGFloor.obj", "/models/textures/3rdFloor_UV.png");
+        if (pathDrawn) {
+            drawPath(pathMade);
+        }
     }
 
     @FXML
@@ -312,6 +321,9 @@ public class ThreeDMapScreenController implements Initializable{
         curXOffset = X_OFFSET_1;
         curZOffset = Z_OFFSET_1;
         updateMap("/models/B&W1stFloor.obj", "/models/textures/3rdFloor_UV.png");
+        if (pathDrawn) {
+            drawPath(pathMade);
+        }
     }
 
     @FXML
@@ -320,6 +332,9 @@ public class ThreeDMapScreenController implements Initializable{
         curXOffset = X_OFFSET_2;
         curZOffset = Z_OFFSET_2;
         updateMap("/models/B&W2ndFloor.obj", "/models/textures/2ndFloor_UV.png");
+        if (pathDrawn) {
+            drawPath(pathMade);
+        }
     }
 
     @FXML
@@ -328,6 +343,9 @@ public class ThreeDMapScreenController implements Initializable{
         curXOffset = X_OFFSET_3;
         curZOffset = Z_OFFSET_3;
         updateMap("/models/B&W3rdFloor.obj", "/models/textures/3rdFloor_UV.png");
+        if (pathDrawn) {
+            drawPath(pathMade);
+        }
     }
 
     /**
