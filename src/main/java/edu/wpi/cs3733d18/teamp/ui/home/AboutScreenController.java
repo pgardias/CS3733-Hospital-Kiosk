@@ -18,6 +18,9 @@ public class AboutScreenController {
     JFXButton backButton;
 
     @FXML
+    JFXButton creditsButton;
+
+    @FXML
     Label introLabel;
 
     @FXML
@@ -25,6 +28,8 @@ public class AboutScreenController {
 
     @FXML
     Label finalLabel;
+
+
 
     public void StartUp() {
         introLabel.setText(
@@ -66,5 +71,25 @@ public class AboutScreenController {
             return;
         }
         backButton.getScene().setRoot(root);
+    }
+
+    @FXML
+    public Boolean creditsButtonOp(ActionEvent e) {
+        Parent root;
+        FXMLLoader loader;
+        CreditsController creditsController;
+
+        loader = new FXMLLoader(getClass().getResource("/FXML/home/CreditsScreen.fxml"));
+
+        try {
+            root = loader.load();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return false;
+        }
+        creditsController = loader.getController();
+        creditsController.StartUp();
+        creditsButton.getScene().setRoot(root);
+        return true;
     }
 }

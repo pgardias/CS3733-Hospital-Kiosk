@@ -31,6 +31,14 @@
                   <Insets left="50.0" top="50.0" />
                </GridPane.margin>
             </JFXButton>
+             <JFXButton fx:id="creditsButton" alignment="TOP_RIGHT" buttonType="RAISED" onAction="#creditsButtonOp" styleClass="blue-button" stylesheets="@../../css/common.css" text="Credits" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+                 <font>
+                     <Font size="25.0" />
+                 </font>
+                 <GridPane.margin>
+                     <Insets right="150.0" top="25.0" />
+                 </GridPane.margin>
+             </JFXButton>
             <Label text="About Us" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                <font>
                   <Font size="30.0" />
