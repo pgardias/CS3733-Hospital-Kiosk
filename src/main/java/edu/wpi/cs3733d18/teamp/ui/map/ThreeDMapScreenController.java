@@ -43,11 +43,14 @@ public class ThreeDMapScreenController implements Initializable{
     // Symbolic Constants
     private static final int VIEWPORT_SIZE = 800;
     private double X_SCALE = 1588.235294 / 5000.0;
-    private double Y_SCALE = 1080.0 / 3400.0;
+    private double Z_SCALE = 1080.0 / 3400.0;
     private static final double NODE_RADIUS = 5.0;
     private static final Color lightColor = Color.rgb(244, 255, 250);
     private static final Color buildingColor = Color.rgb(255, 255, 255);
 
+    private int X_OFFSET = -50;
+    private int Y_OFFSET = -30;
+    private int Z_OFFSET = -2720;
     private int X_OFFSET_3 = -50;
     private int Z_OFFSET_3 = -2720;
     private int X_OFFSET_2 = 160;
@@ -60,7 +63,6 @@ public class ThreeDMapScreenController implements Initializable{
     private int Z_OFFSET_L1 = -2720;
     private int X_OFFSET_L2 = 160;
     private int Z_OFFSET_L2 = -2720;
-    private int Y_OFFSET = -30;
 
     private Group root;
     private PointLight pointLight;
@@ -111,6 +113,14 @@ public class ThreeDMapScreenController implements Initializable{
     PhongMaterial fillRed;
     PhongMaterial fillOrange;
     PhongMaterial fillPurple;
+
+    // Floor visibility
+    private Boolean L2Visible = true;
+    private Boolean L1Visible = true;
+    private Boolean GVisible = true;
+    private Boolean FirstVisible = true;
+    private Boolean SecondVisible = true;
+    private Boolean ThirdVisible = true;
 
     // FXML variables
     @FXML
@@ -314,66 +324,120 @@ public class ThreeDMapScreenController implements Initializable{
     @FXML
     public void floorL2ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_L2;
-        curXOffset = X_OFFSET_L2;
+        MeshView mv = getFloor(currentFloor);
+        /*curXOffset = X_OFFSET_L2;
         curZOffset = Z_OFFSET_L2;
         updateMap("/models/B&WL2Floor.obj", "/models/textures/3rdFloor_UV.png");
         if (pathDrawn) {
             drawPath(pathMade);
+        }*/
+        if (L2Visible) {
+            mv.setOpacity(0);
+            L2Visible = false;
+        }
+        else {
+            mv.setOpacity(1);
+            L2Visible = true;
         }
     }
 
     @FXML
     public void floorL1ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_L1;
-        curXOffset = X_OFFSET_L1;
+        MeshView mv = getFloor(currentFloor);
+        /*curXOffset = X_OFFSET_L1;
         curZOffset = Z_OFFSET_L1;
         updateMap("/models/B&WL1Floor.obj", "/models/textures/3rdFloor_UV.png");
         if (pathDrawn) {
             drawPath(pathMade);
+        }*/
+        if (L1Visible) {
+            mv.setOpacity(0);
+            L1Visible = false;
+        }
+        else {
+            mv.setOpacity(1);
+            L1Visible = true;
         }
     }
 
     @FXML
     public void floorGButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_G;
-        curXOffset = X_OFFSET_G;
+        MeshView mv = getFloor(currentFloor);
+        /*curXOffset = X_OFFSET_G;
         curZOffset = Z_OFFSET_G;
         updateMap("/models/B&WGFloor.obj", "/models/textures/3rdFloor_UV.png");
         if (pathDrawn) {
             drawPath(pathMade);
+        }*/
+        if (GVisible) {
+            mv.setOpacity(0);
+            GVisible = false;
+        }
+        else {
+            mv.setOpacity(1);
+            GVisible = true;
         }
     }
 
     @FXML
     public void floor1ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_1;
-        curXOffset = X_OFFSET_1;
+        MeshView mv = getFloor(currentFloor);
+        /*curXOffset = X_OFFSET_1;
         curZOffset = Z_OFFSET_1;
         updateMap("/models/B&W1stFloor.obj", "/models/textures/3rdFloor_UV.png");
         if (pathDrawn) {
             drawPath(pathMade);
+        }*/
+        if (FirstVisible) {
+            mv.setOpacity(0);
+            FirstVisible = false;
+        }
+        else {
+            mv.setOpacity(1);
+            FirstVisible = true;
         }
     }
 
     @FXML
     public void floor2ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_2;
-        curXOffset = X_OFFSET_2;
+        MeshView mv = getFloor(currentFloor);
+        /*curXOffset = X_OFFSET_2;
         curZOffset = Z_OFFSET_2;
         updateMap("/models/B&W2ndFloor.obj", "/models/textures/2ndFloor_UV.png");
         if (pathDrawn) {
             drawPath(pathMade);
+        }*/
+        if (SecondVisible) {
+            mv.setOpacity(0);
+            SecondVisible = false;
+        }
+        else {
+            mv.setOpacity(1);
+            SecondVisible = true;
         }
     }
 
     @FXML
     public void floor3ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_3;
-        curXOffset = X_OFFSET_3;
+        MeshView mv = getFloor(currentFloor);
+        /*curXOffset = X_OFFSET_3;
         curZOffset = Z_OFFSET_3;
         updateMap("/models/B&W3rdFloor.obj", "/models/textures/3rdFloor_UV.png");
         if (pathDrawn) {
             drawPath(pathMade);
+        }*/
+        if (ThirdVisible) {
+            mv.setOpacity(0);
+            ThirdVisible = false;
+        }
+        else {
+            mv.setOpacity(1);
+            ThirdVisible = true;
         }
     }
 
@@ -534,9 +598,9 @@ public class ThreeDMapScreenController implements Initializable{
             if (node.getFloor() == currentFloor && node.getType() != Node.nodeType.HALL) {
                 Sphere sphere = new Sphere(NODE_RADIUS);
                 threeDAnchorPane.getChildren().add(sphere);
-                sphere.setTranslateX((node.getX() - curXOffset) * X_SCALE);
+                sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
                 sphere.setTranslateY(mv.getTranslateY() - yPos);
-                sphere.setTranslateZ((-node.getY() - curZOffset) * Y_SCALE);
+                sphere.setTranslateZ((-node.getY() - Z_OFFSET) * Z_SCALE);
                 sphere.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.Y_AXIS),
                         new Rotate(curXRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.X_AXIS));
                 sphere.setMaterial(fillBlue);
@@ -554,9 +618,9 @@ public class ThreeDMapScreenController implements Initializable{
             else {
                 Sphere sphere = new Sphere(NODE_RADIUS);
                 threeDAnchorPane.getChildren().add(sphere);
-                sphere.setTranslateX((node.getX() - curXOffset) * X_SCALE);
+                sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
                 sphere.setTranslateY(mv.getTranslateY() - yPos);
-                sphere.setTranslateZ((-node.getY() - curZOffset) * Y_SCALE);
+                sphere.setTranslateZ((-node.getY() - Z_OFFSET) * Z_SCALE);
                 sphere.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.Y_AXIS),
                         new Rotate(curXRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.X_AXIS));
                 sphere.setMaterial(fillBlue);
@@ -853,7 +917,7 @@ public class ThreeDMapScreenController implements Initializable{
                     startLabel.setLayoutY((n.getyDisplay() - 40 - Y_OFFSET) * Y_SCALE);
                 } else {*/
                     startLabel.setLayoutX((n.getX() + 5 - curXOffset) * X_SCALE);
-                    startLabel.setLayoutY((n.getY() - 40 - Y_OFFSET) * Y_SCALE);
+                    startLabel.setLayoutY((n.getY() - 40 - Y_OFFSET) * Z_SCALE);
                 //}
                 startLabel.setText(n.getLongName());
                 startLabel.setFont(font);
@@ -877,7 +941,7 @@ public class ThreeDMapScreenController implements Initializable{
                     endLabel.setLayoutY((n.getyDisplay() - 34 - Y_OFFSET) * Y_SCALE);
                 } else {*/
                     endLabel.setLayoutX((n.getX() + 5 - curXOffset) * X_SCALE);
-                    endLabel.setLayoutY((n.getY() - 34 - Y_OFFSET) * Y_SCALE);
+                    endLabel.setLayoutY((n.getY() - 34 - Y_OFFSET) * Z_SCALE);
                 //}
                 endLabel.setText(n.getLongName());
                 endLabel.setFont(font);
@@ -923,7 +987,7 @@ public class ThreeDMapScreenController implements Initializable{
                     //if (!toggleOn) {
                         // 2d view
                         double actualX = (stairNodeSet.get(i).getX() + 10 - curXOffset) * X_SCALE;
-                        double actualY = (stairNodeSet.get(i).getY() + 10 - Y_OFFSET) * Y_SCALE;
+                        double actualY = (stairNodeSet.get(i).getY() + 10 - Y_OFFSET) * Z_SCALE;
                         clickMeLabel.setLayoutX(actualX + 20);
                         clickMeLabel.setLayoutY(actualY + 20);
                         Line line = new Line(actualX, actualY, actualX + 20, actualY + 20);
@@ -954,7 +1018,7 @@ public class ThreeDMapScreenController implements Initializable{
         double rangeY = maxYCoord - minYCoord;
 
         double desiredZoomX = 1920 / (rangeX * X_SCALE);
-        double desiredZoomY = 1080 / (rangeY * Y_SCALE);
+        double desiredZoomY = 1080 / (rangeY * Z_SCALE);
         System.out.println("desired X zoom: " + desiredZoomX + " desired Zoom Y: " + desiredZoomY);
 
         double centerX = (maxXCoord + minXCoord) / 2;
@@ -1073,6 +1137,37 @@ public class ThreeDMapScreenController implements Initializable{
                 break;
         }
         return floorYPos;
+    }
+
+    /**
+     * Fetches the specified floor mesh from root
+     */
+    private MeshView getFloor(Node.floorType floor) {
+        MeshView mesh;
+        switch(floor) {
+            case LEVEL_L2:
+                mesh = (MeshView)root.getChildren().get(0);
+                break;
+            case LEVEL_L1:
+                mesh = (MeshView)root.getChildren().get(1);
+                break;
+            case LEVEL_G:
+                mesh = (MeshView)root.getChildren().get(2);
+                break;
+            case LEVEL_1:
+                mesh = (MeshView)root.getChildren().get(3);
+                break;
+            case LEVEL_2:
+                mesh = (MeshView)root.getChildren().get(4);
+                break;
+            case LEVEL_3:
+                mesh = (MeshView)root.getChildren().get(5);
+                break;
+            default:
+                mesh = (MeshView)root.getChildren().get(0);
+                break;
+        }
+        return mesh;
     }
 
 }
