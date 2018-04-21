@@ -23,11 +23,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.StrokeType;
+import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import jdk.nashorn.internal.runtime.regexp.joni.constants.NodeType;
@@ -1226,14 +1222,17 @@ public class MapScreenController {
         if (!floorsList.equals(null)) {
             for (Node.floorType floor : floorsList) {
                 System.out.println("Created new LabeL");
-                Label label = new Label(floor.toString());
-                label.setPadding(new Insets(10));
-                label.addEventHandler(MouseEvent.ANY, labelEventHandler);
-                label.setStyle("-fx-border-width: 10px");
-                label.setStyle("-fx-background-color: red");
-                floorSequenceList.add(label);
+                Circle circle = new Circle(20);
+                circle.setStroke(Color.BLACK);
+                circle.setFill(Color.RED);
+                //floorSequenceList.add(circle);
                 System.out.println("Label added to the list");
-                floorSequenceHBox.getChildren().add(label);
+                floorSequenceHBox.getChildren().add(circle);
+                floorSequenceHBox.setMargin(circle, new Insets(10));
+
+                Button button = new Button(floor.toString());
+                button.setShape(new Circle(10));
+                floorSequenceHBox.getChildren().add(button);
             }
         }
 
