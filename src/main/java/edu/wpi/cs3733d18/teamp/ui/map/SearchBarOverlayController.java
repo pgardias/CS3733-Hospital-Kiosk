@@ -106,10 +106,10 @@ public class SearchBarOverlayController implements Initializable{
     JFXButton goButton;
 
     @FXML
-    JFXTextField sourceSearchBar;
+    JFXComboBox sourceSearchBar;
 
     @FXML
-    JFXTextField destinationSearchBar;
+    JFXComboBox destinationSearchBar;
 
     @FXML
     JFXToggleButton mapToggleButton;
@@ -142,12 +142,12 @@ public class SearchBarOverlayController implements Initializable{
     }
 
     public void setSourceSearchBar(String startNode){
-        sourceSearchBar.setText(startNode);
+        sourceSearchBar.getSelectionModel().select(startNode);
         hideDirections();
     }
 
     public void setDestinationSearchBar(String endNode){
-        destinationSearchBar.setText(endNode);
+        destinationSearchBar.getSelectionModel().select(endNode);
         hideDirections();
     }
 
@@ -174,11 +174,14 @@ public class SearchBarOverlayController implements Initializable{
     public void initialize(URL url, ResourceBundle rb){
         setWordArrays();
 
-        AutoCompletionBinding<String> destBinding = TextFields.bindAutoCompletion(destinationSearchBar, destinationWords);
-        AutoCompletionBinding<String> sourceBinding = TextFields.bindAutoCompletion(sourceSearchBar, sourceWords);
+        sourceSearchBar.getItems().addAll(sourceWords);
+        destinationSearchBar.getItems().addAll(destinationWords);
 
-        destBinding.setPrefWidth(destinationSearchBar.getPrefWidth());
-        sourceBinding.setPrefWidth(sourceSearchBar.getPrefWidth());
+//        AutoCompletionBinding<String> destBinding = TextFields.bindAutoCompletion(destinationSearchBar, destinationWords);
+//        AutoCompletionBinding<String> sourceBinding = TextFields.bindAutoCompletion(sourceSearchBar, sourceWords);
+//
+//        destBinding.setPrefWidth(destinationSearchBar.getPrefWidth());
+//        sourceBinding.setPrefWidth(sourceSearchBar.getPrefWidth());
 
         floorChildren = new ArrayList<>();
         parents = new ArrayList<>();
@@ -211,7 +214,6 @@ public class SearchBarOverlayController implements Initializable{
                 sourceWords.add(node.getLongName());
             }
         }
-        destinationWords.addAll(sourceWords);
         destinationWords.add("NEAREST HALLWAY");
         destinationWords.add("NEAREST ELEVATOR");
         destinationWords.add("NEAREST RESTROOM");
@@ -223,6 +225,7 @@ public class SearchBarOverlayController implements Initializable{
         destinationWords.add("NEAREST EXIT");
         destinationWords.add("NEAREST SHOP");
         destinationWords.add("NEAREST SERVICE STATION");
+        destinationWords.addAll(sourceWords);
     }
 
 
@@ -247,8 +250,8 @@ public class SearchBarOverlayController implements Initializable{
 
         //Declare source node, destination node, and get the typed in inputs for both search boxes
         Node srcNode, dstNode;
-        String src = sourceSearchBar.getText();
-        String dst = destinationSearchBar.getText();
+        String src = sourceSearchBar.getValue().toString();
+        String dst = destinationSearchBar.getValue().toString();
 
         // Check if the source node was input
         if (src.length() > 0 && !src.equals("Current Kiosk")) {
