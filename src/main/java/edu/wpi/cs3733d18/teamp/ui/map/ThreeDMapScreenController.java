@@ -79,6 +79,7 @@ public class ThreeDMapScreenController implements Initializable{
 
     // Display hashmaps
     private static ArrayList<MeshView[]> allModels = new ArrayList<>();
+    private static ArrayList<PhongMaterial> allTextures = new ArrayList<>();
     private static HashMap<String, Sphere> nodeDispSet = new HashMap<>();
     private static ArrayList<Polygon> arrowDispSet = new ArrayList<>();
     private static ArrayList<String> arrowFloorSet = new ArrayList<>();
@@ -175,6 +176,26 @@ public class ThreeDMapScreenController implements Initializable{
         pathName = getClass().getResource("/models/B&W3rdFloor.obj");
         allModels.add(loadMeshView(pathName));
 
+        // Load all model textures
+        PhongMaterial floorL2Texture = new PhongMaterial();
+        floorL2Texture.setDiffuseMap(new Image(getClass().getResource("/models/textures/L2Floor_UV.png").toExternalForm()));
+        allTextures.add(floorL2Texture);
+        PhongMaterial floorL1Texture = new PhongMaterial();
+        floorL1Texture.setDiffuseMap(new Image(getClass().getResource("/models/textures/L1Floor_UV.png").toExternalForm()));
+        allTextures.add(floorL1Texture);
+        PhongMaterial floorGTexture = new PhongMaterial();
+        floorGTexture.setDiffuseMap(new Image(getClass().getResource("/models/textures/groundFloor_UV.png").toExternalForm()));
+        allTextures.add(floorGTexture);
+        PhongMaterial floor1stTexture = new PhongMaterial();
+        floor1stTexture.setDiffuseMap(new Image(getClass().getResource("/models/textures/1stFloor_UV.png").toExternalForm()));
+        allTextures.add(floor1stTexture);
+        PhongMaterial floor2ndTexture = new PhongMaterial();
+        floor2ndTexture.setDiffuseMap(new Image(getClass().getResource("/models/textures/2ndFloor_UV.png").toExternalForm()));
+        allTextures.add(floor2ndTexture);
+        PhongMaterial floor3rdTexture = new PhongMaterial();
+        floor3rdTexture.setDiffuseMap(new Image(getClass().getResource("/models/textures/3rdFloor_UV.png").toExternalForm()));
+        allTextures.add(floor3rdTexture);
+
         // Build scene
         Group group = buildScene();
         group.setScaleX(2);
@@ -190,7 +211,6 @@ public class ThreeDMapScreenController implements Initializable{
 
     private void addOverlay() {
         Parent root;
-        Stage stage;
         FXMLLoader loader;
 
         loader = new FXMLLoader(getClass().getResource("/FXML/map/SearchBarOverlay.fxml"));
@@ -216,21 +236,17 @@ public class ThreeDMapScreenController implements Initializable{
             // Left Mouse Button, Rotating
             if (event.getButton() == MouseButton.PRIMARY) {
                 if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                    //System.out.println("Mouse_Pressed");
                     mouseInSceneX = event.getSceneX();
                     mouseInSceneY = event.getSceneY();
                     isDragging = false;
                 } else if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
-                    //System.out.println("Drag_Detected");
                     isDragging = true;
                 } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-                    //System.out.println("Mouse_Dragged");
                     double newMouseInSceneX = event.getSceneX();
                     double newMouseInSceneY = event.getSceneY();
                     double xChange = newMouseInSceneX - mouseInSceneX;
                     double yChange = newMouseInSceneY - mouseInSceneY;
 
-                    //System.out.println("Previous getSceneX: "+mouseInSceneX+" xChange: "+xChange);
                     // Change Rotation Y
                     if (xChange < 0) { // Rotate clockwise
                         curYRotation += ROTATION_SPEED;
@@ -259,15 +275,12 @@ public class ThreeDMapScreenController implements Initializable{
             // Right Mouse Button, Panning
             else if (event.getButton() == MouseButton.SECONDARY) {
                 if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                    //System.out.println("Mouse_Pressed");
                     mouseInSceneX = event.getSceneX();
                     mouseInSceneY = event.getSceneY();
                     isDragging = false;
                 } else if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
-                    //System.out.println("Drag_Detected");
                     isDragging = true;
                 } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-                    //System.out.println("Mouse_Dragged");
                     double newMouseInSceneX = event.getSceneX();
                     double newMouseInSceneY = event.getSceneY();
                     double xChange = newMouseInSceneX - mouseInSceneX;
@@ -445,9 +458,9 @@ public class ThreeDMapScreenController implements Initializable{
         int index = 0;
         ArrayList<Integer> curOffsets;
         PhongMaterial phongMaterial = new PhongMaterial();
-        phongMaterial.setDiffuseMap(new Image(getClass().getResource("/models/textures/3rdFloor_UV.png").toExternalForm()));
         for (MeshView[] model : allModels) {
-            curOffsets = getFloorOffset(index);
+            curOffsets = getFloorOffset(index); // Get current floor translation offsets
+            phongMaterial = allTextures.get(index); // Get texture for current floor
             model[0].setTranslateX((VIEWPORT_SIZE / 2) + curOffsets.get(0)); //TODO get rid of VIEWPORT_SIZE dependency
             model[0].setTranslateY((VIEWPORT_SIZE / 2) + height + curOffsets.get(1));
             model[0].setTranslateZ((VIEWPORT_SIZE / 2) + curOffsets.get(2));

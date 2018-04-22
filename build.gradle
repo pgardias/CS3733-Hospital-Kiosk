@@ -58,5 +58,3 @@ task run(type: JavaExec) {
 	main = 'edu.wpi.cs3733d18.teamp.Main'
 	classpath = sourceSets.main.runtimeClasspath
 }
-group 'groupIP'
-version '1.0-SNAPSHOT'
