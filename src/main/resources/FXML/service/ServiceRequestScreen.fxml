@@ -27,14 +27,6 @@
             <RowConstraints />
             </rowConstraints>
             <children>
-                <JFXButton fx:id="serviceAPIButton" buttonType="RAISED" minWidth="150.0" onAction="#serviceAPIButtonOp" prefWidth="500.0" styleClass="blue-button" text="Transport" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
-                    <font>
-                        <Font size="25.0" />
-                    </font>
-                    <GridPane.margin>
-                        <Insets right="600.0" top="50.0" />
-                    </GridPane.margin>
-                </JFXButton>
                 <JFXButton fx:id="backButton" onAction="#backButtonOp" prefHeight="100.0" prefWidth="100.0" styleClass="back-button" text=" ">
                     <GridPane.margin>
                         <Insets left="50.0" top="50.0" />

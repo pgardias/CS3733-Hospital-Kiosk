@@ -2,6 +2,7 @@ package edu.wpi.cs3733d18.teamp.ui.service;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import edu.wpi.cs3733d18.teamR.RaikouAPI;
 import edu.wpi.cs3733d18.teamp.*;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.RequestNotFoundException;
@@ -43,9 +44,6 @@ public class ServiceRequestScreen implements Initializable{
 
     @FXML
     JFXButton completeRequestButton;
-
-    @FXML
-    JFXButton serviceAPIButton;
 
     @FXML
     Label serviceRequestErrorLabel;
@@ -116,7 +114,9 @@ public class ServiceRequestScreen implements Initializable{
             "Maintenance Request",
             "Sanitation Request",
             "Audio or Visual Help Request",
-            "Gift Delivery Request"
+            "Gift Delivery Request",
+            "Transportation Request",
+            "Prescription Request"
     );
 
     @FXML
@@ -386,6 +386,36 @@ public class ServiceRequestScreen implements Initializable{
         if (selection.equals("Create New Service Request")) {
             return false;
         }
+        else if (selection.equals("Transportation Request")) {
+
+            TransportationRequest tr = new TransportationRequest();
+
+            try {
+                tr.run(0,0,0,0, null, null, null);
+                stage = (Stage) newRequestComboBox.getScene().getWindow();
+                stage.setFullScreen(true);
+            }
+            catch (ServiceException se) {
+                se.printStackTrace();
+            }
+            newRequestComboBox.setValue("Create New Service Request");
+            return true;
+        }
+        else if (selection.equals("Prescription Request")) {
+
+            RaikouAPI r = new RaikouAPI();
+
+            try {
+                r.run(0,0,1920,1080, null, null, null);
+                stage = (Stage) newRequestComboBox.getScene().getWindow();
+                stage.setFullScreen(true);
+            }
+            catch (edu.wpi.cs3733d18.teamR.ServiceException se) {
+                se.printStackTrace();
+            }
+            newRequestComboBox.setValue("Create New Service Request");
+            return true;
+        }
         else {
             stage = new Stage();
             loader = new FXMLLoader(getClass().getResource("/FXML/service/FormContainer.fxml"));
@@ -426,27 +456,6 @@ public class ServiceRequestScreen implements Initializable{
         emergencyRequests.clear();
         otherRequests.clear();
         populateTableViews();
-    }
-
-    /**
-     * Loads the service API
-     * @param e action event
-     */
-    @FXML
-    public void serviceAPIButtonOp(ActionEvent e) {
-
-        Stage stage;
-
-        TransportationRequest tr = new TransportationRequest();
-
-        try {
-            tr.run(0,0,0,0, null, null, null);
-            stage = (Stage) serviceAPIButton.getScene().getWindow();
-            stage.setFullScreen(true);
-        }
-        catch (ServiceException se) {
-            se.printStackTrace();
-        }
     }
 }
 
