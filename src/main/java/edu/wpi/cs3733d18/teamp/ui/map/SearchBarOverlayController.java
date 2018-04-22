@@ -1,11 +1,13 @@
 package edu.wpi.cs3733d18.teamp.ui.map;
 
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Directions;
 import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.ui.home.ShakeTransition;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,19 +22,21 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 
+import javax.print.DocFlavor;
+import javax.transaction.TransactionRequiredException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class SearchBarOverlayController implements Initializable{
 
@@ -70,19 +74,36 @@ public class SearchBarOverlayController implements Initializable{
     @FXML
     TableColumn<DirectionsTable,String> directionsTableViewColumn;
 
+    @FXML
+    JFXTreeTableView<DirectionsTable> directionsTreeTableView;
+
+    @FXML
+    JFXTreeTableColumn<DirectionsTable, String> directionsTreeTableColumn;
+
+
     ObservableList<DirectionsTable> directions = FXCollections.observableArrayList();
 
-    @FXML
-    Button directionsButton;
 
     @FXML
-    Button emailButton;
+    TreeItem<DirectionsTable> floorParent;
 
     @FXML
-    Button phoneButton;
+    TreeItem<DirectionsTable> floorChild;
 
     @FXML
-    Button goButton;
+    TreeItem<DirectionsTable> floors;
+
+    @FXML
+    JFXButton directionsButton;
+
+    @FXML
+    JFXButton emailButton;
+
+    @FXML
+    JFXButton phoneButton;
+
+    @FXML
+    JFXButton goButton;
 
     @FXML
     JFXTextField sourceSearchBar;
@@ -91,14 +112,18 @@ public class SearchBarOverlayController implements Initializable{
     JFXTextField destinationSearchBar;
 
     @FXML
-    ToggleButton mapToggleButton;
+    JFXToggleButton mapToggleButton;
+
+    ArrayList<TreeItem<DirectionsTable>> floorChildren;
+    ArrayList<TreeItem<DirectionsTable>> parents;
 
     MapScreenController mapScreenController;
 
     public void startUp(MapScreenController mapScreenController){
         this.mapScreenController = mapScreenController;
+
         if (!mapScreenController.getPathDrawn()) {
-            directionsTableView.setVisible(false);
+            directionsTreeTableView.setVisible(false);
             directionsButton.setVisible(false);
             emailButton.setVisible(false);
             phoneButton.setVisible(false);
@@ -118,10 +143,12 @@ public class SearchBarOverlayController implements Initializable{
 
     public void setSourceSearchBar(String startNode){
         sourceSearchBar.setText(startNode);
+        hideDirections();
     }
 
     public void setDestinationSearchBar(String endNode){
         destinationSearchBar.setText(endNode);
+        hideDirections();
     }
 
     ArrayList<String> destinationWords = new ArrayList<>();
@@ -152,6 +179,23 @@ public class SearchBarOverlayController implements Initializable{
 
         destBinding.setPrefWidth(destinationSearchBar.getPrefWidth());
         sourceBinding.setPrefWidth(sourceSearchBar.getPrefWidth());
+
+        floorChildren = new ArrayList<>();
+        parents = new ArrayList<>();
+        floorParent = new TreeItem<>();
+
+
+        directionsTreeTableColumn = new JFXTreeTableColumn<>("Directions");
+        directionsTreeTableColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("directions"));
+        directionsTreeTableColumn.setPrefWidth(340);
+        directionsTreeTableColumn.setResizable(false);
+        directionsTreeTableColumn.setSortable(false);
+        directionsTreeTableColumn.getStyleClass().addAll("table-row-cell");
+
+
+
+        directionsTreeTableView.getColumns().addAll(directionsTreeTableColumn);
+
     }
 
     /**
@@ -191,8 +235,10 @@ public class SearchBarOverlayController implements Initializable{
     public Boolean searchButtonOp(ActionEvent e) {
         if (pathDrawn) {
             mapScreenController.resetPath();
+            clearTable();
         }
-        refresh();
+
+
 
         System.out.println("get path");
         //get all nodes
@@ -228,43 +274,6 @@ public class SearchBarOverlayController implements Initializable{
         }
 
         Font font = new Font("verdana", 24.0);
-
-//        System.out.println(toggledOn.toString());
-//
-//        if(toggledOn) {
-//            startLabel.setLayoutX((srcNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
-//            startLabel.setLayoutY((srcNode.getyDisplay()-40- Y_OFFSET)*Y_SCALE);
-//            startLabel.setText(srcNode.getLongName());
-//            startLabel.setFont(font);
-//            System.out.println("Starting location name:  " + startLabel.getText());
-//            System.out.println("Starting location X:  " + startLabel.getLayoutX());
-//            System.out.println("Starting location Y:  " + startLabel.getLayoutY());
-//
-//            startLabel.toFront();
-//
-//            endLabel.setLayoutX((dstNode.getxDisplay()+5- X_OFFSET)*X_SCALE);
-//            endLabel.setLayoutY((dstNode.getyDisplay()-34- Y_OFFSET)*Y_SCALE);
-//            endLabel.setText(dstNode.getLongName());
-//            endLabel.setFont(font);
-//            System.out.println("Ending location name:  " + endLabel.getText());
-//            System.out.println("Ending location X:  " + endLabel.getLayoutX());
-//            System.out.println("Ending location Y:  " + endLabel.getLayoutY());
-//        } else {
-//            startLabel.setLayoutX((srcNode.getX()+5- X_OFFSET)*X_SCALE);
-//            startLabel.setLayoutY((srcNode.getY()-40- Y_OFFSET)*Y_SCALE);
-//            startLabel.setText(srcNode.getLongName());
-//            startLabel.setFont(font);
-//            System.out.println(startLabel.getText());
-//
-//            startLabel.toFront();
-//
-//            endLabel.setLayoutX((dstNode.getX()+5- X_OFFSET)*X_SCALE);
-//            endLabel.setLayoutY((dstNode.getY()-34- Y_OFFSET)*Y_SCALE);
-//            endLabel.setText(dstNode.getLongName());
-//            endLabel.setFont(font);
-//        }
-
-
 
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
         System.out.println(path);
@@ -312,6 +321,7 @@ public class SearchBarOverlayController implements Initializable{
      */
     public Node parseDestinationInput(Node srcNode, String string) {
         Node aNode = srcNode;
+
 //        System.out.println("Input string: " + string);
 //        System.out.println("source node:" + srcNode);
 
@@ -470,146 +480,167 @@ public class SearchBarOverlayController implements Initializable{
      *
      */
     public Boolean directionsButtonOp(ActionEvent e) {
+        directionsTreeTableColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("directions"));
+        directionsTreeTableView.setTreeColumn(directionsTreeTableColumn);
         if (directionsVisible){
-            refresh();
-
-            directionsTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("directions"));
-            directionsTableView.setVisible(false);
+            clearTable();
+            directionsTreeTableView.setVisible(false);
             emailButton.setVisible(false);
             phoneButton.setVisible(false);
             directionsRectangle.setVisible(false);
-            directionsButton.setText("Directions >");
+            directionsButton.setText("Directions");
             directionsVisible = false;
         }
         else {
             emailButton.setVisible(true);
             phoneButton.setVisible(true);
             directionsRectangle.setVisible(true);
-            directionsTableView.setVisible(true);
+            directionsTreeTableView.setVisible(true);
             if (directionsList.getDirections() == null) {
                 directions.add(new DirectionsTable("Path needs to be set first!"));
-                directionsTableView.setItems(directions);
-                directionsTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("directions"));
+//                directionsTreeTableView.setPredicate(directions);
+//                directionsTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("directions"));
                 directionsButton.setText("Directions X");
                 directionsVisible = true;
             }
             else {
                 for (String line : directionsList.getDirections()) {
-                    directions.add(new DirectionsTable(line));
+                    setTreeLeaves(line);
                 }
-                directionsTableView.setItems(directions);
-                directionsTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("directions"));
+                floors = new RecursiveTreeItem<>(directions, RecursiveTreeObject::getChildren);
+
+                floors.getChildren().setAll(parents);
+                directionsTreeTableView.setRoot(floors);
+
+                directionsTreeTableView.setShowRoot(false);
+
 
                 directionsButton.setText("Directions X");
                 directionsVisible = true;
             }
+
         }
+
         return true;
     }
 
-    /**
-     * Generate text directions based on an ArrayList<Node> path
-     * @param path
-     * @return ArrayList of Strings containing directions
-     */
-    public ArrayList<String> generateTextDirections(ArrayList<Node> path) {
-        ArrayList<String> directions = new ArrayList<>();
-        double distance = 0.0;
-        double pastDistance = 0.0;
-        double angle = Math.toRadians(90.0);
-        double pastAngle = Math.toRadians(90.0);
-        double angleDiff = 0.0;
-        String words = "";
-        String pastWords = "Go forward ";
-        String ft = "ft";
-        Node pastNode = new Node();
-        Node lastChangeNode = new Node();
-        boolean changeDirections = false;
-        boolean firstTime = true;
-        double feetPerPixel = 85. / 260.; // Measured on the west wing of the hospital with Google maps and paint
-
-        directions.add("Starting Route!");
-
-        for (Node node : path) {
-            if (pastNode.getID() != null) {
-                angle = node.angleBetweenNodes(pastNode);
-                angleDiff = angle - pastAngle;
-                angleDiff = Math.toDegrees(angleDiff);
-
-                if (angleDiff < -180) {
-                    angleDiff += 360;
-                }
-                if (angleDiff > 180) {
-                    angleDiff -= 360;
-                }
-
-//                System.out.println("Past node: " + pastNode + " current node: " + node + " Distance since last change: " + distance);
-//                System.out.println("Angle: " + Math.toDegrees(angle) + " pastAngle: " + Math.toDegrees(pastAngle) + " angleDif: " + angleDiff);
-
-
-                // todo figure out how to not add "Go forward 0ft"
-//                if (changeDirections) {
-//                    if (firstTime) {
-////                        directions.add(words);
-//                        firstTime = false;
-//                    } else if (roundToNearest(feetPerPixel*lastChangeNode.distanceBetweenNodes(pastNode), 10) != 0) {
-//                        directions.add("Go forward " + roundToNearest(feetPerPixel*lastChangeNode.distanceBetweenNodes(pastNode), 10) + ft);
-//                        directions.add(words);
-//                    }else{
-//                        directions.add(words);
-////                    }
-//
-//                    pastDistance = distance;
-//                    distance = 0;
-//                    changeDirections = false;
-//                    lastChangeNode = pastNode;
-//                } else {
-//
-//                }
-//                distance += pastNode.distanceBetweenNodes(node);
-//
-////                System.out.println();
-//            }
-//            pastWords = words;
-//            pastAngle = angle;
-//            pastNode = node;
-////            directions.add("------------");
-//        }
-//        //directions.add("Go forward " + roundToNearest(feetPerPixel*lastChangeNode.distanceBetweenNodes(pastNode), 10) + ft);
-//        directions.add("You have arrived at your destination!");
-//        return directions;
-            }
-
-        }
-        return null;
-    }
-
-    public void refresh() {
-        for (int i = 0; i < directionsTableView.getItems().size(); i++) {
-            directionsTableView.getItems().clear();
-        }
-    }
-
-    public int roundToNearest(double value, int roundTo) {
-        value += roundTo/2;
-        int retVal = (int) value / roundTo;
-        return retVal * roundTo;
-    }
-
-
-    public Boolean isClear(){
-        if (destinationSearchBar.getText().equals("") || sourceSearchBar.getText().equals("")){
-            return true;
-        }
-        return false;
+    public void clearTable(){
+        directionsTreeTableView.getRoot().getChildren().removeAll(parents);
+        floorChildren.clear();
+        parents.clear();
     }
 
     public void setSearchButtonFocus(){
         goButton.requestFocus();
     }
 
-    public void setDirectionsVisible(Boolean directionsVisible) {
-        this.directionsVisible = directionsVisible;
+    public void setTreeLeaves(String floorBuffer){
+
+        switch (floorBuffer){
+            case "Floor change to 1":
+                floorParent.getChildren().setAll(floorChildren);
+                parents.add(floorParent);
+                floorChildren.clear();
+                floorParent = new TreeItem<>(new DirectionsTable("Floor 1"));
+                break;
+
+            case "Floor change to 2":
+                floorParent.getChildren().setAll(floorChildren);
+                parents.add(floorParent);
+                floorChildren.clear();
+                floorParent = new TreeItem<>(new DirectionsTable("Floor 2"));
+                break;
+
+            case "Floor change to 3":
+                floorParent.getChildren().setAll(floorChildren);
+                parents.add(floorParent);
+                floorChildren.clear();
+                floorParent = new TreeItem<>(new DirectionsTable("Floor 3"));
+                break;
+
+            case "Floor change to G":
+                floorParent.getChildren().setAll(floorChildren);
+                parents.add(floorParent);
+                floorChildren.clear();
+                floorParent = new TreeItem<>(new DirectionsTable("Floor G"));
+                break;
+
+            case "Floor change to L1":
+                floorParent.getChildren().setAll(floorChildren);
+                parents.add(floorParent);
+                floorChildren.clear();
+                floorParent = new TreeItem<>(new DirectionsTable("Floor L1"));
+                break;
+
+            case "Floor change to L2":
+                floorParent.getChildren().setAll(floorChildren);
+                parents.add(floorParent);
+                floorChildren.clear();
+                floorParent = new TreeItem<>(new DirectionsTable("Floor L2"));
+                break;
+
+            case "You have arrived at your destination!":
+                floorParent.getChildren().setAll(floorChildren);
+                parents.add(floorParent);
+                floorChildren.clear();
+                floorParent = new TreeItem<>(new DirectionsTable("You have arrived at your destination!"));
+                parents.add(floorParent);
+                break;
+
+            case "Starting Route!":
+                floorParent = new TreeItem<>(new DirectionsTable("Starting Route!"));
+                break;
+
+            default:
+                floorChild = new TreeItem<>(new DirectionsTable(floorBuffer));
+                floorChildren.add(floorChild);
+                break;
+        }
+
+    }
+
+    public void expandDirections(Node.floorType floor){
+        String level;
+        String parentLevel;
+        switch (floor){
+            case LEVEL_1:
+                level = "Floor 1";
+                break;
+            case LEVEL_3:
+                level = "Floor 3";
+                break;
+            case LEVEL_G:
+                level = "Floor G";
+                break;
+            case LEVEL_L1:
+                level = "Floor L1";
+                break;
+            case LEVEL_L2:
+                level = "Floor L2";
+                break;
+            default:
+                level = "Floor 2";
+                break;
+        }
+
+        for(int i = 1; i < directionsTreeTableView.getRoot().getChildren().size() - 1; i++){
+            parentLevel = directionsTreeTableView.getRoot().getChildren().get(i).getValue().getDirections().toString();
+            if(parentLevel.equals(level)){
+                directionsTreeTableView.getRoot().getChildren().get(i).setExpanded(true);
+            } else {
+                directionsTreeTableView.getRoot().getChildren().get(i).setExpanded(false);
+            }
+        }
+    }
+    public void hideDirections(){
+        directionsTreeTableView.setVisible(false);
+        directionsButton.setVisible(false);
+        emailButton.setVisible(false);
+        phoneButton.setVisible(false);
+        directionsRectangle.setVisible(false);
+        directionsVisible = false;
+        directionsButton.setText("Directions");
+
     }
 }
 

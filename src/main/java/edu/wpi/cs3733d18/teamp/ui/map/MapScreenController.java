@@ -553,6 +553,7 @@ public class MapScreenController {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setFill(Color.RED);
                             searchBarOverlayController.setDestinationSearchBar(node.getLongName());
+
                         }
                     }
                     removeFocus();
