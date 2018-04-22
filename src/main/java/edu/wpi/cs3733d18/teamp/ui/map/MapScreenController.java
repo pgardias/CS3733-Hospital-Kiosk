@@ -987,27 +987,6 @@ public class MapScreenController {
                     }
                 }
             }
-
-            System.out.println("list of stair nodes: " + stairNodeSet.toString());
-            minXCoord -= 200;
-            minYCoord -= 400;
-            maxXCoord += 200;
-            maxYCoord += 100;
-            double rangeX = maxXCoord - minXCoord;
-            double rangeY = maxYCoord - minYCoord;
-
-            double desiredZoomX = 1920 / (rangeX * X_SCALE);
-            double desiredZoomY = 1080 / (rangeY * Y_SCALE);
-            System.out.println("desired X zoom: " + desiredZoomX + " desired Zoom Y: " + desiredZoomY);
-
-            double centerX = (maxXCoord + minXCoord) / 2;
-            double centerY = (maxYCoord + minYCoord) / 2;
-
-            autoTranslateZoom(desiredZoomX, desiredZoomY, centerX, centerY);
-
-            System.out.println(toggleOn.toString());
-
-            pathDrawn = true;
         }
 
         if(searchBarOverlayController.getDirectionsVisible()){
