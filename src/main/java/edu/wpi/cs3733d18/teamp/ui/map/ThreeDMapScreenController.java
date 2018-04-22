@@ -46,23 +46,10 @@ public class ThreeDMapScreenController implements Initializable{
     private double Z_SCALE = 1080.0 / 3400.0;
     private static final double NODE_RADIUS = 5.0;
     private static final Color lightColor = Color.rgb(244, 255, 250);
-    private static final Color buildingColor = Color.rgb(255, 255, 255);
 
     private int X_OFFSET = -50;
-    private int Y_OFFSET = -30;
-    private int Z_OFFSET = -2720;
-    private int X_OFFSET_3 = -50;
-    private int Z_OFFSET_3 = -2720;
-    private int X_OFFSET_2 = 160;
-    private int Z_OFFSET_2 = -2720;
-    private int X_OFFSET_1 = 160;
-    private int Z_OFFSET_1 = -2720;
-    private int X_OFFSET_G = 160;
-    private int Z_OFFSET_G = -2720;
-    private int X_OFFSET_L1 = 160;
-    private int Z_OFFSET_L1 = -2720;
-    private int X_OFFSET_L2 = 160;
-    private int Z_OFFSET_L2 = -2720;
+    private int Y_OFFSET = -170;
+    private int Z_OFFSET = -3120;
 
     private Group root;
     private PointLight pointLight;
@@ -155,16 +142,6 @@ public class ThreeDMapScreenController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-        // Load initial model
-        /*URL pathName = getClass().getResource("/models/B&WWholeFloor.obj");
-        Group group = buildScene();
-        group.setScaleX(2);
-        group.setScaleY(2);
-        group.setScaleZ(2);
-        group.setTranslateX(500);
-        group.setTranslateY(100);
-        threeDAnchorPane.getChildren().add(group);*/
 
         // Add mouse handler
         threeDAnchorPane.addEventHandler(MouseEvent.ANY, mouseEventEventHandler);
@@ -472,7 +449,6 @@ public class ThreeDMapScreenController implements Initializable{
             threeDAnchorPane.setScaleY(curScale);
             threeDAnchorPane.setScaleZ(curScale);
         }
-        System.out.println(curScale);
         curZoom = newZoom; // Set next zoom value to compare to
     }
 
@@ -485,27 +461,30 @@ public class ThreeDMapScreenController implements Initializable{
 
     private Group buildScene() {
         root = new Group();
+        curScale = 15;
+        curXRotation = 20;
+        curYRotation = 0;
+        curZRotation = 0;
         int height = 0;
+        int index = 0;
+        ArrayList<Integer> curOffsets;
         PhongMaterial phongMaterial = new PhongMaterial();
         phongMaterial.setDiffuseMap(new Image(getClass().getResource("/models/textures/3rdFloor_UV.png").toExternalForm()));
         for (MeshView[] model : allModels) {
-            for (int i = 0; i < model.length; i++) {
-                curScale = 15;
-                model[i].setTranslateX(VIEWPORT_SIZE / 2);
-                model[i].setTranslateY((VIEWPORT_SIZE / 2) + height);
-                model[i].setTranslateZ(VIEWPORT_SIZE / 2);
-                model[i].setScaleX(curScale);
-                model[i].setScaleY(curScale);
-                model[i].setScaleZ(curScale);
+            curOffsets = getFloorOffset(index);
+            model[0].setTranslateX((VIEWPORT_SIZE / 2) + curOffsets.get(0)); //TODO get rid of VIEWPORT_SIZE dependency
+            model[0].setTranslateY((VIEWPORT_SIZE / 2) + height + curOffsets.get(1));
+            model[0].setTranslateZ((VIEWPORT_SIZE / 2) + curOffsets.get(2));
+            model[0].setScaleX(curScale);
+            model[0].setScaleY(curScale);
+            model[0].setScaleZ(curScale);
 
-                curXRotation = 20;
-                curYRotation = 0;
-                curZRotation = 0;
-                model[i].getTransforms().setAll(new Rotate(curXRotation, Rotate.X_AXIS), new Rotate(curYRotation, Rotate.Y_AXIS));
-                model[i].setMaterial(phongMaterial);
-            }
+            model[0].getTransforms().setAll(new Rotate(curXRotation, Rotate.X_AXIS), new Rotate(curYRotation, Rotate.Y_AXIS));
+            model[0].setMaterial(phongMaterial);
             root.getChildren().add(model[0]);
+
             height -= 50;
+            index += 1;
         }
 
 
@@ -850,7 +829,6 @@ public class ThreeDMapScreenController implements Initializable{
      *
      * @param path List of Nodes to be drawn
      */
-    //removed static hope it didn't break anything
     public void drawPath(ArrayList<Node> path) {
         double width, height, angle;
         double distanceCounter = 0;
@@ -1141,6 +1119,8 @@ public class ThreeDMapScreenController implements Initializable{
 
     /**
      * Fetches the specified floor mesh from root
+     * @param floor The floor to fetch
+     * @return The mesh of the specified floor
      */
     private MeshView getFloor(Node.floorType floor) {
         MeshView mesh;
@@ -1168,6 +1148,51 @@ public class ThreeDMapScreenController implements Initializable{
                 break;
         }
         return mesh;
+    }
+
+    /**
+     * Fetches offsets to align floors to nodes
+     */
+    private ArrayList<Integer> getFloorOffset(int index) {
+        ArrayList<Integer> offsets = new ArrayList<>();
+        switch(index) {
+            case 0:
+                offsets.add(-150); // X Offset
+                offsets.add(0); // Y Offset
+                offsets.add(0); // Z Offset
+                break;
+            case 1:
+                offsets.add(0); // X Offset
+                offsets.add(0); // Y Offset
+                offsets.add(0); // Z Offset
+                break;
+            case 2:
+                offsets.add(0); // X Offset
+                offsets.add(0); // Y Offset
+                offsets.add(0); // Z Offset
+                break;
+            case 3:
+                offsets.add(0); // X Offset
+                offsets.add(0); // Y Offset
+                offsets.add(0); // Z Offset
+                break;
+            case 4:
+                offsets.add(0); // X Offset
+                offsets.add(0); // Y Offset
+                offsets.add(0); // Z Offset
+                break;
+            case 5:
+                offsets.add(0); // X Offset
+                offsets.add(0); // Y Offset
+                offsets.add(0); // Z Offset
+                break;
+            default:
+                offsets.add(0); // X Offset
+                offsets.add(0); // Y Offset
+                offsets.add(0); // Z Offset
+                break;
+        }
+        return offsets;
     }
 
 }
