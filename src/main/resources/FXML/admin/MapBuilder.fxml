@@ -26,7 +26,9 @@
                         <Rectangle2D />
                     </viewport>
                 </ImageView>
-                <AnchorPane fx:id="nodesEdgesPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" StackPane.alignment="CENTER" />
+            <AnchorPane fx:id="edgePane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" />
+            <AnchorPane fx:id="arrowPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" />
+                <AnchorPane fx:id="nodesPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" StackPane.alignment="CENTER" />
             </children>
         </StackPane>
           <BorderPane fx:id="formOverlayPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0">

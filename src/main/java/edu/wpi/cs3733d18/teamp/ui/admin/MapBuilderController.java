@@ -7,8 +7,6 @@ import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.Pathfinding.PathfindingContext;
 import edu.wpi.cs3733d18.teamp.ui.home.ShakeTransition;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -104,7 +102,13 @@ public class MapBuilderController implements Initializable {
     AnchorPane basePane;
 
     @FXML
-    AnchorPane nodesEdgesPane;
+    AnchorPane nodesPane;
+
+    @FXML
+    AnchorPane edgePane;
+
+    @FXML
+    AnchorPane arrowPane;
 
     @FXML
     StackPane mapPane;
@@ -217,15 +221,19 @@ public class MapBuilderController implements Initializable {
         mapImage.setImage(newImage);
         mapImage.scaleXProperty().bind(zoomSlider.valueProperty());
         mapImage.scaleYProperty().bind(zoomSlider.valueProperty());
-        nodesEdgesPane.scaleXProperty().bind(zoomSlider.valueProperty());
-        nodesEdgesPane.scaleYProperty().bind(zoomSlider.valueProperty());
+        nodesPane.scaleXProperty().bind(zoomSlider.valueProperty());
+        nodesPane.scaleYProperty().bind(zoomSlider.valueProperty());
+        edgePane.scaleXProperty().bind(zoomSlider.valueProperty());
+        edgePane.scaleYProperty().bind(zoomSlider.valueProperty());
+        arrowPane.scaleXProperty().bind(zoomSlider.valueProperty());
+        arrowPane.scaleYProperty().bind(zoomSlider.valueProperty());
 
         newNodeCircle.setPickOnBounds(false);
         mapImage.addEventHandler(MouseEvent.ANY, mouseEventEventHandler);
         getMap();
         drawEdges();
         drawNodes();
-        nodesEdgesPane.getChildren().add(newNodeCircle);
+        nodesPane.getChildren().add(newNodeCircle);
         //newNodeCircle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
         addOverlay();
     }
@@ -336,8 +344,8 @@ public class MapBuilderController implements Initializable {
 //
 ////        mapImage.setFitHeight(ySize);
 ////        mapImage.setFitWidth(xSize);
-//        nodesEdgesPane.setScaleX(1/xSize);
-//        nodesEdgesPane.setScaleY(1/ySize);
+//        nodesPane.setScaleX(1/xSize);
+//        nodesPane.setScaleY(1/ySize);
 
     }
 
@@ -430,8 +438,13 @@ public class MapBuilderController implements Initializable {
 
         mapImage.setTranslateX(newTranslateX);
         mapImage.setTranslateY(newTranslateY);
-        nodesEdgesPane.setTranslateX(newTranslateX);
-        nodesEdgesPane.setTranslateY(newTranslateY);
+        nodesPane.setTranslateX(newTranslateX);
+        nodesPane.setTranslateY(newTranslateY);
+        edgePane.setTranslateX(newTranslateX);
+        edgePane.setTranslateY(newTranslateY);
+        arrowPane.setTranslateX(newTranslateX);
+        arrowPane.setTranslateY(newTranslateY);
+
     }
 
 
@@ -472,7 +485,7 @@ public class MapBuilderController implements Initializable {
                 circle.setDisable(true);
                 circle.setPickOnBounds(false);
             }
-            nodesEdgesPane.getChildren().add(circle);
+            nodesPane.getChildren().add(circle);
 
             // if we are currentlfy modifying a node and node we are on in the list matches the modifynode id
             if (modifyingNode && node.getID() == nodeModify.getID()) { //reads from form labels
@@ -528,7 +541,7 @@ public class MapBuilderController implements Initializable {
         for (Edge edge : edgeSet.values()) {
 
             Line line = new Line();
-            nodesEdgesPane.getChildren().add(line);
+            edgePane.getChildren().add(line);
 
 
             if (modifyingNode) {
@@ -621,8 +634,8 @@ public class MapBuilderController implements Initializable {
                 double offsetX = event.getSceneX() - orgMouseX;
                 double offsetY = event.getSceneY() - orgMouseY;
 
-                double scaledx2Offset = (offsetX) / nodesEdgesPane.getScaleX();
-                double scaledy2Offset = (offsetY) / nodesEdgesPane.getScaleY();
+                double scaledx2Offset = (offsetX) / nodesPane.getScaleX();
+                double scaledy2Offset = (offsetY) / nodesPane.getScaleY();
                 //System.out.println("New Scaled Offset X: " + scaledx2Offset + " New Scaled Offset Y: " + scaledy2Offset);
 
                 newCenterX = orgCenterX + scaledx2Offset;
@@ -698,8 +711,8 @@ public class MapBuilderController implements Initializable {
                     double offsetX = event.getSceneX() - orgMouseX;
                     double offsetY = event.getSceneY() - orgMouseY;
                     // scale the mouse change based on the zoom of the map
-                    double scaledx2Offset = (offsetX) / nodesEdgesPane.getScaleX();
-                    double scaledy2Offset = (offsetY) / nodesEdgesPane.getScaleY();
+                    double scaledx2Offset = (offsetX) / nodesPane.getScaleX();
+                    double scaledy2Offset = (offsetY) / nodesPane.getScaleY();
 
                     // the new center is the offset + the original center
                     newCenterX = orgCenterX + scaledx2Offset;
@@ -1052,8 +1065,13 @@ public class MapBuilderController implements Initializable {
                     newTranslateY = -(translateSlopeY - 1080) / 2;
                 mapImage.setTranslateX(newTranslateX);
                 mapImage.setTranslateY(newTranslateY);
-                nodesEdgesPane.setTranslateX(newTranslateX);
-                nodesEdgesPane.setTranslateY(newTranslateY);
+                nodesPane.setTranslateX(newTranslateX);
+                nodesPane.setTranslateY(newTranslateY);
+                edgePane.setTranslateX(newTranslateX);
+                edgePane.setTranslateY(newTranslateY);
+                arrowPane.setTranslateX(newTranslateX);
+                arrowPane.setTranslateY(newTranslateY);
+
             } else if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
                 //creates a new node at the location the mouse was clicked based
                 System.out.println("ready to click");
@@ -1064,8 +1082,8 @@ public class MapBuilderController implements Initializable {
                     double x2Coord = event.getSceneX();
                     double y2Coord = event.getSceneY();
                     //scale it based on the zoom and add it too the translation of the nodes and edges pane descaled
-                    double scaledx2Coord = (x2Coord - 960) / nodesEdgesPane.getScaleX() + (960 - newTranslateX / nodesEdgesPane.getScaleX());
-                    double scaledy2Coord = (y2Coord - 540) / nodesEdgesPane.getScaleY() + (540 - newTranslateY / nodesEdgesPane.getScaleY());
+                    double scaledx2Coord = (x2Coord - 960) / nodesPane.getScaleX() + (960 - newTranslateX / nodesPane.getScaleX());
+                    double scaledy2Coord = (y2Coord - 540) / nodesPane.getScaleY() + (540 - newTranslateY / nodesPane.getScaleY());
                     System.out.println("x: " + x2Coord + " y: " + y2Coord);
                     //create the new node circle
                     newNodeCircle.setCenterX(scaledx2Coord);
@@ -1080,7 +1098,7 @@ public class MapBuilderController implements Initializable {
                     newNodeCircle.setDisable(false);
                     newNodeFloor = currentFloor;
 
-                    // get the coordinates from the nodesEdgesPane location
+                    // get the coordinates from the nodesPane location
                     double nodex2Coord = scaledx2Coord / X_SCALE + X_OFFSET;
                     double nodey2Coord = scaledy2Coord / Y_SCALE + Y_OFFSET;
                     if (!isNewNode) {
@@ -1247,12 +1265,14 @@ public class MapBuilderController implements Initializable {
      */
     public void updateMap() {
 
-        nodesEdgesPane.getChildren().clear();
+        nodesPane.getChildren().clear();
+        edgePane.getChildren().clear();
+        arrowPane.getChildren().clear();
         nodeDispSet.clear();
         edgeDispSet.clear();
         getMap();
         drawEdges();
-        nodesEdgesPane.getChildren().add(newNodeCircle);
+        nodesPane.getChildren().add(newNodeCircle);
         drawNodes();
         firstSelect = null;
         secondSelect = null;
@@ -1702,8 +1722,12 @@ public class MapBuilderController implements Initializable {
         System.out.println("Chosen translate X: " + screenTranslateX + " Chosen translate Y: " + screenTranslateY);
         mapImage.setTranslateX(screenTranslateX);
         mapImage.setTranslateY(screenTranslateY);
-        nodesEdgesPane.setTranslateX(screenTranslateX);
-        nodesEdgesPane.setTranslateY(screenTranslateY);
+        nodesPane.setTranslateX(screenTranslateX);
+        nodesPane.setTranslateY(screenTranslateY);
+        edgePane.setTranslateX(screenTranslateX);
+        edgePane.setTranslateY(screenTranslateY);
+        arrowPane.setTranslateX(screenTranslateX);
+        arrowPane.setTranslateY(screenTranslateY);
     }
 
     public void setFloorStyleClass(Node.floorType floor){
