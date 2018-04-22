@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -32,23 +33,35 @@
                   <RowConstraints minHeight="10.0" prefHeight="600.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <JFXButton fx:id="activeShooterEmergencyButton" buttonType="RAISED" contentDisplay="CENTER" maxHeight="250.0" maxWidth="350.0" onAction="#activeShooterEmergencyButtonOp" styleClass="emergency-buttons" stylesheets="@../../css/home.css" text="ACTIVE SHOOTER EMERGENCY" textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                  <JFXButton fx:id="activeShooterEmergencyButton" buttonType="RAISED" contentDisplay="CENTER" maxHeight="250.0" maxWidth="350.0" onAction="#activeShooterEmergencyButtonOp" stylesheets="@../../css/home.css" text="ACTIVE SHOOTER EMERGENCY" textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                      <font>
                         <Font size="40.0" />
                      </font>
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
+                     <styleClass>
+                        <String fx:value="emergency-buttons" />
+                        <String fx:value="emergency-button" />
+                     </styleClass>
                   </JFXButton>
-                  <JFXButton fx:id="fireEmergencyButton" buttonType="RAISED" maxHeight="250.0" maxWidth="350.0" onAction="#fireEmergencyButtonOp" styleClass="emergency-buttons" stylesheets="@../../css/home.css" text="FIRE EMERGENCY" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                  <JFXButton fx:id="fireEmergencyButton" buttonType="RAISED" maxHeight="250.0" maxWidth="350.0" onAction="#fireEmergencyButtonOp" stylesheets="@../../css/home.css" text="FIRE EMERGENCY" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                      <font>
                         <Font size="40.0" />
                      </font>
+                     <styleClass>
+                        <String fx:value="emergency-buttons" />
+                        <String fx:value="emergency-button" />
+                     </styleClass>
                   </JFXButton>
-                  <JFXButton fx:id="medicalEmergencyButton" alignment="CENTER" buttonType="RAISED" maxHeight="250.0" maxWidth="350.0" onAction="#medicalEmergencyButtonOp" styleClass="emergency-buttons" stylesheets="@../../css/home.css" text="MEDICAL EMERGENCY" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                  <JFXButton fx:id="medicalEmergencyButton" alignment="CENTER" buttonType="RAISED" maxHeight="250.0" maxWidth="350.0" onAction="#medicalEmergencyButtonOp" stylesheets="@../../css/home.css" text="MEDICAL EMERGENCY" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                      <font>
                         <Font size="40.0" />
                      </font>
+                     <styleClass>
+                        <String fx:value="emergency-buttons" />
+                        <String fx:value="emergency-button" />
+                     </styleClass>
                   </JFXButton>
                   <JFXPasswordField fx:id="emergencyPinPassword" alignment="CENTER" onAction="#emergencyPinPasswordOp" promptText="PLEASE ENTER PIN HERE" stylesheets="@../../css/home.css" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <font>

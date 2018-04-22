@@ -114,7 +114,6 @@ public class RecordScreenController implements Initializable {
     @FXML
     public Boolean backButtonOp(ActionEvent e) {
         FXMLLoader loader;
-        Stage stage;
         Parent root;
 
         loader = new FXMLLoader(getClass().getResource("/FXML/service/ServiceRequestScreen.fxml"));
@@ -124,10 +123,7 @@ public class RecordScreenController implements Initializable {
             ie.printStackTrace();
             return false;
         }
-        stage = (Stage) backButton.getScene().getWindow();
-        stage.setScene(new Scene(root, 1920, 1080));
-        stage.setFullScreen(true);
-        stage.show();
+        backButton.getScene().setRoot(root);
         return true;
     }
 

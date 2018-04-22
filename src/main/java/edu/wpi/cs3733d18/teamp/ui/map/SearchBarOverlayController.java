@@ -97,11 +97,14 @@ public class SearchBarOverlayController implements Initializable{
 
     public void startUp(MapScreenController mapScreenController){
         this.mapScreenController = mapScreenController;
-        directionsTableView.setVisible(false);
-        directionsButton.setVisible(false);
-        emailButton.setVisible(false);
-        phoneButton.setVisible(false);
-        directionsRectangle.setVisible(false);
+        if (!mapScreenController.getPathDrawn()) {
+            directionsTableView.setVisible(false);
+            directionsButton.setVisible(false);
+            emailButton.setVisible(false);
+            phoneButton.setVisible(false);
+            directionsRectangle.setVisible(false);
+        }
+
         mapToggleButtonOp();
     }
 
