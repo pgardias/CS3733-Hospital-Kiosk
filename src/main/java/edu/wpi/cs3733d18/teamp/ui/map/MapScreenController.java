@@ -1229,7 +1229,7 @@ public class MapScreenController {
     }
 
     /**
-     * this method will determin what floors the path goes on
+     * this method will determine what floors the path goes on
      */
     public void getFloors(){
         floorsList.clear();
@@ -1420,5 +1420,8 @@ public class MapScreenController {
 
     public Node.floorType getCurrentFloor() {
         return currentFloor;
+    }
+    public ArrayList<Node.floorType> getFloorsList(){
+        return floorsList;
     }
 }

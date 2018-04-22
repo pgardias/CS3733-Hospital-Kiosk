@@ -183,6 +183,7 @@ public class SearchBarOverlayController implements Initializable{
         floorChildren = new ArrayList<>();
         parents = new ArrayList<>();
         floorParent = new TreeItem<>();
+        floors = new TreeItem<>();
 
 
         directionsTreeTableColumn = new JFXTreeTableColumn<>("Directions");
@@ -191,9 +192,6 @@ public class SearchBarOverlayController implements Initializable{
         directionsTreeTableColumn.setResizable(false);
         directionsTreeTableColumn.setSortable(false);
         directionsTreeTableColumn.getStyleClass().addAll("table-row-cell");
-
-
-
         directionsTreeTableView.getColumns().addAll(directionsTreeTableColumn);
 
     }
@@ -504,13 +502,9 @@ public class SearchBarOverlayController implements Initializable{
                 directionsVisible = true;
             }
             else {
-                for (String line : directionsList.getDirections()) {
-                    setTreeLeaves(line);
-                }
-                floors = new RecursiveTreeItem<>(directions, RecursiveTreeObject::getChildren);
+                rootSetUp(mapScreenController.getFloorsList());
 
-                floors.getChildren().setAll(parents);
-                directionsTreeTableView.setRoot(floors);
+                setChildren(directionsList.getDirections());
 
                 directionsTreeTableView.setShowRoot(false);
 
@@ -535,69 +529,23 @@ public class SearchBarOverlayController implements Initializable{
         goButton.requestFocus();
     }
 
-    public void setTreeLeaves(String floorBuffer){
+    public void setChildren(ArrayList<String> directions){
 
-        switch (floorBuffer){
-            case "Floor change to 1":
-                floorParent.getChildren().setAll(floorChildren);
-                parents.add(floorParent);
-                floorChildren.clear();
-                floorParent = new TreeItem<>(new DirectionsTable("Floor 1"));
-                break;
+        int directionsIndex = 0;
 
-            case "Floor change to 2":
-                floorParent.getChildren().setAll(floorChildren);
-                parents.add(floorParent);
-                floorChildren.clear();
-                floorParent = new TreeItem<>(new DirectionsTable("Floor 2"));
-                break;
-
-            case "Floor change to 3":
-                floorParent.getChildren().setAll(floorChildren);
-                parents.add(floorParent);
-                floorChildren.clear();
-                floorParent = new TreeItem<>(new DirectionsTable("Floor 3"));
-                break;
-
-            case "Floor change to G":
-                floorParent.getChildren().setAll(floorChildren);
-                parents.add(floorParent);
-                floorChildren.clear();
-                floorParent = new TreeItem<>(new DirectionsTable("Floor G"));
-                break;
-
-            case "Floor change to L1":
-                floorParent.getChildren().setAll(floorChildren);
-                parents.add(floorParent);
-                floorChildren.clear();
-                floorParent = new TreeItem<>(new DirectionsTable("Floor L1"));
-                break;
-
-            case "Floor change to L2":
-                floorParent.getChildren().setAll(floorChildren);
-                parents.add(floorParent);
-                floorChildren.clear();
-                floorParent = new TreeItem<>(new DirectionsTable("Floor L2"));
-                break;
-
-            case "You have arrived at your destination!":
-                floorParent.getChildren().setAll(floorChildren);
-                parents.add(floorParent);
-                floorChildren.clear();
-                floorParent = new TreeItem<>(new DirectionsTable("You have arrived at your destination!"));
-                parents.add(floorParent);
-                break;
-
-            case "Starting Route!":
-                floorParent = new TreeItem<>(new DirectionsTable("Starting Route!"));
-                break;
-
-            default:
-                floorChild = new TreeItem<>(new DirectionsTable(floorBuffer));
-                floorChildren.add(floorChild);
-                break;
+        for(int i = 1; i < directionsTreeTableView.getRoot().getChildren().size(); i++){
+            while(directionsIndex < directions.size() && !directions.get(directionsIndex).equals("Buffer")) {
+                floorChildren.add(new TreeItem<>(new DirectionsTable(directions.get(directionsIndex))));
+                directionsIndex++;
+            }
+            directionsIndex++;
+            if(i == directionsTreeTableView.getRoot().getChildren().size() - 1){
+                floorChildren.add(new TreeItem<>(new DirectionsTable("You have arrived at your destination!")));
+            }
+            directionsTreeTableView.getRoot().getChildren().get(i).getChildren().setAll(floorChildren);
+            floorChildren.clear();
         }
-
+        directionsTreeTableView.setRoot(floors);
     }
 
     public void expandDirections(Node.floorType floor){
@@ -624,7 +572,7 @@ public class SearchBarOverlayController implements Initializable{
                 break;
         }
 
-        for(int i = 1; i < directionsTreeTableView.getRoot().getChildren().size() - 1; i++){
+        for(int i = 1; i < directionsTreeTableView.getRoot().getChildren().size(); i++){
             parentLevel = directionsTreeTableView.getRoot().getChildren().get(i).getValue().getDirections().toString();
             if(parentLevel.equals(level)){
                 directionsTreeTableView.getRoot().getChildren().get(i).setExpanded(true);
@@ -650,6 +598,22 @@ public class SearchBarOverlayController implements Initializable{
 
     public void setDirectionsVisible(Boolean directionsVisible) {
         this.directionsVisible = directionsVisible;
+    }
+
+    public void rootSetUp(ArrayList<Node.floorType> floorList){
+        parents.add(new TreeItem<>(new DirectionsTable("Starting Route!")));
+        if(floorList.size() == 0){
+            parents.add(new TreeItem<>(new DirectionsTable("Floor " + mapScreenController.getCurrentFloor().toString())));
+        }else {
+            for (Node.floorType floor : floorList) {
+                parents.add(new TreeItem<>(new DirectionsTable("Floor " + floor.toString())));
+                System.out.println("HERE");
+            }
+        }
+
+
+        floors.getChildren().setAll(parents);
+        directionsTreeTableView.setRoot(floors);
     }
 }
 
