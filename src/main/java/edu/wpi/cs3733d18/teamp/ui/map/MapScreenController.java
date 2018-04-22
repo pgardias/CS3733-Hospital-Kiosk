@@ -1276,15 +1276,18 @@ public class MapScreenController {
                 JFXButton button = new JFXButton();
                 floorSequenceHBox.getChildren().add(button);
                 floorSequenceList.add(button);
-                if (i == 0){
+                if (i == 0) {
                     button.setShape(arrowHead);
                     button.setAlignment(Pos.CENTER_LEFT);
-                } else if (i == floorsList.size() - 1){
+                } else if (i == floorsList.size() - 1) {
                     button.setShape(arrowEnd);
                     button.setAlignment(Pos.CENTER_RIGHT);
                 } else {
                     button.setShape(arrow);
                     button.setAlignment(Pos.CENTER_RIGHT);
+                }
+                if (!currentFloor.equals(floorsList.get(i))){
+                    button.setOpacity(0.5);
                 }
                 button.setMinHeight(75);
                 button.setMinWidth(125);
