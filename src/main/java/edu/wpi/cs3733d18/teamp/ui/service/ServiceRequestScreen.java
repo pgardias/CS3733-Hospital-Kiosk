@@ -119,6 +119,16 @@ public class ServiceRequestScreen implements Initializable{
             "Prescription Request"
     );
 
+    MenuItem mi1 = new MenuItem("Edit Request");
+    MenuItem mi2 = new MenuItem("Claim Request");
+    MenuItem mi3 = new MenuItem("Complete Request");
+    MenuItem mi6 = new MenuItem("Complete Request");
+    ContextMenu menu1 = new ContextMenu();
+    ContextMenu menu2 = new ContextMenu();
+
+    /**
+     * Initializes the hello message
+     */
     @FXML
     public void onStartup() {
         helloMessage.setText("Hello, " + Main.currentUser.getFirstName() + " " + Main.currentUser.getLastName());
@@ -193,7 +203,87 @@ public class ServiceRequestScreen implements Initializable{
         populateTableViews();
 
         newRequestComboBox.setItems(requestTypes);
+
+        mi1.setOnAction((ActionEvent event) -> {
+            //editRequestOp();
+        });
+
+
+        mi2.setOnAction((ActionEvent event) -> {
+            claimRequestButtonOp(event);
+        });
+
+
+        mi3.setOnAction((ActionEvent event) -> {
+            completeRequestButtonOp(event);
+        });
+
+        mi6.setOnAction((ActionEvent event) -> {
+            completeRequestButtonOp(event);
+        });
+
+        menu1.getItems().add(mi1);
+        menu1.getItems().add(mi2);
+        menu1.getItems().add(mi3);
+        menu2.getItems().add(mi6);
+
+        newRequestTable.setContextMenu(menu1);
+        inProgRequestTable.setContextMenu(menu2);
     }
+
+    /**
+     * Sets the available right click options based on the users information for the newRequestTable
+     */
+    public void disableMenu1OptionsOp() {
+        menu1.getItems().get(2).setDisable(true);
+        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        boolean emptype = false;
+        try {
+            Request r = db.getOneRequest(requestID);
+            if (r.getRequestType() == Request.requesttype.LANGUAGEINTERP || r.getRequestType() == Request.requesttype.HOLYPERSON) {
+                if (Main.currentUser.getIsAdmin() ||
+                        (db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType())) &&
+                                Main.currentUser.getSubType().equals(r.getSubType()))) {
+                    emptype = true;
+                }
+            } else {
+                if (Main.currentUser.getIsAdmin() || db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType()))) {
+                    emptype = true;
+                }
+            }
+        }
+        catch (RequestNotFoundException re) {
+            re.printStackTrace();
+        }
+
+        if (!emptype) {
+            menu1.getItems().get(1).setDisable(true);
+        }
+    }
+
+    /**
+     * Sets the available right click options based on the users information for the inProgRequestTable
+     */
+    public void disableMenu2OptionsOp() {
+        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        boolean emptype = false;
+        try {
+            Request r = db.getOneRequest(requestID);
+            String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+            if (Main.currentUser.getIsAdmin() || firstAndLastName.equals(r.getCompletedBy())) {
+                emptype = true;
+            }
+        }
+        catch (RequestNotFoundException re) {
+            re.printStackTrace();
+        }
+
+        if (!emptype) {
+            menu2.getItems().get(0).setDisable(true);
+        }
+    }
+
+
 
     /**
      * Fills in the gridpane with info from requests in the newRequestTable
@@ -283,7 +373,9 @@ public class ServiceRequestScreen implements Initializable{
                     r.setCompletedBy(firstAndLastName);
                     db.modifyRequest(r);
                 } else {
+                    System.out.println("hi");
                     serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
+                    serviceRequestErrorLabel.setVisible(true);
                 }
             }
 
