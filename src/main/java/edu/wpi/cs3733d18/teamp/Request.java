@@ -73,6 +73,9 @@ public class Request {
             case GIFTS:
                 type = "Gift Delivery Request";
                 break;
+            case EMERGENCY:
+                type = "Emergency Request";
+                break;
         }
         return type;
     }

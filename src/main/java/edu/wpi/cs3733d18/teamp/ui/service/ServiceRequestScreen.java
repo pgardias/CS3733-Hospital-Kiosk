@@ -29,7 +29,8 @@ public class ServiceRequestScreen implements Initializable{
     PopUpController popUpController;
     DBSystem db = DBSystem.getInstance();
     ArrayList<Request> requests;
-
+    ArrayList<Request> emergencyRequests = new ArrayList<>();
+    ArrayList<Request> otherRequests = new ArrayList<>();
 
     @FXML
     JFXButton backButton;
@@ -127,23 +128,46 @@ public class ServiceRequestScreen implements Initializable{
      * Gets the list of service requests from the database and puts them in the appropriate tables
      */
     public void populateTableViews() {
+
         try {
             serviceRequestErrorLabel.setText("");
             requests = db.getAllRequests();
 
             for (Request r: requests) {
-                if (r.isCompleted() == 0) {
-                    newRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
-                }
-                else if (r.isCompleted() == 1) {
-                    inProgRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+                if (r.getPriority() == 1) {
+                    emergencyRequests.add(r);
                 }
                 else {
-                    completedRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+                    otherRequests.add(r);
                 }
             }
+
         } catch (RequestNotFoundException rnfe) {
             serviceRequestErrorLabel.setText("There are currently no service requests.");
+        }
+
+        for (Request r: emergencyRequests) {
+            if (r.isCompleted() == 0) {
+                newRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+            }
+            else if (r.isCompleted() == 1) {
+                inProgRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+            }
+            else {
+                completedRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+            }
+        }
+
+        for (Request r: otherRequests) {
+            if (r.isCompleted() == 0) {
+                newRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+            }
+            else if (r.isCompleted() == 1) {
+                inProgRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+            }
+            else {
+                completedRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+            }
         }
 
         newRequestTable.setItems(newRequests);
@@ -399,6 +423,8 @@ public class ServiceRequestScreen implements Initializable{
         for (int i = 0; i < completedRequestTable.getItems().size(); i++) {
             completedRequestTable.getItems().clear();
         }
+        emergencyRequests.clear();
+        otherRequests.clear();
         populateTableViews();
     }
 
