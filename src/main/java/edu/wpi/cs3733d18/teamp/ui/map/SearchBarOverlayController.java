@@ -520,9 +520,11 @@ public class SearchBarOverlayController implements Initializable{
     }
 
     public void clearTable(){
-        directionsTreeTableView.getRoot().getChildren().removeAll(parents);
+
         floorChildren.clear();
         parents.clear();
+        floors.getChildren().removeAll(parents);
+        directionsTreeTableView.setRoot(floors);
     }
 
     public void setSearchButtonFocus(){
