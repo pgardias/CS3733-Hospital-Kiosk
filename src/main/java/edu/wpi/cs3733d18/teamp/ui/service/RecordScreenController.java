@@ -69,7 +69,14 @@ public class RecordScreenController implements Initializable {
             "Security Request",
             "Computer Service Request",
             "Audio/Visual Request",
-            "Gift Delivery Request"
+            "Gift Delivery Request",
+            "Emergency Request"
+    );
+
+    ObservableList<String> emergencyTypes = FXCollections.observableArrayList( // Same as ones in emergency controller
+            "FIRE",
+            "MEDICAL",
+            "ACTIVE SHOOTER"
     );
 
     @Override
@@ -232,6 +239,17 @@ public class RecordScreenController implements Initializable {
                 statsGridPane.getChildren().remove(barChart);
                 setChartSubType(GiftDeliveryController.gifts);
                 break;
+            case "Emergency Request":
+                recordTable.getItems().clear();
+                for (Record record: records) {
+                    if (db.RequestTypeToString(record.getRequestType()).equals("emergency")) {
+                        recordTable.getItems().add(record);
+                    }
+                }
+                statsGridPane.getChildren().remove(pieChart);
+                statsGridPane.getChildren().remove(barChart);
+                setChartSubType(emergencyTypes);
+                break;
         }
         return true;
     }
@@ -274,6 +292,10 @@ public class RecordScreenController implements Initializable {
         int giftCount = db.countType("delivergift"); // Add amount of gift delivery requests
         if (giftCount > 0) {
             requestData.add(new PieChart.Data("Gift Delivery", giftCount));
+        }
+        int emergencyCount = db.countType("emergency"); // Add amount of emergency requests
+        if (giftCount > 0) {
+            requestData.add(new PieChart.Data("Emergency", giftCount));
         }
         PieChart requestPieChart = new PieChart(requestData);
         requestPieChart.setTitle("Request Types");
@@ -340,6 +362,12 @@ public class RecordScreenController implements Initializable {
             series8.getData().add(new XYChart.Data<>("Average Time", db.recordAverageTime("delivergift")));
             requestBarChart.getData().add(series8);
         }
+        if (emergencyCount > 0) { // Add average time for emergency requests
+            XYChart.Series<String, Number> series8 = new XYChart.Series<>();
+            series8.setName("Emergency");
+            series8.getData().add(new XYChart.Data<>("Average Time", db.recordAverageTime("emergency")));
+            requestBarChart.getData().add(series8);
+        }
         statsGridPane.add(requestBarChart, 0, 1);
         barChart = requestBarChart;
 
@@ -361,7 +389,7 @@ public class RecordScreenController implements Initializable {
             }
         }
         PieChart curPieChart = new PieChart(curData);
-        curPieChart.setTitle("Sanitation Types");
+        curPieChart.setTitle("Sub Types");
         curPieChart.setClockwise(true);
         curPieChart.setLabelLineLength(20);
         curPieChart.setLabelsVisible(true);
