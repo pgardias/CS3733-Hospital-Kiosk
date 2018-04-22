@@ -480,49 +480,46 @@ public class MapBuilderController implements Initializable {
         for (Node node : nodeSet.values()) {
             Circle circle = new Circle();
             circle.setRadius(NODE_RADIUS);
-            if (node.getFloor() != currentFloor) { //if node circle is not on current floor
-                circle.setVisible(false);
-                circle.setDisable(true);
-                circle.setPickOnBounds(false);
-            }
-            nodesPane.getChildren().add(circle);
+            if (node.getFloor() == currentFloor) { //if node circle is not on current floor
+                nodesPane.getChildren().add(circle);
 
-            // if we are currentlfy modifying a node and node we are on in the list matches the modifynode id
-            if (modifyingNode && node.getID() == nodeModify.getID()) { //reads from form labels
-                if (!toggleOn) { //2D map
-                    circle.setCenterX((mapBuilderNodeFormController.getNode2XCoord() - X_OFFSET) * X_SCALE);
-                    circle.setCenterY((mapBuilderNodeFormController.getNode2YCoord() - Y_OFFSET) * Y_SCALE);
-                } else { //3D map
-                    circle.setCenterX((mapBuilderNodeFormController.getNode3XCoord() - X_OFFSET) * X_SCALE);
-                    circle.setCenterY((mapBuilderNodeFormController.getNode3YCoord() - Y_OFFSET) * Y_SCALE);
+                // if we are currentlfy modifying a node and node we are on in the list matches the modifynode id
+                if (modifyingNode && node.getID() == nodeModify.getID()) { //reads from form labels
+                    if (!toggleOn) { //2D map
+                        circle.setCenterX((mapBuilderNodeFormController.getNode2XCoord() - X_OFFSET) * X_SCALE);
+                        circle.setCenterY((mapBuilderNodeFormController.getNode2YCoord() - Y_OFFSET) * Y_SCALE);
+                    } else { //3D map
+                        circle.setCenterX((mapBuilderNodeFormController.getNode3XCoord() - X_OFFSET) * X_SCALE);
+                        circle.setCenterY((mapBuilderNodeFormController.getNode3YCoord() - Y_OFFSET) * Y_SCALE);
+                    }
+                    circle.setFill(Color.RED);
+                } else { //if we are not modifying a node, just add circle based off of map coordinates
+                    if (!toggleOn) {
+                        circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
+                        circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
+                    } else {
+                        circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
+                        circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
+                    }
+                    circle.setFill(Color.DODGERBLUE);
                 }
-                circle.setFill(Color.RED);
-            } else { //if we are not modifying a node, just add circle based off of map coordinates
-                if (!toggleOn) {
-                    circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
-                    circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
-                } else {
-                    circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
-                    circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
+
+
+                //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
+
+                circle.setStroke(Color.BLACK);
+                circle.setStrokeType(StrokeType.INSIDE);
+                if (!node.getActive()) { //if node is inactive make it gray and opaque
+                    circle.setOpacity(0.5);
+                    circle.setFill(Color.GRAY);
                 }
-                circle.setFill(Color.DODGERBLUE);
+
+                circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
+
+                String label = node.getID();
+                nodeDispSet.put(label, circle);
+
             }
-
-
-            //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-
-            circle.setStroke(Color.BLACK);
-            circle.setStrokeType(StrokeType.INSIDE);
-            if (!node.getActive()) { //if node is inactive make it gray and opaque
-                circle.setOpacity(0.5);
-                circle.setFill(Color.GRAY);
-            }
-
-            circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
-
-            String label = node.getID();
-            nodeDispSet.put(label, circle);
-
         }
         System.out.println("Printed All Nodes");
     }
@@ -1553,14 +1550,15 @@ public class MapBuilderController implements Initializable {
             pastNode = currentNode;
             currentNode = n;
             //nodeDispSet.get(currentNode.getID()).setFill(Color.rgb(250, 150, 0));
-            if (path.get(0).equals(n)) {
-                //start node is green
-                nodeDispSet.get(currentNode.getID()).setFill(Color.GREEN);
-            }
-            if (path.get(path.size() - 1).equals(n)) {
-                //end node is red
-                nodeDispSet.get(currentNode.getID()).setFill(Color.RED);
-            }
+            //TODO creating the start and end node across floors
+//            if (path.get(0).equals(n)) {
+//                //start node is green
+//                nodeDispSet.get(currentNode.getID()).setFill(Color.GREEN);
+//            }
+//            if (path.get(path.size() - 1).equals(n)) {
+//                //end node is red
+//                nodeDispSet.get(currentNode.getID()).setFill(Color.RED);
+//            }
             for (Edge e : currentNode.getEdges()) {
                 //color in all the edges and increase their width
                 if (pastNode != null) {
@@ -1612,7 +1610,8 @@ public class MapBuilderController implements Initializable {
         for (Node n : pathMade) {
             pastNode = currentNode;
             currentNode = n;
-            nodeDispSet.get(n.getID()).setFill(Color.DODGERBLUE);
+            //TODO might need to reset nodes if we change it in draw Path
+            //nodeDispSet.get(n.getID()).setFill(Color.DODGERBLUE);
 
             for (Edge e : currentNode.getEdges()) {
                 if (pastNode != null) {
