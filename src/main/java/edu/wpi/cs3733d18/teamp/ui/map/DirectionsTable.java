@@ -19,4 +19,10 @@ public class DirectionsTable extends RecursiveTreeObject<DirectionsTable>{
     public void setDirections(String directions) {
         this.directions.set(directions);
     }
+
+
+    @Override
+    public String toString(){
+        return directions.toString();
+    }
 }

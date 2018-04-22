@@ -540,42 +540,49 @@ public class SearchBarOverlayController implements Initializable{
             case "Floor change to 1":
                 floorParent.getChildren().setAll(floorChildren);
                 parents.add(floorParent);
+                floorChildren.clear();
                 floorParent = new TreeItem<>(new DirectionsTable("Floor 1"));
                 break;
 
             case "Floor change to 2":
                 floorParent.getChildren().setAll(floorChildren);
                 parents.add(floorParent);
+                floorChildren.clear();
                 floorParent = new TreeItem<>(new DirectionsTable("Floor 2"));
                 break;
 
             case "Floor change to 3":
                 floorParent.getChildren().setAll(floorChildren);
                 parents.add(floorParent);
+                floorChildren.clear();
                 floorParent = new TreeItem<>(new DirectionsTable("Floor 3"));
                 break;
 
             case "Floor change to G":
                 floorParent.getChildren().setAll(floorChildren);
                 parents.add(floorParent);
+                floorChildren.clear();
                 floorParent = new TreeItem<>(new DirectionsTable("Floor G"));
                 break;
 
             case "Floor change to L1":
                 floorParent.getChildren().setAll(floorChildren);
                 parents.add(floorParent);
+                floorChildren.clear();
                 floorParent = new TreeItem<>(new DirectionsTable("Floor L1"));
                 break;
 
             case "Floor change to L2":
                 floorParent.getChildren().setAll(floorChildren);
                 parents.add(floorParent);
+                floorChildren.clear();
                 floorParent = new TreeItem<>(new DirectionsTable("Floor L2"));
                 break;
 
             case "You have arrived at your destination!":
                 floorParent.getChildren().setAll(floorChildren);
                 parents.add(floorParent);
+                floorChildren.clear();
                 floorParent = new TreeItem<>(new DirectionsTable("You have arrived at your destination!"));
                 parents.add(floorParent);
                 break;
@@ -591,6 +598,40 @@ public class SearchBarOverlayController implements Initializable{
         }
 
     }
+
+    public void expandDirections(Node.floorType floor){
+        String level;
+        String parentLevel;
+        switch (floor){
+            case LEVEL_1:
+                level = "Floor 1";
+                break;
+            case LEVEL_3:
+                level = "Floor 3";
+                break;
+            case LEVEL_G:
+                level = "Floor G";
+                break;
+            case LEVEL_L1:
+                level = "Floor L1";
+                break;
+            case LEVEL_L2:
+                level = "Floor L2";
+                break;
+            default:
+                level = "Floor 2";
+                break;
+        }
+
+        for(int i = 1; i < directionsTreeTableView.getRoot().getChildren().size() - 1; i++){
+            parentLevel = directionsTreeTableView.getRoot().getChildren().get(i).getValue().getDirections().toString();
+            if(parentLevel.equals(level)){
+                directionsTreeTableView.getRoot().getChildren().get(i).setExpanded(true);
+            } else {
+                directionsTreeTableView.getRoot().getChildren().get(i).setExpanded(false);
+            }
+        }
+    }
     public void hideDirections(){
         directionsTreeTableView.setVisible(false);
         directionsButton.setVisible(false);
@@ -599,6 +640,7 @@ public class SearchBarOverlayController implements Initializable{
         directionsRectangle.setVisible(false);
         directionsVisible = false;
         directionsButton.setText("Directions");
+
     }
 }
 
