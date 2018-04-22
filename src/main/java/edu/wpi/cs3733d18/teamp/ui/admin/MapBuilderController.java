@@ -654,6 +654,9 @@ public class MapBuilderController implements Initializable {
                     break;
                 }
             }
+            if (event.getEventType() == MouseEvent.MOUSE_MOVED) {
+                isDragging = false;
+            }
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
                 orgMouseX = event.getSceneX();
                 orgMouseY = event.getSceneY();
@@ -704,7 +707,6 @@ public class MapBuilderController implements Initializable {
                     } else {
                         mapBuilderNodeFormController.set3XYCoords(nodex2Coord, nodey2Coord);
                     }
-
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
                 popOver.hide();
