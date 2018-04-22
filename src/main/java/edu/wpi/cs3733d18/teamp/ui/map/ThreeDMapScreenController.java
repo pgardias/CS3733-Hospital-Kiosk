@@ -305,12 +305,16 @@ public class ThreeDMapScreenController implements Initializable{
             mv.setOpacity(0);
             L2Visible = false;
             hideNodes(currentFloor);
+            floorL2Button.getStyleClass().removeAll("floor-button");
+            floorL2Button.getStyleClass().add("highlight-floor-button");
 
         }
         else {
             mv.setOpacity(1);
             L2Visible = true;
             unhideNodes(currentFloor);
+            floorL2Button.getStyleClass().removeAll("highlight-floor-button");
+            floorL2Button.getStyleClass().add("floor-button");
         }
     }
 
@@ -322,11 +326,15 @@ public class ThreeDMapScreenController implements Initializable{
             mv.setOpacity(0);
             L1Visible = false;
             hideNodes(currentFloor);
+            floorL1Button.getStyleClass().removeAll("floor-button");
+            floorL1Button.getStyleClass().add("highlight-floor-button");
         }
         else {
             mv.setOpacity(1);
             L1Visible = true;
             unhideNodes(currentFloor);
+            floorL1Button.getStyleClass().removeAll("highlight-floor-button");
+            floorL1Button.getStyleClass().add("floor-button");
         }
     }
 
@@ -338,11 +346,15 @@ public class ThreeDMapScreenController implements Initializable{
             mv.setOpacity(0);
             GVisible = false;
             hideNodes(currentFloor);
+            floorGButton.getStyleClass().removeAll("floor-button");
+            floorGButton.getStyleClass().add("highlight-floor-button");
         }
         else {
             mv.setOpacity(1);
             GVisible = true;
             unhideNodes(currentFloor);
+            floorGButton.getStyleClass().removeAll("highlight-floor-button");
+            floorGButton.getStyleClass().add("floor-button");
         }
     }
 
@@ -354,11 +366,15 @@ public class ThreeDMapScreenController implements Initializable{
             mv.setOpacity(0);
             FirstVisible = false;
             hideNodes(currentFloor);
+            floor1Button.getStyleClass().removeAll("floor-button");
+            floor1Button.getStyleClass().add("highlight-floor-button");
         }
         else {
             mv.setOpacity(1);
             FirstVisible = true;
             unhideNodes(currentFloor);
+            floor1Button.getStyleClass().removeAll("highlight-floor-button");
+            floor1Button.getStyleClass().add("floor-button");
         }
     }
 
@@ -370,11 +386,15 @@ public class ThreeDMapScreenController implements Initializable{
             mv.setOpacity(0);
             SecondVisible = false;
             hideNodes(currentFloor);
+            floor2Button.getStyleClass().removeAll("floor-button");
+            floor2Button.getStyleClass().add("highlight-floor-button");
         }
         else {
             mv.setOpacity(1);
             SecondVisible = true;
             unhideNodes(currentFloor);
+            floor2Button.getStyleClass().removeAll("highlight-floor-button");
+            floor2Button.getStyleClass().add("floor-button");
         }
     }
 
@@ -386,11 +406,15 @@ public class ThreeDMapScreenController implements Initializable{
             mv.setOpacity(0);
             ThirdVisible = false;
             hideNodes(currentFloor);
+            floor3Button.getStyleClass().removeAll("floor-button");
+            floor3Button.getStyleClass().add("highlight-floor-button");
         }
         else {
             mv.setOpacity(1);
             ThirdVisible = true;
             unhideNodes(currentFloor);
+            floor3Button.getStyleClass().removeAll("highlight-floor-button");
+            floor3Button.getStyleClass().add("floor-button");
         }
     }
 
@@ -1199,5 +1223,4 @@ public class ThreeDMapScreenController implements Initializable{
         }
         return offsets;
     }
-
 }
