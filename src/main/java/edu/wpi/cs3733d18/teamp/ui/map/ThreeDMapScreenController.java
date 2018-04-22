@@ -79,7 +79,6 @@ public class ThreeDMapScreenController implements Initializable{
 
     // Display hashmaps
     private static ArrayList<MeshView[]> allModels = new ArrayList<>();
-    private static HashMap<String, MeshView> modelDispSet = new HashMap<>();
     private static HashMap<String, Sphere> nodeDispSet = new HashMap<>();
     private static ArrayList<Polygon> arrowDispSet = new ArrayList<>();
     private static ArrayList<String> arrowFloorSet = new ArrayList<>();
@@ -302,19 +301,16 @@ public class ThreeDMapScreenController implements Initializable{
     public void floorL2ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_L2;
         MeshView mv = getFloor(currentFloor);
-        /*curXOffset = X_OFFSET_L2;
-        curZOffset = Z_OFFSET_L2;
-        updateMap("/models/B&WL2Floor.obj", "/models/textures/3rdFloor_UV.png");
-        if (pathDrawn) {
-            drawPath(pathMade);
-        }*/
         if (L2Visible) {
             mv.setOpacity(0);
             L2Visible = false;
+            hideNodes(currentFloor);
+
         }
         else {
             mv.setOpacity(1);
             L2Visible = true;
+            unhideNodes(currentFloor);
         }
     }
 
@@ -322,19 +318,15 @@ public class ThreeDMapScreenController implements Initializable{
     public void floorL1ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_L1;
         MeshView mv = getFloor(currentFloor);
-        /*curXOffset = X_OFFSET_L1;
-        curZOffset = Z_OFFSET_L1;
-        updateMap("/models/B&WL1Floor.obj", "/models/textures/3rdFloor_UV.png");
-        if (pathDrawn) {
-            drawPath(pathMade);
-        }*/
         if (L1Visible) {
             mv.setOpacity(0);
             L1Visible = false;
+            hideNodes(currentFloor);
         }
         else {
             mv.setOpacity(1);
             L1Visible = true;
+            unhideNodes(currentFloor);
         }
     }
 
@@ -342,19 +334,15 @@ public class ThreeDMapScreenController implements Initializable{
     public void floorGButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_G;
         MeshView mv = getFloor(currentFloor);
-        /*curXOffset = X_OFFSET_G;
-        curZOffset = Z_OFFSET_G;
-        updateMap("/models/B&WGFloor.obj", "/models/textures/3rdFloor_UV.png");
-        if (pathDrawn) {
-            drawPath(pathMade);
-        }*/
         if (GVisible) {
             mv.setOpacity(0);
             GVisible = false;
+            hideNodes(currentFloor);
         }
         else {
             mv.setOpacity(1);
             GVisible = true;
+            unhideNodes(currentFloor);
         }
     }
 
@@ -362,19 +350,15 @@ public class ThreeDMapScreenController implements Initializable{
     public void floor1ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_1;
         MeshView mv = getFloor(currentFloor);
-        /*curXOffset = X_OFFSET_1;
-        curZOffset = Z_OFFSET_1;
-        updateMap("/models/B&W1stFloor.obj", "/models/textures/3rdFloor_UV.png");
-        if (pathDrawn) {
-            drawPath(pathMade);
-        }*/
         if (FirstVisible) {
             mv.setOpacity(0);
             FirstVisible = false;
+            hideNodes(currentFloor);
         }
         else {
             mv.setOpacity(1);
             FirstVisible = true;
+            unhideNodes(currentFloor);
         }
     }
 
@@ -382,19 +366,15 @@ public class ThreeDMapScreenController implements Initializable{
     public void floor2ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_2;
         MeshView mv = getFloor(currentFloor);
-        /*curXOffset = X_OFFSET_2;
-        curZOffset = Z_OFFSET_2;
-        updateMap("/models/B&W2ndFloor.obj", "/models/textures/2ndFloor_UV.png");
-        if (pathDrawn) {
-            drawPath(pathMade);
-        }*/
         if (SecondVisible) {
             mv.setOpacity(0);
             SecondVisible = false;
+            hideNodes(currentFloor);
         }
         else {
             mv.setOpacity(1);
             SecondVisible = true;
+            unhideNodes(currentFloor);
         }
     }
 
@@ -402,19 +382,15 @@ public class ThreeDMapScreenController implements Initializable{
     public void floor3ButtonOp(ActionEvent e) {
         currentFloor = Node.floorType.LEVEL_3;
         MeshView mv = getFloor(currentFloor);
-        /*curXOffset = X_OFFSET_3;
-        curZOffset = Z_OFFSET_3;
-        updateMap("/models/B&W3rdFloor.obj", "/models/textures/3rdFloor_UV.png");
-        if (pathDrawn) {
-            drawPath(pathMade);
-        }*/
         if (ThirdVisible) {
             mv.setOpacity(0);
             ThirdVisible = false;
+            hideNodes(currentFloor);
         }
         else {
             mv.setOpacity(1);
             ThirdVisible = true;
+            unhideNodes(currentFloor);
         }
     }
 
@@ -574,7 +550,7 @@ public class ThreeDMapScreenController implements Initializable{
             }
 
             // Node is on current floor
-            if (node.getFloor() == currentFloor && node.getType() != Node.nodeType.HALL) {
+            if (node.getType() != Node.nodeType.HALL) {
                 Sphere sphere = new Sphere(NODE_RADIUS);
                 threeDAnchorPane.getChildren().add(sphere);
                 sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
@@ -595,16 +571,15 @@ public class ThreeDMapScreenController implements Initializable{
 
             // Node is on other floor
             else {
-                Sphere sphere = new Sphere(NODE_RADIUS);
+                Sphere sphere = new Sphere(0);
                 threeDAnchorPane.getChildren().add(sphere);
                 sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
                 sphere.setTranslateY(mv.getTranslateY() - yPos);
                 sphere.setTranslateZ((-node.getY() - Z_OFFSET) * Z_SCALE);
                 sphere.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.Y_AXIS),
                         new Rotate(curXRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.X_AXIS));
-                sphere.setMaterial(fillBlue);
                 //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-                //circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
+                //sphere.addEventHandler(MouseEvent.ANY, nodeClickHandler);
 
                 String label = node.getID();
                 nodeDispSet.put(label, sphere);
@@ -665,7 +640,7 @@ public class ThreeDMapScreenController implements Initializable{
      */
     Boolean firstSelected = false;
     Boolean secondSelected = false;
-    EventHandler<MouseEvent> nodeClickHandler = new EventHandler<MouseEvent>() {
+    private EventHandler<MouseEvent> nodeClickHandler = new EventHandler<MouseEvent>() {
         Boolean isDragging = false;
         double orgMouseX;
         double orgMouseY;
@@ -799,6 +774,36 @@ public class ThreeDMapScreenController implements Initializable{
         threeDAnchorPane.setScaleX(curScale);
         threeDAnchorPane.setScaleY(curScale);
         threeDAnchorPane.setScaleZ(curScale);
+    }
+
+    /**
+     * Hides the nodes for a floor that is not visible
+     * @param floor The floor of nodes to hide
+     */
+    private void hideNodes(Node.floorType floor) {
+        HashMap<String, Node> allNodes = db.getAllNodes();
+        for (Node n : allNodes.values()) {
+            if (n.getFloor().equals(floor)) {
+                Sphere curSphere = nodeDispSet.get(n.getID());
+                curSphere.setDisable(true);
+                curSphere.setVisible(false);
+            }
+        }
+    }
+
+    /**
+     * Unhides the nodes for a floor that is visible
+     * @param floor The floor of nodes to unhide
+     */
+    private void unhideNodes(Node.floorType floor) {
+        HashMap<String, Node> allNodes = db.getAllNodes();
+        for (Node n : allNodes.values()) {
+            if (n.getFloor().equals(floor)) {
+                Sphere curSphere = nodeDispSet.get(n.getID());
+                curSphere.setDisable(false);
+                curSphere.setVisible(true);
+            }
+        }
     }
 
     /**
@@ -1159,12 +1164,12 @@ public class ThreeDMapScreenController implements Initializable{
             case 0:
                 offsets.add(-150); // X Offset
                 offsets.add(0); // Y Offset
-                offsets.add(0); // Z Offset
+                offsets.add(35); // Z Offset
                 break;
             case 1:
                 offsets.add(0); // X Offset
                 offsets.add(0); // Y Offset
-                offsets.add(0); // Z Offset
+                offsets.add(20); // Z Offset
                 break;
             case 2:
                 offsets.add(0); // X Offset
