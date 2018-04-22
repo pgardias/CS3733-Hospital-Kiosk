@@ -517,6 +517,7 @@ public class SearchBarOverlayController implements Initializable{
 
                 directionsButton.setText("Directions X");
                 directionsVisible = true;
+                expandDirections(mapScreenController.getCurrentFloor());
             }
 
         }
@@ -641,6 +642,14 @@ public class SearchBarOverlayController implements Initializable{
         directionsVisible = false;
         directionsButton.setText("Directions");
 
+    }
+
+    public Boolean getDirectionsVisible() {
+        return directionsVisible;
+    }
+
+    public void setDirectionsVisible(Boolean directionsVisible) {
+        this.directionsVisible = directionsVisible;
     }
 }
 

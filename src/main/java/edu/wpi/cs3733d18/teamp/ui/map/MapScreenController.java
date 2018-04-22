@@ -936,6 +936,12 @@ public class MapScreenController {
                 }
             }
         }
+
+        if(searchBarOverlayController.getDirectionsVisible()){
+            searchBarOverlayController.clearTable();
+            searchBarOverlayController.setDirectionsVisible(false);
+            searchBarOverlayController.directionsButtonOp(null);
+        }
         //this sets the proper opacity for the arrows based on floor
         for (int i = 0; i < arrowDispSet.size(); i++) {
             System.out.println(arrowFloorSet.get(i));
@@ -981,6 +987,7 @@ public class MapScreenController {
         }
         getFloors();
         createFloorSequence();
+
 
         System.out.println("list of stair nodes: " + stairNodeSet.toString());
         minXCoord -= 400;
@@ -1409,5 +1416,9 @@ public class MapScreenController {
 
         }
 
+    }
+
+    public Node.floorType getCurrentFloor() {
+        return currentFloor;
     }
 }
