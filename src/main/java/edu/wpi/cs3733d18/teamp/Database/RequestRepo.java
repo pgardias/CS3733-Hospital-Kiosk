@@ -238,6 +238,33 @@ public class RequestRepo {
     }
 
     /**
+     * deleteRequest removes an request from the REQUEST_INFO table
+     * @param request request to be removed
+     * @return true if the request is deleted, false if something went wrong
+     */
+    Boolean deleteRequest(Request request) {
+        try {
+            conn = DriverManager.getConnection(DB_URL);
+
+            // Prepare statement
+            String sql = "DELETE FROM REQUEST_INFO WHERE requestID = ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, request.getRequestID());
+
+            int success = pstmt.executeUpdate();
+
+            pstmt.close();
+            conn.close();
+
+            return (success > 0);
+        } catch(SQLException se) {
+            se.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
      * generateRequestID creates a request ID
      * by incrementing the amount of requests in REQUEST_INFO
      * @return new ID

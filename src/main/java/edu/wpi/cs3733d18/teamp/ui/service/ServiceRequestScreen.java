@@ -119,10 +119,12 @@ public class ServiceRequestScreen implements Initializable{
             "Prescription Request"
     );
 
-    MenuItem mi1 = new MenuItem("Edit Request");
-    MenuItem mi2 = new MenuItem("Claim Request");
-    MenuItem mi3 = new MenuItem("Complete Request");
-    MenuItem mi6 = new MenuItem("Complete Request");
+    MenuItem mi1 = new MenuItem("Claim Request");
+    MenuItem mi2 = new MenuItem("Complete Request");
+    MenuItem mi3 = new MenuItem("Delete Request");
+    MenuItem mi4 = new MenuItem("Claim Request");
+    MenuItem mi5 = new MenuItem("Complete Request");
+    MenuItem mi6 = new MenuItem("Delete Request");
     ContextMenu menu1 = new ContextMenu();
     ContextMenu menu2 = new ContextMenu();
 
@@ -205,26 +207,22 @@ public class ServiceRequestScreen implements Initializable{
         newRequestComboBox.setItems(requestTypes);
 
         mi1.setOnAction((ActionEvent event) -> {
-            //editRequestOp();
-        });
-
-
-        mi2.setOnAction((ActionEvent event) -> {
             claimRequestButtonOp(event);
         });
 
-
         mi3.setOnAction((ActionEvent event) -> {
-            completeRequestButtonOp(event);
+            deleteRequestOp();
         });
 
-        mi6.setOnAction((ActionEvent event) -> {
+        mi5.setOnAction((ActionEvent event) -> {
             completeRequestButtonOp(event);
         });
 
         menu1.getItems().add(mi1);
         menu1.getItems().add(mi2);
         menu1.getItems().add(mi3);
+        menu2.getItems().add(mi4);
+        menu2.getItems().add(mi5);
         menu2.getItems().add(mi6);
 
         newRequestTable.setContextMenu(menu1);
@@ -235,20 +233,30 @@ public class ServiceRequestScreen implements Initializable{
      * Sets the available right click options based on the users information for the newRequestTable
      */
     public void disableMenu1OptionsOp() {
-        menu1.getItems().get(2).setDisable(true);
+        menu1.getItems().get(1).setDisable(true);
         int requestID = newRequestTable.getSelectionModel().getSelectedItem().getRequestID();
-        boolean emptype = false;
+        boolean claim = false;
+        boolean delete = false;
         try {
             Request r = db.getOneRequest(requestID);
             if (r.getRequestType() == Request.requesttype.LANGUAGEINTERP || r.getRequestType() == Request.requesttype.HOLYPERSON) {
                 if (Main.currentUser.getIsAdmin() ||
                         (db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType())) &&
                                 Main.currentUser.getSubType().equals(r.getSubType()))) {
-                    emptype = true;
+                    claim = true;
                 }
-            } else {
+                String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+                if (Main.currentUser.getIsAdmin() || firstAndLastName.equals(r.getMadeBy())) {
+                    delete = true;
+                }
+            }
+            else {
                 if (Main.currentUser.getIsAdmin() || db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType()))) {
-                    emptype = true;
+                    claim = true;
+                }
+                String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+                if (Main.currentUser.getIsAdmin() || firstAndLastName.equals(r.getMadeBy())) {
+                    delete = true;
                 }
             }
         }
@@ -256,8 +264,11 @@ public class ServiceRequestScreen implements Initializable{
             re.printStackTrace();
         }
 
-        if (!emptype) {
-            menu1.getItems().get(1).setDisable(true);
+        if (!claim) {
+            menu1.getItems().get(0).setDisable(true);
+        }
+        if (!delete) {
+            menu1.getItems().get(2).setDisable(true);
         }
     }
 
@@ -265,6 +276,8 @@ public class ServiceRequestScreen implements Initializable{
      * Sets the available right click options based on the users information for the inProgRequestTable
      */
     public void disableMenu2OptionsOp() {
+        menu2.getItems().get(0).setDisable(true);
+        menu2.getItems().get(2).setDisable(true);
         int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getRequestID();
         boolean emptype = false;
         try {
@@ -279,11 +292,21 @@ public class ServiceRequestScreen implements Initializable{
         }
 
         if (!emptype) {
-            menu2.getItems().get(0).setDisable(true);
+            menu2.getItems().get(1).setDisable(true);
         }
     }
 
-
+    public void deleteRequestOp() {
+        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        try {
+            Request r = db.getOneRequest(requestID);
+            db.deleteRequest(r);
+        }
+        catch (RequestNotFoundException re) {
+            re.printStackTrace();
+        }
+        refresh();
+    }
 
     /**
      * Fills in the gridpane with info from requests in the newRequestTable
@@ -534,7 +557,6 @@ public class ServiceRequestScreen implements Initializable{
     /**
      * Called by various functions to clear the TableViews and calls populateTableViews() again
      */
-
     public void refresh() {
         for (int i = 0; i < newRequestTable.getItems().size(); i++) {
             newRequestTable.getItems().clear();
