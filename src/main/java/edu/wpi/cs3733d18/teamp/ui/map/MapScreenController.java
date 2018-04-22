@@ -958,7 +958,7 @@ public class MapScreenController {
                 if (arrowFloorSet.get(i).equals(currentFloor.toString())) {
                     arrowDispSet.get(i).setOpacity(1.0);
                 } else {
-                    arrowDispSet.get(i).setOpacity(0.3);
+                    arrowDispSet.get(i).setOpacity(0.5);
                 }
             }
 
@@ -1073,7 +1073,8 @@ public class MapScreenController {
                         if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
                             line.setOpacity(1.0);
                         } else {
-                            line.setOpacity(0.3);
+                            line.getStrokeDashArray().addAll(1.0, 10.0);
+                            line.setOpacity(0.5);
                         }
                     }
                 }
