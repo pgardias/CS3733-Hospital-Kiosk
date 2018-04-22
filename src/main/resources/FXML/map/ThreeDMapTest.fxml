@@ -33,27 +33,22 @@
          </padding>
          <children>
             <Slider fx:id="zoomSlider" blockIncrement="0.1" max="10.0" maxHeight="-Infinity" maxWidth="-Infinity" min="1.0" orientation="VERTICAL" prefHeight="444.0" prefWidth="28.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
-            <JFXButton fx:id="floor3Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor3ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="floor-buttons" text="3" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <JFXButton fx:id="floor2Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor2ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="highlight-floor-button" text="2" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <font>
                   <Font size="36.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="floor2Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor2ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="floor-buttons" text="2" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <JFXButton fx:id="floor1Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor1ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="highlight-floor-button" text="1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <font>
                   <Font size="36.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="floor1Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor1ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="floor-buttons" text="1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <JFXButton fx:id="floorGButton" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floorGButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="highlight-floor-button" text="G" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <font>
                   <Font size="36.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="floorGButton" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floorGButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="floor-buttons" text="G" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </JFXButton>
-            <JFXButton fx:id="floorL1Button" onAction="#floorL1ButtonOp" prefHeight="85.0" prefWidth="85.0" ripplerFill="WHITE" styleClass="floor-buttons" text="L1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <JFXButton fx:id="floorL1Button" onAction="#floorL1ButtonOp" prefHeight="85.0" prefWidth="85.0" ripplerFill="WHITE" styleClass="highlight-floor-button" text="L1" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <font>
                   <Font size="36.0" />
                </font>
@@ -61,7 +56,13 @@
                   <Insets />
                </GridPane.margin>
             </JFXButton>
-            <JFXButton fx:id="floorL2Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floorL2ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="floor-buttons" text="L2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <JFXButton fx:id="floorL2Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floorL2ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="highlight-floor-button" text="L2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </JFXButton>
+               <BorderPane fx:id="searchbarBorderPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" GridPane.columnIndex="5" />
+            <JFXButton fx:id="floor3Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor3ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="highlight-floor-button" text="3" GridPane.columnIndex="5" GridPane.rowIndex="1">
                <font>
                   <Font size="36.0" />
                </font>
@@ -70,5 +71,4 @@
       </GridPane>
    </right>
    </BorderPane>
-   <BorderPane fx:id="searchbarBorderPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
 </AnchorPane>
