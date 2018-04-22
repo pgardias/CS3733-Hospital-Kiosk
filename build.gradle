@@ -7,7 +7,9 @@ version = '3.0'
 buildDir = 'build'
 
 repositories {
+    jcenter()
     mavenCentral()
+    mavenLocal()
 }
 
 sourceSets {
@@ -23,6 +25,9 @@ sourceSets {
 
 
 dependencies {
+    compile 'de.jensd:fontawesomefx-materialdesignfont:1.7.22-4'
+    compile 'de.jensd:fontawesomefx-materialicons:2.2.0-5'
+
     testCompile(
             [group: 'junit', name: 'junit', version: '4.12'],
             [group: 'com.jfoenix', name: 'jfoenix', version: '8.0.3'],
@@ -60,3 +65,17 @@ task run(type: JavaExec) {
 }
 group 'groupIP'
 version '1.0-SNAPSHOT'
+group 'Iteration4'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
