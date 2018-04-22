@@ -173,11 +173,10 @@ public class MapScreenController {
         firstSelected = true;
 
         mapImage.addEventHandler(MouseEvent.ANY, mouseEventEventHandler);
-        //drawEdges();
         drawNodes();
         getMap();
         addOverlay();
-
+        searchBarOverlayController.setSourceSearchBar("Current Kiosk");
     }
 
     @FXML
