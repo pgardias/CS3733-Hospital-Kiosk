@@ -51,12 +51,12 @@
                         <Insets right="20.0" top="10.0" />
                     </GridPane.margin>
                 </JFXToggleButton>
-                <JFXComboBox fx:id="sourceSearchBar" focusColor="#e6e6e6" prefHeight="50.0" prefWidth="650.0" promptText="Start Location" unFocusColor="#f5bc3a">
+                <JFXComboBox fx:id="sourceSearchBar" editable="true" focusColor="#e6e6e6" prefHeight="50.0" prefWidth="650.0" promptText="Start Location" style="-fx-font-size: 25px; -fx-prompt-text-fill: #e6e6e6; -fx-font-color: #f5bc3a;" unFocusColor="#f5bc3a">
                     <GridPane.margin>
                         <Insets left="50.0" />
                     </GridPane.margin>
                 </JFXComboBox>
-                <JFXComboBox fx:id="destinationSearchBar" focusColor="#e6e6e6" prefHeight="50.0" prefWidth="650.0" promptText="End Location" unFocusColor="#f5bc3a" GridPane.rowIndex="1">
+                <JFXComboBox fx:id="destinationSearchBar" editable="true" focusColor="#e6e6e6" prefHeight="50.0" prefWidth="650.0" promptText="End Location" style="-fx-font-size: 25px; -fx-font-color: #f5bc3a; -fx-prompt-text-fill: #e6e6e6;" unFocusColor="#f5bc3a" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets left="50.0" />
                     </GridPane.margin>

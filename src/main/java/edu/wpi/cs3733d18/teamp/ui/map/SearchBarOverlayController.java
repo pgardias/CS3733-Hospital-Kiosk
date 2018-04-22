@@ -106,10 +106,10 @@ public class SearchBarOverlayController implements Initializable{
     JFXButton goButton;
 
     @FXML
-    JFXComboBox sourceSearchBar;
+    JFXComboBox<String> sourceSearchBar;
 
     @FXML
-    JFXComboBox destinationSearchBar;
+    JFXComboBox<String> destinationSearchBar;
 
     @FXML
     JFXToggleButton mapToggleButton;
@@ -177,11 +177,11 @@ public class SearchBarOverlayController implements Initializable{
         sourceSearchBar.getItems().addAll(sourceWords);
         destinationSearchBar.getItems().addAll(destinationWords);
 
-//        AutoCompletionBinding<String> destBinding = TextFields.bindAutoCompletion(destinationSearchBar, destinationWords);
-//        AutoCompletionBinding<String> sourceBinding = TextFields.bindAutoCompletion(sourceSearchBar, sourceWords);
-//
-//        destBinding.setPrefWidth(destinationSearchBar.getPrefWidth());
-//        sourceBinding.setPrefWidth(sourceSearchBar.getPrefWidth());
+        AutoCompletionBinding<String> destBinding = TextFields.bindAutoCompletion(destinationSearchBar.getEditor(), destinationWords);
+        AutoCompletionBinding<String> sourceBinding = TextFields.bindAutoCompletion(sourceSearchBar.getEditor(), sourceWords);
+
+        destBinding.setPrefWidth(destinationSearchBar.getPrefWidth());
+        sourceBinding.setPrefWidth(sourceSearchBar.getPrefWidth());
 
         floorChildren = new ArrayList<>();
         parents = new ArrayList<>();
@@ -529,7 +529,6 @@ public class SearchBarOverlayController implements Initializable{
     }
 
     public void clearTable(){
-        directionsTreeTableView.getRoot().getChildren().removeAll(parents);
         floorChildren.clear();
         parents.clear();
     }
