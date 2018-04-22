@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToggleButton?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -93,23 +94,18 @@
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
-         <children>
-            <JFXButton fx:id="directionsButton" buttonType="RAISED" onAction="#directionsButtonOp" prefHeight="95.0" prefWidth="185.0" styleClass="yellow-button" stylesheets="@../../css/map.css" text="Directions" textAlignment="CENTER" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="TOP">
-               <font>
-                  <Font size="20.0" />
-               </font>
-               <GridPane.margin>
-                  <Insets top="40.0" />
-               </GridPane.margin>
-            </JFXButton>
-         </children>
       </GridPane>
-      <Rectangle fx:id="directionsRectangle" arcHeight="20.0" arcWidth="20.0" fill="#113868" height="860.0" stroke="BLACK" strokeType="INSIDE" style="-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 0);" styleClass="search-bar-bg" width="325.0" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+      <Rectangle fx:id="directionsRectangle" arcHeight="20.0" arcWidth="20.0" fill="#113868" height="860.0" stroke="BLACK" strokeType="INSIDE" style="-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 0);" width="375.0" GridPane.halignment="LEFT" GridPane.valignment="TOP">
          <GridPane.margin>
             <Insets left="15.0" top="150.0" />
          </GridPane.margin>
       </Rectangle>
-      <TableView fx:id="directionsTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="700.0" prefWidth="290.0" stylesheets="@../../css/tableview.css" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+      <JFXTreeTableView fx:id="directionsTreeTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="340.0" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets left="32.5" top="165.0" />
+         </GridPane.margin>
+      </JFXTreeTableView>
+      <TableView fx:id="directionsTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="700.0" prefWidth="290.0" stylesheets="@../../css/tableview.css" visible="false" GridPane.halignment="LEFT" GridPane.valignment="TOP">
          <GridPane.margin>
             <Insets left="32.5" top="165.0" />
          </GridPane.margin>
@@ -132,7 +128,7 @@
          <children>
             <JFXButton fx:id="emailButton" buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#emailButtonOp" pickOnBounds="false" prefHeight="100.0" prefWidth="100.0" styleClass="envelope" stylesheets="@../../css/common.css" text=" " GridPane.halignment="LEFT" GridPane.valignment="TOP">
                <GridPane.margin>
-                  <Insets left="225.0" top="885.0" />
+                  <Insets left="275.0" top="885.0" />
                </GridPane.margin>
             </JFXButton>
             <JFXButton fx:id="phoneButton" buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#phoneButtonOp" pickOnBounds="false" prefHeight="100.0" prefWidth="100.0" styleClass="mobile" stylesheets="@../../css/common.css" text=" " GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
@@ -141,6 +137,14 @@
                </GridPane.margin></JFXButton>
          </children>
       </GridPane>
+      <JFXButton fx:id="directionsButton" buttonType="RAISED" onAction="#directionsButtonOp" prefHeight="95.0" prefWidth="185.0" styleClass="yellow-button" stylesheets="@../../css/map.css" text="Directions" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+         <font>
+            <Font size="20.0" />
+         </font>
+         <GridPane.margin>
+            <Insets bottom="20.0" left="250.0" />
+         </GridPane.margin>
+      </JFXButton>
    </children>
    <padding>
       <Insets top="5.0" />

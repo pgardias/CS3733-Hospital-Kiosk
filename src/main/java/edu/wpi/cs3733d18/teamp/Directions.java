@@ -23,6 +23,7 @@ public class Directions {
 
     private ArrayList<String> directions;
 
+
     public Directions(){
 
         this.directions = new ArrayList<>();
@@ -47,10 +48,9 @@ public class Directions {
         Node pastNode = null;
         Node nextNode = null;
         boolean changeDirections = false;
-        boolean floorChange = false;
+        boolean floorChange = true;
         int direction;
         directions.add("Starting Route!");
-
         for (int i = 0; i < path.size()-1; i++) {
             // Set new nodes
             pastNode = node;
@@ -66,6 +66,9 @@ public class Directions {
                 pastAngle = pastNode.angleBetweenNodes(node);
 
                 direction = angleState(angle, pastAngle, node, pastNode);
+                if(floorChange){
+                    directions.add("Floor change to " + node.getFloor().toString());
+                }
                 floorChange = false;
 
                 switch (direction) {
@@ -145,6 +148,7 @@ public class Directions {
                     directions.add(words);
                     distance = 0;
                 }
+
                 System.out.println("");
             }
         }
