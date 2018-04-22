@@ -12,6 +12,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,17 +21,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.StrokeType;
+import javafx.scene.shape.*;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import jdk.nashorn.internal.runtime.regexp.joni.constants.NodeType;
 import org.controlsfx.control.PopOver;
@@ -79,6 +74,8 @@ public class MapScreenController {
     private ArrayList<Node> stairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentStairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentElevNodeSet = new ArrayList<Node>();
+    private ArrayList<Node.floorType> floorsList = new ArrayList<>();
+    private ArrayList<JFXButton> floorSequenceList = new ArrayList<>();
 
 
     DBSystem db = DBSystem.getInstance();
@@ -109,6 +106,9 @@ public class MapScreenController {
 
     @FXML
     AnchorPane nodesEdgesPane;
+
+    @FXML
+    HBox floorSequenceHBox;
 
     @FXML
     JFXButton floorL2Button;
@@ -208,6 +208,7 @@ public class MapScreenController {
 
     @FXML
     public void floorL1ButtonOp(ActionEvent e) {
+        System.out.println("level L1");
         floorState = floorL1Button.getText();
         currentFloor = Node.floorType.LEVEL_L1;
 
@@ -267,6 +268,7 @@ public class MapScreenController {
      */
     public void getMap() {
         Image image;
+        Image oldImage = mapImage.getImage();
 
         if (toggleOn) {
             X_OFFSET = 0;
@@ -339,7 +341,9 @@ public class MapScreenController {
                     break;
             }
         }
-        mapImage.setImage(image);
+        if (!oldImage.equals(image))
+            mapImage.setImage(image);
+        autoTranslateZoom(zoomSlider.getMin(), zoomSlider.getMin(), 0, 0);
     }
 
 
@@ -413,7 +417,7 @@ public class MapScreenController {
         zoomForTranslate = zoomSlider.getValue();
 
         double translateSlopeX = X_SCALE * mapImage.getScaleX() * IMG_WIDTH;
-        double translateSlopeY = Y_SCALE * mapImage.getScaleX() * IMG_HEIGHT;
+        double translateSlopeY = Y_SCALE * mapImage.getScaleY() * IMG_HEIGHT;
 
         if (newTranslateX > (translateSlopeX - 1920) / 2)
             newTranslateX = (translateSlopeX - 1920) / 2;
@@ -557,6 +561,7 @@ public class MapScreenController {
                     Boolean foundStair = false;
                     for (String string : nodeDispSet.keySet()) {
                         if (nodeDispSet.get(string).equals(event.getSource())) {
+                            //The node clicked was a stair node so we swap the floor cuz a path was drawn
                             for (int i = 0; i < stairNodeSet.size(); i += 2) {
                                 System.out.println("entered for loop for stair nodes");
                                 if (stairNodeSet.get(i).getID().equals(string)) {
@@ -696,7 +701,7 @@ public class MapScreenController {
                 zoomForTranslate = zoomSlider.getValue();
 
                 double translateSlopeX = X_SCALE * mapImage.getScaleX() * IMG_WIDTH;
-                double translateSlopeY = Y_SCALE * mapImage.getScaleX() * IMG_HEIGHT;
+                double translateSlopeY = Y_SCALE * mapImage.getScaleY() * IMG_HEIGHT;
 
                 System.out.println("Offset X: " + offsetX + " Offset Y: " + offsetY);
                 if (newTranslateX > (translateSlopeX - 1920) / 2)
@@ -715,6 +720,51 @@ public class MapScreenController {
             }
         }
     };
+
+    EventHandler<MouseEvent> labelEventHandler = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+            System.out.println("mouseEvent: " + event.getEventType().toString());
+            if (event.getEventType() == MouseEvent.MOUSE_CLICKED){
+                System.out.println("Label Clicked");
+
+            }
+        }
+    };
+
+    public void floorSequenceButtonOp(ActionEvent e){
+        String floor = "";
+        for (JFXButton button: floorSequenceList) {
+            button.setOpacity(0.5);
+            if (e.getSource().equals(button)) {
+                String regex = "Floor ";
+                floor = button.getText();
+                floor = floor.replace(regex, "");
+                System.out.println(floor);
+                button.setOpacity(1.0);
+            }
+        }
+        switch (floor){
+            case "3":
+                floor3ButtonOp(null);
+                break;
+            case "2":
+                floor2ButtonOp(null);
+                break;
+            case "1":
+                floor1ButtonOp(null);
+                break;
+            case "G":
+                floorGButtonOp(null);
+                break;
+            case "L1":
+                floorL1ButtonOp(null);
+                break;
+            case "L2":
+                floorL2ButtonOp(null);
+                break;
+        }
+    }
 
     public void addOverlay() {
         Parent root;
@@ -749,7 +799,8 @@ public class MapScreenController {
 
     /**
      * Used to draw the list of nodes returned by AStar
-     *
+     * it will also create the start and end labels, color the path, change the color of certain nodes
+     * (end = red, start = green, stair = blue) and it will create the label for the stairs
      * @param path List of Nodes to be drawn
      */
     //removed static hope it didn't break anything
@@ -873,10 +924,13 @@ public class MapScreenController {
                     if (e.contains(pastNode)) {
                         edgeDispSet.get(e.getID()).setStroke(Color.rgb(250, 150, 0));
                         edgeDispSet.get(e.getID()).setVisible(true);
+
                         if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
                             edgeDispSet.get(e.getID()).setOpacity(1.0);
                         } else {
-                            edgeDispSet.get(e.getID()).setOpacity(0.3);
+                            edgeDispSet.get(e.getID()).getStrokeDashArray().addAll(1.0, 10.0);
+                            edgeDispSet.get(e.getID()).setOpacity(0.5);
+
                         }
                     }
                 }
@@ -894,7 +948,7 @@ public class MapScreenController {
             if (arrowFloorSet.get(i).equals(currentFloor.toString())) {
                 arrowDispSet.get(i).setOpacity(1.0);
             } else {
-                arrowDispSet.get(i).setOpacity(0.3);
+                arrowDispSet.get(i).setOpacity(0.5);
             }
         }
 
@@ -931,13 +985,15 @@ public class MapScreenController {
                 }
             }
         }
+        getFloors();
+        createFloorSequence();
 
 
         System.out.println("list of stair nodes: " + stairNodeSet.toString());
-        minXCoord -= 200;
+        minXCoord -= 400;
         minYCoord -= 400;
-        maxXCoord += 200;
-        maxYCoord += 100;
+        maxXCoord += 400;
+        maxYCoord += 400;
         double rangeX = maxXCoord - minXCoord;
         double rangeY = maxYCoord - minYCoord;
 
@@ -1002,9 +1058,13 @@ public class MapScreenController {
     public void checkStairNodeSet(Node currentNode) {
 
         if (currentNode.getType().equals(Node.nodeType.STAI)) {
+            if(recentElevNodeSet.size() > 1)
+                addToStairNodeSet();
             recentElevNodeSet.clear();
             recentStairNodeSet.add(currentNode);
         } else if (currentNode.getType().equals(Node.nodeType.ELEV)) {
+            if (recentStairNodeSet.size() > 1)
+                addToStairNodeSet();
             recentStairNodeSet.clear();
             recentElevNodeSet.add(currentNode);
         } else {
@@ -1037,7 +1097,7 @@ public class MapScreenController {
 //        searchBarOverlayController.directionsTableView.setVisible(false);
 //        searchBarOverlayController.directionsButton.setText("Directions >");
 //        searchBarOverlayController.setDirectionsVisible(false);
-
+        clearFloorSequenceHBox();
         Node currentNode = null, pastNode = null;
         Circle waypoint;
         Line line;
@@ -1147,7 +1207,7 @@ public class MapScreenController {
         System.out.println("translate X: " + translateX + " translate Y: " + translateY);
 
         double translateSlopeX = X_SCALE * mapImage.getScaleX() * IMG_WIDTH;
-        double translateSlopeY = Y_SCALE * mapImage.getScaleX() * IMG_HEIGHT;
+        double translateSlopeY = Y_SCALE * mapImage.getScaleY() * IMG_HEIGHT;
         if (screenTranslateX > (translateSlopeX - 1920) / 2)
             screenTranslateX = (translateSlopeX - 1920) / 2;
         if (screenTranslateX < -(translateSlopeX - 1920) / 2)
@@ -1166,6 +1226,91 @@ public class MapScreenController {
 
     public Boolean getPathDrawn(){
         return this.pathDrawn;
+    }
+
+    /**
+     * this method will determin what floors the path goes on
+     */
+    public void getFloors(){
+        floorsList.clear();
+        for (int i = 0; i < stairNodeSet.size(); i+=2){
+                floorsList.add(stairNodeSet.get(i).getFloor());
+        }
+        if (stairNodeSet.size() > 1)
+            floorsList.add(stairNodeSet.get(stairNodeSet.size()-1).getFloor());
+        System.out.println("size of stairNodeSet: " + stairNodeSet.size());
+        System.out.println("Floors in floorslist: " + floorsList.toString());
+    }
+
+    /**
+     * creates the labels and puts them in the hbox
+     */
+    public void createFloorSequence(){
+        clearFloorSequenceHBox();
+        floorSequenceList.clear();
+        Polygon arrowHead = new Polygon();
+        Polygon arrowEnd = new Polygon();
+        Polygon arrow = new Polygon();
+        arrowHead.getPoints().addAll( new Double[]{
+                0.0, 0.0,
+                200.0, 0.0,
+                300.0, 50.0,
+                200.0, 100.0,
+                0.0, 100.0
+        });
+
+        arrowEnd.getPoints().addAll(new Double[]{
+                0.0,0.0,
+                300.0,0.0,
+                300.0,100.0,
+                0.0, 100.0,
+                100.0, 50.0
+        });
+
+        arrow.getPoints().addAll(new Double[]{
+                0.0,0.0,
+                200.0,0.0,
+                300.0,50.0,
+                200.0,100.0,
+                0.0,100.0,
+                100.0,50.0
+        });
+
+
+        if (!floorsList.equals(null)) {
+            for (int i = 0; i < floorsList.size(); i++) {
+                System.out.println("Created new LabeL");
+
+                JFXButton button = new JFXButton();
+                floorSequenceHBox.getChildren().add(button);
+                floorSequenceList.add(button);
+                if (i == 0) {
+                    button.setShape(arrowHead);
+                    button.setAlignment(Pos.CENTER_LEFT);
+                } else if (i == floorsList.size() - 1) {
+                    button.setShape(arrowEnd);
+                    button.setAlignment(Pos.CENTER_RIGHT);
+                } else {
+                    button.setShape(arrow);
+                    button.setAlignment(Pos.CENTER_RIGHT);
+                }
+                if (!currentFloor.equals(floorsList.get(i))){
+                    button.setOpacity(0.5);
+                }
+                button.setMinHeight(75);
+                button.setMinWidth(125);
+                button.setPadding(new Insets(20));
+                button.setButtonType(JFXButton.ButtonType.RAISED);
+                button.setOnAction(e -> floorSequenceButtonOp(e));
+                button.setText("Floor " + floorsList.get(i).toString());
+                button.setStyle("-fx-background-color: red;");
+            }
+        }
+
+    }
+
+    public void clearFloorSequenceHBox(){
+        floorSequenceHBox.getChildren().clear();
     }
 
 
