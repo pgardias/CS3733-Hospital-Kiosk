@@ -923,10 +923,13 @@ public class MapScreenController {
                     if (e.contains(pastNode)) {
                         edgeDispSet.get(e.getID()).setStroke(Color.rgb(250, 150, 0));
                         edgeDispSet.get(e.getID()).setVisible(true);
+
                         if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
                             edgeDispSet.get(e.getID()).setOpacity(1.0);
                         } else {
-                            edgeDispSet.get(e.getID()).setOpacity(0.3);
+                            edgeDispSet.get(e.getID()).getStrokeDashArray().addAll(1.0, 10.0);
+                            edgeDispSet.get(e.getID()).setOpacity(0.5);
+
                         }
                     }
                 }
@@ -938,7 +941,7 @@ public class MapScreenController {
             if (arrowFloorSet.get(i).equals(currentFloor.toString())) {
                 arrowDispSet.get(i).setOpacity(1.0);
             } else {
-                arrowDispSet.get(i).setOpacity(0.3);
+                arrowDispSet.get(i).setOpacity(0.5);
             }
         }
 
@@ -1276,15 +1279,12 @@ public class MapScreenController {
                 if (i == 0){
                     button.setShape(arrowHead);
                     button.setAlignment(Pos.CENTER_LEFT);
-                    button.setOpacity(1.0);
                 } else if (i == floorsList.size() - 1){
                     button.setShape(arrowEnd);
                     button.setAlignment(Pos.CENTER_RIGHT);
-                    button.setOpacity(0.5);
                 } else {
                     button.setShape(arrow);
                     button.setAlignment(Pos.CENTER_RIGHT);
-                    button.setOpacity(0.5);
                 }
                 button.setMinHeight(75);
                 button.setMinWidth(125);
