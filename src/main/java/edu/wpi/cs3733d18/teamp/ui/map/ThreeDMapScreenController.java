@@ -45,7 +45,7 @@ public class ThreeDMapScreenController implements Initializable{
     private double X_SCALE = 1588.235294 / 5000.0;
     private double Z_SCALE = 1080.0 / 3400.0;
     private static final double NODE_RADIUS = 5.0;
-    private static final Color lightColor = Color.rgb(244, 255, 250);
+    private static final Color lightColor = Color.rgb(150, 150, 150);
 
     private int X_OFFSET = -50;
     private int Y_OFFSET = -170;
@@ -80,6 +80,8 @@ public class ThreeDMapScreenController implements Initializable{
     // Display hashmaps
     private static ArrayList<MeshView[]> allModels = new ArrayList<>();
     private static ArrayList<PhongMaterial> allTextures = new ArrayList<>();
+    private static Group allLights = new Group();
+    private static ArrayList<Integer> floorOffsets = new ArrayList<>();
     private static HashMap<String, Sphere> nodeDispSet = new HashMap<>();
     private static ArrayList<Polygon> arrowDispSet = new ArrayList<>();
     private static ArrayList<String> arrowFloorSet = new ArrayList<>();
@@ -204,9 +206,11 @@ public class ThreeDMapScreenController implements Initializable{
         group.setTranslateX(500);
         group.setTranslateY(100);
         threeDAnchorPane.getChildren().add(group);
+        threeDAnchorPane.getChildren().add(allLights);
         currentFloor = Node.floorType.LEVEL_L2;
         draw3DNodes();
         drawEdges();
+        curScale = 1;
     }
 
     private void addOverlay() {
@@ -476,23 +480,25 @@ public class ThreeDMapScreenController implements Initializable{
 
     private Group buildScene() {
         root = new Group();
-        curScale = 15;
+        curScale = 16;
         curXRotation = 20;
         curYRotation = 0;
         curZRotation = 0;
         int height = 0;
         int index = 0;
-        ArrayList<Integer> curOffsets;
-        PhongMaterial phongMaterial = new PhongMaterial();
+        ArrayList<Integer> floorScale;
+        PhongMaterial phongMaterial;
         for (MeshView[] model : allModels) {
-            curOffsets = getFloorOffset(index); // Get current floor translation offsets
+            getFloorOffset(index); // Get current floor translation offsets
             phongMaterial = allTextures.get(index); // Get texture for current floor
-            model[0].setTranslateX((VIEWPORT_SIZE / 2) + curOffsets.get(0)); //TODO get rid of VIEWPORT_SIZE dependency
-            model[0].setTranslateY((VIEWPORT_SIZE / 2) + height + curOffsets.get(1));
-            model[0].setTranslateZ((VIEWPORT_SIZE / 2) + curOffsets.get(2));
-            model[0].setScaleX(curScale);
+            floorScale = getFloorScale(index);
+
+            model[0].setTranslateX(400 + floorOffsets.get(0));
+            model[0].setTranslateY(400 + height);
+            model[0].setTranslateZ(400 + floorOffsets.get(2));
+            model[0].setScaleX(curScale + floorScale.get(0));
             model[0].setScaleY(curScale);
-            model[0].setScaleZ(curScale);
+            model[0].setScaleZ(curScale + floorScale.get(1));
 
             model[0].getTransforms().setAll(new Rotate(curXRotation, Rotate.X_AXIS), new Rotate(curYRotation, Rotate.Y_AXIS));
             model[0].setMaterial(phongMaterial);
@@ -500,29 +506,29 @@ public class ThreeDMapScreenController implements Initializable{
 
             height -= 50;
             index += 1;
+            floorOffsets.clear();
         }
 
-
         pointLight = new PointLight(lightColor);
-        pointLight.setTranslateX(VIEWPORT_SIZE*3/4);
-        pointLight.setTranslateY(VIEWPORT_SIZE/2);
-        pointLight.setTranslateZ(VIEWPORT_SIZE/2);
+        pointLight.setTranslateX(0);
+        pointLight.setTranslateY(-1000);
+        pointLight.setTranslateZ(0);
         PointLight pointLight2 = new PointLight(lightColor);
-        pointLight2.setTranslateX(VIEWPORT_SIZE/4);
-        pointLight2.setTranslateY(VIEWPORT_SIZE*3/4);
-        pointLight2.setTranslateZ(VIEWPORT_SIZE*3/4);
+        pointLight2.setTranslateX(200);
+        pointLight2.setTranslateY(600);
+        pointLight2.setTranslateZ(600);
         PointLight pointLight3 = new PointLight(lightColor);
-        pointLight3.setTranslateX(VIEWPORT_SIZE*5/8);
-        pointLight3.setTranslateY(VIEWPORT_SIZE/2);
+        pointLight3.setTranslateX(500);
+        pointLight3.setTranslateY(400);
         pointLight3.setTranslateZ(0);
 
-        Color ambientColor = Color.rgb(80, 80, 80, 0);
+        Color ambientColor = Color.rgb(140, 140, 140, 0);
         AmbientLight ambient = new AmbientLight(ambientColor);
 
-        root.getChildren().add(pointLight);
-        root.getChildren().add(pointLight2);
-        root.getChildren().add(pointLight3);
-        root.getChildren().add(ambient);
+        allLights.getChildren().add(pointLight);
+        //allLights.getChildren().add(pointLight2);
+        //allLights.getChildren().add(pointLight3);
+        allLights.getChildren().add(ambient);
 
         return root;
     }
@@ -766,54 +772,6 @@ public class ThreeDMapScreenController implements Initializable{
             event.consume();
         }
     };
-
-    /**
-     * this clears the anchor pane, draws the edges and the nodes and loads in the new map
-     * this also brings in the basic overlays
-     */
-    private void updateMap(String model, String texture) {
-        // Clear display sets and anchor pane
-        nodeDispSet.clear();
-        edgeDispSet.clear();
-        threeDAnchorPane.getChildren().clear();
-
-        // Set rotation and translation to position where putting in nodes and edges is easier
-        threeDAnchorPane.setTranslateX(0);
-        threeDAnchorPane.setTranslateY(0);
-        threeDAnchorPane.setTranslateZ(0);
-        threeDAnchorPane.getTransforms().setAll(new Rotate(0, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
-                new Rotate(0, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
-        int tempXRotation = curXRotation;
-        int tempYRotaton = curYRotation;
-        int tempZRotation = curZRotation;
-        double tempScale = curScale;
-
-        // Get new floor mesh and texture it
-        URL pathName = getClass().getResource(model);
-        switchMesh(pathName);
-        PhongMaterial phongMaterial = new PhongMaterial();
-        phongMaterial.setDiffuseMap(new Image(getClass().getResource(texture).toExternalForm()));
-        MeshView mv = getMesh();
-        mv.setMaterial(phongMaterial);
-
-        // Redraw the nodes and edges
-        draw3DNodes();
-        drawEdges();
-        mv.toBack();
-
-        // Reset rotation to what it was for teh previous floor
-        curXRotation = tempXRotation;
-        curYRotation = tempYRotaton;
-        curZRotation = tempZRotation;
-        curScale = tempScale;
-        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
-                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
-        threeDAnchorPane.setTranslateX(curXTranslation); // Map panning
-        threeDAnchorPane.setTranslateY(curYTranslation); // Map panning
-        threeDAnchorPane.setScaleX(curScale);
-        threeDAnchorPane.setScaleY(curScale);
-        threeDAnchorPane.setScaleZ(curScale);
-    }
 
     /**
      * Hides the nodes for a floor that is not visible
@@ -1100,64 +1058,12 @@ public class ThreeDMapScreenController implements Initializable{
      */
     private ArrayList<Integer> nodeFloorPos() {
         ArrayList<Integer> floorYPos = new ArrayList<>();
-        switch (currentFloor) {
-            case LEVEL_L2:
-                floorYPos.add(Y_OFFSET);
-                floorYPos.add(Y_OFFSET + 100);
-                floorYPos.add(Y_OFFSET + 200);
-                floorYPos.add(Y_OFFSET + 300);
-                floorYPos.add(Y_OFFSET + 400);
-                floorYPos.add(Y_OFFSET + 500);
-                break;
-            case LEVEL_L1:
-                floorYPos.add(Y_OFFSET - 100);
-                floorYPos.add(Y_OFFSET);
-                floorYPos.add(Y_OFFSET + 100);
-                floorYPos.add(Y_OFFSET + 200);
-                floorYPos.add(Y_OFFSET + 300);
-                floorYPos.add(Y_OFFSET + 400);
-                break;
-            case LEVEL_G:
-                floorYPos.add(Y_OFFSET - 200);
-                floorYPos.add(Y_OFFSET - 100);
-                floorYPos.add(Y_OFFSET);
-                floorYPos.add(Y_OFFSET + 100);
-                floorYPos.add(Y_OFFSET + 200);
-                floorYPos.add(Y_OFFSET + 300);
-                break;
-            case LEVEL_1:
-                floorYPos.add(Y_OFFSET - 300);
-                floorYPos.add(Y_OFFSET - 200);
-                floorYPos.add(Y_OFFSET - 100);
-                floorYPos.add(Y_OFFSET);
-                floorYPos.add(Y_OFFSET + 100);
-                floorYPos.add(Y_OFFSET + 200);
-                break;
-            case LEVEL_2:
-                floorYPos.add(Y_OFFSET - 400);
-                floorYPos.add(Y_OFFSET - 300);
-                floorYPos.add(Y_OFFSET - 200);
-                floorYPos.add(Y_OFFSET - 100);
-                floorYPos.add(Y_OFFSET);
-                floorYPos.add(Y_OFFSET + 100);
-                break;
-            case LEVEL_3:
-                floorYPos.add(Y_OFFSET - 500);
-                floorYPos.add(Y_OFFSET - 400);
-                floorYPos.add(Y_OFFSET - 300);
-                floorYPos.add(Y_OFFSET - 200);
-                floorYPos.add(Y_OFFSET - 100);
-                floorYPos.add(Y_OFFSET);
-                break;
-            default:
-                floorYPos.add(Y_OFFSET);
-                floorYPos.add(Y_OFFSET + 100);
-                floorYPos.add(Y_OFFSET + 100);
-                floorYPos.add(Y_OFFSET + 100);
-                floorYPos.add(Y_OFFSET + 100);
-                floorYPos.add(Y_OFFSET + 100);
-                break;
-        }
+        floorYPos.add(Y_OFFSET - 60);
+        floorYPos.add(Y_OFFSET + 60);
+        floorYPos.add(Y_OFFSET + 160);
+        floorYPos.add(Y_OFFSET + 260);
+        floorYPos.add(Y_OFFSET + 360);
+        floorYPos.add(Y_OFFSET + 460);
         return floorYPos;
     }
 
@@ -1197,45 +1103,78 @@ public class ThreeDMapScreenController implements Initializable{
     /**
      * Fetches offsets to align floors to nodes
      */
-    private ArrayList<Integer> getFloorOffset(int index) {
-        ArrayList<Integer> offsets = new ArrayList<>();
+    private void getFloorOffset(int index) {
         switch(index) {
             case 0:
-                offsets.add(-150); // X Offset
-                offsets.add(0); // Y Offset
-                offsets.add(35); // Z Offset
+                floorOffsets.add(0, -130); // X Offset
+                floorOffsets.add(1, 0); // Y Offset
+                floorOffsets.add(2, 50); // Z Offset
                 break;
             case 1:
-                offsets.add(0); // X Offset
-                offsets.add(0); // Y Offset
-                offsets.add(20); // Z Offset
+                floorOffsets.add(0, 35); // X Offset
+                floorOffsets.add(1, 0); // Y Offset
+                floorOffsets.add(2, 70); // Z Offset
                 break;
             case 2:
-                offsets.add(0); // X Offset
-                offsets.add(0); // Y Offset
-                offsets.add(0); // Z Offset
+                floorOffsets.add(0, 0); // X Offset
+                floorOffsets.add(1, 0); // Y Offset
+                floorOffsets.add(2, 0); // Z Offset
                 break;
             case 3:
-                offsets.add(0); // X Offset
-                offsets.add(0); // Y Offset
-                offsets.add(0); // Z Offset
+                floorOffsets.add(0, 0); // X Offset
+                floorOffsets.add(1, 0); // Y Offset
+                floorOffsets.add(2, 0); // Z Offset
                 break;
             case 4:
-                offsets.add(0); // X Offset
-                offsets.add(0); // Y Offset
-                offsets.add(0); // Z Offset
+                floorOffsets.add(0, 0); // X Offset
+                floorOffsets.add(1, 0); // Y Offset
+                floorOffsets.add(2, 0); // Z Offset
                 break;
             case 5:
-                offsets.add(0); // X Offset
-                offsets.add(0); // Y Offset
-                offsets.add(0); // Z Offset
+                floorOffsets.add(0, 0); // X Offset
+                floorOffsets.add(1, 0); // Y Offset
+                floorOffsets.add(2, 0); // Z Offset
                 break;
             default:
-                offsets.add(0); // X Offset
-                offsets.add(0); // Y Offset
-                offsets.add(0); // Z Offset
+                floorOffsets.add(0, 0); // X Offset
+                floorOffsets.add(1, 0); // Y Offset
+                floorOffsets.add(2, 0); // Z Offset
                 break;
         }
-        return offsets;
+    }
+
+    private ArrayList<Integer> getFloorScale(int index) {
+        ArrayList<Integer> floorScale = new ArrayList<>();
+        switch(index) {
+            case 0:
+                floorScale.add(0, 0); // X Scale
+                floorScale.add(1, 0); // Z Scale
+                break;
+            case 1:
+                floorScale.add(0, 0); // X Scale
+                floorScale.add(1, 0); // Z Scale
+                break;
+            case 2:
+                floorScale.add(0, 0); // X Scale
+                floorScale.add(1, 0); // Z Scale
+                break;
+            case 3:
+                floorScale.add(0, 0); // X Scale
+                floorScale.add(1, 0); // Z Scale
+                break;
+            case 4:
+                floorScale.add(0, 0); // X Scale
+                floorScale.add(1, 0); // Z Scale
+                break;
+            case 5:
+                floorScale.add(0, 0); // X Scale
+                floorScale.add(1, 0); // Z Scale
+                break;
+            default:
+                floorScale.add(0, 0); // X Scale
+                floorScale.add(1, 0); // Z Scale
+                break;
+        }
+        return floorScale;
     }
 }
