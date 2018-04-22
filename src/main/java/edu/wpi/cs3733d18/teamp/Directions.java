@@ -20,6 +20,7 @@ public class Directions {
     private static final int ELEVATORS = 8;
     private static final int STAIRS = 9;
     private static final int TURN_AROUND = 10;
+    private boolean firstDirection = false;
 
     private ArrayList<String> directions;
 
@@ -48,9 +49,14 @@ public class Directions {
         Node pastNode = null;
         Node nextNode = null;
         boolean changeDirections = false;
-        boolean floorChange = true;
+        boolean floorChange = false;
         int direction;
-        directions.add("Starting Route!");
+
+//        if(path.get(0).getType() == Node.nodeType.ELEV || path.get(0).getType() == Node.nodeType.STAI){
+//            directions.add("Floor change to " + path.get(0).getFloor().toString());
+//            firstElevator = false;
+//        }
+
         for (int i = 0; i < path.size()-1; i++) {
             // Set new nodes
             pastNode = node;
@@ -59,6 +65,7 @@ public class Directions {
 
             System.out.println("pastNode: " + pastNode + " node: " + node + " nextNode: " + nextNode);
 
+
             if (pastNode != null) {
                 // Set new values according to new nodes
                 distance += node.distanceBetweenNodes(pastNode);
@@ -66,10 +73,14 @@ public class Directions {
                 pastAngle = pastNode.angleBetweenNodes(node);
 
                 direction = angleState(angle, pastAngle, node, pastNode);
+
+
                 if(floorChange){
-                    directions.add("Floor change to " + node.getFloor().toString());
+                    directions.add("Buffer");
+
                 }
                 floorChange = false;
+
 
                 switch (direction) {
                     case STAIRS:
@@ -153,7 +164,6 @@ public class Directions {
             }
         }
         directions.add(getDistanceString(distance, nextNode, node));
-        directions.add("You have arrived at your destination!");
         setDirections(directions);
     }
 
@@ -264,5 +274,6 @@ public class Directions {
     public  void clearDirections(){
         this.directions.clear();
     }
+
 
 }
