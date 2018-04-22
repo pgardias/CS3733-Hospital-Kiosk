@@ -25,6 +25,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import jdk.nashorn.internal.runtime.regexp.joni.constants.NodeType;
 import org.controlsfx.control.PopOver;
@@ -74,7 +75,7 @@ public class MapScreenController {
     private ArrayList<Node> recentStairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentElevNodeSet = new ArrayList<Node>();
     private ArrayList<Node.floorType> floorsList = new ArrayList<>();
-    private ArrayList<Label> floorSequenceList = new ArrayList<>();
+    private ArrayList<JFXButton> floorSequenceList = new ArrayList<>();
 
 
     DBSystem db = DBSystem.getInstance();
@@ -722,37 +723,44 @@ public class MapScreenController {
             System.out.println("mouseEvent: " + event.getEventType().toString());
             if (event.getEventType() == MouseEvent.MOUSE_CLICKED){
                 System.out.println("Label Clicked");
-                String floor = "";
-                for (Label label: floorSequenceList){
-                    if (event.getSource().equals(label)) {
-                        System.out.println("label chosen: " + label.getText());
-                        floor = label.getText();
-                        break;
-                    }
-                }
-                switch (floor){
-                    case "3":
-                        floor3ButtonOp(null);
-                        break;
-                    case "2":
-                        floor2ButtonOp(null);
-                        break;
-                    case "1":
-                        floor1ButtonOp(null);
-                        break;
-                    case "G":
-                        floorGButtonOp(null);
-                        break;
-                    case "L1":
-                        floorL1ButtonOp(null);
-                        break;
-                    case "L2":
-                        floorL2ButtonOp(null);
-                        break;
-                }
+
             }
         }
     };
+
+    public void floorSequenceButtonOp(ActionEvent e){
+        String floor = "";
+        for (JFXButton button: floorSequenceList) {
+            button.setOpacity(0.5);
+            if (e.getSource().equals(button)) {
+                String regex = "Floor ";
+                floor = button.getText();
+                floor = floor.replace(regex, "");
+                System.out.println(floor);
+                button.setOpacity(1.0);
+            }
+        }
+        switch (floor){
+            case "3":
+                floor3ButtonOp(null);
+                break;
+            case "2":
+                floor2ButtonOp(null);
+                break;
+            case "1":
+                floor1ButtonOp(null);
+                break;
+            case "G":
+                floorGButtonOp(null);
+                break;
+            case "L1":
+                floorL1ButtonOp(null);
+                break;
+            case "L2":
+                floorL2ButtonOp(null);
+                break;
+        }
+    }
 
     public void addOverlay() {
         Parent root;
@@ -1036,9 +1044,13 @@ public class MapScreenController {
     public void checkStairNodeSet(Node currentNode) {
 
         if (currentNode.getType().equals(Node.nodeType.STAI)) {
+            if(recentElevNodeSet.size() > 1)
+                addToStairNodeSet();
             recentElevNodeSet.clear();
             recentStairNodeSet.add(currentNode);
         } else if (currentNode.getType().equals(Node.nodeType.ELEV)) {
+            if (recentStairNodeSet.size() > 1)
+                addToStairNodeSet();
             recentStairNodeSet.clear();
             recentElevNodeSet.add(currentNode);
         } else {
@@ -1207,10 +1219,12 @@ public class MapScreenController {
      */
     public void getFloors(){
         floorsList.clear();
-        for (Node node: stairNodeSet){
-            if (!floorsList.contains(node.getFloor()))
-                floorsList.add(node.getFloor());
+        for (int i = 0; i < stairNodeSet.size(); i+=2){
+                floorsList.add(stairNodeSet.get(i).getFloor());
         }
+        floorsList.add(stairNodeSet.get(stairNodeSet.size()-1).getFloor());
+        System.out.println("size of stairNodeSet: " + stairNodeSet.size());
+        System.out.println("Floors in floorslist: " + floorsList.toString());
     }
 
     /**
@@ -1219,20 +1233,62 @@ public class MapScreenController {
     public void createFloorSequence(){
         clearFloorSequenceHBox();
         floorSequenceList.clear();
-        if (!floorsList.equals(null)) {
-            for (Node.floorType floor : floorsList) {
-                System.out.println("Created new LabeL");
-                Circle circle = new Circle(20);
-                circle.setStroke(Color.BLACK);
-                circle.setFill(Color.RED);
-                //floorSequenceList.add(circle);
-                System.out.println("Label added to the list");
-                floorSequenceHBox.getChildren().add(circle);
-                floorSequenceHBox.setMargin(circle, new Insets(10));
+        Polygon arrowHead = new Polygon();
+        Polygon arrowEnd = new Polygon();
+        Polygon arrow = new Polygon();
+        arrowHead.getPoints().addAll( new Double[]{
+                0.0, 0.0,
+                200.0, 0.0,
+                300.0, 50.0,
+                200.0, 100.0,
+                0.0, 100.0
+        });
 
-                Button button = new Button(floor.toString());
-                button.setShape(new Circle(10));
+        arrowEnd.getPoints().addAll(new Double[]{
+                0.0,0.0,
+                300.0,0.0,
+                300.0,100.0,
+                0.0, 100.0,
+                100.0, 50.0
+        });
+
+        arrow.getPoints().addAll(new Double[]{
+                0.0,0.0,
+                200.0,0.0,
+                300.0,50.0,
+                200.0,100.0,
+                0.0,100.0,
+                100.0,50.0
+        });
+
+
+        if (!floorsList.equals(null)) {
+            for (int i = 0; i < floorsList.size(); i++) {
+                System.out.println("Created new LabeL");
+
+                JFXButton button = new JFXButton();
                 floorSequenceHBox.getChildren().add(button);
+                floorSequenceList.add(button);
+                if (i == 0){
+                    button.setShape(arrowHead);
+                    button.setAlignment(Pos.CENTER_LEFT);
+                    button.setOpacity(1.0);
+                } else if (i == floorsList.size() - 1){
+                    button.setShape(arrowEnd);
+                    button.setAlignment(Pos.CENTER_RIGHT);
+                    button.setOpacity(0.5);
+                } else {
+                    button.setShape(arrow);
+                    button.setAlignment(Pos.CENTER_RIGHT);
+                    button.setOpacity(0.5);
+                }
+                button.setMinHeight(75);
+                button.setMinWidth(125);
+                button.setPadding(new Insets(20));
+                button.setButtonType(JFXButton.ButtonType.RAISED);
+                button.setOnAction(e -> floorSequenceButtonOp(e));
+                button.setText("Floor " + floorsList.get(i).toString());
+                button.setStyle("-fx-background-color: red;");
             }
         }
 
