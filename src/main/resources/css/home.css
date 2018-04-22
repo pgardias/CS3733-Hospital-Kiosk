@@ -58,13 +58,12 @@
 .emergency-button:hover {
     -fx-background-color: #c60000;
     /*-fx-font-family: "Abyssinica SIL";*/
-    /*-fx-font-size: 48px;*/
 }
 
 .reactive-logo {
-    -fx-effect:  dropshadow(gaussian, LIGHTGRAY, 5, 0.0, 0, 0);
+    -fx-effect: dropshadow(gaussian, GRAY, 5, 0.0, 0, 0);
 }
 
 .reactive-logo:hover {
-    -fx-effect: dropshadow(gaussian, GRAY, 5, 0.0, 0, 0);
+    -fx-effect: dropshadow(gaussian, GRAY, 10, 0.0, 0, 0);
 }
