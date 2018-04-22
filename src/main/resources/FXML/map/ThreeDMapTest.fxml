@@ -61,7 +61,6 @@
                   <Font size="36.0" />
                </font>
             </JFXButton>
-               <BorderPane fx:id="searchbarBorderPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" GridPane.columnIndex="5" />
             <JFXButton fx:id="floor3Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor3ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="highlight-floor-button" text="3" GridPane.columnIndex="5" GridPane.rowIndex="1">
                <font>
                   <Font size="36.0" />
@@ -71,4 +70,5 @@
       </GridPane>
    </right>
    </BorderPane>
+   <BorderPane fx:id="searchbarBorderPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" GridPane.columnIndex="5" />
 </AnchorPane>

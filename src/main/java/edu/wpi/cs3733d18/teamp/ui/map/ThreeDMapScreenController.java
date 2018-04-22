@@ -486,7 +486,7 @@ public class ThreeDMapScreenController implements Initializable{
         curZRotation = 0;
         int height = 0;
         int index = 0;
-        ArrayList<Integer> floorScale;
+        ArrayList<Double> floorScale;
         PhongMaterial phongMaterial;
         for (MeshView[] model : allModels) {
             getFloorOffset(index); // Get current floor translation offsets
@@ -704,7 +704,7 @@ public class ThreeDMapScreenController implements Initializable{
                     for (String string : nodeDispSet.keySet()) {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
-                            //nodeDispSet.get(string).setFill(Color.GREEN);
+                            nodeDispSet.get(string).setMaterial(fillGreen);
                             searchBarOverlayController.setSourceSearchBar(node.getLongName());
                         }
                     }
@@ -713,7 +713,7 @@ public class ThreeDMapScreenController implements Initializable{
                     for (String string : nodeDispSet.keySet()) {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
-                            //nodeDispSet.get(string).setFill(Color.RED);
+                            nodeDispSet.get(string).setMaterial(fillRed);
                             searchBarOverlayController.setDestinationSearchBar(node.getLongName());
                         }
                     }
@@ -722,7 +722,8 @@ public class ThreeDMapScreenController implements Initializable{
                     for (String string : nodeDispSet.keySet()) {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
-                            //nodeDispSet.get(string).setFill(Color.GREEN);
+                            nodeDispSet.get(string).setMaterial(fillGreen);
+                            System.out.println("TEST");
                             searchBarOverlayController.setSourceSearchBar(node.getLongName());
                         }
                     }
@@ -732,7 +733,7 @@ public class ThreeDMapScreenController implements Initializable{
                     for (String string : nodeDispSet.keySet()) {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
-                            //nodeDispSet.get(string).setFill(Color.RED);
+                            nodeDispSet.get(string).setMaterial(fillRed);
                             searchBarOverlayController.setDestinationSearchBar(node.getLongName());
                         }
                     }
@@ -1058,12 +1059,12 @@ public class ThreeDMapScreenController implements Initializable{
      */
     private ArrayList<Integer> nodeFloorPos() {
         ArrayList<Integer> floorYPos = new ArrayList<>();
-        floorYPos.add(Y_OFFSET - 60);
-        floorYPos.add(Y_OFFSET + 60);
-        floorYPos.add(Y_OFFSET + 160);
-        floorYPos.add(Y_OFFSET + 260);
-        floorYPos.add(Y_OFFSET + 360);
-        floorYPos.add(Y_OFFSET + 460);
+        floorYPos.add(Y_OFFSET - 50);
+        floorYPos.add(Y_OFFSET + 50);
+        floorYPos.add(Y_OFFSET + 150);
+        floorYPos.add(Y_OFFSET + 250);
+        floorYPos.add(Y_OFFSET + 350);
+        floorYPos.add(Y_OFFSET + 450);
         return floorYPos;
     }
 
@@ -1112,28 +1113,28 @@ public class ThreeDMapScreenController implements Initializable{
                 break;
             case 1:
                 floorOffsets.add(0, 35); // X Offset
-                floorOffsets.add(1, 0); // Y Offset
+                floorOffsets.add(1, 10); // Y Offset
                 floorOffsets.add(2, 70); // Z Offset
                 break;
             case 2:
-                floorOffsets.add(0, 0); // X Offset
+                floorOffsets.add(0, 35); // X Offset
                 floorOffsets.add(1, 0); // Y Offset
-                floorOffsets.add(2, 0); // Z Offset
+                floorOffsets.add(2, 70); // Z Offset
                 break;
             case 3:
-                floorOffsets.add(0, 0); // X Offset
+                floorOffsets.add(0, 35); // X Offset
                 floorOffsets.add(1, 0); // Y Offset
-                floorOffsets.add(2, 0); // Z Offset
+                floorOffsets.add(2, 47); // Z Offset
                 break;
             case 4:
-                floorOffsets.add(0, 0); // X Offset
+                floorOffsets.add(0, 32); // X Offset
                 floorOffsets.add(1, 0); // Y Offset
-                floorOffsets.add(2, 0); // Z Offset
+                floorOffsets.add(2, 32); // Z Offset
                 break;
             case 5:
-                floorOffsets.add(0, 0); // X Offset
+                floorOffsets.add(0, 25); // X Offset
                 floorOffsets.add(1, 0); // Y Offset
-                floorOffsets.add(2, 0); // Z Offset
+                floorOffsets.add(2, 35); // Z Offset
                 break;
             default:
                 floorOffsets.add(0, 0); // X Offset
@@ -1143,36 +1144,36 @@ public class ThreeDMapScreenController implements Initializable{
         }
     }
 
-    private ArrayList<Integer> getFloorScale(int index) {
-        ArrayList<Integer> floorScale = new ArrayList<>();
+    private ArrayList<Double> getFloorScale(int index) {
+        ArrayList<Double> floorScale = new ArrayList<>();
         switch(index) {
             case 0:
-                floorScale.add(0, 0); // X Scale
-                floorScale.add(1, 0); // Z Scale
+                floorScale.add(0, 0.0); // X Scale
+                floorScale.add(1, 0.0); // Z Scale
                 break;
             case 1:
-                floorScale.add(0, 0); // X Scale
-                floorScale.add(1, 0); // Z Scale
+                floorScale.add(0, 0.0); // X Scale
+                floorScale.add(1, 0.0); // Z Scale
                 break;
             case 2:
-                floorScale.add(0, 0); // X Scale
-                floorScale.add(1, 0); // Z Scale
+                floorScale.add(0, 0.0); // X Scale
+                floorScale.add(1, 0.0); // Z Scale
                 break;
             case 3:
-                floorScale.add(0, 0); // X Scale
-                floorScale.add(1, 0); // Z Scale
+                floorScale.add(0, 0.0); // X Scale
+                floorScale.add(1, 0.0); // Z Scale
                 break;
             case 4:
-                floorScale.add(0, 0); // X Scale
-                floorScale.add(1, 0); // Z Scale
+                floorScale.add(0, -0.2); // X Scale
+                floorScale.add(1, -0.2); // Z Scale
                 break;
             case 5:
-                floorScale.add(0, 0); // X Scale
-                floorScale.add(1, 0); // Z Scale
+                floorScale.add(0, -0.3); // X Scale
+                floorScale.add(1, -0.3); // Z Scale
                 break;
             default:
-                floorScale.add(0, 0); // X Scale
-                floorScale.add(1, 0); // Z Scale
+                floorScale.add(0, 0.0); // X Scale
+                floorScale.add(1, 0.0); // Z Scale
                 break;
         }
         return floorScale;
