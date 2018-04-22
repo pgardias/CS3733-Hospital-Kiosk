@@ -17,8 +17,9 @@
       <StackPane fx:id="mapPane" prefHeight="1080.0" prefWidth="1920.0">
          <children>
             <ImageView fx:id="mapImage" fitHeight="1080.0" fitWidth="1920.0" onMouseClicked="#getMouseValue" onScroll="#zoomScrollWheel" pickOnBounds="true" preserveRatio="true" />
-            <AnchorPane fx:id="nodesEdgesPane" onMousePressed="#getMouseValue" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" />
-            <AnchorPane fx:id="labelPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" />
+            <AnchorPane fx:id="edgePane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" />
+            <AnchorPane fx:id="arrowPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" />
+            <AnchorPane fx:id="nodesPane" onMousePressed="#getMouseValue" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" />
          </children>
       </StackPane>
       <BorderPane fx:id="buttonOverlayPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0">
