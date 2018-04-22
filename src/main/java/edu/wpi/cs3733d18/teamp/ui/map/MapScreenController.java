@@ -268,6 +268,7 @@ public class MapScreenController {
      */
     public void getMap() {
         Image image;
+        Image oldImage = mapImage.getImage();
 
         if (toggleOn) {
             X_OFFSET = 0;
@@ -340,7 +341,8 @@ public class MapScreenController {
                     break;
             }
         }
-        mapImage.setImage(image);
+        if (!oldImage.equals(image))
+            mapImage.setImage(image);
         autoTranslateZoom(zoomSlider.getMin(), zoomSlider.getMin(), 0, 0);
     }
 
@@ -558,6 +560,7 @@ public class MapScreenController {
                     Boolean foundStair = false;
                     for (String string : nodeDispSet.keySet()) {
                         if (nodeDispSet.get(string).equals(event.getSource())) {
+                            //The node clicked was a stair node so we swap the floor cuz a path was drawn
                             for (int i = 0; i < stairNodeSet.size(); i += 2) {
                                 System.out.println("entered for loop for stair nodes");
                                 if (stairNodeSet.get(i).getID().equals(string)) {
@@ -976,10 +979,10 @@ public class MapScreenController {
         createFloorSequence();
 
         System.out.println("list of stair nodes: " + stairNodeSet.toString());
-        minXCoord -= 200;
+        minXCoord -= 400;
         minYCoord -= 400;
-        maxXCoord += 200;
-        maxYCoord += 100;
+        maxXCoord += 400;
+        maxYCoord += 400;
         double rangeX = maxXCoord - minXCoord;
         double rangeY = maxYCoord - minYCoord;
 
@@ -1222,7 +1225,8 @@ public class MapScreenController {
         for (int i = 0; i < stairNodeSet.size(); i+=2){
                 floorsList.add(stairNodeSet.get(i).getFloor());
         }
-        floorsList.add(stairNodeSet.get(stairNodeSet.size()-1).getFloor());
+        if (stairNodeSet.size() > 1)
+            floorsList.add(stairNodeSet.get(stairNodeSet.size()-1).getFloor());
         System.out.println("size of stairNodeSet: " + stairNodeSet.size());
         System.out.println("Floors in floorslist: " + floorsList.toString());
     }
