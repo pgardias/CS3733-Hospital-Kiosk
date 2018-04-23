@@ -268,8 +268,6 @@ public class ServiceRequestScreen implements Initializable{
 
         populateTableViews();
 
-        newRequestComboBox.setItems(requestTypes);
-
         mi1.setOnAction((ActionEvent event) -> {
             claimRequestButtonOp(event);
         });
@@ -291,6 +289,7 @@ public class ServiceRequestScreen implements Initializable{
 
         newRequestTable.setContextMenu(menu1);
         inProgRequestTable.setContextMenu(menu2);
+        newRequestComboBox.setItems(requestTypes);
     }
 
     /**
@@ -623,11 +622,11 @@ public class ServiceRequestScreen implements Initializable{
     public void refresh() {
         newRequestTableChildren.clear();
         inProgRequestTableChildren.clear();
-        System.out.println("hi");
         completedRequestTableChildren.clear();
-        System.out.println("hello");
+
         emergencyRequests.clear();
         otherRequests.clear();
+
         populateTableViews();
     }
 }
