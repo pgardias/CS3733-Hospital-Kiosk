@@ -35,8 +35,7 @@ import org.controlsfx.control.PopOver;
 import org.controlsfx.control.PopOver.ArrowLocation;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class MapScreenController {
 
@@ -452,22 +451,17 @@ public class MapScreenController {
         nodeSet = db.getAllNodes();
         System.out.println("drawing icons");
 
-        // TODO organize node set to be ordered by increasing Y coordinate for creating icons - requires optimization
-        // Brute force nodes set ordered by increasing Y coordinate
-
-//        long startTime = System.currentTimeMillis();
-//        List<Node> orderedNodes = new ArrayList<>();
-//        for (int i = 0; i < IMG_HEIGHT; i++) {
-//            for (Node node : nodeSet.values()) {
-//                if (node.getY() == i) {
-//                    orderedNodes.add(node);
-//                }
-//            }
-//        }
-//        long endTime = System.currentTimeMillis();
-//        System.out.println("Brute force ordering nodes took " + (endTime - startTime) + " ms");
-
+        long startTime = System.currentTimeMillis();
+        List<Node> orderedNodes = new ArrayList<>();
         for (Node node : nodeSet.values()) {
+            orderedNodes.add(node);
+        }
+        orderedNodes.sort(Comparator.comparing(Node::getY));
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Ordering nodes took " + (endTime - startTime) + " ms");
+
+        for (Node node : orderedNodes) {
             if (node.getFloor() == currentFloor && node.getType() != Node.nodeType.HALL) {
                 StackPane container = constructIcon(node.getType());
                 if (!toggleOn) {
@@ -511,7 +505,6 @@ public class MapScreenController {
                     for (String string : iconDispSet.keySet()) {
                         if (iconDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
-                            // TODO mark icon as start location
                             searchBarOverlayController.setSourceSearchBar(node.getLongName());
                         }
                     }
@@ -521,8 +514,6 @@ public class MapScreenController {
                     for (String string : iconDispSet.keySet()) {
                         if (iconDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
-                            // TODO mark icon as start location
-//                        iconDispSet.get(string).setFill(Color.RED);
                             searchBarOverlayController.setDestinationSearchBar(node.getLongName());
 
                         }
@@ -575,6 +566,7 @@ public class MapScreenController {
                             popOver = null;
                         }
                         Node node = nodeSet.get(string);
+                        iconDispSet.get(node.getID()).toFront();
                         String type = node.getType().toString().toUpperCase();
                         if (type.equals("STAIR")) {
                             type = "STAIRS";
@@ -599,10 +591,18 @@ public class MapScreenController {
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
                         popOver = new PopOver(popOverVBox);
 
-                        if (event.getSceneX() < 960) {
-                            popOver.setArrowLocation(ArrowLocation.LEFT_TOP);
+                        if (event.getSceneX() < 1920 / 2) {
+                            if (event.getSceneY() > 1080 / 2) {
+                                popOver.setArrowLocation(ArrowLocation.LEFT_BOTTOM);
+                            } else {
+                                popOver.setArrowLocation(ArrowLocation.LEFT_TOP);
+                            }
                         } else {
-                            popOver.setArrowLocation(ArrowLocation.RIGHT_TOP);
+                            if (event.getSceneY() > 1080 / 2) {
+                                popOver.setArrowLocation(ArrowLocation.RIGHT_BOTTOM);
+                            } else {
+                                popOver.setArrowLocation(ArrowLocation.RIGHT_TOP);
+                            }
                         }
 
                         popOver.show((javafx.scene.Node) event.getSource(), -6);
@@ -904,6 +904,9 @@ public class MapScreenController {
             node.setScaleX(nodeIconScale);
             node.setScaleY(nodeIconScale);
             node.setOpacity(0.6);
+            node.toFront();
+            BounceTransition anim2 = new BounceTransition(node);
+            anim2.playFromStart();
             nodesPane.getChildren().add(node);
         }
 
@@ -921,7 +924,10 @@ public class MapScreenController {
             anim.playFromStart();
             node.setScaleX(nodeIconScale);
             node.setScaleY(nodeIconScale);
-            node.setOpacity(0.5);
+            node.setOpacity(0.6);
+            node.toFront();
+            BounceTransition anim2 = new BounceTransition(node);
+            anim2.playFromStart();
             nodesPane.getChildren().add(node);
         }
 
