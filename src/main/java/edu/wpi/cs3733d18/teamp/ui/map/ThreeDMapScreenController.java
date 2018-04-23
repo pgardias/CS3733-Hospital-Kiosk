@@ -321,18 +321,18 @@ public class ThreeDMapScreenController implements Initializable{
                     double yChange = newMouseInSceneY - mouseInSceneY;
 
                     // Change Panning X
-                    if (xChange < 0) { // Pan left
+                    if (xChange < 0 && curXTranslation > -800 * curScale) { // Pan left
                         curXTranslation -= PAN_SPEED;
                         threeDAnchorPane.setTranslateX(curXTranslation); // Map panning
-                    } else if (xChange > 0) { // Pan right
+                    } else if (xChange > 0 && curXTranslation < 800 * curScale) { // Pan right
                         curXTranslation += PAN_SPEED;
                         threeDAnchorPane.setTranslateX(curXTranslation); // Map panning
                     }
                     // Change Panning Y
-                    if (yChange < 0) { // Pan down
+                    if (yChange < 0 && curYTranslation > -800 * curScale) { // Pan down
                         curYTranslation -= PAN_SPEED;
                         threeDAnchorPane.setTranslateY(curYTranslation); // Map panning
-                    } else if (yChange > 0) { // Pan up
+                    } else if (yChange > 0 && curYTranslation < 800 * curScale) { // Pan up
                         curYTranslation += PAN_SPEED;
                         threeDAnchorPane.setTranslateY(curYTranslation); // Map panning
                     }
@@ -544,25 +544,25 @@ public class ThreeDMapScreenController implements Initializable{
     @FXML
     public void zoomScrollWheel(ScrollEvent s){
         double newZoom = (s.getDeltaY()); // Get value from scroll wheel
-        if (newZoom > 0 && curScale < 5) { // Zoom in (already zoomed out)
+        if (newZoom > 0 && curScale + 0.2 < 5) { // Zoom in (already zoomed out)
             curScale += 0.2;
             threeDAnchorPane.setScaleX(curScale);
             threeDAnchorPane.setScaleY(curScale);
             threeDAnchorPane.setScaleZ(curScale);
         }
-        else if (newZoom > 0 && curScale + 5 <= 100) { // Zoom in (already zoomed in)
+        else if (newZoom >= 5 && curScale + 5 <= 100) { // Zoom in (already zoomed in)
             curScale += 5;
             threeDAnchorPane.setScaleX(curScale);
             threeDAnchorPane.setScaleY(curScale);
             threeDAnchorPane.setScaleZ(curScale);
         }
-        else if (newZoom < 0 && curScale - 5 > 0) { // Zoomed out (already zoomed in)
+        else if (newZoom < 100 && curScale - 5 > 0) { // Zoomed out (already zoomed in)
             curScale -= 5;
             threeDAnchorPane.setScaleX(curScale);
             threeDAnchorPane.setScaleY(curScale);
             threeDAnchorPane.setScaleZ(curScale);
         }
-        else if (newZoom < 0 && curScale - 0.2 > 0) { // Zoomed out (already zoomed out)
+        else if (newZoom <= 5 && curScale - 0.2 > 0.2) { // Zoomed out (already zoomed out)
             curScale -= 0.2;
             threeDAnchorPane.setScaleX(curScale);
             threeDAnchorPane.setScaleY(curScale);

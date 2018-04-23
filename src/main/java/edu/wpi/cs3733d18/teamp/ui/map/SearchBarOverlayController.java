@@ -93,6 +93,7 @@ public class SearchBarOverlayController implements Initializable{
     private Boolean is3D = false;
 
     public void startUp(MapScreenController mapScreenController){
+        threeDButton.setText("3D");
         this.mapScreenController = mapScreenController;
         if (!mapScreenController.getPathDrawn()) {
             directionsTableView.setVisible(false);
@@ -106,17 +107,16 @@ public class SearchBarOverlayController implements Initializable{
     }
 
     public void startUp3D(ThreeDMapScreenController threeDMapScreenController){
+        threeDButton.setText("2D");
         this.threeDMapScreenController = threeDMapScreenController;
-        //if (!mapScreenController.getPathDrawn()) { // TODO uncomment when map is integrated with the rest of the app
+        if (!threeDMapScreenController.getPathDrawn()) {
             directionsTableView.setVisible(false);
             directionsButton.setVisible(false);
             emailButton.setVisible(false);
             phoneButton.setVisible(false);
             directionsRectangle.setVisible(false);
             is3D = true;
-        //}
-
-        //mapToggleButtonOp();
+        }
     }
 
     public Boolean isSourceFocused(){
