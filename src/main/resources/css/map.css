@@ -7,12 +7,12 @@
 
 .yellow-button {
     -jfx-button-type: RAISED;
-    -fx-background-color: #F5BC3A;
-    -fx-background-radius: 40;
-    -fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 0);
+    -fx-background-color: WHITESMOKE;
+    /*-fx-background-radius: 40;*/
+    -fx-effect: dropshadow(gaussian, GRAY, 10, 0, 0, 0);
 }
 .yellow-button:hover {
-    -fx-background-color: #efaf1c;
+    -fx-background-color: WHITESMOKE;
     -fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 0);
 }
 
