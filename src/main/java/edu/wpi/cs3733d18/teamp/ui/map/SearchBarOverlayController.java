@@ -1,6 +1,8 @@
 package edu.wpi.cs3733d18.teamp.ui.map;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXToggleButton;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Directions;
 import edu.wpi.cs3733d18.teamp.Main;
@@ -13,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -52,6 +55,10 @@ public class SearchBarOverlayController implements Initializable{
     Label startLabel = new Label();
     Label endLabel = new Label();*/
 
+    // Camera for 3D
+    PerspectiveCamera perspectiveCamera = new PerspectiveCamera();
+    Boolean isCamera = false;
+
     // Pathfinding variables
     private ArrayList<String> pathDirections; // The actual directions
     private Boolean directionsVisible = false; // Whether the box for directions are visible or not
@@ -72,16 +79,19 @@ public class SearchBarOverlayController implements Initializable{
     ObservableList<DirectionsTable> directions = FXCollections.observableArrayList();
 
     @FXML
-    Button directionsButton;
+    JFXButton directionsButton;
 
     @FXML
-    Button emailButton;
+    JFXButton threeDButton;
 
     @FXML
-    Button phoneButton;
+    JFXButton emailButton;
 
     @FXML
-    Button goButton;
+    JFXButton phoneButton;
+
+    @FXML
+    JFXButton goButton;
 
     @FXML
     JFXTextField sourceSearchBar;
@@ -90,7 +100,7 @@ public class SearchBarOverlayController implements Initializable{
     JFXTextField destinationSearchBar;
 
     @FXML
-    ToggleButton mapToggleButton;
+    JFXToggleButton mapToggleButton;
 
     private MapScreenController mapScreenController;
     private ThreeDMapScreenController threeDMapScreenController;
@@ -203,6 +213,7 @@ public class SearchBarOverlayController implements Initializable{
      * @param e ActionEvent instance passed by JavaFX used to get source information
      * @return true if successful otherwise false
      */
+    @FXML
     public Boolean searchButtonOp(ActionEvent e) {
         if (pathDrawn && !is3D) {
             mapScreenController.resetPath();
@@ -391,6 +402,7 @@ public class SearchBarOverlayController implements Initializable{
      * @param e ActionEvent instance passed by JavaFX used to get source information
      * @return true if successful otherwise false
      */
+    @FXML
     public Boolean emailButtonOp(ActionEvent e) {
         Stage stage;
         Parent root;
@@ -454,6 +466,7 @@ public class SearchBarOverlayController implements Initializable{
      * Displays the text directions on the map screen
      *
      */
+    @FXML
     public Boolean directionsButtonOp(ActionEvent e) {
         if (directionsVisible){
             refresh();
@@ -490,6 +503,54 @@ public class SearchBarOverlayController implements Initializable{
             }
         }
         return true;
+    }
+
+    /**
+     * Switches map to 3D or back to 2D
+     *
+     */
+    @FXML
+    public void threeDButtonOp() {
+        // If 3D, switch to 2D
+        if (is3D) {
+            FXMLLoader loader;
+            Parent root;
+            MapScreenController mapScreenController;
+
+            loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
+
+            try {
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return;
+            }
+            mapScreenController = loader.getController();
+            mapScreenController.onStartUp();
+            threeDButton.getScene().setRoot(root);
+        }
+        // If 2D, switch to 3D
+        else {
+            FXMLLoader loader;
+            Parent root;
+            //MapScreenController mapScreenController;=
+
+            loader = new FXMLLoader(getClass().getResource("/FXML/map/ThreeDMap.fxml"));
+
+            try {
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return;
+            }
+            //mapScreenController = loader.getController();
+            //mapScreenController.onStartUp();
+            if (!isCamera) {
+                threeDButton.getScene().setCamera(perspectiveCamera);
+                isCamera = true;
+            }
+            threeDButton.getScene().setRoot(root);
+        }
     }
 
     /**

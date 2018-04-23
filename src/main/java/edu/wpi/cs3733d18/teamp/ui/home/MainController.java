@@ -16,7 +16,6 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -186,7 +185,7 @@ public class MainController {
         Parent root;
         PerspectiveCamera perspectiveCamera = new PerspectiveCamera();
 
-        loader = new FXMLLoader(getClass().getResource("/FXML/map/ThreeDMapTest.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/map/ThreeDMap.fxml"));
         try {
             root = loader.load();
         } catch (IOException ie) {

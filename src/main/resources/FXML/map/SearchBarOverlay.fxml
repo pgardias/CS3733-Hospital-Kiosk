@@ -102,6 +102,14 @@
                   <Insets top="40.0" />
                </GridPane.margin>
             </JFXButton>
+            <JFXButton fx:id="threeDButton" buttonType="RAISED" onAction="#threeDButtonOp" styleClass="yellow-button" stylesheets="@../../css/map.css" text="3D" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </JFXButton>
          </children>
       </GridPane>
       <Rectangle fx:id="directionsRectangle" arcHeight="20.0" arcWidth="20.0" fill="#113868" height="860.0" stroke="BLACK" strokeType="INSIDE" style="-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 0);" styleClass="search-bar-bg" width="325.0" GridPane.halignment="LEFT" GridPane.valignment="TOP">
