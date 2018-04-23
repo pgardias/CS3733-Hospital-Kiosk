@@ -1,10 +1,11 @@
 package edu.wpi.cs3733d18.teamp.ui.admin;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTreeTableColumn;
+import com.jfoenix.controls.JFXTreeTableView;
 import edu.wpi.cs3733d18.teamp.*;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import edu.wpi.cs3733d18.teamp.ui.home.ShakeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -39,58 +40,51 @@ public class ManageEmployeeScreenController implements Initializable {
     JFXButton removeEmployeeButton;
 
     @FXML
-    TableView<EmployeeTable> employeeListTableView;
+    JFXTreeTableView<EmployeeTable> employeeTreeTableView;
 
     @FXML
-    TableColumn<EmployeeTable, Integer> employeeIDTableViewColumn;
+    JFXTreeTableColumn<EmployeeTable, Integer> employeeIDTableViewColumn;
 
     @FXML
-    TableColumn<EmployeeTable, String> userNameColumn;
+    JFXTreeTableColumn<EmployeeTable, String> userNameColumn;
 
     @FXML
-    TableColumn<EmployeeTable, String> firstNameColumn;
+    JFXTreeTableColumn<EmployeeTable, String> firstNameColumn;
 
     @FXML
-    TableColumn<EmployeeTable, String> lastNameColumn;
+    JFXTreeTableColumn<EmployeeTable, String> lastNameColumn;
 
     @FXML
-    TableColumn<EmployeeTable, String> permissionsColumn;
+    JFXTreeTableColumn<EmployeeTable, String> permissionsColumn;
 
     @FXML
-    TableColumn<EmployeeTable, String> employeeTypeColumn;
+    JFXTreeTableColumn<EmployeeTable, String> employeeTypeColumn;
 
     @FXML
-    TableColumn<EmployeeTable, String> employeeSubTypeColumn;
-
-    final ObservableList<EmployeeTable> employed = FXCollections.observableArrayList();
+    JFXTreeTableColumn<EmployeeTable, String> employeeSubTypeColumn;
 
 
-//    public void populateEmployeeTableView(){
-//
-//        employees = db.getAllEmployees();
-//
-//
-//
-//        for(HashMap.Entry<String, Employee> employee: employees.entrySet()){
-//            System.out.println(employee.getValue().isAdminToString());
-//            employed.add(new EmployeeTable(employee.getValue().getUserName(), employee.getValue().getFirstName(), employee.getValue().getLastName(),
-//                    employee.getValue().isAdminToString(), employee.getValue().getEmployeeType().toString(), employee.getValue().getSubType()));
-//        }
-//
-//        //employeeListTableView.setItems(employed);
-//    }
+    @FXML
+    TreeItem<EmployeeTable> root;
+
+    ArrayList<TreeItem<EmployeeTable>> employeeTableArrayList;
 
     @FXML
     public boolean onStartUp(){
         employees = db.getAllEmployees();
 
         for(HashMap.Entry<String, Employee> employee: employees.entrySet()){
-            System.out.println(employee.getValue().isAdminToString());
-            employed.add(new EmployeeTable(employee.getValue().getEmployeeID(), employee.getValue().getUserName(), employee.getValue().getFirstName(), employee.getValue().getLastName(),
-                    employee.getValue().isAdminToString(), employee.getValue().getEmployeeType().toString(), employee.getValue().getSubType()));
+
+            employeeTableArrayList.add(new TreeItem<>(new EmployeeTable(employee.getValue().getEmployeeID(), employee.getValue().getUserName(),
+                    employee.getValue().getFirstName(), employee.getValue().getLastName(), employee.getValue().isAdminToString(),
+                    employee.getValue().getEmployeeType().toString(), employee.getValue().getSubType())));
         }
 
-        employeeListTableView.setItems(employed);
+        root.getChildren().setAll(employeeTableArrayList);
+
+        employeeTreeTableView.setRoot(root);
+
+        employeeTreeTableView.setShowRoot(false);
         return true;
     }
 
@@ -110,21 +104,66 @@ public class ManageEmployeeScreenController implements Initializable {
         }
         backButton.getScene().setRoot(root);
 
+
         return true;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        employeeIDTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
-        userNameColumn.setCellValueFactory(new PropertyValueFactory<EmployeeTable, String>("username"));
-        firstNameColumn.setCellValueFactory(new PropertyValueFactory<EmployeeTable, String>("firstName"));
-        lastNameColumn.setCellValueFactory(new PropertyValueFactory<EmployeeTable, String>("lastName"));
-        permissionsColumn.setCellValueFactory(new PropertyValueFactory<EmployeeTable, String>("adminPermission"));
-        employeeSubTypeColumn.setCellValueFactory(new PropertyValueFactory<EmployeeTable, String>("employeeSubType"));
-        employeeTypeColumn.setCellValueFactory(new PropertyValueFactory<EmployeeTable, String>("employeeType"));
 
-        onStartUp();
+        employeeTableArrayList = new ArrayList<>();
+        root = new TreeItem<>();
+
+        employeeIDTableViewColumn = new JFXTreeTableColumn<>("Employee ID");
+        userNameColumn = new JFXTreeTableColumn<>("UserName");
+        firstNameColumn = new JFXTreeTableColumn<>("First Name");
+        lastNameColumn = new JFXTreeTableColumn<>("Last Name");
+        permissionsColumn = new JFXTreeTableColumn<>("Admin Permission");
+        employeeTypeColumn = new JFXTreeTableColumn<>("Employee Type");
+        employeeSubTypeColumn = new JFXTreeTableColumn<>("Employee Subtype");
+
+        employeeIDTableViewColumn.setPrefWidth(267);
+        employeeIDTableViewColumn.setResizable(false);
+        employeeIDTableViewColumn.setSortable(true);
+
+        userNameColumn.setPrefWidth(267);
+        userNameColumn.setResizable(false);
+        userNameColumn.setSortable(true);
+
+        firstNameColumn.setPrefWidth(267);
+        firstNameColumn.setResizable(false);
+        firstNameColumn.setSortable(true);
+
+        lastNameColumn.setPrefWidth(267);
+        lastNameColumn.setResizable(false);
+        lastNameColumn.setSortable(true);
+
+        permissionsColumn.setPrefWidth(267);
+        permissionsColumn.setResizable(false);
+        permissionsColumn.setSortable(true);
+
+        employeeTypeColumn.setPrefWidth(267);
+        employeeTypeColumn.setResizable(false);
+        employeeTypeColumn.setSortable(true);
+
+        employeeSubTypeColumn.setPrefWidth(267);
+        employeeSubTypeColumn.setResizable(false);
+        employeeSubTypeColumn.setSortable(true);
+
+
+        employeeIDTableViewColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("employeeID"));
+        userNameColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("username"));
+        firstNameColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("firstName"));
+        lastNameColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("lastName"));
+        permissionsColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("adminPermission"));
+        employeeTypeColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("employeeType"));
+        employeeSubTypeColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("employeeSubType"));
+
+
+
+        employeeTreeTableView.getColumns().addAll(employeeIDTableViewColumn, userNameColumn, firstNameColumn,lastNameColumn,
+                permissionsColumn, employeeTypeColumn, employeeSubTypeColumn);
     }
 
     @FXML
@@ -168,14 +207,19 @@ public class ManageEmployeeScreenController implements Initializable {
             ie.printStackTrace();
             return false;
         }
+        if(employeeTreeTableView.getSelectionModel().getSelectedItem() != null) {
 
-        employeePopUpController = loader.getController();
-        employeePopUpController.startUpModify(this);
-        stage.setScene(new Scene(root, 1000, 950));
-        stage.setTitle("New Employee");
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(addNewEmployeeButton.getScene().getWindow());
-        stage.show();
+            employeePopUpController = loader.getController();
+            employeePopUpController.startUpModify(this);
+            stage.setScene(new Scene(root, 1000, 950));
+            stage.setTitle("New Employee");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(addNewEmployeeButton.getScene().getWindow());
+            stage.show();
+        } else {
+            ShakeTransition anim = new ShakeTransition(modifyEmployeeInfoButton);
+            anim.playFromStart();
+        }
 
         return true;
     }
@@ -205,19 +249,34 @@ public class ManageEmployeeScreenController implements Initializable {
         stage.showAndWait();
 
         if (deletePopUpController.getChoice()) {
-            int employeeID = employeeListTableView.getSelectionModel().getSelectedItem().getEmployeeID();
+            System.out.println( employeeTreeTableView.getSelectionModel().getSelectedItem().getValue().getEmployeeID());
+            int employeeID = employeeTreeTableView.getSelectionModel().getSelectedItem().getValue().getEmployeeID();
 
             db.deleteEmployee(employeeID);
-
-            refresh();
+            reBuildTable();
         }
     }
 
-    public void refresh() {
-        for (int i = 0; i < employeeListTableView.getItems().size(); i++) {
-            employeeListTableView.getItems().clear();
+    public void reBuildTable() {
+        employees = db.getAllEmployees();
+        employeeTableArrayList.clear();
+        root.getChildren().setAll(employeeTableArrayList);
+
+        System.out.println("HELLOWORLD");
+        for(HashMap.Entry<String, Employee> employee: employees.entrySet()){
+            employeeTableArrayList.add(new TreeItem<>(new EmployeeTable(employee.getValue().getEmployeeID(), employee.getValue().getUserName(),
+                    employee.getValue().getFirstName(), employee.getValue().getLastName(), employee.getValue().isAdminToString(),
+                    employee.getValue().getEmployeeType().toString(), employee.getValue().getSubType())));
         }
-        onStartUp();
+
+        root.getChildren().setAll(employeeTableArrayList);
+
+        employeeTreeTableView.setRoot(root);
+        employeeTreeTableView.setShowRoot(false);
+    }
+
+    public JFXTreeTableView<EmployeeTable> getEmployeeTreeTableView() {
+        return employeeTreeTableView;
     }
 }
 
