@@ -1,9 +1,10 @@
 package edu.wpi.cs3733d18.teamp.ui.admin;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class EmployeeTable {
+public class EmployeeTable extends RecursiveTreeObject<EmployeeTable>{
 
     private SimpleIntegerProperty employeeID;
     private SimpleStringProperty username;
