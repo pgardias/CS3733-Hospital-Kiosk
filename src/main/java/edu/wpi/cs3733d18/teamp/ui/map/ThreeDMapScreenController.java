@@ -77,16 +77,16 @@ public class ThreeDMapScreenController implements Initializable{
     DBSystem db = DBSystem.getInstance();
 
     // Display hashmaps
-    private static ArrayList<MeshView[]> allModels = new ArrayList<>();
-    private static ArrayList<PhongMaterial> allTextures = new ArrayList<>();
-    private static Group allLights = new Group();
-    private static ArrayList<Integer> floorOffsets = new ArrayList<>();
-    private static HashMap<String, Sphere> nodeDispSet = new HashMap<>();
-    private static ArrayList<Polygon> arrowDispSet = new ArrayList<>();
-    private static ArrayList<String> arrowFloorSet = new ArrayList<>();
-    private static HashMap<String, Cylinder> edgeDispSet = new HashMap<>();
-    private static ArrayList<Line> lineDispSet = new ArrayList<>();
-    private static ArrayList<Label> labelDispSet = new ArrayList<>();
+    private ArrayList<MeshView[]> allModels = new ArrayList<>();
+    private ArrayList<PhongMaterial> allTextures = new ArrayList<>();
+    private Group allLights = new Group();
+    private ArrayList<Integer> floorOffsets = new ArrayList<>();
+    private HashMap<String, Sphere> nodeDispSet = new HashMap<>();
+    private ArrayList<Polygon> arrowDispSet = new ArrayList<>();
+    private ArrayList<String> arrowFloorSet = new ArrayList<>();
+    private HashMap<String, Cylinder> edgeDispSet = new HashMap<>();
+    private ArrayList<Line> lineDispSet = new ArrayList<>();
+    private ArrayList<Label> labelDispSet = new ArrayList<>();
     private ArrayList<Node> stairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentStairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentElevNodeSet = new ArrayList<Node>();

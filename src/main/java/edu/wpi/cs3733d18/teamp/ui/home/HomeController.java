@@ -39,9 +39,6 @@ public class HomeController {
     JFXButton mapButton;
 
     @FXML
-    Button threeDMap;
-
-    @FXML
     JFXTextField usernameTxt;
 
     @FXML
@@ -343,29 +340,5 @@ public class HomeController {
 
         scene.setRoot(root);
         return true;
-    }
-
-    @FXML
-    public void threeDMapOp(){
-        FXMLLoader loader;
-        Stage stage;
-        Parent root;
-        PerspectiveCamera perspectiveCamera = new PerspectiveCamera();
-
-        loader = new FXMLLoader(getClass().getResource("/FXML/map/ThreeDMap.fxml"));
-        try {
-            root = loader.load();
-        } catch (IOException ie) {
-            ie.printStackTrace();
-            return;
-        }
-        stage = (Stage) threeDMap.getScene().getWindow();
-        stage.setFullScreen(false);
-        Scene scene = new Scene(root, 1920, 1080);
-        scene.setCamera(perspectiveCamera);
-        stage.setScene(scene);
-        //stage.setScene(new Scene(root, 1920, 1080));
-        stage.setFullScreen(true);
-        stage.show();
     }
 }

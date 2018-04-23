@@ -533,7 +533,7 @@ public class SearchBarOverlayController implements Initializable{
         else {
             FXMLLoader loader;
             Parent root;
-            //MapScreenController mapScreenController;=
+            ThreeDMapScreenController threeDMapScreenController;
 
             loader = new FXMLLoader(getClass().getResource("/FXML/map/ThreeDMap.fxml"));
 
@@ -543,12 +543,8 @@ public class SearchBarOverlayController implements Initializable{
                 ie.printStackTrace();
                 return;
             }
-            //mapScreenController = loader.getController();
-            //mapScreenController.onStartUp();
-            if (!isCamera) {
-                threeDButton.getScene().setCamera(perspectiveCamera);
-                isCamera = true;
-            }
+            threeDButton.getScene().setCamera(perspectiveCamera);
+            isCamera = true;
             threeDButton.getScene().setRoot(root);
         }
     }
