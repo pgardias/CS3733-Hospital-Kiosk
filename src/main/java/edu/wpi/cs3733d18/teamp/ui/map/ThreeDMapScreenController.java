@@ -82,8 +82,6 @@ public class ThreeDMapScreenController implements Initializable{
     private Group allLights = new Group();
     private ArrayList<Integer> floorOffsets = new ArrayList<>();
     private HashMap<String, Sphere> nodeDispSet = new HashMap<>();
-    private ArrayList<Polygon> arrowDispSet = new ArrayList<>();
-    private ArrayList<String> arrowFloorSet = new ArrayList<>();
     private HashMap<String, Cylinder> edgeDispSet = new HashMap<>();
     private ArrayList<Line> lineDispSet = new ArrayList<>();
     private ArrayList<Label> labelDispSet = new ArrayList<>();
@@ -223,6 +221,26 @@ public class ThreeDMapScreenController implements Initializable{
 
         // Add searchbar overlay
         addOverlay();
+    }
+
+    /**
+     * Initialization going from the 2D map screen if a path is already made.
+     * @param pathDrawn pathDrawn boolean from 2D map
+     * @param pathMade pathMade array from 2D map
+     */
+    @FXML
+    public void onStartUp(Boolean pathDrawn, ArrayList<Node> pathMade) {
+        this.pathDrawn = pathDrawn;
+        this.pathMade = pathMade;
+        drawPath(this.pathMade);
+    }
+
+    public Boolean getPathDrawn() {
+        return this.pathDrawn;
+    }
+
+    public ArrayList<Node> getPathMade() {
+        return this.pathMade;
     }
 
     private void addOverlay() {

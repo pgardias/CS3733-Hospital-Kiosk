@@ -172,6 +172,22 @@ public class MapScreenController {
     }
 
     @FXML
+    public void onStartUp3D(Boolean pathDrawn, ArrayList<Node> pathMade) {
+        this.pathDrawn = pathDrawn;
+        this.pathMade = pathMade;
+        drawPath(pathMade);
+    }
+
+    public Boolean getPathDrawn(){
+        return this.pathDrawn;
+    }
+
+    public ArrayList<Node> getPathMade() {
+        return this.pathMade;
+    }
+
+
+    @FXML
     public void backButtonOp() {
         Stage stage;
         Parent root;
@@ -1144,11 +1160,6 @@ public class MapScreenController {
         nodesEdgesPane.setTranslateX(screenTranslateX);
         nodesEdgesPane.setTranslateY(screenTranslateY);
     }
-
-    public Boolean getPathDrawn(){
-        return this.pathDrawn;
-    }
-
 
     public void setFloorStyleClass(Node.floorType floor) {
 

@@ -38,26 +38,12 @@ import java.util.ResourceBundle;
 
 public class SearchBarOverlayController implements Initializable{
 
-    /*public static final int X_OFFSET = -523;
-    public static final int Y_OFFSET = 0;
-    public static final double X_SCALE = 1588.235294/5000.0;
-    public static final double Y_SCALE = 1080.0/3400.0;
-    public static final double NODE_RADIUS = 3.0;
-    public static final double EDGE_WIDTH = 1.0;
-    public static final int WIDTH = 1380;
-    public static final int HEIGHT = 776;
-    private static final double STRAIGHT_BOUNDS = 15;
-    private static final double SLIGHT_BOUNDS = 60;
-    private static final double NORMAL_BOUNDS = 120;
-    private static final double HARD_BOUNDS = 165;
-    private static final double TURN_AROUND_BOUNDS = 180;
-
+    /*
     Label startLabel = new Label();
     Label endLabel = new Label();*/
 
     // Camera for 3D
     PerspectiveCamera perspectiveCamera = new PerspectiveCamera();
-    Boolean isCamera = false;
 
     // Pathfinding variables
     private ArrayList<String> pathDirections; // The actual directions
@@ -527,6 +513,10 @@ public class SearchBarOverlayController implements Initializable{
             }
             mapScreenController = loader.getController();
             mapScreenController.onStartUp();
+            if (threeDMapScreenController.getPathDrawn()) {
+                mapScreenController = loader.getController();
+                mapScreenController.onStartUp3D(threeDMapScreenController.getPathDrawn(), threeDMapScreenController.getPathMade());
+            }
             threeDButton.getScene().setRoot(root);
         }
         // If 2D, switch to 3D
@@ -543,87 +533,13 @@ public class SearchBarOverlayController implements Initializable{
                 ie.printStackTrace();
                 return;
             }
+            if (mapScreenController.getPathDrawn()) {
+                threeDMapScreenController = loader.getController();
+                threeDMapScreenController.onStartUp(mapScreenController.getPathDrawn(), mapScreenController.getPathMade());
+            }
             threeDButton.getScene().setCamera(perspectiveCamera);
-            isCamera = true;
             threeDButton.getScene().setRoot(root);
         }
-    }
-
-    /**
-     * Generate text directions based on an ArrayList<Node> path
-     * @param path
-     * @return ArrayList of Strings containing directions
-     */
-    public ArrayList<String> generateTextDirections(ArrayList<Node> path) {
-        ArrayList<String> directions = new ArrayList<>();
-        double distance = 0.0;
-        double pastDistance = 0.0;
-        double angle = Math.toRadians(90.0);
-        double pastAngle = Math.toRadians(90.0);
-        double angleDiff = 0.0;
-        String words = "";
-        String pastWords = "Go forward ";
-        String ft = "ft";
-        Node pastNode = new Node();
-        Node lastChangeNode = new Node();
-        boolean changeDirections = false;
-        boolean firstTime = true;
-        double feetPerPixel = 85. / 260.; // Measured on the west wing of the hospital with Google maps and paint
-
-        directions.add("Starting Route!");
-
-        for (Node node : path) {
-            if (pastNode.getID() != null) {
-                angle = node.angleBetweenNodes(pastNode);
-                angleDiff = angle - pastAngle;
-                angleDiff = Math.toDegrees(angleDiff);
-
-                if (angleDiff < -180) {
-                    angleDiff += 360;
-                }
-                if (angleDiff > 180) {
-                    angleDiff -= 360;
-                }
-
-//                System.out.println("Past node: " + pastNode + " current node: " + node + " Distance since last change: " + distance);
-//                System.out.println("Angle: " + Math.toDegrees(angle) + " pastAngle: " + Math.toDegrees(pastAngle) + " angleDif: " + angleDiff);
-
-
-                // todo figure out how to not add "Go forward 0ft"
-//                if (changeDirections) {
-//                    if (firstTime) {
-////                        directions.add(words);
-//                        firstTime = false;
-//                    } else if (roundToNearest(feetPerPixel*lastChangeNode.distanceBetweenNodes(pastNode), 10) != 0) {
-//                        directions.add("Go forward " + roundToNearest(feetPerPixel*lastChangeNode.distanceBetweenNodes(pastNode), 10) + ft);
-//                        directions.add(words);
-//                    }else{
-//                        directions.add(words);
-////                    }
-//
-//                    pastDistance = distance;
-//                    distance = 0;
-//                    changeDirections = false;
-//                    lastChangeNode = pastNode;
-//                } else {
-//
-//                }
-//                distance += pastNode.distanceBetweenNodes(node);
-//
-////                System.out.println();
-//            }
-//            pastWords = words;
-//            pastAngle = angle;
-//            pastNode = node;
-////            directions.add("------------");
-//        }
-//        //directions.add("Go forward " + roundToNearest(feetPerPixel*lastChangeNode.distanceBetweenNodes(pastNode), 10) + ft);
-//        directions.add("You have arrived at your destination!");
-//        return directions;
-            }
-
-        }
-        return null;
     }
 
     public void refresh() {
@@ -632,26 +548,8 @@ public class SearchBarOverlayController implements Initializable{
         }
     }
 
-    public int roundToNearest(double value, int roundTo) {
-        value += roundTo/2;
-        int retVal = (int) value / roundTo;
-        return retVal * roundTo;
-    }
-
-
-    public Boolean isClear(){
-        if (destinationSearchBar.getText().equals("") || sourceSearchBar.getText().equals("")){
-            return true;
-        }
-        return false;
-    }
-
     public void setSearchButtonFocus(){
         goButton.requestFocus();
-    }
-
-    public void setDirectionsVisible(Boolean directionsVisible) {
-        this.directionsVisible = directionsVisible;
     }
 }
 
