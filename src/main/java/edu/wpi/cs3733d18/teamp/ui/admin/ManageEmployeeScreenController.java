@@ -22,7 +22,7 @@ import java.net.URL;
 import java.util.*;
 
 public class ManageEmployeeScreenController implements Initializable {
-    DeletePopUpController deletePopUpController;
+    ConfirmationPopUpController confirmationPopUpController;
     EmployeePopUpController employeePopUpController;
     DBSystem db = DBSystem.getInstance();
     HashMap<String, Employee> employees;
@@ -241,14 +241,14 @@ public class ManageEmployeeScreenController implements Initializable {
             return;
         }
 
-        deletePopUpController = loader.getController();
-        deletePopUpController.StartUp(this);
+        confirmationPopUpController = loader.getController();
+        confirmationPopUpController.StartUp(this);
         stage.setScene(new Scene(root, 600, 150));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(removeEmployeeButton.getScene().getWindow());
         stage.showAndWait();
 
-        if (deletePopUpController.getChoice()) {
+        if (confirmationPopUpController.getChoice()) {
             System.out.println( employeeTreeTableView.getSelectionModel().getSelectedItem().getValue().getEmployeeID());
             int employeeID = employeeTreeTableView.getSelectionModel().getSelectedItem().getValue().getEmployeeID();
 

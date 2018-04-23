@@ -13,18 +13,13 @@ import edu.wpi.cs3733d18.teamp.Exceptions.OrphanNodeException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
@@ -38,7 +33,7 @@ import java.util.ResourceBundle;
 
 public class MapBuilderNodeFormController implements Initializable{
 
-    DeletePopUpController deletePopUpController;
+    ConfirmationPopUpController confirmationPopUpController;
 
     public static final int FULL_WIDTH = 5000;
     public static final int FULL_HEIGHT = 3400;
@@ -432,15 +427,15 @@ public class MapBuilderNodeFormController implements Initializable{
             return;
         }
 
-        deletePopUpController = loader.getController();
-        deletePopUpController.StartUp(this);
+        confirmationPopUpController = loader.getController();
+        confirmationPopUpController.StartUp(this);
         stage.setScene(new Scene(root, 600, 150));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(deleteButton.getScene().getWindow());
         stage.showAndWait();
 
         // If user confirms deletion, delete the node
-        if (deletePopUpController.getChoice()) {
+        if (confirmationPopUpController.getChoice()) {
             try {
                 db.deleteNode(editedNodeID);
             } catch (NodeNotFoundException | EdgeNotFoundException ne) {

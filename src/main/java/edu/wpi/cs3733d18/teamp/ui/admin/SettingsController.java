@@ -14,8 +14,14 @@ import java.io.IOException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.PathfindingContext.PathfindingSetting;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class SettingsController {
+    ConfirmationPopUpController confirmationPopUpController;
+    boolean isSaved = false;
+
 
     @FXML
     JFXTextField feetPerPixelTextField;
@@ -43,80 +49,120 @@ public class SettingsController {
      */
     @FXML
     public void onStartUp() {
+
         algorithmComboBox.setItems(algorithmTypes);
         switch (Settings.getPathfindingSettings()) {
-            case AStar: {
+            case AStar:
                 algorithmComboBox.setValue("A*");
                 break;
-            }
-            case DepthFirst: {
+            case DepthFirst:
                 algorithmComboBox.setValue("Depth-first");
                 break;
-            }
-            case BreadthFirst: {
+            case BreadthFirst:
                 algorithmComboBox.setValue("Breadth-first");
                 break;
-            }
-            case Dijkstra: {
+            case Dijkstra:
                 algorithmComboBox.setValue("Dijkstra's");
                 break;
-            }
-            case BestFirst: {
+            case BestFirst:
                 algorithmComboBox.setValue("BestFirst");
                 break;
-            }
-            default: {
+            default:
                 System.out.println("Admin Settings Panel was unable to set the current Pathfinding Algorithm Context");
                 break;
-            }
         }
         feetPerPixelTextField.setText(Double.toString(Settings.getFeetPerPixel()));
     }
+        /**
+         * Sets the settings singleton based upon the current inputs when the
+         * submit button is pressed.
+         */
+        @FXML
+        public void submitButtonOp () {
+            Stage stage;
+            Parent root;
+            FXMLLoader loader;
 
-    /**
-     * Sets the settings singleton based upon the current inputs when the
-     * submit button is pressed.
-     */
-    @FXML
-    public void submitButtonOp() {
-        switch (algorithmComboBox.getValue().toString()) {
-            case "A*":
-                Settings.setPathfindingAlgorithm(PathfindingSetting.AStar);
-                break;
-            case "Depth-first":
-                Settings.setPathfindingAlgorithm(PathfindingSetting.DepthFirst);
-                break;
-            case "Breadth-first":
-                Settings.setPathfindingAlgorithm(PathfindingSetting.BreadthFirst);
-                break;
-            case "Dijkstra's":
-                Settings.setPathfindingAlgorithm(PathfindingSetting.Dijkstra);
-                break;
-            case "Best-first":
-                Settings.setPathfindingAlgorithm(PathfindingSetting.BestFirst);
-                break;
-        }
-        try {
-            Settings.setFeetPerPixel(Double.parseDouble(feetPerPixelTextField.getText()));
-        } catch (NumberFormatException nfe) {
-            nfe.printStackTrace();
-            // TODO Set error label appropriately
-            return;
-        }
-    }
+            stage = new Stage();
+            loader = new FXMLLoader(getClass().getResource("/FXML/general/ConfirmationPopUp.fxml"));
 
-    @FXML
-    public void backButtonOp() {
-        Parent root;
-        FXMLLoader loader;
+            try {
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return;
+            }
 
-        loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
-        try {
-            root = loader.load();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-            return;
+            confirmationPopUpController = loader.getController();
+            confirmationPopUpController.setSettingsButtonOp("Submit");
+            confirmationPopUpController.StartUp(this);
+            stage.setScene(new Scene(root, 600, 150));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(submitButton.getScene().getWindow());
+            stage.showAndWait();
+
+            if(confirmationPopUpController.getChoice()){
+                switch (algorithmComboBox.getValue().toString()) {
+                    case "A*":
+                        Settings.setPathfindingAlgorithm(PathfindingSetting.AStar);
+                        break;
+                    case "Depth-first":
+                        Settings.setPathfindingAlgorithm(PathfindingSetting.DepthFirst);
+                        break;
+                    case "Breadth-first":
+                        Settings.setPathfindingAlgorithm(PathfindingSetting.BreadthFirst);
+                        break;
+                    case "Dijkstra's":
+                        Settings.setPathfindingAlgorithm(PathfindingSetting.Dijkstra);
+                        break;
+                    case "Best-first":
+                        Settings.setPathfindingAlgorithm(PathfindingSetting.BestFirst);
+                        break;
+                }
+                try {
+                    Settings.setFeetPerPixel(Double.parseDouble(feetPerPixelTextField.getText()));
+                } catch (NumberFormatException nfe) {
+                    nfe.printStackTrace();
+                    // TODO Set error label appropriately
+                    return;
+                }
+            }
         }
-        backButton.getScene().setRoot(root);
-    }
+
+        @FXML
+        public void backButtonOp(ActionEvent e) {
+            Stage stage;
+            Parent root;
+            FXMLLoader loader;
+
+            stage = new Stage();
+            loader = new FXMLLoader(getClass().getResource("/FXML/general/ConfirmationPopUp.fxml"));
+
+            try {
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return;
+            }
+
+            confirmationPopUpController = loader.getController();
+            confirmationPopUpController.setSettingsButtonOp("Back");
+            confirmationPopUpController.StartUp(this);
+            stage.setScene(new Scene(root, 600, 150));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(submitButton.getScene().getWindow());
+            stage.showAndWait();
+
+            if(confirmationPopUpController.getChoice()) {
+
+                loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
+                try {
+                    root = loader.load();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                    return;
+                }
+                backButton.getScene().setRoot(root);
+            }
+        }
 }
