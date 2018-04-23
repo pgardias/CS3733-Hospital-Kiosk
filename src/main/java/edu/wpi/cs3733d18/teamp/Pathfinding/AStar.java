@@ -70,39 +70,41 @@ public class AStar extends Pathfinder {
 
             // Add neighbors to openSet
             for (Edge e : currentNode.getEdges()) {
-                // Temporary variable for comparing gScores
-                Double tempGScore = 0.0;
+                if (e.getActive()) {
+                    // Temporary variable for comparing gScores
+                    Double tempGScore = 0.0;
 
-                // Set neighbor to the node in edge that is not current node
-                Node neighbor;
-                if (e.getStart().equals(currentNode)) {
-                    neighbor = e.getEnd();
-                } else {
-                    neighbor = e.getStart();
-                }
-                if (!closedSet.contains(neighbor) && neighbor.getActive()) {
-
-                    // Add neighbor gScore value to gScore
-                    tempGScore = gScore.get(currentNode.getID()) + e.getWeight();
-                    System.out.println(e.getWeight());
-
-                    if (!gScore.containsKey(neighbor.getID())) {
-
-                        // Set parent for recreating the path later
-                        neighbor.setParent(currentNode);
-
-                        // Set the gScore for neighbor to tempGScore
-                        gScore.put(neighbor.getID(), tempGScore);
-
-                        // Calculate tempFScore for readability
-                        tempFScore = gScore.get(neighbor.getID()) + destNode.distanceBetweenNodes(neighbor);
-
-                        // Set fScore for neighbor to tempFScore
-                        fScore.put(neighbor.getID(), tempFScore);
+                    // Set neighbor to the node in edge that is not current node
+                    Node neighbor;
+                    if (e.getStart().equals(currentNode)) {
+                        neighbor = e.getEnd();
+                    } else {
+                        neighbor = e.getStart();
                     }
+                    if (!closedSet.contains(neighbor) && neighbor.getActive()) {
 
-                    // Add neighbor nodes with weights to the openSet
-                    openSet.add(neighbor);
+                        // Add neighbor gScore value to gScore
+                        tempGScore = gScore.get(currentNode.getID()) + e.getWeight();
+                        System.out.println(e.getWeight());
+
+                        if (!gScore.containsKey(neighbor.getID())) {
+
+                            // Set parent for recreating the path later
+                            neighbor.setParent(currentNode);
+
+                            // Set the gScore for neighbor to tempGScore
+                            gScore.put(neighbor.getID(), tempGScore);
+
+                            // Calculate tempFScore for readability
+                            tempFScore = gScore.get(neighbor.getID()) + destNode.distanceBetweenNodes(neighbor);
+
+                            // Set fScore for neighbor to tempFScore
+                            fScore.put(neighbor.getID(), tempFScore);
+                        }
+
+                        // Add neighbor nodes with weights to the openSet
+                        openSet.add(neighbor);
+                    }
                 }
             }
         }

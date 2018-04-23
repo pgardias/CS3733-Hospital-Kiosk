@@ -20,14 +20,20 @@ public class DepthFirst extends Pathfinder {
 
         edges = root.getEdges();
         for (Edge e : edges) {
-            Node nextNode;
-            if (e.getStart() == root) {
-                nextNode = e.getEnd();
-                children.add(nextNode);
-            } else {
-                nextNode = e.getStart();
-                children.add(nextNode);
-
+            if (e.getActive()) {
+                Node nextNode;
+                if (e.getStart() == root) {
+                    nextNode = e.getEnd();
+                    if (nextNode.getActive()) {
+                        children.add(nextNode);
+                    }
+                }
+                if (e.getEnd() == root) {
+                    nextNode = e.getStart();
+                    if (nextNode.getActive()) {
+                        children.add(nextNode);
+                    }
+                }
             }
         }
         return children;
@@ -41,12 +47,12 @@ public class DepthFirst extends Pathfinder {
      */
     @Override
     public void findPath(Node srcNode, Node destNode) {
-        System.out.println("ASTAR");
         System.out.println("depth first");
         Stack<Node> stack = new Stack<Node>();
         ArrayList<Node> visited = new ArrayList<Node>();
         stack.add(srcNode);
         visited.add(srcNode);
+        srcNode.setParent(null);
         // the loop will run until there are no more nodes left in the stack
         // or we find the destination and return the path
         while (!stack.isEmpty()) {
@@ -55,19 +61,17 @@ public class DepthFirst extends Pathfinder {
             // checks if it is the destination node
             if (currentNode.equals(destNode)) {
                 return;
+            }
 
             // if it is not the destination node it adds it to the visited nodes
             // and checks its children
-            } else {
-                visited.add(currentNode);
+            visited.add(currentNode);
 
-                List<Node> children = getChildren(currentNode);
-                for (int i = 0; i < children.size(); i++) {
-                    Node n = children.get(i);
-                    if (n != null && !visited.contains(n) && n.getActive()) {
-                        stack.add(n);
-                        n.setParent(currentNode);
-                    }
+            ArrayList<Node> children = getChildren(currentNode);
+            for (Node node : children) {
+                if (!visited.contains(node)) {
+                    stack.add(node);
+                    node.setParent(currentNode);
                 }
             }
         }

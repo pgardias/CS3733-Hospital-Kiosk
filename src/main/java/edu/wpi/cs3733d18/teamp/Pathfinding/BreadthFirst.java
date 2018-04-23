@@ -21,6 +21,7 @@ public class BreadthFirst extends Pathfinder {
         HashSet<Node> closedSet = new HashSet<>();
         Node currentNode = srcNode;
         openSet.add(currentNode);
+        srcNode.setParent(null);
 
         //System.out.println("Source node: " + srcNode + " Destination node: " + destNode);
 
@@ -36,19 +37,23 @@ public class BreadthFirst extends Pathfinder {
             ArrayList<Edge> edges = currentNode.getEdges();
 
             for (Edge e : edges) {
-                Node neighbor = new Node();
-                if (!closedSet.contains(e.getStart())) {
-                    neighbor = e.getStart();
-                    neighbor.setParent(currentNode);
-                }
+                if (e.getActive()) {
+                    Node neighbor = null;
+                    if (!closedSet.contains(e.getStart())) {
+                        neighbor = e.getStart();
+                        neighbor.setParent(currentNode);
+                    } else
 
-                if (!closedSet.contains(e.getEnd())) {
-                    neighbor = e.getEnd();
-                    neighbor.setParent(currentNode);
-                }
+                    if (!closedSet.contains(e.getEnd())) {
+                        neighbor = e.getEnd();
+                        neighbor.setParent(currentNode);
+                    }
 
-                if (neighbor.getActive()) {
-                    openSet.add(neighbor);
+                    if (neighbor != null) {
+                        if (neighbor.getActive()) {
+                            openSet.add(neighbor);
+                        }
+                    }
                 }
             }
         }

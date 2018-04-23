@@ -21,14 +21,16 @@ public class Dijkstra extends Pathfinder{
 
         edges = root.getEdges();
         for (Edge e : edges) {
-            Node nextNode;
-            if (e.getStart() == root) {
-                nextNode = e.getEnd();
-            } else {
-                nextNode = e.getStart();
-            }
-            if (nextNode.getActive()) {
-                children.add(nextNode);
+            if (e.getActive()) {
+                Node nextNode;
+                if (e.getStart() == root) {
+                    nextNode = e.getEnd();
+                } else {
+                    nextNode = e.getStart();
+                }
+                if (nextNode.getActive()) {
+                    children.add(nextNode);
+                }
             }
         }
         return children;
@@ -53,6 +55,7 @@ public class Dijkstra extends Pathfinder{
         dist.put(strNode, 0.0);
         queue.add(strNode);
         Node currentNode;
+        strNode.setParent(null);
 
         if (!destNode.equals(strNode)) {
             while (!queue.isEmpty()) {
