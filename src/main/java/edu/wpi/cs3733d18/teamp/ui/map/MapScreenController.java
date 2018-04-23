@@ -53,6 +53,11 @@ public class MapScreenController {
     private double zoomForTranslate = 0;
     private static int MAP_ICON_SIZE = 18;
 
+    double maxXCoord = 0;
+    double maxYCoord = 0;
+    double minXCoord = 5000;
+    double minYCoord = 3400;
+
     double nodeIconScale = 1.2;
     private Node startNode;
     private Node endNode;
@@ -102,6 +107,12 @@ public class MapScreenController {
 
     @FXML
     AnchorPane nodesPane;
+
+    @FXML
+    AnchorPane edgePane;
+
+    @FXML
+    AnchorPane arrowPane;
 
     @FXML
     HBox floorSequenceHBox;
