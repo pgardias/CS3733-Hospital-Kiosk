@@ -14,6 +14,7 @@ abstract public class Pathfinder {
     public ArrayList<Node> runPathfinder(Node srcNode, Node destNode){
         findPath(srcNode, destNode);
         ArrayList<Node> path = getPath(destNode);
+        System.out.println("Returning path!");
         return path;
     }
     public abstract void findPath(Node srcNode, Node destNode);
@@ -24,9 +25,13 @@ abstract public class Pathfinder {
      * @return ArrayList<Node> constituting the path
      */
     public ArrayList<Node> getPath(Node node) {
+        System.out.println("Getting path!");
         ArrayList<Node> tempPath = new ArrayList<Node>();
 //        System.out.println("Node given: " + n.toString());
+        int count = 0;
         while (node.hasParent()) {
+            System.out.println("count: " + count);
+            count++;
 //            System.out.println("Parent: " + n.getParent());
             tempPath.add(node);
             node = node.getParent();
