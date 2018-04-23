@@ -41,15 +41,14 @@ import java.util.ResourceBundle;
 public class ThreeDMapScreenController implements Initializable{
 
     // Symbolic Constants
-    private static final int VIEWPORT_SIZE = 800;
-    private double X_SCALE = 1588.235294 / 5000.0;
-    private double Z_SCALE = 1080.0 / 3400.0;
+    private double X_SCALE = 1588.235294 / 5000.0 * 0.53;
+    private double Z_SCALE = 1080.0 / 3400.0 * 0.53;
     private static final double NODE_RADIUS = 5.0;
     private static final Color lightColor = Color.rgb(150, 150, 150);
 
-    private int X_OFFSET = -50;
+    private int X_OFFSET = 300;
     private int Y_OFFSET = -170;
-    private int Z_OFFSET = -3120;
+    private int Z_OFFSET = -4500;
 
     private Group root;
     private PointLight pointLight;
@@ -95,6 +94,14 @@ public class ThreeDMapScreenController implements Initializable{
     ArrayList<Node> pathMade;
     Node.floorType currentFloor;
     String floorState;
+
+    // Node Groups
+    Group L2Nodes = new Group();
+    Group L1Nodes = new Group();
+    Group GNodes = new Group();
+    Group FirstNodes = new Group();
+    Group SecondNodes = new Group();
+    Group ThirdNodes = new Group();
 
     // Colors
     PhongMaterial fillBlue;
@@ -199,7 +206,9 @@ public class ThreeDMapScreenController implements Initializable{
         allTextures.add(floor3rdTexture);
 
         // Build scene
+        currentFloor = Node.floorType.LEVEL_L2;
         Group group = buildScene();
+        drawEdges();
         group.setScaleX(2);
         group.setScaleY(2);
         group.setScaleZ(2);
@@ -207,9 +216,7 @@ public class ThreeDMapScreenController implements Initializable{
         group.setTranslateY(100);
         threeDAnchorPane.getChildren().add(group);
         threeDAnchorPane.getChildren().add(allLights);
-        currentFloor = Node.floorType.LEVEL_L2;
-        draw3DNodes();
-        drawEdges();
+        //draw3DNodes();
         curScale = 1;
     }
 
@@ -504,6 +511,35 @@ public class ThreeDMapScreenController implements Initializable{
             model[0].setMaterial(phongMaterial);
             root.getChildren().add(model[0]);
 
+            switch(index) {
+                case 0:
+                    L2Nodes = draw3DNodes(Node.floorType.LEVEL_L2);
+                    root.getChildren().add(L2Nodes);
+                    break;
+                case 1:
+                    L1Nodes = draw3DNodes(Node.floorType.LEVEL_L1);
+                    root.getChildren().add(L1Nodes);
+                    break;
+                case 2:
+                    GNodes = draw3DNodes(Node.floorType.LEVEL_G);
+                    root.getChildren().add(GNodes);
+                    break;
+                case 3:
+                    FirstNodes = draw3DNodes(Node.floorType.LEVEL_1);
+                    root.getChildren().add(FirstNodes);
+                    break;
+                case 4:
+                    SecondNodes = draw3DNodes(Node.floorType.LEVEL_2);
+                    root.getChildren().add(SecondNodes);
+                    break;
+                case 5:
+                    ThirdNodes = draw3DNodes(Node.floorType.LEVEL_3);
+                    root.getChildren().add(ThirdNodes);
+                    break;
+                default:
+                    break;
+            }
+
             height -= 50;
             index += 1;
             floorOffsets.clear();
@@ -538,28 +574,14 @@ public class ThreeDMapScreenController implements Initializable{
      * @return The MeshView we are looking for
      */
     private MeshView getMesh() {
-        Group group = (Group)threeDAnchorPane.getChildren().get(0); // Main Mesh should always be first node in pane
-        return (MeshView)group.getChildren().get(0);
-    }
-
-    /**
-     * Loads in a new mesh when switching floors
-     */
-    @FXML
-    private void switchMesh(URL fileName) {
-        Group newRoot = buildScene();
-        newRoot.setScaleX(2);
-        newRoot.setScaleY(2);
-        newRoot.setScaleZ(2);
-        newRoot.setTranslateX(500);
-        newRoot.setTranslateY(100);
-        threeDAnchorPane.getChildren().add(newRoot);
+        return (MeshView)root.getChildren().get(0);
     }
 
     /**
      * Draws all of the nodes on the map depending on which map is loaded
      */
-    private void draw3DNodes() {
+    private Group draw3DNodes(Node.floorType floor) {
+        Group nodeGroup = new Group();
         HashMap<String, Node> nodeSet;
         nodeSet = db.getAllNodes();
         System.out.println("drawing nodes");
@@ -568,69 +590,70 @@ public class ThreeDMapScreenController implements Initializable{
 
         for (Node node : nodeSet.values()) {
 
-            // Get y position for this node
-            int yPos;
-            switch(node.getFloor()) {
-                case LEVEL_L2:
-                    yPos = nodeYPos.get(0);
-                    break;
-                case LEVEL_L1:
-                    yPos = nodeYPos.get(1);
-                    break;
-                case LEVEL_G:
-                    yPos = nodeYPos.get(2);
-                    break;
-                case LEVEL_1:
-                    yPos = nodeYPos.get(3);
-                    break;
-                case LEVEL_2:
-                    yPos = nodeYPos.get(4);
-                    break;
-                case LEVEL_3:
-                    yPos = nodeYPos.get(5);
-                    break;
-                default:
-                    yPos = nodeYPos.get(0);
-                    break;
-            }
-
-            // Node is on current floor
-            if (node.getType() != Node.nodeType.HALL) {
-                Sphere sphere = new Sphere(NODE_RADIUS);
-                threeDAnchorPane.getChildren().add(sphere);
-                sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
-                sphere.setTranslateY(mv.getTranslateY() - yPos);
-                sphere.setTranslateZ((-node.getY() - Z_OFFSET) * Z_SCALE);
-                sphere.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.Y_AXIS),
-                        new Rotate(curXRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.X_AXIS));
-                sphere.setMaterial(fillBlue);
-                if (!node.getActive()) {
-                    sphere.setOpacity(0.5);
-                    //circle.setFill(Color.GRAY);
+            if (node.getFloor() == floor) {
+                // Get y position for this node
+                int yPos;
+                switch (node.getFloor()) {
+                    case LEVEL_L2:
+                        yPos = nodeYPos.get(0);
+                        break;
+                    case LEVEL_L1:
+                        yPos = nodeYPos.get(1);
+                        break;
+                    case LEVEL_G:
+                        yPos = nodeYPos.get(2);
+                        break;
+                    case LEVEL_1:
+                        yPos = nodeYPos.get(3);
+                        break;
+                    case LEVEL_2:
+                        yPos = nodeYPos.get(4);
+                        break;
+                    case LEVEL_3:
+                        yPos = nodeYPos.get(5);
+                        break;
+                    default:
+                        yPos = nodeYPos.get(0);
+                        break;
                 }
-                sphere.addEventHandler(MouseEvent.ANY, nodeClickHandler);
 
-                String label = node.getID();
-                nodeDispSet.put(label, sphere);
-            }
+                // Node is on current floor
+                if (node.getType() != Node.nodeType.HALL) {
+                    Sphere sphere = new Sphere(NODE_RADIUS);
+                    nodeGroup.getChildren().add(sphere);
+                    sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
+                    sphere.setTranslateY(mv.getTranslateY() - yPos);
+                    sphere.setTranslateZ((-node.getY() - Z_OFFSET) * Z_SCALE);
+                    sphere.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.Y_AXIS),
+                            new Rotate(curXRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.X_AXIS));
+                    sphere.setMaterial(fillBlue);
+                    if (!node.getActive()) {
+                        sphere.setOpacity(0.5);
+                        //circle.setFill(Color.GRAY);
+                    }
+                    sphere.addEventHandler(MouseEvent.ANY, nodeClickHandler);
 
-            // Node is on other floor
-            else {
-                Sphere sphere = new Sphere(0);
-                threeDAnchorPane.getChildren().add(sphere);
-                sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
-                sphere.setTranslateY(mv.getTranslateY() - yPos);
-                sphere.setTranslateZ((-node.getY() - Z_OFFSET) * Z_SCALE);
-                sphere.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.Y_AXIS),
-                        new Rotate(curXRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.X_AXIS));
-                //System.out.println("Center X: " + circle.getCenterX() + "Center Y: " + circle.getCenterY());
-                //sphere.addEventHandler(MouseEvent.ANY, nodeClickHandler);
+                    String label = node.getID();
+                    nodeDispSet.put(label, sphere);
+                }
 
-                String label = node.getID();
-                nodeDispSet.put(label, sphere);
+                // Node is on other floor
+                else {
+                    Sphere sphere = new Sphere(0);
+                    nodeGroup.getChildren().add(sphere);
+                    sphere.setTranslateX((node.getX() - X_OFFSET) * X_SCALE);
+                    sphere.setTranslateY(mv.getTranslateY() - yPos);
+                    sphere.setTranslateZ((-node.getY() - Z_OFFSET) * Z_SCALE);
+                    sphere.getTransforms().setAll(new Rotate(curYRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.Y_AXIS),
+                            new Rotate(curXRotation, mv.getTranslateX() - sphere.getTranslateX(), mv.getTranslateY() - sphere.getTranslateY(), mv.getTranslateZ() - sphere.getTranslateZ(), Rotate.X_AXIS));
+
+                    String label = node.getID();
+                    nodeDispSet.put(label, sphere);
+                }
             }
         }
         System.out.println("Printed All Nodes");
+        return nodeGroup;
     }
 
     /**
@@ -674,7 +697,7 @@ public class ThreeDMapScreenController implements Initializable{
         // Set translations and move edges to behind nodes
         edgeGroup.getTransforms().setAll(new Rotate(curXRotation, mv.getTranslateX() - edgeGroup.getTranslateX(), mv.getTranslateY() - edgeGroup.getTranslateY(), mv.getTranslateZ() - edgeGroup.getTranslateZ(), Rotate.X_AXIS),
                         new Rotate(curYRotation, mv.getTranslateX() - edgeGroup.getTranslateX(), mv.getTranslateY() - edgeGroup.getTranslateY(), mv.getTranslateZ() - edgeGroup.getTranslateZ(), Rotate.Y_AXIS));
-        threeDAnchorPane.getChildren().add(edgeGroup);
+        root.getChildren().add(edgeGroup);
         /*edgeGroup.toBack(); //TODO get edges behind nodes
         mv.toBack();*/
     }
@@ -1080,19 +1103,19 @@ public class ThreeDMapScreenController implements Initializable{
                 mesh = (MeshView)root.getChildren().get(0);
                 break;
             case LEVEL_L1:
-                mesh = (MeshView)root.getChildren().get(1);
-                break;
-            case LEVEL_G:
                 mesh = (MeshView)root.getChildren().get(2);
                 break;
-            case LEVEL_1:
-                mesh = (MeshView)root.getChildren().get(3);
-                break;
-            case LEVEL_2:
+            case LEVEL_G:
                 mesh = (MeshView)root.getChildren().get(4);
                 break;
+            case LEVEL_1:
+                mesh = (MeshView)root.getChildren().get(6);
+                break;
+            case LEVEL_2:
+                mesh = (MeshView)root.getChildren().get(8);
+                break;
             case LEVEL_3:
-                mesh = (MeshView)root.getChildren().get(5);
+                mesh = (MeshView)root.getChildren().get(10);
                 break;
             default:
                 mesh = (MeshView)root.getChildren().get(0);
