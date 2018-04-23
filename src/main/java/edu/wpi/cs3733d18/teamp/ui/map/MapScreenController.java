@@ -8,6 +8,8 @@ import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
+import javafx.animation.Interpolator;
+import javafx.animation.PathTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -24,16 +26,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import javafx.scene.shape.*;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
-
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.StrokeType;
 
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.PopOver.ArrowLocation;
 
@@ -930,7 +925,6 @@ public class MapScreenController {
                 distanceCounter += currentNode.distanceBetweenNodes(pastNode);
                 if (distanceCounter >= 175) {
                     distanceCounter = 0;
-
                     arrowFloorSet.add(currentNode.getFloor().toString());
                     if (toggleOn) {
                         drawTriangle(angle, pastNode.getxDisplay(), pastNode.getyDisplay());
@@ -989,19 +983,10 @@ public class MapScreenController {
             }
         }
 
-        if(searchBarOverlayController.getDirectionsVisible()){
+        if (searchBarOverlayController.getDirectionsVisible()) {
             searchBarOverlayController.clearTable();
             searchBarOverlayController.setDirectionsVisible(false);
             searchBarOverlayController.directionsButtonOp(null);
-        }
-        //this sets the proper opacity for the arrows based on floor
-        for (int i = 0; i < arrowDispSet.size(); i++) {
-            System.out.println(arrowFloorSet.get(i));
-            if (arrowFloorSet.get(i).equals(currentFloor.toString())) {
-                arrowDispSet.get(i).setOpacity(1.0);
-            } else {
-                arrowDispSet.get(i).setOpacity(0.5);
-            }
         }
 
         getFloors();
@@ -1028,6 +1013,10 @@ public class MapScreenController {
         System.out.println(toggleOn.toString());
 
         pathDrawn = true;
+        ArrowPathTransition arrowPathTransition = new ArrowPathTransition(pathMade, arrowDispSet.get(0));
+        arrowPathTransition.setPathAnim();
+        arrowPathTransition.playAnim();
+
     }
 
     public void drawEdge(Node currentNode, Node pastNode) {
@@ -1093,9 +1082,9 @@ public class MapScreenController {
 
 
         arrow.getPoints().addAll(new Double[]{
-                initX, initY,
-                x2, y2,
                 x1, y1,
+                x2, y2,
+                initX, initY,
                 x3, y3});
         arrow.setFill(Color.rgb(200, 30, 0));
 
