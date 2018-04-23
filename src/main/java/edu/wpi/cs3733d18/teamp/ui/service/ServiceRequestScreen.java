@@ -1,6 +1,10 @@
 package edu.wpi.cs3733d18.teamp.ui.service;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTreeTableColumn;
+import com.jfoenix.controls.JFXTreeTableView;
+import edu.wpi.cs3733d18.teamR.RaikouAPI;
 import edu.wpi.cs3733d18.teamp.*;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.RequestNotFoundException;
@@ -16,6 +20,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -28,14 +33,15 @@ public class ServiceRequestScreen implements Initializable{
     PopUpController popUpController;
     DBSystem db = DBSystem.getInstance();
     ArrayList<Request> requests;
-    int requestSize;
+    ArrayList<Request> emergencyRequests = new ArrayList<>();
+    ArrayList<Request> otherRequests = new ArrayList<>();
 
+    ArrayList<TreeItem<ServiceRequestTable>> newRequestTableChildren;
+    ArrayList<TreeItem<ServiceRequestTable>> inProgRequestTableChildren;
+    ArrayList<TreeItem<ServiceRequestTable>> completedRequestTableChildren;
 
     @FXML
     JFXButton backButton;
-
-    @FXML
-    JFXButton newRequestButton;
 
     @FXML
     JFXButton claimRequestButton;
@@ -45,9 +51,6 @@ public class ServiceRequestScreen implements Initializable{
 
     @FXML
     JFXButton completeRequestButton;
-
-    @FXML
-    JFXButton serviceAPIButton;
 
     @FXML
     Label serviceRequestErrorLabel;
@@ -74,39 +77,76 @@ public class ServiceRequestScreen implements Initializable{
     Label additionalInfoLabel;
 
     @FXML
-    TableView<ServiceRequestTable> newRequestTable;
-
-    @FXML
-    TableView<ServiceRequestTable> inProgRequestTable;
-
-    @FXML
-    TableView<ServiceRequestTable> completedRequestTable;
-
-    @FXML
-    TableColumn<ServiceRequestTable, Integer> rID1;
-
-    @FXML
-    TableColumn<ServiceRequestTable, String> rType1;
-
-    @FXML
-    TableColumn<ServiceRequestTable, Integer> rID2;
-
-    @FXML
-    TableColumn<ServiceRequestTable, String> rType2;
-
-    @FXML
-    TableColumn<ServiceRequestTable, Integer> rID3;
-
-    @FXML
-    TableColumn<ServiceRequestTable, String> rType3;
-
-    @FXML
     Label helloMessage;
+
+    @FXML
+    JFXTreeTableView<ServiceRequestTable> newRequestTable;
+
+    @FXML
+    JFXTreeTableView<ServiceRequestTable> inProgRequestTable;
+
+    @FXML
+    JFXTreeTableView<ServiceRequestTable> completedRequestTable;
+
+    @FXML
+    JFXTreeTableColumn<ServiceRequestTable, Integer> rID1;
+
+    @FXML
+    JFXTreeTableColumn<ServiceRequestTable, String> rType1;
+
+    @FXML
+    JFXTreeTableColumn<ServiceRequestTable, Integer> rID2;
+
+    @FXML
+    JFXTreeTableColumn<ServiceRequestTable, String> rType2;
+
+    @FXML
+    JFXTreeTableColumn<ServiceRequestTable, Integer> rID3;
+
+    @FXML
+    JFXTreeTableColumn<ServiceRequestTable, String> rType3;
+
+    @FXML
+    TreeItem<ServiceRequestTable> newRequestTableRoot;
+
+    @FXML
+    TreeItem<ServiceRequestTable> inProgRequestTableRoot;
+
+    @FXML
+    TreeItem<ServiceRequestTable> completedRequestTableRoot;
+
+    @FXML
+    JFXComboBox newRequestComboBox;
 
     final ObservableList<ServiceRequestTable> newRequests = FXCollections.observableArrayList();
     final ObservableList<ServiceRequestTable> inProgRequests = FXCollections.observableArrayList();
     final ObservableList<ServiceRequestTable> completedRequests = FXCollections.observableArrayList();
+    static ObservableList<String> requestTypes = FXCollections.observableArrayList(
+            "Create New Service Request",
+            "Language Interpreter Request",
+            "Religious Request",
+            "Computer Service Request",
+            "Security Request",
+            "Maintenance Request",
+            "Sanitation Request",
+            "Audio or Visual Help Request",
+            "Gift Delivery Request",
+            "Transportation Request",
+            "Prescription Request"
+    );
 
+    MenuItem mi1 = new MenuItem("Claim Request");
+    MenuItem mi2 = new MenuItem("Complete Request");
+    MenuItem mi3 = new MenuItem("Delete Request");
+    MenuItem mi4 = new MenuItem("Claim Request");
+    MenuItem mi5 = new MenuItem("Complete Request");
+    MenuItem mi6 = new MenuItem("Delete Request");
+    ContextMenu menu1 = new ContextMenu();
+    ContextMenu menu2 = new ContextMenu();
+
+    /**
+     * Initializes the hello message
+     */
     @FXML
     public void onStartup() {
         helloMessage.setText("Hello, " + Main.currentUser.getFirstName() + " " + Main.currentUser.getLastName());
@@ -116,29 +156,59 @@ public class ServiceRequestScreen implements Initializable{
      * Gets the list of service requests from the database and puts them in the appropriate tables
      */
     public void populateTableViews() {
+
         try {
             serviceRequestErrorLabel.setText("");
             requests = db.getAllRequests();
-            requestSize = requests.size();
 
             for (Request r: requests) {
-                if (r.isCompleted() == 0) {
-                    newRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
-                }
-                else if (r.isCompleted() == 1) {
-                    inProgRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+                if (r.getPriority() == 1) {
+                    emergencyRequests.add(r);
                 }
                 else {
-                    completedRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+                    otherRequests.add(r);
                 }
             }
+
         } catch (RequestNotFoundException rnfe) {
             serviceRequestErrorLabel.setText("There are currently no service requests.");
         }
 
-        newRequestTable.setItems(newRequests);
-        inProgRequestTable.setItems(inProgRequests);
-        completedRequestTable.setItems(completedRequests);
+        for (Request r: emergencyRequests) {
+            if (r.isCompleted() == 0) {
+                newRequestTableChildren.add(new TreeItem<>(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString())));
+            }
+            else if (r.isCompleted() == 1) {
+                inProgRequestTableChildren.add(new TreeItem<>(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString())));
+            }
+            else {
+                completedRequestTableChildren.add(new TreeItem<>(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString())));
+            }
+        }
+
+        for (Request r: otherRequests) {
+            if (r.isCompleted() == 0) {
+                newRequestTableChildren.add(new TreeItem<>(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString())));
+            }
+            else if (r.isCompleted() == 1) {
+                inProgRequestTableChildren.add(new TreeItem<>(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString())));
+            }
+            else {
+                completedRequestTableChildren.add(new TreeItem<>(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString())));
+            }
+        }
+
+        newRequestTableRoot.getChildren().setAll(newRequestTableChildren);
+        inProgRequestTableRoot.getChildren().setAll(inProgRequestTableChildren);
+        completedRequestTableRoot.getChildren().setAll(completedRequestTableChildren);
+
+        newRequestTable.setRoot(newRequestTableRoot);
+        inProgRequestTable.setRoot(inProgRequestTableRoot);
+        completedRequestTable.setRoot(completedRequestTableRoot);
+
+        newRequestTable.setShowRoot(false);
+        inProgRequestTable.setShowRoot(false);
+        completedRequestTable.setShowRoot(false);
     }
 
     /**
@@ -149,21 +219,163 @@ public class ServiceRequestScreen implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        rID1.setCellValueFactory(new PropertyValueFactory<ServiceRequestTable, Integer>("requestID"));
-        rType1.setCellValueFactory(new PropertyValueFactory<ServiceRequestTable, String>("requestType"));
-        rID2.setCellValueFactory(new PropertyValueFactory<ServiceRequestTable, Integer>("requestID"));
-        rType2.setCellValueFactory(new PropertyValueFactory<ServiceRequestTable, String>("requestType"));
-        rID3.setCellValueFactory(new PropertyValueFactory<ServiceRequestTable, Integer>("requestID"));
-        rType3.setCellValueFactory(new PropertyValueFactory<ServiceRequestTable, String>("requestType"));
+        newRequestTableChildren = new ArrayList<>();
+        inProgRequestTableChildren = new ArrayList<>();
+        completedRequestTableChildren = new ArrayList<>();
+
+        newRequestTableRoot = new TreeItem<>();
+        inProgRequestTableRoot = new TreeItem<>();
+        completedRequestTableRoot = new TreeItem<>();
+
+        rID1 = new JFXTreeTableColumn<>("Request ID");
+        rType1 = new JFXTreeTableColumn<>("Request Type");
+        rID2 = new JFXTreeTableColumn<>("Request ID");
+        rType2 = new JFXTreeTableColumn<>("Request Type");
+        rID3 = new JFXTreeTableColumn<>("Request ID");
+        rType3 = new JFXTreeTableColumn<>("Request Type");
+
+        rID1.setPrefWidth(100);
+        rID1.setResizable(false);
+        rID1.setSortable(true);
+        rID2.setPrefWidth(100);
+        rID2.setResizable(false);
+        rID2.setSortable(true);
+        rID3.setPrefWidth(100);
+        rID3.setResizable(false);
+        rID3.setSortable(true);
+
+        rType1.setPrefWidth(433);
+        rType1.setResizable(false);
+        rType1.setSortable(true);
+        rType2.setPrefWidth(433);
+        rType2.setResizable(false);
+        rType2.setSortable(true);
+        rType3.setPrefWidth(433);
+        rType3.setResizable(false);
+        rType3.setSortable(true);
+
+
+        rID1.setCellValueFactory(new TreeItemPropertyValueFactory<>("requestID"));
+        rType1.setCellValueFactory(new TreeItemPropertyValueFactory<>("requestType"));
+        rID2.setCellValueFactory(new TreeItemPropertyValueFactory<>("requestID"));
+        rType2.setCellValueFactory(new TreeItemPropertyValueFactory<>("requestType"));
+        rID3.setCellValueFactory(new TreeItemPropertyValueFactory<>("requestID"));
+        rType3.setCellValueFactory(new TreeItemPropertyValueFactory<>("requestType"));
+
+        newRequestTable.getColumns().addAll(rID1, rType1);
+        inProgRequestTable.getColumns().addAll(rID2, rType2);
+        completedRequestTable.getColumns().addAll(rID3, rType3);
 
         populateTableViews();
+
+        mi1.setOnAction((ActionEvent event) -> {
+            claimRequestButtonOp(event);
+        });
+
+        mi3.setOnAction((ActionEvent event) -> {
+            deleteRequestOp();
+        });
+
+        mi5.setOnAction((ActionEvent event) -> {
+            completeRequestButtonOp(event);
+        });
+
+        menu1.getItems().add(mi1);
+        menu1.getItems().add(mi2);
+        menu1.getItems().add(mi3);
+        menu2.getItems().add(mi4);
+        menu2.getItems().add(mi5);
+        menu2.getItems().add(mi6);
+
+        newRequestTable.setContextMenu(menu1);
+        inProgRequestTable.setContextMenu(menu2);
+        newRequestComboBox.setItems(requestTypes);
+    }
+
+    /**
+     * Sets the available right click options based on the users information for the newRequestTable
+     */
+    public void disableMenu1OptionsOp() {
+        menu1.getItems().get(1).setDisable(true);
+        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
+        boolean claim = false;
+        boolean delete = false;
+        try {
+            Request r = db.getOneRequest(requestID);
+            if (r.getRequestType() == Request.requesttype.LANGUAGEINTERP || r.getRequestType() == Request.requesttype.HOLYPERSON) {
+                if (Main.currentUser.getIsAdmin() ||
+                        (db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType())) &&
+                                Main.currentUser.getSubType().equals(r.getSubType()))) {
+                    claim = true;
+                }
+                String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+                if (Main.currentUser.getIsAdmin() || firstAndLastName.equals(r.getMadeBy())) {
+                    delete = true;
+                }
+            }
+            else {
+                if (Main.currentUser.getIsAdmin() || db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType()))) {
+                    claim = true;
+                }
+                String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+                if (Main.currentUser.getIsAdmin() || firstAndLastName.equals(r.getMadeBy())) {
+                    delete = true;
+                }
+            }
+        }
+        catch (RequestNotFoundException re) {
+            re.printStackTrace();
+        }
+
+        if (!claim) {
+            menu1.getItems().get(0).setDisable(true);
+        }
+        if (!delete) {
+            menu1.getItems().get(2).setDisable(true);
+        }
+    }
+
+    /**
+     * Sets the available right click options based on the users information for the inProgRequestTable
+     */
+    public void disableMenu2OptionsOp() {
+        menu2.getItems().get(0).setDisable(true);
+        menu2.getItems().get(2).setDisable(true);
+        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
+        boolean emptype = false;
+        try {
+            Request r = db.getOneRequest(requestID);
+            String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+            if (Main.currentUser.getIsAdmin() || firstAndLastName.equals(r.getCompletedBy())) {
+                emptype = true;
+            }
+        }
+        catch (RequestNotFoundException re) {
+            re.printStackTrace();
+        }
+
+        if (!emptype) {
+            menu2.getItems().get(1).setDisable(true);
+        }
+    }
+
+    public void deleteRequestOp() {
+        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
+        try {
+            Request r = db.getOneRequest(requestID);
+            db.deleteRequest(r);
+        }
+        catch (RequestNotFoundException re) {
+            re.printStackTrace();
+        }
+        refresh();
     }
 
     /**
      * Fills in the gridpane with info from requests in the newRequestTable
      */
     public void onNewRequestTableClickOp() {
-        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
             timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
@@ -182,7 +394,7 @@ public class ServiceRequestScreen implements Initializable{
      * Fills in the gridpane with info from requests in the inProgRequestTable
      */
     public void onInProgRequestTableClickOp() {
-        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
             timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
@@ -202,7 +414,7 @@ public class ServiceRequestScreen implements Initializable{
      * Fills in the gridpane with info from requests in the completedRequestTable
      */
     public void onCompletedRequestTableClickOp() {
-        int requestID = completedRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        int requestID = completedRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
             timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
@@ -225,7 +437,7 @@ public class ServiceRequestScreen implements Initializable{
     @FXML
     public void claimRequestButtonOp(ActionEvent e) {
         serviceRequestErrorLabel.setText("");
-        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
             if (r.getRequestType() == Request.requesttype.LANGUAGEINTERP || r.getRequestType() == Request.requesttype.HOLYPERSON) {
@@ -247,7 +459,9 @@ public class ServiceRequestScreen implements Initializable{
                     r.setCompletedBy(firstAndLastName);
                     db.modifyRequest(r);
                 } else {
+                    System.out.println("hi");
                     serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
+                    serviceRequestErrorLabel.setVisible(true);
                 }
             }
 
@@ -265,7 +479,7 @@ public class ServiceRequestScreen implements Initializable{
     @FXML
     public void completeRequestButtonOp(ActionEvent e) {
         serviceRequestErrorLabel.setText("");
-        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
             String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
@@ -341,67 +555,79 @@ public class ServiceRequestScreen implements Initializable{
      * @param e action event
      */
     @FXML
-    public Boolean newRequestButtonOp(ActionEvent e) {
+    public Boolean selectNewRequestOp(ActionEvent e) {
         Stage stage;
         Parent root;
         FXMLLoader loader;
+        String selection = newRequestComboBox.getSelectionModel().getSelectedItem().toString();
 
-        stage = new Stage();
-        loader = new FXMLLoader(getClass().getResource("/FXML/service/FormContainer.fxml"));
-
-        try {
-            root = loader.load();
-        } catch (IOException ie) {
-            ie.printStackTrace();
+        if (selection.equals("Create New Service Request")) {
             return false;
         }
+        else if (selection.equals("Transportation Request")) {
 
-        popUpController = loader.getController();
-        popUpController.StartUp(this);
-        stage.setScene(new Scene(root, 1000, 950));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(newRequestButton.getScene().getWindow());
-        stage.show();
-        return true;
+            TransportationRequest tr = new TransportationRequest();
+
+            try {
+                tr.run(0,0,0,0, null, null, null);
+                stage = (Stage) newRequestComboBox.getScene().getWindow();
+                stage.setFullScreen(true);
+            }
+            catch (ServiceException se) {
+                se.printStackTrace();
+            }
+            newRequestComboBox.setValue("Create New Service Request");
+            return true;
+        }
+        else if (selection.equals("Prescription Request")) {
+
+            RaikouAPI r = new RaikouAPI();
+
+            try {
+                r.run(0,0,1920,1080, null, null, null);
+                stage = (Stage) newRequestComboBox.getScene().getWindow();
+                stage.setFullScreen(true);
+            }
+            catch (edu.wpi.cs3733d18.teamR.ServiceException se) {
+                se.printStackTrace();
+            }
+            newRequestComboBox.setValue("Create New Service Request");
+            return true;
+        }
+        else {
+            stage = new Stage();
+            loader = new FXMLLoader(getClass().getResource("/FXML/service/FormContainer.fxml"));
+
+            try {
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return false;
+            }
+
+            popUpController = loader.getController();
+            popUpController.StartUp(this, selection);
+            stage.setScene(new Scene(root, 1000, 950));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(newRequestComboBox.getScene().getWindow());
+            stage.show();
+            newRequestComboBox.setValue("Create New Service Request");
+            return true;
+        }
     }
 
     /**
      * Called by various functions to clear the TableViews and calls populateTableViews() again
      */
-
     public void refresh() {
-        for (int i = 0; i < newRequestTable.getItems().size(); i++) {
-            newRequestTable.getItems().clear();
-        }
-        for (int i = 0; i < inProgRequestTable.getItems().size(); i++) {
-            inProgRequestTable.getItems().clear();
-        }
-        for (int i = 0; i < completedRequestTable.getItems().size(); i++) {
-            completedRequestTable.getItems().clear();
-        }
+        newRequestTableChildren.clear();
+        inProgRequestTableChildren.clear();
+        completedRequestTableChildren.clear();
+
+        emergencyRequests.clear();
+        otherRequests.clear();
+
         populateTableViews();
-
-    }
-
-    /**
-     * Loads the service API
-     * @param e action event
-     */
-    @FXML
-    public void serviceAPIButtonOp(ActionEvent e) {
-
-        Stage stage;
-
-        TransportationRequest tr = new TransportationRequest();
-
-        try {
-            tr.run(0,0,0,0, null, null, null);
-            stage = (Stage) serviceAPIButton.getScene().getWindow();
-            stage.setFullScreen(true);
-        }
-        catch (ServiceException se) {
-            se.printStackTrace();
-        }
     }
 }
 

@@ -89,7 +89,6 @@ public class SecurityController implements Initializable {
 
         destBinding.setPrefWidth(securityLocationTxt.getPrefWidth());
 
-        securityComboBox.setValue("Choose a situation");
         securityComboBox.setItems(situations);
     }
 
@@ -140,8 +139,8 @@ public class SecurityController implements Initializable {
             return;
         }
         try {
-            situation = securityComboBox.getValue().toString();
-            if (situation.equals("Choose a situation")) {
+            situation = securityComboBox.getSelectionModel().getSelectedItem().toString();
+            if (situation.equals("Select a situation")) {
                 throw new NothingSelectedException();
             }
         } catch (NothingSelectedException nse) {

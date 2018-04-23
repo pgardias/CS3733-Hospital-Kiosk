@@ -85,7 +85,6 @@ public class ReligiousServiceController implements Initializable {
 
         destBinding.setPrefWidth(religiousRequestLocationTxt.getPrefWidth());
 
-        religiousRequestComboBox.setValue("Choose a religion");
         religiousRequestComboBox.setItems(religions);
     }
 
@@ -133,8 +132,8 @@ public class ReligiousServiceController implements Initializable {
             return;
         }
         try {
-            religion = religiousRequestComboBox.getValue().toString();
-            if(religion.equals("Choose a religion")) {
+            religion = religiousRequestComboBox.getSelectionModel().getSelectedItem().toString();
+            if(religion.equals("Select a religion")) {
                 throw new NothingSelectedException();
             }
         } catch(NothingSelectedException nse) {

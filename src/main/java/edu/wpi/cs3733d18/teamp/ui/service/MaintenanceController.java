@@ -89,7 +89,6 @@ public class MaintenanceController implements Initializable {
 
         destBinding.setPrefWidth(maintenanceLocationTxt.getPrefWidth());
 
-        maintenanceComboBox.setValue("Choose a machine");
         maintenanceComboBox.setItems(machines);
     }
 
@@ -140,12 +139,12 @@ public class MaintenanceController implements Initializable {
             return;
         }
         try {
-            machine = maintenanceComboBox.getValue().toString();
-            if (machine.equals("Choose a machine")) {
+            machine = maintenanceComboBox.getSelectionModel().getSelectedItem().toString();
+            if (machine.equals("Select a broken machine")) {
                 throw new NothingSelectedException();
             }
         } catch (NothingSelectedException nse) {
-            maintenanceErrorLabel.setText("Please select a machine.");
+            maintenanceErrorLabel.setText("Please select a broken machine.");
             maintenanceErrorLabel.setVisible(true);
             return;
         }

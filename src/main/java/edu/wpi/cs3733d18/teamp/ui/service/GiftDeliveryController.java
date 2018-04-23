@@ -88,7 +88,6 @@ public class GiftDeliveryController implements Initializable {
 
         destBinding.setPrefWidth(giftLocationTxt.getPrefWidth());
 
-        giftComboBox.setValue("Choose a gift");
         giftComboBox.setItems(gifts);
     }
 
@@ -139,8 +138,8 @@ public class GiftDeliveryController implements Initializable {
             return;
         }
         try {
-            gift = giftComboBox.getValue().toString();
-            if (gift.equals("Choose a gift")) {
+            gift = giftComboBox.getSelectionModel().getSelectedItem().toString();
+            if (gift.equals("Select a gift")) {
                 throw new NothingSelectedException();
             }
         } catch (NothingSelectedException nse) {

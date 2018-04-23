@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -26,14 +26,6 @@
             <RowConstraints />
             </rowConstraints>
             <children>
-                <JFXButton fx:id="serviceAPIButton" buttonType="RAISED" minWidth="150.0" onAction="#serviceAPIButtonOp" prefWidth="500.0" styleClass="blue-button" text="Transport" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
-                    <font>
-                        <Font size="25.0" />
-                    </font>
-                    <GridPane.margin>
-                        <Insets right="600.0" top="50.0" />
-                    </GridPane.margin>
-                </JFXButton>
                 <JFXButton fx:id="backButton" onAction="#backButtonOp" prefHeight="100.0" prefWidth="100.0" styleClass="back-button" text=" ">
                     <GridPane.margin>
                         <Insets left="50.0" top="50.0" />
@@ -47,26 +39,26 @@
                         <Insets right="400.0" top="50.0" />
                     </GridPane.margin>
                 </JFXButton>
-                <JFXButton fx:id="newRequestButton" onAction="#newRequestButtonOp" styleClass="blue-button" text="Create New Request" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
-                    <font>
-                        <Font size="25.0" />
-                    </font>
-                    <GridPane.margin>
-                        <Insets right="50.0" top="50.0" />
-                    </GridPane.margin>
-                </JFXButton>
                 <Label fx:id="serviceRequestErrorLabel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                     <font>
                         <Font size="20.0" />
-                    </font></Label>
-                <Label fx:id="helloMessage" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                    </font>
+               <GridPane.margin>
+                  <Insets top="40.0" />
+               </GridPane.margin></Label>
+                <Label fx:id="helloMessage" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="TOP">
                     <font>
                         <Font size="36.0" />
                     </font>
                <GridPane.margin>
-                  <Insets top="50.0" />
+                  <Insets top="10.0" />
                </GridPane.margin>
                 </Label>
+            <JFXComboBox fx:id="newRequestComboBox" maxWidth="350.0" onAction="#selectNewRequestOp" prefHeight="52.0" prefWidth="295.0" promptText=" Create New Service Request" style="-fx-border-width: 1; -fx-border-color: black;" unFocusColor="BLACK" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
+               <GridPane.margin>
+                  <Insets bottom="25.0" right="10.0" />
+               </GridPane.margin>
+            </JFXComboBox>
             </children>
         </GridPane>
     </top>
@@ -114,33 +106,6 @@
                         <Insets bottom="10.0" />
                     </GridPane.margin>
                 </Label>
-                <TableView fx:id="newRequestTable" editable="true" onMouseClicked="#onNewRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" tableMenuButtonVisible="true" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                    <columns>
-                        <TableColumn fx:id="rID1" prefWidth="100.0" text="Request ID" />
-                        <TableColumn fx:id="rType1" prefWidth="312.0" text="Request Type" />
-                    </columns>
-                </TableView>
-                <TableView fx:id="inProgRequestTable" onMouseClicked="#onInProgRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                    <columns>
-                        <TableColumn fx:id="rID2" prefWidth="100.0" text="Request ID" />
-                        <TableColumn fx:id="rType2" prefWidth="312.0" text="Request Type" />
-                    </columns>
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </TableView>
-                <TableView fx:id="completedRequestTable" onMouseClicked="#onCompletedRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" GridPane.columnIndex="4" GridPane.rowIndex="1">
-                    <columns>
-                        <TableColumn fx:id="rID3" prefWidth="100.0" text="Request ID" />
-                        <TableColumn fx:id="rType3" prefWidth="312.0" text="Request Type" />
-                    </columns>
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </TableView>
                 <JFXButton fx:id="claimRequestButton" buttonType="RAISED" onAction="#claimRequestButtonOp" styleClass="blue-button" text="Claim Service Request" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <font>
                         <Font size="18.0" />
@@ -151,6 +116,9 @@
                         <Font size="18.0" />
                     </font>
                 </JFXButton>
+            <JFXTreeTableView fx:id="newRequestTable" onContextMenuRequested="#disableMenu1OptionsOp" onMouseClicked="#onNewRequestTableClickOp" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.rowIndex="1" />
+            <JFXTreeTableView fx:id="inProgRequestTable" onContextMenuRequested="#disableMenu2OptionsOp" onMouseClicked="#onInProgRequestTableClickOp" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <JFXTreeTableView fx:id="completedRequestTable" onMouseClicked="#onCompletedRequestTableClickOp" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.columnIndex="4" GridPane.rowIndex="1" />
             </children>
         </GridPane>
     </center>
@@ -192,7 +160,7 @@
                         </Label>
                         <Label fx:id="timeCreatedLabel" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                         <Label fx:id="requestTypeLabel" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                        <Label fx:id="locationLabel" textAlignment="CENTER" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                        <Label fx:id="locationLabel" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                         <Label fx:id="createdByLabel" textAlignment="CENTER" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                         <Label fx:id="assignedToLabel" textAlignment="CENTER" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                         <Label fx:id="additionalInfoLabel" textAlignment="CENTER" GridPane.columnIndex="7" GridPane.rowIndex="1" GridPane.valignment="TOP">
