@@ -149,6 +149,12 @@ public class ThreeDMapScreenController implements Initializable{
     @FXML
     JFXButton floor3Button;
 
+    @FXML
+    JFXButton defaultButton;
+
+    @FXML
+    JFXButton topDownButton;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -330,14 +336,14 @@ public class ThreeDMapScreenController implements Initializable{
             L2Visible = false;
             hideNodes(currentFloor);
             floorL2Button.getStyleClass().removeAll("highlight-floor-button");
-            floorL2Button.getStyleClass().add("floor-button");
+            floorL2Button.getStyleClass().add("floor-buttons");
 
         }
         else {
             mv.setOpacity(1);
             L2Visible = true;
             unhideNodes(currentFloor);
-            floorL2Button.getStyleClass().removeAll("floor-button");
+            floorL2Button.getStyleClass().removeAll("floor-buttons");
             floorL2Button.getStyleClass().add("highlight-floor-button");
         }
     }
@@ -351,13 +357,13 @@ public class ThreeDMapScreenController implements Initializable{
             L1Visible = false;
             hideNodes(currentFloor);
             floorL1Button.getStyleClass().removeAll("highlight-floor-button");
-            floorL1Button.getStyleClass().add("floor-button");
+            floorL1Button.getStyleClass().add("floor-buttons");
         }
         else {
             mv.setOpacity(1);
             L1Visible = true;
             unhideNodes(currentFloor);
-            floorL1Button.getStyleClass().removeAll("floor-button");
+            floorL1Button.getStyleClass().removeAll("floor-buttons");
             floorL1Button.getStyleClass().add("highlight-floor-button");
         }
     }
@@ -371,13 +377,13 @@ public class ThreeDMapScreenController implements Initializable{
             GVisible = false;
             hideNodes(currentFloor);
             floorGButton.getStyleClass().removeAll("highlight-floor-button");
-            floorGButton.getStyleClass().add("floor-button");
+            floorGButton.getStyleClass().add("floor-buttons");
         }
         else {
             mv.setOpacity(1);
             GVisible = true;
             unhideNodes(currentFloor);
-            floorGButton.getStyleClass().removeAll("floor-button");
+            floorGButton.getStyleClass().removeAll("floor-buttons");
             floorGButton.getStyleClass().add("highlight-floor-button");
         }
     }
@@ -391,13 +397,13 @@ public class ThreeDMapScreenController implements Initializable{
             FirstVisible = false;
             hideNodes(currentFloor);
             floor1Button.getStyleClass().removeAll("highlight-floor-button");
-            floor1Button.getStyleClass().add("floor-button");
+            floor1Button.getStyleClass().add("floor-buttons");
         }
         else {
             mv.setOpacity(1);
             FirstVisible = true;
             unhideNodes(currentFloor);
-            floor1Button.getStyleClass().removeAll("floor-button");
+            floor1Button.getStyleClass().removeAll("floor-buttons");
             floor1Button.getStyleClass().add("highlight-floor-button");
         }
     }
@@ -411,14 +417,14 @@ public class ThreeDMapScreenController implements Initializable{
             SecondVisible = false;
             hideNodes(currentFloor);
             floor2Button.getStyleClass().removeAll("highlight-floor-button");
-            floor2Button.getStyleClass().add("floor-button");
+            floor2Button.getStyleClass().add("floor-buttons");
 
         }
         else {
             mv.setOpacity(1);
             SecondVisible = true;
             unhideNodes(currentFloor);
-            floor2Button.getStyleClass().removeAll("floor-button");
+            floor2Button.getStyleClass().removeAll("floor-buttons");
             floor2Button.getStyleClass().add("highlight-floor-button");
         }
     }
@@ -432,16 +438,47 @@ public class ThreeDMapScreenController implements Initializable{
             ThirdVisible = false;
             hideNodes(currentFloor);
             floor3Button.getStyleClass().removeAll("highlight-floor-button");
-            floor3Button.getStyleClass().add("floor-button");
+            floor3Button.getStyleClass().add("floor-buttons");
         }
         else {
             mv.setOpacity(1);
             ThirdVisible = true;
             unhideNodes(currentFloor);
-            floor3Button.getStyleClass().removeAll("floor-button");
+            floor3Button.getStyleClass().removeAll("floor-buttons");
             floor3Button.getStyleClass().add("highlight-floor-button");
 
         }
+    }
+
+    @FXML
+    public void defaultButtonOP(ActionEvent e) {
+
+        threeDAnchorPane.getTransforms().setAll(new Rotate(0, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(0, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+
+        // Set panning
+        threeDAnchorPane.setTranslateX(0);
+        threeDAnchorPane.setTranslateY(0);
+        threeDAnchorPane.setTranslateZ(0);
+
+        /* Set Zoom
+        threeDAnchorPane.setScaleX(15);
+        threeDAnchorPane.setScaleY(15);
+        threeDAnchorPane.setScaleZ(15);
+        */
+
+    }
+
+    @FXML
+    public void topDownButtonOP(ActionEvent e) {
+        // Rotate
+        threeDAnchorPane.getTransforms().setAll(new Rotate(0, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(90, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+
+        // Panning
+        threeDAnchorPane.setTranslateX(0);
+        threeDAnchorPane.setTranslateY(300);
+        threeDAnchorPane.setTranslateZ(500);
     }
 
     /**
@@ -544,6 +581,7 @@ public class ThreeDMapScreenController implements Initializable{
             index += 1;
             floorOffsets.clear();
         }
+
 
         pointLight = new PointLight(lightColor);
         pointLight.setTranslateX(0);
@@ -722,31 +760,13 @@ public class ThreeDMapScreenController implements Initializable{
             HashMap<String, Node> nodeSet;
             nodeSet = db.getAllNodes();
             if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
-                if (searchBarOverlayController.isSourceFocused()) {
+
+                if (!firstSelected) {
                     clearStartNode();
                     for (String string : nodeDispSet.keySet()) {
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setMaterial(fillGreen);
-                            searchBarOverlayController.setSourceSearchBar(node.getLongName());
-                        }
-                    }
-                } else if (searchBarOverlayController.isDestinationFocused()) {
-                    clearEndNode();
-                    for (String string : nodeDispSet.keySet()) {
-                        if (nodeDispSet.get(string) == event.getSource()) {
-                            Node node = nodeSet.get(string);
-                            nodeDispSet.get(string).setMaterial(fillRed);
-                            searchBarOverlayController.setDestinationSearchBar(node.getLongName());
-                        }
-                    }
-                } else if (!firstSelected) {
-                    clearStartNode();
-                    for (String string : nodeDispSet.keySet()) {
-                        if (nodeDispSet.get(string) == event.getSource()) {
-                            Node node = nodeSet.get(string);
-                            nodeDispSet.get(string).setMaterial(fillGreen);
-                            System.out.println("TEST");
                             searchBarOverlayController.setSourceSearchBar(node.getLongName());
                         }
                     }
@@ -910,8 +930,8 @@ public class ThreeDMapScreenController implements Initializable{
 
             //set start node to Green and end node to red
             if (path.get(0).equals(n)) {
-                phongMaterial.setDiffuseMap(new Image(getClass().getResource("/models/textures/node_start.png").toExternalForm()));
-                nodeDispSet.get(currentNode.getID()).setMaterial(phongMaterial);
+                //phongMaterial.setDiffuseMap(new Image(getClass().getResource("/models/textures/node_start.png").toExternalForm()));
+                //nodeDispSet.get(currentNode.getID()).setMaterial(fillPurple);
                 nodeDispSet.get(currentNode.getID()).setVisible(true);
                 if (!currentNode.getFloor().equals(currentFloor))
                     nodeDispSet.get(currentNode.getID()).setOpacity(0.5);
@@ -930,8 +950,8 @@ public class ThreeDMapScreenController implements Initializable{
                 //threeDAnchorPane.getChildren().add(startLabel); //TODO Set this on it's on pane, make it so labels move with map
 
             } else if (path.get(path.size() - 1).equals(n)) {
-                phongMaterial.setDiffuseMap(new Image(getClass().getResource("/models/textures/node_end.png").toExternalForm()));
-                nodeDispSet.get(currentNode.getID()).setMaterial(phongMaterial);
+                //phongMaterial.setDiffuseMap(new Image(getClass().getResource("/models/textures/node_end.png").toExternalForm()));
+                //nodeDispSet.get(currentNode.getID()).setMaterial(phongMaterial);
                 nodeDispSet.get(currentNode.getID()).setVisible(true);
                 if (!currentNode.getFloor().equals(currentFloor))
                     nodeDispSet.get(currentNode.getID()).setOpacity(0.5);
@@ -1061,18 +1081,18 @@ public class ThreeDMapScreenController implements Initializable{
     private void clearStartNode() { //TODO change these to the correct materials
         if (pathDrawn) resetPath();
         for (Sphere s: nodeDispSet.values()) {
-            //if (s.getMaterial().equals(fillGreen)) {
-                s.setMaterial(fillBlue);
-            //}
+            if (s.getMaterial() == fillGreen) {
+               s.setMaterial(fillBlue);
+           }
         }
     }
 
     private void clearEndNode() {
         if (pathDrawn) resetPath();
         for (Sphere s : nodeDispSet.values()) {
-            //if (s.getMaterial().equals(fillRed)) {
+            if (s.getMaterial() == fillRed) {
                 s.setMaterial(fillBlue);
-            //}
+            }
         }
     }
 
