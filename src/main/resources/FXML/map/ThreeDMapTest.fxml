@@ -15,7 +15,7 @@
    <AnchorPane fx:id="nodeAnchorPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    <BorderPane fx:id="buttonOverlayPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0">
    <right>
-      <GridPane prefHeight="388.0" prefWidth="716.0" stylesheets="@../../css/map.css" BorderPane.alignment="CENTER">
+      <GridPane pickOnBounds="false" prefHeight="388.0" prefWidth="716.0" stylesheets="@../../css/map.css" BorderPane.alignment="CENTER">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -66,7 +66,6 @@
                   <Font size="36.0" />
                </font>
             </JFXButton>
-               <BorderPane fx:id="searchbarBorderPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </right>
@@ -90,4 +89,5 @@
          </GridPane>
       </left>
    </BorderPane>
+   <BorderPane fx:id="searchbarBorderPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
 </AnchorPane>

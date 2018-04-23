@@ -35,7 +35,7 @@ import java.util.ResourceBundle;
 
 public class SearchBarOverlayController implements Initializable{
 
-    public static final int X_OFFSET = -523;
+    /*public static final int X_OFFSET = -523;
     public static final int Y_OFFSET = 0;
     public static final double X_SCALE = 1588.235294/5000.0;
     public static final double Y_SCALE = 1080.0/3400.0;
@@ -50,7 +50,7 @@ public class SearchBarOverlayController implements Initializable{
     private static final double TURN_AROUND_BOUNDS = 180;
 
     Label startLabel = new Label();
-    Label endLabel = new Label();
+    Label endLabel = new Label();*/
 
     // Pathfinding variables
     private ArrayList<String> pathDirections; // The actual directions

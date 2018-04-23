@@ -41,14 +41,14 @@ import java.util.ResourceBundle;
 public class ThreeDMapScreenController implements Initializable{
 
     // Symbolic Constants
-    private double X_SCALE = 1588.235294 / 5000.0 * 0.53;
-    private double Z_SCALE = 1080.0 / 3400.0 * 0.53;
-    private static final double NODE_RADIUS = 5.0;
+    private double X_SCALE = 1588.235294 / 5000.0 * 0.5;
+    private double Z_SCALE = 1080.0 / 3400.0 * 0.5;
+    private static final double NODE_RADIUS = 2.0;
     private static final Color lightColor = Color.rgb(150, 150, 150);
 
-    private int X_OFFSET = 300;
+    private int X_OFFSET = 140;
     private int Y_OFFSET = -170;
-    private int Z_OFFSET = -4500;
+    private int Z_OFFSET = -4750;
 
     private Group root;
     private PointLight pointLight;
@@ -93,7 +93,6 @@ public class ThreeDMapScreenController implements Initializable{
     private Boolean pathDrawn = false;
     ArrayList<Node> pathMade;
     Node.floorType currentFloor;
-    String floorState;
 
     // Node Groups
     Group L2Nodes = new Group();
@@ -161,9 +160,6 @@ public class ThreeDMapScreenController implements Initializable{
         // Add mouse handler
         threeDAnchorPane.addEventHandler(MouseEvent.ANY, mouseEventEventHandler);
 
-        // Add searchbar overlay
-        addOverlay();
-
         // Load color materials
         fillBlue = new PhongMaterial();
         fillBlue.setDiffuseMap(new Image(getClass().getResource("/models/textures/node_standard.png").toExternalForm()));
@@ -222,8 +218,11 @@ public class ThreeDMapScreenController implements Initializable{
         group.setTranslateY(100);
         threeDAnchorPane.getChildren().add(group);
         threeDAnchorPane.getChildren().add(allLights);
-        //draw3DNodes();
         curScale = 1;
+        curXRotation = 20;
+
+        // Add searchbar overlay
+        addOverlay();
     }
 
     private void addOverlay() {
@@ -332,20 +331,25 @@ public class ThreeDMapScreenController implements Initializable{
         currentFloor = Node.floorType.LEVEL_L2;
         MeshView mv = getFloor(currentFloor);
         if (L2Visible) {
+            mv.setDisable(true);
             mv.setOpacity(0);
             L2Visible = false;
             hideNodes(currentFloor);
-            floorL2Button.getStyleClass().removeAll("highlight-floor-button");
+            floorL2Button.getStyleClass().remove("highlight-floor-button");
             floorL2Button.getStyleClass().add("floor-buttons");
 
         }
         else {
+            mv.setDisable(false);
             mv.setOpacity(1);
             L2Visible = true;
             unhideNodes(currentFloor);
-            floorL2Button.getStyleClass().removeAll("floor-buttons");
+            floorL2Button.getStyleClass().remove("floor-buttons");
             floorL2Button.getStyleClass().add("highlight-floor-button");
         }
+        // This makes it so that the pane doesn't spaz out as much for some reason
+        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
     }
 
     @FXML
@@ -353,19 +357,24 @@ public class ThreeDMapScreenController implements Initializable{
         currentFloor = Node.floorType.LEVEL_L1;
         MeshView mv = getFloor(currentFloor);
         if (L1Visible) {
+            mv.setDisable(true);
             mv.setOpacity(0);
             L1Visible = false;
             hideNodes(currentFloor);
-            floorL1Button.getStyleClass().removeAll("highlight-floor-button");
+            floorL1Button.getStyleClass().remove("highlight-floor-button");
             floorL1Button.getStyleClass().add("floor-buttons");
         }
         else {
+            mv.setDisable(false);
             mv.setOpacity(1);
             L1Visible = true;
             unhideNodes(currentFloor);
-            floorL1Button.getStyleClass().removeAll("floor-buttons");
+            floorL1Button.getStyleClass().remove("floor-buttons");
             floorL1Button.getStyleClass().add("highlight-floor-button");
         }
+        // This makes it so that the pane doesn't spaz out as much for some reason
+        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
     }
 
     @FXML
@@ -373,19 +382,24 @@ public class ThreeDMapScreenController implements Initializable{
         currentFloor = Node.floorType.LEVEL_G;
         MeshView mv = getFloor(currentFloor);
         if (GVisible) {
+            mv.setDisable(true);
             mv.setOpacity(0);
             GVisible = false;
             hideNodes(currentFloor);
-            floorGButton.getStyleClass().removeAll("highlight-floor-button");
+            floorGButton.getStyleClass().remove("highlight-floor-button");
             floorGButton.getStyleClass().add("floor-buttons");
         }
         else {
+            mv.setDisable(false);
             mv.setOpacity(1);
             GVisible = true;
             unhideNodes(currentFloor);
-            floorGButton.getStyleClass().removeAll("floor-buttons");
+            floorGButton.getStyleClass().remove("floor-buttons");
             floorGButton.getStyleClass().add("highlight-floor-button");
         }
+        // This makes it so that the pane doesn't spaz out as much for some reason
+        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
     }
 
     @FXML
@@ -393,19 +407,24 @@ public class ThreeDMapScreenController implements Initializable{
         currentFloor = Node.floorType.LEVEL_1;
         MeshView mv = getFloor(currentFloor);
         if (FirstVisible) {
+            mv.setDisable(true);
             mv.setOpacity(0);
             FirstVisible = false;
             hideNodes(currentFloor);
-            floor1Button.getStyleClass().removeAll("highlight-floor-button");
+            floor1Button.getStyleClass().remove("highlight-floor-button");
             floor1Button.getStyleClass().add("floor-buttons");
         }
         else {
+            mv.setDisable(false);
             mv.setOpacity(1);
             FirstVisible = true;
             unhideNodes(currentFloor);
-            floor1Button.getStyleClass().removeAll("floor-buttons");
+            floor1Button.getStyleClass().remove("floor-buttons");
             floor1Button.getStyleClass().add("highlight-floor-button");
         }
+        // This makes it so that the pane doesn't spaz out as much for some reason
+        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
     }
 
     @FXML
@@ -413,20 +432,25 @@ public class ThreeDMapScreenController implements Initializable{
         currentFloor = Node.floorType.LEVEL_2;
         MeshView mv = getFloor(currentFloor);
         if (SecondVisible) {
+            mv.setDisable(true);
             mv.setOpacity(0);
             SecondVisible = false;
             hideNodes(currentFloor);
-            floor2Button.getStyleClass().removeAll("highlight-floor-button");
+            floor2Button.getStyleClass().remove("highlight-floor-button");
             floor2Button.getStyleClass().add("floor-buttons");
 
         }
         else {
+            mv.setDisable(false);
             mv.setOpacity(1);
             SecondVisible = true;
             unhideNodes(currentFloor);
-            floor2Button.getStyleClass().removeAll("floor-buttons");
+            floor2Button.getStyleClass().remove("floor-buttons");
             floor2Button.getStyleClass().add("highlight-floor-button");
         }
+        // This makes it so that the pane doesn't spaz out as much for some reason
+        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
     }
 
     @FXML
@@ -434,32 +458,41 @@ public class ThreeDMapScreenController implements Initializable{
         currentFloor = Node.floorType.LEVEL_3;
         MeshView mv = getFloor(currentFloor);
         if (ThirdVisible) {
+            mv.setDisable(true);
             mv.setOpacity(0);
             ThirdVisible = false;
             hideNodes(currentFloor);
-            floor3Button.getStyleClass().removeAll("highlight-floor-button");
+            floor3Button.getStyleClass().remove("highlight-floor-button");
             floor3Button.getStyleClass().add("floor-buttons");
         }
         else {
+            mv.setDisable(false);
             mv.setOpacity(1);
             ThirdVisible = true;
             unhideNodes(currentFloor);
-            floor3Button.getStyleClass().removeAll("floor-buttons");
+            floor3Button.getStyleClass().remove("floor-buttons");
             floor3Button.getStyleClass().add("highlight-floor-button");
-
         }
+        // This makes it so that the pane doesn't spaz out as much for some reason
+        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
     }
 
     @FXML
     public void defaultButtonOP(ActionEvent e) {
 
-        threeDAnchorPane.getTransforms().setAll(new Rotate(0, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
-                new Rotate(0, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+        curYRotation = 0;
+        curXRotation = 0;
+        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
 
         // Set panning
-        threeDAnchorPane.setTranslateX(0);
-        threeDAnchorPane.setTranslateY(0);
-        threeDAnchorPane.setTranslateZ(0);
+        curXTranslation = 0;
+        curYTranslation = 0;
+        curZTranslation = 0;
+        threeDAnchorPane.setTranslateX(curXTranslation);
+        threeDAnchorPane.setTranslateY(curYTranslation);
+        threeDAnchorPane.setTranslateZ(curZTranslation);
 
         /* Set Zoom
         threeDAnchorPane.setScaleX(15);
@@ -472,13 +505,18 @@ public class ThreeDMapScreenController implements Initializable{
     @FXML
     public void topDownButtonOP(ActionEvent e) {
         // Rotate
-        threeDAnchorPane.getTransforms().setAll(new Rotate(0, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
-                new Rotate(90, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+        curYRotation = 0;
+        curXRotation = 90;
+        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
 
         // Panning
-        threeDAnchorPane.setTranslateX(0);
-        threeDAnchorPane.setTranslateY(300);
-        threeDAnchorPane.setTranslateZ(500);
+        curXTranslation = 0;
+        curYTranslation = 300;
+        curZTranslation = 500;
+        threeDAnchorPane.setTranslateX(curXTranslation);
+        threeDAnchorPane.setTranslateY(curYTranslation);
+        threeDAnchorPane.setTranslateZ(curZTranslation);
     }
 
     /**
@@ -546,6 +584,7 @@ public class ThreeDMapScreenController implements Initializable{
 
             model[0].getTransforms().setAll(new Rotate(curXRotation, Rotate.X_AXIS), new Rotate(curYRotation, Rotate.Y_AXIS));
             model[0].setMaterial(phongMaterial);
+            model[0].setPickOnBounds(false);
             root.getChildren().add(model[0]);
 
             switch(index) {
@@ -736,8 +775,6 @@ public class ThreeDMapScreenController implements Initializable{
         edgeGroup.getTransforms().setAll(new Rotate(curXRotation, mv.getTranslateX() - edgeGroup.getTranslateX(), mv.getTranslateY() - edgeGroup.getTranslateY(), mv.getTranslateZ() - edgeGroup.getTranslateZ(), Rotate.X_AXIS),
                         new Rotate(curYRotation, mv.getTranslateX() - edgeGroup.getTranslateX(), mv.getTranslateY() - edgeGroup.getTranslateY(), mv.getTranslateZ() - edgeGroup.getTranslateZ(), Rotate.Y_AXIS));
         root.getChildren().add(edgeGroup);
-        /*edgeGroup.toBack(); //TODO get edges behind nodes
-        mv.toBack();*/
     }
 
     /**
@@ -813,6 +850,9 @@ public class ThreeDMapScreenController implements Initializable{
                 //popOver.hide();
                 //popOverHidden = true;
             }
+            // This makes it so that the pane doesn't spaz out as much for some reason
+            threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                    new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
             event.consume();
         }
     };
@@ -851,13 +891,13 @@ public class ThreeDMapScreenController implements Initializable{
      * Used to draw the list of nodes returned by AStar
      */
     public void resetPath() {
-        Node currentNode = null, pastNode = null;
+        Node currentNode = null, pastNode;
         for (Node n : pathMade) {
             pastNode = currentNode;
             currentNode = n;
             nodeDispSet.get(n.getID()).setMaterial(fillBlue);
 
-            for (Edge e : currentNode.getEdges()) { //TODO set this for cylinders
+            for (Edge e : currentNode.getEdges()) {
                 if (pastNode != null) {
                     if (e.contains(pastNode)) {
                         edgeDispSet.get(e.getID()).setVisible(false);
@@ -878,7 +918,6 @@ public class ThreeDMapScreenController implements Initializable{
     public void drawPath(ArrayList<Node> path) {
         double width, height, angle;
         double distanceCounter = 0;
-        PhongMaterial phongMaterial = new PhongMaterial();
 
         Node currentNode = null, pastNode = null;
         if (pathMade != null) {
@@ -910,13 +949,13 @@ public class ThreeDMapScreenController implements Initializable{
             checkStairNodeSet(currentNode);
 
             //Draws the arrows
-            if (!path.get(0).equals(n)) {
+            /*if (!path.get(0).equals(n)) {
                 width = currentNode.getX() - pastNode.getX();
                 height = currentNode.getY() - pastNode.getY();
                 angle = Math.atan2(height, width);
                 //increment the distanceCounter
                 distanceCounter += currentNode.distanceBetweenNodes(pastNode);
-                /*if (distanceCounter >= 175) {
+                if (distanceCounter >= 175) {
                     distanceCounter = 0;
 
                     arrowFloorSet.add(currentNode.getFloor().toString());
@@ -925,33 +964,23 @@ public class ThreeDMapScreenController implements Initializable{
                     } else {
                         drawTriangle(angle, pastNode.getX(), pastNode.getY());
                     //}
-                }*/
-            }
+                }
+            }*/
 
             //set start node to Green and end node to red
             if (path.get(0).equals(n)) {
-                //phongMaterial.setDiffuseMap(new Image(getClass().getResource("/models/textures/node_start.png").toExternalForm()));
-                //nodeDispSet.get(currentNode.getID()).setMaterial(fillPurple);
                 nodeDispSet.get(currentNode.getID()).setVisible(true);
-                if (!currentNode.getFloor().equals(currentFloor))
+                    if (!currentNode.getFloor().equals(currentFloor))
                     nodeDispSet.get(currentNode.getID()).setOpacity(0.5);
-
-                /*if (toggleOn) {
-                    startLabel.setLayoutX((n.getxDisplay() + 5 - X_OFFSET) * X_SCALE);
-                    startLabel.setLayoutY((n.getyDisplay() - 40 - Y_OFFSET) * Y_SCALE);
-                } else {*/
-                    startLabel.setLayoutX((n.getX() + 5 - curXOffset) * X_SCALE);
-                    startLabel.setLayoutY((n.getY() - 40 - Y_OFFSET) * Z_SCALE);
-                //}
+                /*startLabel.setLayoutX((n.getX() + 5 - curXOffset) * X_SCALE);
+                startLabel.setLayoutY((n.getY() - 40 - Y_OFFSET) * Z_SCALE);
                 startLabel.setText(n.getLongName());
                 startLabel.setFont(font);
                 startLabel.toFront();
-                labelDispSet.add(startLabel);
+                labelDispSet.add(startLabel);*/
                 //threeDAnchorPane.getChildren().add(startLabel); //TODO Set this on it's on pane, make it so labels move with map
 
             } else if (path.get(path.size() - 1).equals(n)) {
-                //phongMaterial.setDiffuseMap(new Image(getClass().getResource("/models/textures/node_end.png").toExternalForm()));
-                //nodeDispSet.get(currentNode.getID()).setMaterial(phongMaterial);
                 nodeDispSet.get(currentNode.getID()).setVisible(true);
                 if (!currentNode.getFloor().equals(currentFloor))
                     nodeDispSet.get(currentNode.getID()).setOpacity(0.5);
@@ -960,75 +989,51 @@ public class ThreeDMapScreenController implements Initializable{
                 if (currentNode.getType().equals(Node.nodeType.ELEV) || currentNode.getType().equals(Node.nodeType.STAI)) {
                     addToStairNodeSet();
                 }
-                /*if (toggleOn) {
-                    endLabel.setLayoutX((n.getxDisplay() + 5 - X_OFFSET) * X_SCALE);
-                    endLabel.setLayoutY((n.getyDisplay() - 34 - Y_OFFSET) * Y_SCALE);
-                } else {*/
-                    endLabel.setLayoutX((n.getX() + 5 - curXOffset) * X_SCALE);
-                    endLabel.setLayoutY((n.getY() - 34 - Y_OFFSET) * Z_SCALE);
-                //}
+                /*endLabel.setLayoutX((n.getX() + 5 - curXOffset) * X_SCALE);
+                endLabel.setLayoutY((n.getY() - 34 - Y_OFFSET) * Z_SCALE);
                 endLabel.setText(n.getLongName());
                 endLabel.setFont(font);
                 endLabel.toFront();
-                labelDispSet.add(endLabel);
+                labelDispSet.add(endLabel);*/
                 //nodesEdgesPane.getChildren().add(endLabel); //TODO again put this on its own pane
             }
             //Color in the path appropriately
             for (Edge e : currentNode.getEdges()) {
                 if (pastNode != null) {
                     if (e.contains(pastNode)) {
-                        //edgeDispSet.get(e.getID()).setStroke(Color.rgb(250, 150, 0)); //TODO set for cylinder
                         edgeDispSet.get(e.getID()).setVisible(true);
-                        if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
-                            edgeDispSet.get(e.getID()).setOpacity(1.0);
-                        } else {
-                            edgeDispSet.get(e.getID()).setOpacity(0.3);
-                        }
+                        edgeDispSet.get(e.getID()).setOpacity(1.0);
                     }
                 }
             }
         }
         //this sets the proper opacity for the arrows based on floor
-        for (int i = 0; i < arrowDispSet.size(); i++) {
+        /*for (int i = 0; i < arrowDispSet.size(); i++) {
             System.out.println(arrowFloorSet.get(i));
             if (arrowFloorSet.get(i).equals(currentFloor.toString())) {
                 arrowDispSet.get(i).setOpacity(1.0);
             } else {
                 arrowDispSet.get(i).setOpacity(0.3);
             }
-        }
+        }*/
 
         // Create PopOver for Stair or Elevator nodes
         for (int i = 0; i < stairNodeSet.size(); i += 2) {
             for (String str : nodeDispSet.keySet()) {
                 if (str.equals(stairNodeSet.get(i).getID()) && stairNodeSet.get(i).getFloor().equals(currentFloor)) {
-                    phongMaterial.setDiffuseMap(new Image(getClass().getResource("/models/textures/node_stair.png").toExternalForm()));
-                    nodeDispSet.get(str).setMaterial(phongMaterial);
+                    nodeDispSet.get(str).setMaterial(fillPurple);
                     Label clickMeLabel = new Label("Click me to follow the path");
                     clickMeLabel.setFont(font);
                     labelDispSet.add(clickMeLabel);
                     //nodesEdgesPane.getChildren().add(clickMeLabel); //TODO add label to labels pane
-                    //if (!toggleOn) {
-                        // 2d view
-                        double actualX = (stairNodeSet.get(i).getX() + 10 - curXOffset) * X_SCALE;
-                        double actualY = (stairNodeSet.get(i).getY() + 10 - Y_OFFSET) * Z_SCALE;
-                        clickMeLabel.setLayoutX(actualX + 20);
-                        clickMeLabel.setLayoutY(actualY + 20);
-                        Line line = new Line(actualX, actualY, actualX + 20, actualY + 20);
-                        //nodesEdgesPane.getChildren().add(line); //TODO add label to labels pane
-                        lineDispSet.add(line);
-                        break;
-                    /*} else {
-                        // 3d view
-                        double actualX = (stairNodeSet.get(i).getxDisplay() + 10 - X_OFFSET) * X_SCALE;
-                        double actualY = (stairNodeSet.get(i).getyDisplay() + 10 - Y_OFFSET) * Y_SCALE;
-                        clickMeLabel.setLayoutX(actualX + 20);
-                        clickMeLabel.setLayoutY(actualY + 20);
-                        Line line = new Line(actualX, actualY, actualX + 20, actualY + 20);
-                        nodesEdgesPane.getChildren().add(line);
-                        lineDispSet.add(line);
-                        break;
-                    }*/
+                    double actualX = (stairNodeSet.get(i).getX() + 10 - curXOffset) * X_SCALE;
+                    double actualY = (stairNodeSet.get(i).getY() + 10 - Y_OFFSET) * Z_SCALE;
+                    clickMeLabel.setLayoutX(actualX + 20);
+                    clickMeLabel.setLayoutY(actualY + 20);
+                    Line line = new Line(actualX, actualY, actualX + 20, actualY + 20);
+                    //nodesEdgesPane.getChildren().add(line); //TODO add label to labels pane
+                    lineDispSet.add(line);
+                    break;
                 }
             }
         }
@@ -1051,6 +1056,9 @@ public class ThreeDMapScreenController implements Initializable{
         //autoTranslateZoom(desiredZoomX, desiredZoomY, centerX, centerY); //TODO get auto zoom on path working
 
         pathDrawn = true;
+        // This makes it so that the pane doesn't spaz out as much for some reason
+        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
     }
 
     private void checkStairNodeSet(Node currentNode) {
@@ -1102,12 +1110,12 @@ public class ThreeDMapScreenController implements Initializable{
      */
     private ArrayList<Integer> nodeFloorPos() {
         ArrayList<Integer> floorYPos = new ArrayList<>();
-        floorYPos.add(Y_OFFSET - 50);
-        floorYPos.add(Y_OFFSET + 50);
-        floorYPos.add(Y_OFFSET + 150);
-        floorYPos.add(Y_OFFSET + 250);
-        floorYPos.add(Y_OFFSET + 350);
-        floorYPos.add(Y_OFFSET + 450);
+        floorYPos.add(Y_OFFSET + 165);
+        floorYPos.add(Y_OFFSET + 215);
+        floorYPos.add(Y_OFFSET + 270);
+        floorYPos.add(Y_OFFSET + 320);
+        floorYPos.add(Y_OFFSET + 370);
+        floorYPos.add(Y_OFFSET + 420);
         return floorYPos;
     }
 
@@ -1149,32 +1157,32 @@ public class ThreeDMapScreenController implements Initializable{
      */
     private void getFloorOffset(int index) {
         switch(index) {
-            case 0:
+            case 0: // Floor L2
                 floorOffsets.add(0, -130); // X Offset
                 floorOffsets.add(1, 0); // Y Offset
                 floorOffsets.add(2, 50); // Z Offset
                 break;
-            case 1:
+            case 1: // Floor L1
                 floorOffsets.add(0, 35); // X Offset
                 floorOffsets.add(1, 10); // Y Offset
                 floorOffsets.add(2, 70); // Z Offset
                 break;
-            case 2:
+            case 2: // Floor G
                 floorOffsets.add(0, 35); // X Offset
                 floorOffsets.add(1, 0); // Y Offset
                 floorOffsets.add(2, 70); // Z Offset
                 break;
-            case 3:
+            case 3: // Floor 1
                 floorOffsets.add(0, 35); // X Offset
                 floorOffsets.add(1, 0); // Y Offset
                 floorOffsets.add(2, 47); // Z Offset
                 break;
-            case 4:
+            case 4: // Floor 2
                 floorOffsets.add(0, 32); // X Offset
                 floorOffsets.add(1, 0); // Y Offset
                 floorOffsets.add(2, 32); // Z Offset
                 break;
-            case 5:
+            case 5: // Floor 3
                 floorOffsets.add(0, 25); // X Offset
                 floorOffsets.add(1, 0); // Y Offset
                 floorOffsets.add(2, 35); // Z Offset
@@ -1190,27 +1198,27 @@ public class ThreeDMapScreenController implements Initializable{
     private ArrayList<Double> getFloorScale(int index) {
         ArrayList<Double> floorScale = new ArrayList<>();
         switch(index) {
-            case 0:
+            case 0: // Floor L2
                 floorScale.add(0, 0.0); // X Scale
                 floorScale.add(1, 0.0); // Z Scale
                 break;
-            case 1:
+            case 1: // Floor L1
                 floorScale.add(0, 0.0); // X Scale
                 floorScale.add(1, 0.0); // Z Scale
                 break;
-            case 2:
+            case 2: // Floor G
                 floorScale.add(0, 0.0); // X Scale
                 floorScale.add(1, 0.0); // Z Scale
                 break;
-            case 3:
+            case 3: // Floor 1
                 floorScale.add(0, 0.0); // X Scale
                 floorScale.add(1, 0.0); // Z Scale
                 break;
-            case 4:
+            case 4: // Floor 2
                 floorScale.add(0, -0.2); // X Scale
                 floorScale.add(1, -0.2); // Z Scale
                 break;
-            case 5:
+            case 5: // Floor 3
                 floorScale.add(0, -0.3); // X Scale
                 floorScale.add(1, -0.3); // Z Scale
                 break;
