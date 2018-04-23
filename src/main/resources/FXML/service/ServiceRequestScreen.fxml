@@ -2,10 +2,9 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -107,33 +106,6 @@
                         <Insets bottom="10.0" />
                     </GridPane.margin>
                 </Label>
-                <TableView fx:id="newRequestTable" editable="true" onContextMenuRequested="#disableMenu1OptionsOp" onMouseClicked="#onNewRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" GridPane.rowIndex="1">
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                    <columns>
-                        <TableColumn fx:id="rID1" prefWidth="100.0" text="Request ID" />
-                        <TableColumn fx:id="rType1" prefWidth="433.0" text="Request Type" />
-                    </columns>
-                </TableView>
-                <TableView fx:id="inProgRequestTable" onContextMenuRequested="#disableMenu2OptionsOp" onMouseClicked="#onInProgRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                    <columns>
-                        <TableColumn fx:id="rID2" prefWidth="100.0" text="Request ID" />
-                        <TableColumn fx:id="rType2" prefWidth="433.0" text="Request Type" />
-                    </columns>
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </TableView>
-                <TableView fx:id="completedRequestTable" onMouseClicked="#onCompletedRequestTableClickOp" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/tableview.css" GridPane.columnIndex="4" GridPane.rowIndex="1">
-                    <columns>
-                        <TableColumn fx:id="rID3" prefWidth="100.0" text="Request ID" />
-                        <TableColumn fx:id="rType3" prefWidth="433.0" text="Request Type" />
-                    </columns>
-                    <GridPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                    </GridPane.margin>
-                </TableView>
                 <JFXButton fx:id="claimRequestButton" buttonType="RAISED" onAction="#claimRequestButtonOp" styleClass="blue-button" text="Claim Service Request" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <font>
                         <Font size="18.0" />
@@ -144,6 +116,9 @@
                         <Font size="18.0" />
                     </font>
                 </JFXButton>
+            <JFXTreeTableView fx:id="newRequestTable" onContextMenuRequested="#disableMenu1OptionsOp" onMouseClicked="#onNewRequestTableClickOp" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.rowIndex="1" />
+            <JFXTreeTableView fx:id="inProgRequestTable" onContextMenuRequested="#disableMenu2OptionsOp" onMouseClicked="#onInProgRequestTableClickOp" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <JFXTreeTableView fx:id="completedRequestTable" onMouseClicked="#onCompletedRequestTableClickOp" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.columnIndex="4" GridPane.rowIndex="1" />
             </children>
         </GridPane>
     </center>

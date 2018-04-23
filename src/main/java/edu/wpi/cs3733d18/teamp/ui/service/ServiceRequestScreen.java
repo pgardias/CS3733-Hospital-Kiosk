@@ -2,6 +2,8 @@ package edu.wpi.cs3733d18.teamp.ui.service;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTreeTableColumn;
+import com.jfoenix.controls.JFXTreeTableView;
 import edu.wpi.cs3733d18.teamR.RaikouAPI;
 import edu.wpi.cs3733d18.teamp.*;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
@@ -18,6 +20,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -32,6 +35,10 @@ public class ServiceRequestScreen implements Initializable{
     ArrayList<Request> requests;
     ArrayList<Request> emergencyRequests = new ArrayList<>();
     ArrayList<Request> otherRequests = new ArrayList<>();
+
+    ArrayList<TreeItem<ServiceRequestTable>> newRequestTableChildren;
+    ArrayList<TreeItem<ServiceRequestTable>> inProgRequestTableChildren;
+    ArrayList<TreeItem<ServiceRequestTable>> completedRequestTableChildren;
 
     @FXML
     JFXButton backButton;
@@ -73,31 +80,40 @@ public class ServiceRequestScreen implements Initializable{
     Label helloMessage;
 
     @FXML
-    TableView<ServiceRequestTable> newRequestTable;
+    JFXTreeTableView<ServiceRequestTable> newRequestTable;
 
     @FXML
-    TableView<ServiceRequestTable> inProgRequestTable;
+    JFXTreeTableView<ServiceRequestTable> inProgRequestTable;
 
     @FXML
-    TableView<ServiceRequestTable> completedRequestTable;
+    JFXTreeTableView<ServiceRequestTable> completedRequestTable;
 
     @FXML
-    TableColumn<ServiceRequestTable, Integer> rID1;
+    JFXTreeTableColumn<ServiceRequestTable, Integer> rID1;
 
     @FXML
-    TableColumn<ServiceRequestTable, String> rType1;
+    JFXTreeTableColumn<ServiceRequestTable, String> rType1;
 
     @FXML
-    TableColumn<ServiceRequestTable, Integer> rID2;
+    JFXTreeTableColumn<ServiceRequestTable, Integer> rID2;
 
     @FXML
-    TableColumn<ServiceRequestTable, String> rType2;
+    JFXTreeTableColumn<ServiceRequestTable, String> rType2;
 
     @FXML
-    TableColumn<ServiceRequestTable, Integer> rID3;
+    JFXTreeTableColumn<ServiceRequestTable, Integer> rID3;
 
     @FXML
-    TableColumn<ServiceRequestTable, String> rType3;
+    JFXTreeTableColumn<ServiceRequestTable, String> rType3;
+
+    @FXML
+    TreeItem<ServiceRequestTable> newRequestTableRoot;
+
+    @FXML
+    TreeItem<ServiceRequestTable> inProgRequestTableRoot;
+
+    @FXML
+    TreeItem<ServiceRequestTable> completedRequestTableRoot;
 
     @FXML
     JFXComboBox newRequestComboBox;
@@ -160,31 +176,39 @@ public class ServiceRequestScreen implements Initializable{
 
         for (Request r: emergencyRequests) {
             if (r.isCompleted() == 0) {
-                newRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+                newRequestTableChildren.add(new TreeItem<>(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString())));
             }
             else if (r.isCompleted() == 1) {
-                inProgRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+                inProgRequestTableChildren.add(new TreeItem<>(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString())));
             }
             else {
-                completedRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+                completedRequestTableChildren.add(new TreeItem<>(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString())));
             }
         }
 
         for (Request r: otherRequests) {
             if (r.isCompleted() == 0) {
-                newRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+                newRequestTableChildren.add(new TreeItem<>(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString())));
             }
             else if (r.isCompleted() == 1) {
-                inProgRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+                inProgRequestTableChildren.add(new TreeItem<>(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString())));
             }
             else {
-                completedRequests.add(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString()));
+                completedRequestTableChildren.add(new TreeItem<>(new ServiceRequestTable(r.getRequestID(), r.getRequestType().toString())));
             }
         }
 
-        newRequestTable.setItems(newRequests);
-        inProgRequestTable.setItems(inProgRequests);
-        completedRequestTable.setItems(completedRequests);
+        newRequestTableRoot.getChildren().setAll(newRequestTableChildren);
+        inProgRequestTableRoot.getChildren().setAll(inProgRequestTableChildren);
+        completedRequestTableRoot.getChildren().setAll(completedRequestTableChildren);
+
+        newRequestTable.setRoot(newRequestTableRoot);
+        inProgRequestTable.setRoot(inProgRequestTableRoot);
+        completedRequestTable.setRoot(completedRequestTableRoot);
+
+        newRequestTable.setShowRoot(false);
+        inProgRequestTable.setShowRoot(false);
+        completedRequestTable.setShowRoot(false);
     }
 
     /**
@@ -195,12 +219,52 @@ public class ServiceRequestScreen implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        rID1.setCellValueFactory(new PropertyValueFactory<ServiceRequestTable, Integer>("requestID"));
-        rType1.setCellValueFactory(new PropertyValueFactory<ServiceRequestTable, String>("requestType"));
-        rID2.setCellValueFactory(new PropertyValueFactory<ServiceRequestTable, Integer>("requestID"));
-        rType2.setCellValueFactory(new PropertyValueFactory<ServiceRequestTable, String>("requestType"));
-        rID3.setCellValueFactory(new PropertyValueFactory<ServiceRequestTable, Integer>("requestID"));
-        rType3.setCellValueFactory(new PropertyValueFactory<ServiceRequestTable, String>("requestType"));
+        newRequestTableChildren = new ArrayList<>();
+        inProgRequestTableChildren = new ArrayList<>();
+        completedRequestTableChildren = new ArrayList<>();
+
+        newRequestTableRoot = new TreeItem<>();
+        inProgRequestTableRoot = new TreeItem<>();
+        completedRequestTableRoot = new TreeItem<>();
+
+        rID1 = new JFXTreeTableColumn<>("Request ID");
+        rType1 = new JFXTreeTableColumn<>("Request Type");
+        rID2 = new JFXTreeTableColumn<>("Request ID");
+        rType2 = new JFXTreeTableColumn<>("Request Type");
+        rID3 = new JFXTreeTableColumn<>("Request ID");
+        rType3 = new JFXTreeTableColumn<>("Request Type");
+
+        rID1.setPrefWidth(100);
+        rID1.setResizable(false);
+        rID1.setSortable(true);
+        rID2.setPrefWidth(100);
+        rID2.setResizable(false);
+        rID2.setSortable(true);
+        rID3.setPrefWidth(100);
+        rID3.setResizable(false);
+        rID3.setSortable(true);
+
+        rType1.setPrefWidth(433);
+        rType1.setResizable(false);
+        rType1.setSortable(true);
+        rType2.setPrefWidth(433);
+        rType2.setResizable(false);
+        rType2.setSortable(true);
+        rType3.setPrefWidth(433);
+        rType3.setResizable(false);
+        rType3.setSortable(true);
+
+
+        rID1.setCellValueFactory(new TreeItemPropertyValueFactory<>("requestID"));
+        rType1.setCellValueFactory(new TreeItemPropertyValueFactory<>("requestType"));
+        rID2.setCellValueFactory(new TreeItemPropertyValueFactory<>("requestID"));
+        rType2.setCellValueFactory(new TreeItemPropertyValueFactory<>("requestType"));
+        rID3.setCellValueFactory(new TreeItemPropertyValueFactory<>("requestID"));
+        rType3.setCellValueFactory(new TreeItemPropertyValueFactory<>("requestType"));
+
+        newRequestTable.getColumns().addAll(rID1, rType1);
+        inProgRequestTable.getColumns().addAll(rID2, rType2);
+        completedRequestTable.getColumns().addAll(rID3, rType3);
 
         populateTableViews();
 
@@ -234,7 +298,7 @@ public class ServiceRequestScreen implements Initializable{
      */
     public void disableMenu1OptionsOp() {
         menu1.getItems().get(1).setDisable(true);
-        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         boolean claim = false;
         boolean delete = false;
         try {
@@ -278,7 +342,7 @@ public class ServiceRequestScreen implements Initializable{
     public void disableMenu2OptionsOp() {
         menu2.getItems().get(0).setDisable(true);
         menu2.getItems().get(2).setDisable(true);
-        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         boolean emptype = false;
         try {
             Request r = db.getOneRequest(requestID);
@@ -297,7 +361,7 @@ public class ServiceRequestScreen implements Initializable{
     }
 
     public void deleteRequestOp() {
-        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
             db.deleteRequest(r);
@@ -312,7 +376,7 @@ public class ServiceRequestScreen implements Initializable{
      * Fills in the gridpane with info from requests in the newRequestTable
      */
     public void onNewRequestTableClickOp() {
-        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
             timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
@@ -331,7 +395,7 @@ public class ServiceRequestScreen implements Initializable{
      * Fills in the gridpane with info from requests in the inProgRequestTable
      */
     public void onInProgRequestTableClickOp() {
-        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
             timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
@@ -351,7 +415,7 @@ public class ServiceRequestScreen implements Initializable{
      * Fills in the gridpane with info from requests in the completedRequestTable
      */
     public void onCompletedRequestTableClickOp() {
-        int requestID = completedRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        int requestID = completedRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
             timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
@@ -374,7 +438,7 @@ public class ServiceRequestScreen implements Initializable{
     @FXML
     public void claimRequestButtonOp(ActionEvent e) {
         serviceRequestErrorLabel.setText("");
-        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
             if (r.getRequestType() == Request.requesttype.LANGUAGEINTERP || r.getRequestType() == Request.requesttype.HOLYPERSON) {
@@ -416,7 +480,7 @@ public class ServiceRequestScreen implements Initializable{
     @FXML
     public void completeRequestButtonOp(ActionEvent e) {
         serviceRequestErrorLabel.setText("");
-        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getRequestID();
+        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
             Request r = db.getOneRequest(requestID);
             String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
@@ -542,7 +606,6 @@ public class ServiceRequestScreen implements Initializable{
                 return false;
             }
 
-
             popUpController = loader.getController();
             popUpController.StartUp(this, selection);
             stage.setScene(new Scene(root, 1000, 950));
@@ -558,15 +621,11 @@ public class ServiceRequestScreen implements Initializable{
      * Called by various functions to clear the TableViews and calls populateTableViews() again
      */
     public void refresh() {
-        for (int i = 0; i < newRequestTable.getItems().size(); i++) {
-            newRequestTable.getItems().clear();
-        }
-        for (int i = 0; i < inProgRequestTable.getItems().size(); i++) {
-            inProgRequestTable.getItems().clear();
-        }
-        for (int i = 0; i < completedRequestTable.getItems().size(); i++) {
-            completedRequestTable.getItems().clear();
-        }
+        newRequestTableChildren.clear();
+        inProgRequestTableChildren.clear();
+        System.out.println("hi");
+        completedRequestTableChildren.clear();
+        System.out.println("hello");
         emergencyRequests.clear();
         otherRequests.clear();
         populateTableViews();
