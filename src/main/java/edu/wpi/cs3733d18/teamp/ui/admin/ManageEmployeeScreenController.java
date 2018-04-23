@@ -67,7 +67,7 @@ public class ManageEmployeeScreenController implements Initializable {
     @FXML
     TreeItem<EmployeeTable> root;
 
-    ArrayList<TreeItem<EmployeeTable>> employeeTableArrayList;
+    ArrayList<TreeItem<EmployeeTable>> employeeTableChildren;
 
     @FXML
     public boolean onStartUp(){
@@ -75,12 +75,12 @@ public class ManageEmployeeScreenController implements Initializable {
 
         for(HashMap.Entry<String, Employee> employee: employees.entrySet()){
 
-            employeeTableArrayList.add(new TreeItem<>(new EmployeeTable(employee.getValue().getEmployeeID(), employee.getValue().getUserName(),
+            employeeTableChildren.add(new TreeItem<>(new EmployeeTable(employee.getValue().getEmployeeID(), employee.getValue().getUserName(),
                     employee.getValue().getFirstName(), employee.getValue().getLastName(), employee.getValue().isAdminToString(),
                     employee.getValue().getEmployeeType().toString(), employee.getValue().getSubType())));
         }
 
-        root.getChildren().setAll(employeeTableArrayList);
+        root.getChildren().setAll(employeeTableChildren);
 
         employeeTreeTableView.setRoot(root);
 
