@@ -186,6 +186,7 @@ public class EmployeePopUpController {
         String employeeSubType = "DEFAULT";
 
         passwordErrorLabel.setText("");
+        firstNameTextField.requestFocus();
         String firstName = firstNameTextField.getText();
         String lastName = lastNameTextField.getText();
 
@@ -240,6 +241,8 @@ public class EmployeePopUpController {
             Stage stage = (Stage) submitButton.getScene().getWindow();
             stage.close();
         } else {
+            ShakeTransition anim = new ShakeTransition(reEnterPasswordPasswordField);
+            anim.playFromStart();
             passwordErrorLabel.setText("Passwords do not match. Please re-enter passwords.");
         }
     }

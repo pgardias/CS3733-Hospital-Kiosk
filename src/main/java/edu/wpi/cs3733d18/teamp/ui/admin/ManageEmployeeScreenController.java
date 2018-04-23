@@ -112,7 +112,7 @@ public class ManageEmployeeScreenController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
 
-        employeeTableArrayList = new ArrayList<>();
+        employeeTableChildren = new ArrayList<>();
         root = new TreeItem<>();
 
         employeeIDTableViewColumn = new JFXTreeTableColumn<>("Employee ID");
@@ -259,17 +259,16 @@ public class ManageEmployeeScreenController implements Initializable {
 
     public void reBuildTable() {
         employees = db.getAllEmployees();
-        employeeTableArrayList.clear();
-        root.getChildren().setAll(employeeTableArrayList);
+        employeeTableChildren.clear();
+        root.getChildren().setAll(employeeTableChildren);
 
-        System.out.println("HELLOWORLD");
         for(HashMap.Entry<String, Employee> employee: employees.entrySet()){
-            employeeTableArrayList.add(new TreeItem<>(new EmployeeTable(employee.getValue().getEmployeeID(), employee.getValue().getUserName(),
+            employeeTableChildren.add(new TreeItem<>(new EmployeeTable(employee.getValue().getEmployeeID(), employee.getValue().getUserName(),
                     employee.getValue().getFirstName(), employee.getValue().getLastName(), employee.getValue().isAdminToString(),
                     employee.getValue().getEmployeeType().toString(), employee.getValue().getSubType())));
         }
 
-        root.getChildren().setAll(employeeTableArrayList);
+        root.getChildren().setAll(employeeTableChildren);
 
         employeeTreeTableView.setRoot(root);
         employeeTreeTableView.setShowRoot(false);
