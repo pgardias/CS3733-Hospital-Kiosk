@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.admin.DeletePopUpController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.admin.ConfirmationPopUpController">
    <bottom>
       <GridPane maxHeight="-Infinity" prefHeight="75.0" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -20,7 +20,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <JFXButton fx:id="deleteButton" buttonType="RAISED" defaultButton="true" onAction="#deleteButtonOp" style="-fx-background-color: RED;" text="Delete" GridPane.columnIndex="1" GridPane.halignment="LEFT">
+            <JFXButton fx:id="confirmationButton" buttonType="RAISED" defaultButton="true" onAction="#confirmationButtonOp" style="-fx-background-color: RED;" GridPane.columnIndex="1" GridPane.halignment="LEFT">
                <GridPane.margin>
                   <Insets left="50.0" />
                </GridPane.margin>
@@ -40,7 +40,7 @@
       </GridPane>
    </bottom>
    <center>
-      <Label fx:id="itemLabel" maxWidth="-Infinity" prefWidth="400.0" text="Are you sure you want to delete this item? This cannot be undone." textAlignment="CENTER" wrapText="true" BorderPane.alignment="CENTER">
+      <Label fx:id="itemLabel" alignment="CENTER" contentDisplay="CENTER" maxWidth="-Infinity" prefWidth="400.0" textAlignment="CENTER" wrapText="true" BorderPane.alignment="CENTER">
          <font>
             <Font size="20.0" />
          </font>
