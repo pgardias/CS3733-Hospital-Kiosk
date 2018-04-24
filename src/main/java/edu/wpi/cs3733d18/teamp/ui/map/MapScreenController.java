@@ -1047,7 +1047,7 @@ public class MapScreenController {
                     Line line = new Line();
                     edgePane.getChildren().add(line);
                     edgeDispSet.put(e.getID(), line);
-                    line.setStroke(Color.rgb(250, 150, 0));
+                    line.setStroke(Color.rgb(245, 188, 58));
                     line.setStrokeWidth(5.0);
                     if (!toggleOn) {
                         line.setStartX((e.getStart().getX() - X_OFFSET) * X_SCALE);
@@ -1128,7 +1128,7 @@ public class MapScreenController {
                 x2, y2,
                 x1, y1,
                 x3, y3});
-        arrow.setFill(Color.rgb(200, 30, 0));
+        arrow.setFill(Color.rgb(11, 47, 91));
 
         arrowPane.getChildren().add(arrow);
 

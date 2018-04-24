@@ -109,14 +109,17 @@ public class SettingsController {
     public void backButtonOp() {
         Parent root;
         FXMLLoader loader;
+        AdminMenuController adminMenuController;
 
         loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
         try {
             root = loader.load();
+            adminMenuController = loader.getController();
         } catch (IOException ioe) {
             ioe.printStackTrace();
             return;
         }
+        adminMenuController.onStartup();
         backButton.getScene().setRoot(root);
     }
 }

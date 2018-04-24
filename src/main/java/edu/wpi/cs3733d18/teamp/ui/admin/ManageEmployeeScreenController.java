@@ -99,15 +99,18 @@ public class ManageEmployeeScreenController implements Initializable {
         Stage stage;
         Parent root;
         FXMLLoader loader;
+        AdminMenuController adminMenuController;
 
         loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
         stage = (Stage) backButton.getScene().getWindow();
         try {
             root = loader.load();
+            adminMenuController = loader.getController();
         } catch (IOException ie) {
             ie.printStackTrace();
             return false;
         }
+        adminMenuController.onStartup();
         backButton.getScene().setRoot(root);
 
         return true;

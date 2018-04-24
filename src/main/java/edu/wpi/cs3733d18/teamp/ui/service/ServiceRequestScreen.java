@@ -6,6 +6,7 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.RequestNotFoundException;
 import edu.wpi.cs3733d18.teamp.api.Exceptions.ServiceException;
 import edu.wpi.cs3733d18.teamp.api.TransportationRequest;
+import edu.wpi.cs3733d18.teamp.ui.admin.AdminMenuController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -294,19 +295,28 @@ public class ServiceRequestScreen implements Initializable{
         Stage stage;
         Parent root;
         FXMLLoader loader;
+        AdminMenuController adminMenuController;
 
         stage = (Stage) backButton.getScene().getWindow();
         if(Main.currentUser.getIsAdmin()) {
             loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
+            try {
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return false;
+            }
+            adminMenuController = loader.getController();
+            adminMenuController.onStartup();
         }else{
             loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
             Main.logoutCurrentUser();
-        }
-        try {
-            root = loader.load();
-        } catch (IOException ie) {
-            ie.printStackTrace();
-            return false;
+            try {
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return false;
+            }
         }
 
         backButton.getScene().setRoot(root);

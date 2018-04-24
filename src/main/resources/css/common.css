@@ -8,10 +8,20 @@
     -fx-text-fill: #e6e6e6;
 }
 
+.blue-button:hover {
+    -fx-background-color: #4178b8;
+    -fx-effect: dropshadow(gaussian, GRAY, 2, 0, 0, 0);
+}
+
 .red-button {
     -jfx-button-type: RAISED;
     -fx-background-color: RED;
     -fx-text-fill: BLACK;
+}
+
+.red-button:hover {
+    -fx-background-color: #ff7777;
+    -fx-effect: dropshadow(gaussian, GRAY, 2, 0, 0, 0);
 }
 
 .mobile {
