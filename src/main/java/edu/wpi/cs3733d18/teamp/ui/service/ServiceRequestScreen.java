@@ -228,30 +228,30 @@ public class ServiceRequestScreen implements Initializable{
         inProgRequestTableRoot = new TreeItem<>();
         completedRequestTableRoot = new TreeItem<>();
 
-        rID1 = new JFXTreeTableColumn<>("Request ID");
+        rID1 = new JFXTreeTableColumn<>("ID");
         rType1 = new JFXTreeTableColumn<>("Request Type");
-        rID2 = new JFXTreeTableColumn<>("Request ID");
+        rID2 = new JFXTreeTableColumn<>("ID");
         rType2 = new JFXTreeTableColumn<>("Request Type");
-        rID3 = new JFXTreeTableColumn<>("Request ID");
+        rID3 = new JFXTreeTableColumn<>("ID");
         rType3 = new JFXTreeTableColumn<>("Request Type");
 
-        rID1.setPrefWidth(100);
+        rID1.setPrefWidth(75);
         rID1.setResizable(false);
         rID1.setSortable(true);
-        rID2.setPrefWidth(100);
+        rID2.setPrefWidth(75);
         rID2.setResizable(false);
         rID2.setSortable(true);
-        rID3.setPrefWidth(100);
+        rID3.setPrefWidth(75);
         rID3.setResizable(false);
         rID3.setSortable(true);
 
-        rType1.setPrefWidth(433);
+        rType1.setPrefWidth(475);
         rType1.setResizable(false);
         rType1.setSortable(true);
-        rType2.setPrefWidth(433);
+        rType2.setPrefWidth(475);
         rType2.setResizable(false);
         rType2.setSortable(true);
-        rType3.setPrefWidth(433);
+        rType3.setPrefWidth(475);
         rType3.setResizable(false);
         rType3.setSortable(true);
 
