@@ -886,19 +886,15 @@ public class MapScreenController {
             iconNode.setScaleX(nodeIconScale);
             iconNode.setScaleY(nodeIconScale);
             iconNode.toFront();
-            System.out.println("WHAT THE FUCK 1");
             BounceTransition anim1 = new BounceTransition(iconNode);
             animSet.add(anim1);
             anim1.playFromStart();
         } else {
             javafx.scene.Node node = iconDispSet.get(startNode.getID());
-            BounceTransition anim = new BounceTransition(node);
-            anim.playFromStart();
             node.setScaleX(nodeIconScale);
             node.setScaleY(nodeIconScale);
             node.setOpacity(0.6);
             node.toFront();
-            System.out.println("WHAT THE FUCK 2");
             BounceTransition anim2 = new BounceTransition(node);
             animSet.add(anim2);
             anim2.playFromStart();
@@ -918,19 +914,15 @@ public class MapScreenController {
             iconNode.setScaleX(nodeIconScale);
             iconNode.setScaleY(nodeIconScale);
             iconNode.toFront();
-            System.out.println("WHAT THE FUCK 3");
             BounceTransition anim3 = new BounceTransition(iconNode);
             animSet.add(anim3);
             anim3.playFromStart();
         } else {
             javafx.scene.Node node = iconDispSet.get(endNode.getID());
-            BounceTransition anim2 = new BounceTransition(node);
-            anim2.playFromStart();
             node.setScaleX(nodeIconScale);
             node.setScaleY(nodeIconScale);
             node.setOpacity(0.6);
             node.toFront();
-            System.out.println("WHAT THE FUCK 4");
             BounceTransition anim4 = new BounceTransition(node);
             animSet.add(anim4);
             anim4.playFromStart();
@@ -1187,6 +1179,8 @@ public class MapScreenController {
             anim.stop();
         }
         animSet.clear();
+        nodesPane.getChildren().clear();
+        drawNodes();
     }
 
     public void setToggleOn(Boolean toggleOn) {
@@ -1201,22 +1195,10 @@ public class MapScreenController {
 
     public void clearStartNode() {
         if (pathDrawn) resetPath();
-        for (Circle c : nodeDispSet.values()) {
-            if (c.getFill().equals(Color.GREEN)) {
-                c.setFill(Color.DODGERBLUE);
-            }
-
-        }
     }
 
     public void clearEndNode() {
         if (pathDrawn) resetPath();
-        for (Circle c : nodeDispSet.values()) {
-            if (c.getFill().equals(Color.RED)) {
-                c.setFill(Color.DODGERBLUE);
-            }
-
-        }
     }
 
     public void removeFocus() {
