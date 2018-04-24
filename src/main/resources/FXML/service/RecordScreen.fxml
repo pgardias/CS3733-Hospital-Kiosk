@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Rectangle?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../../css/common.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.service.RecordScreenController">
    <children>
       <Rectangle fill="#dadada" height="1050.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian,GREY,5,0.0,0,0);" width="1890.0" x="15.0" y="15.0" />
@@ -25,7 +24,11 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <JFXButton fx:id="backButton" onAction="#backButtonOp" prefHeight="87.0" prefWidth="260.0" />
+                  <JFXButton fx:id="backButton" onAction="#backButtonOp" prefHeight="100.0" prefWidth="100.0" styleClass="back-button" text=" ">
+                     <GridPane.margin>
+                        <Insets left="50.0" top="50.0" />
+                     </GridPane.margin>
+                  </JFXButton>
                </children>
             </GridPane>
          </top>
@@ -40,7 +43,7 @@
               </rowConstraints>
                <children>
                   <JFXComboBox fx:id="filterRecordComboBox" focusColor="#f5bc3a" onAction="#filterRecordComboBoxOp" prefWidth="400.0" promptText="Filter Records" unFocusColor="BLACK" GridPane.halignment="RIGHT" />
-                  <JFXTreeTableView fx:id="recordsTreeTable" GridPane.rowIndex="1" />
+                  <JFXTreeTableView fx:id="recordsTreeTable" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.rowIndex="1" />
                </children>
                <BorderPane.margin>
                   <Insets bottom="50.0" />
