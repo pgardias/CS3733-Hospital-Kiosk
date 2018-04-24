@@ -14,6 +14,18 @@
     -fx-text-fill: BLACK;
 }
 
+.delete-button {
+    -jfx-button-type: RAISED;
+    -fx-background-color: RED;
+}
+
+.submit-button {
+    -jfx-button-type: RAISED;
+    -fx-background-color: LIGHTBLUE;
+}
+
+
+
 .mobile {
     -fx-background-color: #F5BC3A;
     -fx-background-image: url(../img/icons/mobile.png) no-repeat center center fixed;

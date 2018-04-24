@@ -63,6 +63,8 @@ public class ConfirmationPopUpController {
         this.serviceRequestScreen = serviceRequestScreen;
         itemLabel.setText("You are now opening a new application. Are you sure you want to do this?");
         confirmationButton.setText("Open");
+        confirmationButton.getStyleClass().removeAll("delete-button");
+        confirmationButton.getStyleClass().add("submit-button");
     }
 
     public void StartUp(SettingsController settingsController) {
