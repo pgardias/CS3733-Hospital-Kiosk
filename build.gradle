@@ -59,22 +59,6 @@ jar {
 }
 
 task run(type: JavaExec) {
-    main = 'Main'
-    classpath = sourceSets.main.runtimeClasspath
-}
-group 'groupIP'
-version '1.0-SNAPSHOT'
-group 'iteration4'
-version '1.0-SNAPSHOT'
-
-apply plugin: 'java'
-
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+	main = 'edu.wpi.cs3733d18.teamp.Main'
+	classpath = sourceSets.main.runtimeClasspath
 }

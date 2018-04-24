@@ -116,18 +116,14 @@ public class MapScreenController {
     @FXML
     JFXButton floorL1Button;
 
-
     @FXML
     JFXButton floorGButton;
-
 
     @FXML
     JFXButton floor1Button;
 
-
     @FXML
     JFXButton floor2Button;
-
 
     @FXML
     JFXButton floor3Button;
@@ -175,6 +171,22 @@ public class MapScreenController {
         searchBarOverlayController.setSourceSearchBar("Primary Kiosk");
         nodeDispSet.get("PKIOS00102").setFill(Color.GREEN);
     }
+
+    @FXML
+    public void onStartUp3D(Boolean pathDrawn, ArrayList<Node> pathMade) {
+        this.pathDrawn = pathDrawn;
+        this.pathMade = pathMade;
+        drawPath(pathMade);
+    }
+
+    public Boolean getPathDrawn(){
+        return this.pathDrawn;
+    }
+
+    public ArrayList<Node> getPathMade() {
+        return this.pathMade;
+    }
+
 
     @FXML
     public void backButtonOp() {
@@ -1224,10 +1236,6 @@ public class MapScreenController {
         nodesEdgesPane.setTranslateY(screenTranslateY);
     }
 
-    public Boolean getPathDrawn(){
-        return this.pathDrawn;
-    }
-
     /**
      * this method will determine what floors the path goes on
      */
@@ -1279,7 +1287,7 @@ public class MapScreenController {
 
         if (!floorsList.equals(null)) {
             for (int i = 0; i < floorsList.size(); i++) {
-                System.out.println("Created new LabeL");
+                System.out.println("Created new Label");
 
                 JFXButton button = new JFXButton();
                 floorSequenceHBox.getChildren().add(button);
