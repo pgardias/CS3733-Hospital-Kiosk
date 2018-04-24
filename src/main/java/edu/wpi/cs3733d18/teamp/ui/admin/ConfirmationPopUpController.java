@@ -1,6 +1,7 @@
 package edu.wpi.cs3733d18.teamp.ui.admin;
 
 import com.jfoenix.controls.JFXButton;
+import edu.wpi.cs3733d18.teamp.ui.service.ServiceRequestScreen;
 import javafx.fxml.FXML;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -10,6 +11,7 @@ public class ConfirmationPopUpController {
     private MapBuilderNodeFormController mapBuilderNodeFormController;
     private MapBuilderEdgeFormController mapBuilderEdgeFormController;
     private ManageEmployeeScreenController manageEmployeeScreenController;
+    private ServiceRequestScreen serviceRequestScreen;
     private SettingsController settingsController;
     private Boolean actionConfirmed = false;
     private String settingsButtonOp;
@@ -51,6 +53,18 @@ public class ConfirmationPopUpController {
         this.manageEmployeeScreenController = manageEmployeeScreenController;
         itemLabel.setText("Are you sure you want to delete this employee? This cannot be undone.");
         confirmationButton.setText("Delete");
+    }
+
+    /**
+     * Constructor for deleting Employees
+     * @param
+     */
+    public void StartUp(ServiceRequestScreen serviceRequestScreen) {
+        this.serviceRequestScreen = serviceRequestScreen;
+        itemLabel.setText("You are now opening a new application. Are you sure you want to do this?");
+        confirmationButton.setText("Open");
+        confirmationButton.getStyleClass().removeAll("delete-button");
+        confirmationButton.getStyleClass().add("submit-button");
     }
 
     public void StartUp(SettingsController settingsController) {

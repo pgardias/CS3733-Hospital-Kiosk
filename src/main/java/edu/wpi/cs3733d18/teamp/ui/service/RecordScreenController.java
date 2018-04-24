@@ -2,9 +2,14 @@ package edu.wpi.cs3733d18.teamp.ui.service;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTreeTableColumn;
+import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.RecordNotFoundException;
+import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.Record;
+import edu.wpi.cs3733d18.teamp.Request;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,12 +17,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,9 +29,10 @@ import java.util.ResourceBundle;
 
 public class RecordScreenController implements Initializable {
     DBSystem db = DBSystem.getInstance();
-    private ArrayList<Record> records;
     private PieChart pieChart;
     private BarChart barChart;
+    private Request.requesttype filterType;
+
 
     @FXML
     JFXButton backButton;
@@ -40,25 +44,30 @@ public class RecordScreenController implements Initializable {
     GridPane statsGridPane;
 
     @FXML
-    TableView recordTable;
-
-    @FXML
     JFXComboBox filterRecordComboBox;
 
     @FXML
-    TableColumn colRequestType;
+    JFXTreeTableView<RecordsTable> recordsTreeTable;
 
     @FXML
-    TableColumn colSpecificType;
+    JFXTreeTableColumn<RecordsTable, String> requestTypeCol;
 
     @FXML
-    TableColumn colTotalOfType;
+    JFXTreeTableColumn<RecordsTable, String> subTypeCol;
 
     @FXML
-    TableColumn colTotalTime;
+    JFXTreeTableColumn<RecordsTable, Integer> totalOfTypeCol;
 
     @FXML
-    TableColumn colAvgTime;
+    JFXTreeTableColumn<RecordsTable, Integer> totalTimeCol;
+
+    @FXML
+    JFXTreeTableColumn<RecordsTable, Integer> avgTimeCol;
+
+    @FXML
+    TreeItem<RecordsTable> root;
+    private ArrayList<Record> records;
+    private ArrayList<TreeItem<RecordsTable>> children;
 
     ObservableList<String> requestTypes = FXCollections.observableArrayList(
             "All",
@@ -69,41 +78,98 @@ public class RecordScreenController implements Initializable {
             "Security Request",
             "Computer Service Request",
             "Audio/Visual Request",
-            "Gift Delivery Request"
+            "Gift Delivery Request",
+            "Emergency Request"
+    );
+
+    ObservableList<String> emergencyTypes = FXCollections.observableArrayList( // Same as ones in emergency controller
+            "FIRE",
+            "MEDICAL",
+            "ACTIVE SHOOTER"
     );
 
     @Override
     public void initialize(URL url, ResourceBundle rb){
+
         filterRecordComboBox.setItems(requestTypes);
+        records = new ArrayList<>();
+        children = new ArrayList<>();
+        root = new TreeItem<>();
+
+        requestTypeCol = new JFXTreeTableColumn<>("Request Type");
+        subTypeCol = new JFXTreeTableColumn<>("Sub Type");
+        totalOfTypeCol = new JFXTreeTableColumn<>("Total Of Type");
+        totalTimeCol = new JFXTreeTableColumn<>("Total Time");
+        avgTimeCol = new JFXTreeTableColumn<>("Average Time");
+
+        requestTypeCol.setPrefWidth(288);
+        subTypeCol.setPrefWidth(288);
+        totalOfTypeCol.setPrefWidth(288);
+        totalTimeCol.setPrefWidth(288);
+        avgTimeCol.setPrefWidth(288);
+
+        requestTypeCol.setResizable(false);
+        subTypeCol.setResizable(false);
+        totalOfTypeCol.setResizable(false);
+        totalTimeCol.setResizable(false);
+        avgTimeCol.setResizable(false);
+
+        requestTypeCol.setSortable(true);
+        subTypeCol.setSortable(true);
+        totalOfTypeCol.setSortable(true);
+        totalTimeCol.setSortable(true);
+        avgTimeCol.setSortable(true);
+
+
+        requestTypeCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("requestType"));
+        subTypeCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("subType"));
+        totalOfTypeCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("totalOfType"));
+        totalTimeCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("totalTime"));
+        avgTimeCol.setCellValueFactory(new TreeItemPropertyValueFactory<>("avgTime"));
+
+        recordsTreeTable.getColumns().setAll(requestTypeCol, subTypeCol, totalOfTypeCol, totalTimeCol, avgTimeCol);
+
     }
+
+
 
     /**
      * Initialize the record table
      * @return
      */
     @FXML
-    public boolean onStartUp() {
-        try {
+    public void onStartUp() {
+        buildTable();
+        setChartAll();
+    }
+
+    private void buildTable(){
+        try{
             records = db.getAllRecords();
-
-            colRequestType.setCellValueFactory(new PropertyValueFactory<>("requestType"));
-            colSpecificType.setCellValueFactory(new PropertyValueFactory<>("subType"));
-            colTotalOfType.setCellValueFactory(new PropertyValueFactory<>("totalOfType"));
-            colTotalTime.setCellValueFactory(new PropertyValueFactory<>("totalTime"));
-            colAvgTime.setCellValueFactory(new PropertyValueFactory<>("avgTime"));
-
-            // Add all records to table
-            for (Record curRecord : records) {
-                recordTable.getItems().add(curRecord);
-            }
-
-            // Make starting charts
-            setChartAll();
-
-        } catch (RecordNotFoundException rnfe) {
+        }catch (RecordNotFoundException r){
             errorLabel.setText("No record data: No requests have been completed!");
+
+            return;
+            // set Label, exit scene
         }
-        return true;
+        children.clear();
+
+        for(Record record: records) {
+            System.out.println(db.RequestTypeToString(record.getRequestType()));
+            if(filterType != null && record.getRequestType().equals(filterType)) {
+
+                children.add(new TreeItem<>(new RecordsTable(db.RequestTypeToString(record.getRequestType()), record.getSubType(),
+                        record.getTotalOfType(), record.getTotalTime(), record.getAvgTime())));
+            }else if (filterType == null){
+                children.add(new TreeItem<>(new RecordsTable(db.RequestTypeToString(record.getRequestType()), record.getSubType(),
+                        record.getTotalOfType(), record.getTotalTime(), record.getAvgTime())));
+            }
+        }
+        root.getChildren().setAll(children);
+        recordsTreeTable.setRoot(root);
+        recordsTreeTable.setShowRoot(false);
+
+        return;
     }
 
     /**
@@ -132,114 +198,62 @@ public class RecordScreenController implements Initializable {
      * @param e Action event
      * @return True if everything runs properly
      */
-    public Boolean filterRecordComboBoxOp(ActionEvent e) {
-        String requestType = filterRecordComboBox.getValue().toString();
-        switch(requestType) {
-            case "All":
-                recordTable.getItems().clear();
-                for (Record record: records) {
-                    recordTable.getItems().add(record);
-                }
-                statsGridPane.getChildren().remove(pieChart);
-                statsGridPane.getChildren().remove(barChart);
-                setChartAll();
-                break;
-            case "Language Interpreter":
-                recordTable.getItems().clear();
-                for (Record record: records) {
-                    if (db.RequestTypeToString(record.getRequestType()).equals("language interpreter")) {
-                        recordTable.getItems().add(record);
-                    }
-                }
-                statsGridPane.getChildren().remove(pieChart);
-                statsGridPane.getChildren().remove(barChart);
+    @FXML
+    public boolean filterRecordComboBoxOp(ActionEvent e) {
+        String type = filterRecordComboBox.getValue().toString();
+        type = type.toLowerCase();
+        statsGridPane.getChildren().remove(pieChart);
+        statsGridPane.getChildren().remove(barChart);
+        switch (type) {
+            case "language interpreter":
+                filterType = Request.requesttype.LANGUAGEINTERP;
                 setChartSubType(LanguageInterpreterController.languages);
                 break;
-            case  "Religious Request":
-                recordTable.getItems().clear();
-                for (Record record: records) {
-                    if (db.RequestTypeToString(record.getRequestType()).equals("religion handler")) {
-                        recordTable.getItems().add(record);
-                    }
-                }
-                statsGridPane.getChildren().remove(pieChart);
-                statsGridPane.getChildren().remove(barChart);
+            case "religious request":
+                filterType = Request.requesttype.HOLYPERSON;
                 setChartSubType(ReligiousServiceController.religions);
                 break;
-            case  "Sanitation Request":
-                recordTable.getItems().clear();
-                for (Record record: records) {
-                    if (db.RequestTypeToString(record.getRequestType()).equals("sanitation")) {
-                        recordTable.getItems().add(record);
-                    }
-                }
-                statsGridPane.getChildren().remove(pieChart);
-                statsGridPane.getChildren().remove(barChart);
+            case "sanitation request":
+                filterType = Request.requesttype.SANITATION;
                 setChartSubType(SanitationController.messes);
                 break;
-            case  "Maintenance Request":
-                recordTable.getItems().clear();
-                for (Record record: records) {
-                    if (db.RequestTypeToString(record.getRequestType()).equals("maintenance")) {
-                        recordTable.getItems().add(record);
-                    }
-                }
-                statsGridPane.getChildren().remove(pieChart);
-                statsGridPane.getChildren().remove(barChart);
+            case "maintenance request":
+                filterType = Request.requesttype.MAINTENANCE;
                 setChartSubType(MaintenanceController.machines);
                 break;
-            case  "Security Request":
-                recordTable.getItems().clear();
-                for (Record record: records) {
-                    if (db.RequestTypeToString(record.getRequestType()).equals("security")) {
-                        recordTable.getItems().add(record);
-                    }
-                }
-                statsGridPane.getChildren().remove(pieChart);
-                statsGridPane.getChildren().remove(barChart);
-                setChartSubType(SecurityController.situations);
-                break;
-            case  "Computer Service Request":
-                recordTable.getItems().clear();
-                for (Record record: records) {
-                    if (db.RequestTypeToString(record.getRequestType()).equals("computer service")) {
-                        recordTable.getItems().add(record);
-                    }
-                }
-                statsGridPane.getChildren().remove(pieChart);
-                statsGridPane.getChildren().remove(barChart);
+            case "computer service request":
+                filterType = Request.requesttype.COMPUTER;
                 setChartSubType(ComputerServiceController.devices);
                 break;
-            case  "Audio/Visual Request":
-                recordTable.getItems().clear();
-                for (Record record: records) {
-                    if (db.RequestTypeToString(record.getRequestType()).equals("audio+visual")) {
-                        recordTable.getItems().add(record);
-                    }
-                }
-                statsGridPane.getChildren().remove(pieChart);
-                statsGridPane.getChildren().remove(barChart);
+            case "security request":
+                filterType = Request.requesttype.SECURITY;
+                setChartSubType(SecurityController.situations);
+                break;
+            case "audio/visual request":
+                filterType = Request.requesttype.AV;
                 setChartSubType(AudioVisualController.AVDevices);
                 break;
-            case  "Gift Delivery Request":
-                recordTable.getItems().clear();
-                for (Record record: records) {
-                    if (db.RequestTypeToString(record.getRequestType()).equals("delivergift")) {
-                        recordTable.getItems().add(record);
-                    }
-                }
-                statsGridPane.getChildren().remove(pieChart);
-                statsGridPane.getChildren().remove(barChart);
+            case "gift delivery request":
+                filterType = Request.requesttype.GIFTS;
                 setChartSubType(GiftDeliveryController.gifts);
                 break;
+            case "Emergency Request":
+                filterType = Request.requesttype.EMERGENCY;
+                setChartSubType(emergencyTypes);
+                break;
+            default:
+                filterType = null;
+                setChartAll();
         }
+        buildTable();
+
         return true;
     }
 
     /**
      * Generates charts for all request types
      */
-    private Boolean setChartAll() {
+    private void setChartAll() {
 
         // Make the pie chart
         ObservableList<PieChart.Data> requestData = FXCollections.observableArrayList();
@@ -274,6 +288,10 @@ public class RecordScreenController implements Initializable {
         int giftCount = db.countType("delivergift"); // Add amount of gift delivery requests
         if (giftCount > 0) {
             requestData.add(new PieChart.Data("Gift Delivery", giftCount));
+        }
+        int emergencyCount = db.countType("emergency"); // Add amount of emergency requests
+        if (giftCount > 0) {
+            requestData.add(new PieChart.Data("Emergency", giftCount));
         }
         PieChart requestPieChart = new PieChart(requestData);
         requestPieChart.setTitle("Request Types");
@@ -340,10 +358,16 @@ public class RecordScreenController implements Initializable {
             series8.getData().add(new XYChart.Data<>("Average Time", db.recordAverageTime("delivergift")));
             requestBarChart.getData().add(series8);
         }
+        if (emergencyCount > 0) { // Add average time for emergency requests
+            XYChart.Series<String, Number> series8 = new XYChart.Series<>();
+            series8.setName("Emergency");
+            series8.getData().add(new XYChart.Data<>("Average Time", db.recordAverageTime("emergency")));
+            requestBarChart.getData().add(series8);
+        }
         statsGridPane.add(requestBarChart, 0, 1);
         barChart = requestBarChart;
 
-        return true;
+
     }
 
     /**
@@ -361,7 +385,7 @@ public class RecordScreenController implements Initializable {
             }
         }
         PieChart curPieChart = new PieChart(curData);
-        curPieChart.setTitle("Sanitation Types");
+        curPieChart.setTitle("Sub Types");
         curPieChart.setClockwise(true);
         curPieChart.setLabelLineLength(20);
         curPieChart.setLabelsVisible(true);

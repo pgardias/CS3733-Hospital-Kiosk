@@ -10,6 +10,7 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.RequestNotFoundException;
 import edu.wpi.cs3733d18.teamp.api.Exceptions.ServiceException;
 import edu.wpi.cs3733d18.teamp.api.TransportationRequest;
+import edu.wpi.cs3733d18.teamp.ui.admin.ConfirmationPopUpController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,6 +32,7 @@ import java.util.ResourceBundle;
 
 public class ServiceRequestScreen implements Initializable{
     PopUpController popUpController;
+    ConfirmationPopUpController confirmationPopUpController;
     DBSystem db = DBSystem.getInstance();
     ArrayList<Request> requests;
     ArrayList<Request> emergencyRequests = new ArrayList<>();
@@ -118,9 +120,6 @@ public class ServiceRequestScreen implements Initializable{
     @FXML
     JFXComboBox newRequestComboBox;
 
-    final ObservableList<ServiceRequestTable> newRequests = FXCollections.observableArrayList();
-    final ObservableList<ServiceRequestTable> inProgRequests = FXCollections.observableArrayList();
-    final ObservableList<ServiceRequestTable> completedRequests = FXCollections.observableArrayList();
     static ObservableList<String> requestTypes = FXCollections.observableArrayList(
             "Create New Service Request",
             "Language Interpreter Request",
@@ -229,30 +228,30 @@ public class ServiceRequestScreen implements Initializable{
         inProgRequestTableRoot = new TreeItem<>();
         completedRequestTableRoot = new TreeItem<>();
 
-        rID1 = new JFXTreeTableColumn<>("Request ID");
+        rID1 = new JFXTreeTableColumn<>("ID");
         rType1 = new JFXTreeTableColumn<>("Request Type");
-        rID2 = new JFXTreeTableColumn<>("Request ID");
+        rID2 = new JFXTreeTableColumn<>("ID");
         rType2 = new JFXTreeTableColumn<>("Request Type");
-        rID3 = new JFXTreeTableColumn<>("Request ID");
+        rID3 = new JFXTreeTableColumn<>("ID");
         rType3 = new JFXTreeTableColumn<>("Request Type");
 
-        rID1.setPrefWidth(100);
+        rID1.setPrefWidth(75);
         rID1.setResizable(false);
         rID1.setSortable(true);
-        rID2.setPrefWidth(100);
+        rID2.setPrefWidth(75);
         rID2.setResizable(false);
         rID2.setSortable(true);
-        rID3.setPrefWidth(100);
+        rID3.setPrefWidth(75);
         rID3.setResizable(false);
         rID3.setSortable(true);
 
-        rType1.setPrefWidth(433);
+        rType1.setPrefWidth(441);
         rType1.setResizable(false);
         rType1.setSortable(true);
-        rType2.setPrefWidth(433);
+        rType2.setPrefWidth(441);
         rType2.setResizable(false);
         rType2.setSortable(true);
-        rType3.setPrefWidth(433);
+        rType3.setPrefWidth(441);
         rType3.setResizable(false);
         rType3.setSortable(true);
 
@@ -377,18 +376,23 @@ public class ServiceRequestScreen implements Initializable{
      * Fills in the gridpane with info from requests in the newRequestTable
      */
     public void onNewRequestTableClickOp() {
-        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
-            Request r = db.getOneRequest(requestID);
-            timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
-            requestTypeLabel.setText(r.toString());
-            locationLabel.setText(r.getLocation());
-            createdByLabel.setText(r.getMadeBy());
-            assignedToLabel.setText(r.getCompletedBy());
-            additionalInfoLabel.setText(r.getAdditionalInfo());
+            int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
+            try {
+                Request r = db.getOneRequest(requestID);
+                timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
+                requestTypeLabel.setText(r.toString());
+                locationLabel.setText(r.getLocation());
+                createdByLabel.setText(r.getMadeBy());
+                assignedToLabel.setText(r.getCompletedBy());
+                additionalInfoLabel.setText(r.getAdditionalInfo());
+            }
+            catch (RequestNotFoundException re) {
+                re.printStackTrace();
+            }
         }
-        catch (RequestNotFoundException re) {
-            re.printStackTrace();
+        catch (NullPointerException npe) {
+
         }
     }
 
@@ -396,19 +400,23 @@ public class ServiceRequestScreen implements Initializable{
      * Fills in the gridpane with info from requests in the inProgRequestTable
      */
     public void onInProgRequestTableClickOp() {
-        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
-            Request r = db.getOneRequest(requestID);
-            timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
-            timeCompletedLabel.setText("");
-            requestTypeLabel.setText(r.toString());
-            locationLabel.setText(r.getLocation());
-            createdByLabel.setText(r.getMadeBy());
-            assignedToLabel.setText(r.getCompletedBy());
-            additionalInfoLabel.setText(r.getAdditionalInfo());
+            int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
+            try {
+                Request r = db.getOneRequest(requestID);
+                timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
+                timeCompletedLabel.setText("");
+                requestTypeLabel.setText(r.toString());
+                locationLabel.setText(r.getLocation());
+                createdByLabel.setText(r.getMadeBy());
+                assignedToLabel.setText(r.getCompletedBy());
+                additionalInfoLabel.setText(r.getAdditionalInfo());
+            } catch (RequestNotFoundException re) {
+                re.printStackTrace();
+            }
         }
-        catch (RequestNotFoundException re) {
-            re.printStackTrace();
+        catch (NullPointerException npe) {
+
         }
     }
 
@@ -416,19 +424,23 @@ public class ServiceRequestScreen implements Initializable{
      * Fills in the gridpane with info from requests in the completedRequestTable
      */
     public void onCompletedRequestTableClickOp() {
-        int requestID = completedRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
-            Request r = db.getOneRequest(requestID);
-            timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
-            timeCompletedLabel.setText(r.convertTime(r.getTimeCompleted().getTime()));
-            requestTypeLabel.setText(r.toString());
-            locationLabel.setText(r.getLocation());
-            createdByLabel.setText(r.getMadeBy());
-            assignedToLabel.setText(r.getCompletedBy());
-            additionalInfoLabel.setText(r.getAdditionalInfo());
+            int requestID = completedRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
+            try {
+                Request r = db.getOneRequest(requestID);
+                timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
+                timeCompletedLabel.setText(r.convertTime(r.getTimeCompleted().getTime()));
+                requestTypeLabel.setText(r.toString());
+                locationLabel.setText(r.getLocation());
+                createdByLabel.setText(r.getMadeBy());
+                assignedToLabel.setText(r.getCompletedBy());
+                additionalInfoLabel.setText(r.getAdditionalInfo());
+            } catch (RequestNotFoundException re) {
+                re.printStackTrace();
+            }
         }
-        catch (RequestNotFoundException re) {
-            re.printStackTrace();
+        catch (NullPointerException npe) {
+            
         }
     }
 
@@ -439,37 +451,40 @@ public class ServiceRequestScreen implements Initializable{
     @FXML
     public void claimRequestButtonOp(ActionEvent e) {
         serviceRequestErrorLabel.setText("");
-        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
-            Request r = db.getOneRequest(requestID);
-            if (r.getRequestType() == Request.requesttype.LANGUAGEINTERP || r.getRequestType() == Request.requesttype.HOLYPERSON) {
-                if (Main.currentUser.getIsAdmin() ||
-                        (db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType())) &&
-                                Main.currentUser.getSubType().equals(r.getSubType()))) {
-                    r.setCompleted(1);
-                    String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
-                    r.setCompletedBy(firstAndLastName);
-                    db.modifyRequest(r);
+            int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
+            try {
+                Request r = db.getOneRequest(requestID);
+                if (r.getRequestType() == Request.requesttype.LANGUAGEINTERP || r.getRequestType() == Request.requesttype.HOLYPERSON) {
+                    if (Main.currentUser.getIsAdmin() ||
+                            (db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType())) &&
+                                    Main.currentUser.getSubType().equals(r.getSubType()))) {
+                        r.setCompleted(1);
+                        String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+                        r.setCompletedBy(firstAndLastName);
+                        db.modifyRequest(r);
+                    } else {
+                        serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
+                    }
                 } else {
-                    serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
+                    if (Main.currentUser.getIsAdmin() || db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType()))) {
+                        r.setCompleted(1);
+                        String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+                        r.setCompletedBy(firstAndLastName);
+                        db.modifyRequest(r);
+                    } else {
+                        System.out.println("hi");
+                        serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
+                        serviceRequestErrorLabel.setVisible(true);
+                    }
                 }
-            }
-            else {
-                if (Main.currentUser.getIsAdmin() || db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType()))) {
-                    r.setCompleted(1);
-                    String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
-                    r.setCompletedBy(firstAndLastName);
-                    db.modifyRequest(r);
-                } else {
-                    System.out.println("hi");
-                    serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
-                    serviceRequestErrorLabel.setVisible(true);
-                }
-            }
 
+            } catch (RequestNotFoundException re) {
+                re.printStackTrace();
+            }
         }
-        catch (RequestNotFoundException re) {
-            re.printStackTrace();
+        catch (NullPointerException npe) {
+
         }
         refresh();
     }
@@ -481,21 +496,24 @@ public class ServiceRequestScreen implements Initializable{
     @FXML
     public void completeRequestButtonOp(ActionEvent e) {
         serviceRequestErrorLabel.setText("");
-        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
-            Request r = db.getOneRequest(requestID);
-            String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
-            if (Main.currentUser.getIsAdmin() || firstAndLastName.equals(r.getCompletedBy())) {
-                r.setCompleted(2);
-                r.setCompletedBy(firstAndLastName);
-                db.completeRequest(r);
-            }
-            else {
-                serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
+            int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
+            try {
+                Request r = db.getOneRequest(requestID);
+                String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+                if (Main.currentUser.getIsAdmin() || firstAndLastName.equals(r.getCompletedBy())) {
+                    r.setCompleted(2);
+                    r.setCompletedBy(firstAndLastName);
+                    db.completeRequest(r);
+                } else {
+                    serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
+                }
+            } catch (RequestNotFoundException re) {
+                re.printStackTrace();
             }
         }
-        catch (RequestNotFoundException re) {
-            re.printStackTrace();
+        catch (NullPointerException npe) {
+            
         }
         refresh();
     }
@@ -569,29 +587,65 @@ public class ServiceRequestScreen implements Initializable{
         }
         else if (selection.equals("Transportation Request")) {
 
-            TransportationRequest tr = new TransportationRequest();
+            stage = new Stage();
+            loader = new FXMLLoader(getClass().getResource("/FXML/general/ConfirmationPopUp.fxml"));
 
             try {
-                tr.run(0,0,0,0, null, null, null);
-                stage = (Stage) newRequestComboBox.getScene().getWindow();
-                stage.setFullScreen(true);
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return false;
             }
-            catch (ServiceException se) {
-                se.printStackTrace();
+
+            confirmationPopUpController = loader.getController();
+            confirmationPopUpController.StartUp(this);
+            stage.setScene(new Scene(root, 600, 150));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(newRequestComboBox.getScene().getWindow());
+            stage.showAndWait();
+
+            if(confirmationPopUpController.getChoice()) {
+                TransportationRequest tr = new TransportationRequest();
+
+                try {
+                    tr.run(0, 0, 0, 0, null, null, null);
+                    stage = (Stage) newRequestComboBox.getScene().getWindow();
+                    stage.setFullScreen(true);
+                } catch (ServiceException se) {
+                    se.printStackTrace();
+                }
             }
             return true;
         }
         else if (selection.equals("Prescription Request")) {
 
-            RaikouAPI r = new RaikouAPI();
+            stage = new Stage();
+            loader = new FXMLLoader(getClass().getResource("/FXML/general/ConfirmationPopUp.fxml"));
 
             try {
-                r.run(0,0,1920,1080, null, null, null);
-                stage = (Stage) newRequestComboBox.getScene().getWindow();
-                stage.setFullScreen(true);
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return false;
             }
-            catch (edu.wpi.cs3733d18.teamR.ServiceException se) {
-                se.printStackTrace();
+
+            confirmationPopUpController = loader.getController();
+            confirmationPopUpController.StartUp(this);
+            stage.setScene(new Scene(root, 600, 150));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(newRequestComboBox.getScene().getWindow());
+            stage.showAndWait();
+
+            if(confirmationPopUpController.getChoice()) {
+                RaikouAPI r = new RaikouAPI();
+
+                try {
+                    r.run(0, 0, 1920, 1080, null, null, null);
+                    stage = (Stage) newRequestComboBox.getScene().getWindow();
+                    stage.setFullScreen(true);
+                } catch (edu.wpi.cs3733d18.teamR.ServiceException se) {
+                    se.printStackTrace();
+                }
             }
             return true;
         }

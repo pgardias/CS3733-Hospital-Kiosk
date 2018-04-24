@@ -274,7 +274,7 @@ public class RequestRepo {
             conn = DriverManager.getConnection(DB_URL);
 
             // Get count of requests
-            String sql = "SELECT COUNT(*) FROM REQUEST_INFO";
+            String sql = "SELECT MAX(requestID) FROM REQUEST_INFO";
             Statement stmt = conn.createStatement();
             ResultSet results = stmt.executeQuery(sql);
             results.next();
