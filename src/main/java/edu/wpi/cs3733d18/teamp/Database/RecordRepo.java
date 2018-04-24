@@ -336,24 +336,20 @@ public class RecordRepo {
             conn = DriverManager.getConnection(DB_URL);
 
             // Prepare statement
-            String sql = "SELECT count(*) FROM RECORD_INFO";
+            String sql = "SELECT MAX(recordID) FROM RECORD_INFO";
             Statement stmt = conn.createStatement();
             ResultSet results = stmt.executeQuery(sql);
 
-            if(!results.next()) { // If no records, is first one
-                count = 1;
-            }else { // Otherwise return count + 1
-                count =  results.getInt(1) + 1;
-            }
+            count = results.getInt(1);
 
             stmt.close();
             conn.close();
+            return count + 1;
         } catch (SQLException se) {
             se.printStackTrace();
         }
-
         return count;
-    }
+}
 
 
     /**

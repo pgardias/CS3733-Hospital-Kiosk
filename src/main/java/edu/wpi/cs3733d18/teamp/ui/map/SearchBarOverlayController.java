@@ -33,8 +33,21 @@ import java.net.URL;
 import java.util.*;
 
 public class SearchBarOverlayController implements Initializable{
-
     /*
+    public static final int X_OFFSET = -523;
+    public static final int Y_OFFSET = 0;
+    public static final double X_SCALE = 1588.235294/5000.0;
+    public static final double Y_SCALE = 1080.0/3400.0;
+    public static final double NODE_RADIUS = 3.0;
+    public static final double EDGE_WIDTH = 1.0;
+    public static final int WIDTH = 1380;
+    public static final int HEIGHT = 776;
+    private static final double STRAIGHT_BOUNDS = 15;
+    private static final double SLIGHT_BOUNDS = 60;
+    private static final double NORMAL_BOUNDS = 120;
+    private static final double HARD_BOUNDS = 165;
+    private static final double TURN_AROUND_BOUNDS = 180;
+
     Label startLabel = new Label();
     Label endLabel = new Label();*/
 
