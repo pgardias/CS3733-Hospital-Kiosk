@@ -31,6 +31,7 @@
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="400.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="400.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="400.0" />
+                  <ColumnConstraints />
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="100.0" prefHeight="100.0" />
@@ -82,7 +83,7 @@
                         <Insets bottom="20.0" />
                      </GridPane.margin>
                         </JFXButton>
-                        <Label fx:id="helloMessage" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
+                        <Label fx:id="helloMessage" text="sampleText" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
                             <font>
                                 <Font size="40.0" />
                             </font>
