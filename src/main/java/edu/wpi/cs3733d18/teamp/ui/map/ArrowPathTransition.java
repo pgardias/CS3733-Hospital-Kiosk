@@ -3,13 +3,10 @@ package edu.wpi.cs3733d18.teamp.ui.map;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import javafx.animation.*;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.shape.*;
 import javafx.util.Duration;
 
 
-import java.sql.Time;
 import java.util.ArrayList;
 
 public class ArrowPathTransition {
@@ -19,10 +16,16 @@ public class ArrowPathTransition {
     private FadeTransition[] fadeTransition;
     private SequentialTransition sequentialTransition = new SequentialTransition();
     Shape shape;
-    double X_OFFSET = 0;
-    double Y_OFFSET = -19;
-    double X_SCALE = 1920.0 / 5000.0;
-    double Y_SCALE = 1065.216 / 2774.0;
+    double X3_OFFSET = 0;
+    double Y3_OFFSET = -19;
+    double X3_SCALE = 1920.0 / 5000.0;
+    double Y3_SCALE = 1065.216 / 2774.0;
+
+    double X2_OFFSET = -523;
+    double Y2_OFFSET = 0;
+    double X2_SCALE = 1588.235294 / 5000.0;
+    double Y2_SCALE = 1080.0 / 3400.0;
+
     double jumpDuration = 0;
     int size;
 
@@ -37,7 +40,8 @@ public class ArrowPathTransition {
      * @param arrowDispSetSize the size of the arrow display set that will be put into the animation
      * @param currentFloor the current floor the path was drawn on
      */
-    public ArrowPathTransition(ArrayList<Node> nodePath, Polygon shape, int arrowDispSetSize, Node.floorType currentFloor){
+    public ArrowPathTransition(ArrayList<Node> nodePath, Polygon shape, int arrowDispSetSize, Node.floorType currentFloor,
+                               Boolean toggleOn){
         this.size = arrowDispSetSize;
 
         pathTransition = new PathTransition[nodePath.size() - 1];
@@ -45,8 +49,8 @@ public class ArrowPathTransition {
         fadeTransition = new FadeTransition[nodePath.size() - 1];
         path = new Path[nodePath.size() - 1];
         this.shape = shape;
-        double startx = (nodePath.get(0).getxDisplay() - X_OFFSET) * X_SCALE;
-        double starty = (nodePath.get(0).getyDisplay() - Y_OFFSET) * Y_SCALE;
+        double startx = (nodePath.get(0).getxDisplay() - X3_OFFSET) * X3_SCALE;
+        double starty = (nodePath.get(0).getyDisplay() - Y3_OFFSET) * Y3_SCALE;
 
         ObservableList<Double> points = shape.getPoints();
         double arrowStartx = points.get(0);
@@ -69,8 +73,14 @@ public class ArrowPathTransition {
 
             //Rotation Transition
             //desired angle the arrow should be based on path
-            double desiredAngle = Math.atan2(pastNode.getyDisplay() - currentNode.getyDisplay(),
-                    pastNode.getxDisplay() - currentNode.getxDisplay()) * 180 / Math.PI;
+            double desiredAngle;
+            if (toggleOn) {
+                desiredAngle = Math.atan2(pastNode.getyDisplay() - currentNode.getyDisplay(),
+                        pastNode.getxDisplay() - currentNode.getxDisplay()) * 180 / Math.PI;
+            } else {
+                desiredAngle = Math.atan2(pastNode.getY() - currentNode.getY(),
+                        pastNode.getX() - currentNode.getX()) * 180 / Math.PI;
+            }
 
             //this subtracts the actual angle of the arrow to get what angle it should be rotated to
             double endAngle = desiredAngle - arrowAngle;
@@ -105,12 +115,24 @@ public class ArrowPathTransition {
             //Path Transition
             //First part of path
             path[i-1] = new Path();
-            double x = (pastNode.getxDisplay() - X_OFFSET) * X_SCALE;
-            double y = (pastNode.getyDisplay() - Y_OFFSET) * Y_SCALE;
+            double x,y;
+            if (toggleOn) {
+                 x = (pastNode.getxDisplay() - X3_OFFSET) * X3_SCALE;
+                y = (pastNode.getyDisplay() - Y3_OFFSET) * Y3_SCALE;
+            } else {
+                x = (pastNode.getX() - X2_OFFSET) * X2_SCALE;
+                y = (pastNode.getY() - Y2_OFFSET) * Y2_SCALE;
+            }
             path[i-1].getElements().add(new MoveTo(x, y));
             //Second part of path
-            double x2 = (currentNode.getxDisplay() - X_OFFSET) * X_SCALE;
-            double y2 = (currentNode.getyDisplay() - Y_OFFSET) * Y_SCALE;
+            double x2,y2;
+            if (toggleOn) {
+                x2 = (currentNode.getxDisplay() - X3_OFFSET) * X3_SCALE;
+                y2 = (currentNode.getyDisplay() - Y3_OFFSET) * Y3_SCALE;
+            } else {
+                x2 = (currentNode.getX() - X2_OFFSET) * X2_SCALE;
+                y2 = (currentNode.getY() - Y2_OFFSET) * Y2_SCALE;
+            }
 
             double distance = Math.sqrt(Math.pow(x2-x, 2) + Math.pow(y2-y,2));
 

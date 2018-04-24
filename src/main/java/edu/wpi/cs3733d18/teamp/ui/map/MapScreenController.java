@@ -1017,7 +1017,8 @@ public class MapScreenController {
         int counter = 0;
         for (Polygon shape: arrowDispSet) {
             counter++;
-            ArrowPathTransition arrowPathTransition = new ArrowPathTransition(pathMade, shape, arrowDispSet.size(), currentFloor);
+            ArrowPathTransition arrowPathTransition = new ArrowPathTransition(pathMade, shape, arrowDispSet.size(),
+                    currentFloor, toggleOn);
             arrowPathTransition.setPathAnim();
             arrowPathTransition.jumpToDuration(counter);
             arrowPathTransition.playAnim();
