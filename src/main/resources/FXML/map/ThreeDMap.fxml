@@ -70,28 +70,32 @@
       </GridPane>
    </right>
       <left>
-         <GridPane BorderPane.alignment="CENTER">
+         <GridPane maxHeight="100.0" minWidth="400.0" BorderPane.alignment="TOP_LEFT">
            <columnConstraints>
              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
            </columnConstraints>
            <rowConstraints>
                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
            </rowConstraints>
             <children>
-               <JFXButton id="defaultButton" fx:id="defaultButton" onAction="#defaultButtonOP" prefHeight="50.0" prefWidth="100.0" styleClass="blue-button" stylesheets="@../../css/common.css" text="Default" GridPane.rowIndex="2">
+               <JFXButton id="defaultButton" fx:id="defaultButton" onAction="#defaultButtonOP" prefHeight="80.0" prefWidth="80.0" styleClass="blue-button" stylesheets="@../../css/common.css" text="Default">
                   <GridPane.margin>
                      <Insets />
-                  </GridPane.margin></JFXButton>
-               <JFXButton id="topDownButton" fx:id="topDownButton" onAction="#topDownButtonOP" prefHeight="50.0" prefWidth="100.0" styleClass="blue-button" stylesheets="@../../css/common.css" text="Top Down" GridPane.rowIndex="3" />
+                  </GridPane.margin>
+               </JFXButton>
+               <JFXButton id="topDownButton" fx:id="topDownButton" onAction="#topDownButtonOP" prefHeight="80.0" prefWidth="80.0" styleClass="blue-button" stylesheets="@../../css/common.css" text="Top Down" GridPane.columnIndex="1">
+                  <GridPane.margin>
+                     <Insets />
+                  </GridPane.margin>
+               </JFXButton>
             </children>
+            <padding>
+               <Insets left="150.0" />
+            </padding>
          </GridPane>
       </left>
    </BorderPane>
    <BorderPane fx:id="searchbarBorderPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-   <JFXButton fx:id="backButton" buttonType="RAISED" layoutX="50.0" layoutY="50.0" onAction="#backButtonOp" pickOnBounds="false" prefHeight="100.0" prefWidth="100.0" styleClass="back-button" text=" " />
+   <JFXButton fx:id="backButton" buttonType="RAISED" layoutX="50.0" layoutY="50.0" onAction="#backButtonOp" pickOnBounds="false" prefHeight="100.0" prefWidth="100.0" styleClass="back-button" stylesheets="@../../css/common.css" text=" " />
 </AnchorPane>
