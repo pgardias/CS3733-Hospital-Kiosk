@@ -376,18 +376,23 @@ public class ServiceRequestScreen implements Initializable{
      * Fills in the gridpane with info from requests in the newRequestTable
      */
     public void onNewRequestTableClickOp() {
-        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
-            Request r = db.getOneRequest(requestID);
-            timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
-            requestTypeLabel.setText(r.toString());
-            locationLabel.setText(r.getLocation());
-            createdByLabel.setText(r.getMadeBy());
-            assignedToLabel.setText(r.getCompletedBy());
-            additionalInfoLabel.setText(r.getAdditionalInfo());
+            int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
+            try {
+                Request r = db.getOneRequest(requestID);
+                timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
+                requestTypeLabel.setText(r.toString());
+                locationLabel.setText(r.getLocation());
+                createdByLabel.setText(r.getMadeBy());
+                assignedToLabel.setText(r.getCompletedBy());
+                additionalInfoLabel.setText(r.getAdditionalInfo());
+            }
+            catch (RequestNotFoundException re) {
+                re.printStackTrace();
+            }
         }
-        catch (RequestNotFoundException re) {
-            re.printStackTrace();
+        catch (NullPointerException npe) {
+
         }
     }
 
@@ -395,19 +400,23 @@ public class ServiceRequestScreen implements Initializable{
      * Fills in the gridpane with info from requests in the inProgRequestTable
      */
     public void onInProgRequestTableClickOp() {
-        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
-            Request r = db.getOneRequest(requestID);
-            timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
-            timeCompletedLabel.setText("");
-            requestTypeLabel.setText(r.toString());
-            locationLabel.setText(r.getLocation());
-            createdByLabel.setText(r.getMadeBy());
-            assignedToLabel.setText(r.getCompletedBy());
-            additionalInfoLabel.setText(r.getAdditionalInfo());
+            int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
+            try {
+                Request r = db.getOneRequest(requestID);
+                timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
+                timeCompletedLabel.setText("");
+                requestTypeLabel.setText(r.toString());
+                locationLabel.setText(r.getLocation());
+                createdByLabel.setText(r.getMadeBy());
+                assignedToLabel.setText(r.getCompletedBy());
+                additionalInfoLabel.setText(r.getAdditionalInfo());
+            } catch (RequestNotFoundException re) {
+                re.printStackTrace();
+            }
         }
-        catch (RequestNotFoundException re) {
-            re.printStackTrace();
+        catch (NullPointerException npe) {
+
         }
     }
 
@@ -415,19 +424,23 @@ public class ServiceRequestScreen implements Initializable{
      * Fills in the gridpane with info from requests in the completedRequestTable
      */
     public void onCompletedRequestTableClickOp() {
-        int requestID = completedRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
-            Request r = db.getOneRequest(requestID);
-            timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
-            timeCompletedLabel.setText(r.convertTime(r.getTimeCompleted().getTime()));
-            requestTypeLabel.setText(r.toString());
-            locationLabel.setText(r.getLocation());
-            createdByLabel.setText(r.getMadeBy());
-            assignedToLabel.setText(r.getCompletedBy());
-            additionalInfoLabel.setText(r.getAdditionalInfo());
+            int requestID = completedRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
+            try {
+                Request r = db.getOneRequest(requestID);
+                timeCreatedLabel.setText(r.convertTime(r.getTimeMade().getTime()));
+                timeCompletedLabel.setText(r.convertTime(r.getTimeCompleted().getTime()));
+                requestTypeLabel.setText(r.toString());
+                locationLabel.setText(r.getLocation());
+                createdByLabel.setText(r.getMadeBy());
+                assignedToLabel.setText(r.getCompletedBy());
+                additionalInfoLabel.setText(r.getAdditionalInfo());
+            } catch (RequestNotFoundException re) {
+                re.printStackTrace();
+            }
         }
-        catch (RequestNotFoundException re) {
-            re.printStackTrace();
+        catch (NullPointerException npe) {
+            
         }
     }
 
