@@ -3,11 +3,14 @@ package edu.wpi.cs3733d18.teamp.ui.map;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
+import com.jfoenix.controls.*;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Directions;
 import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.ui.home.ShakeTransition;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,19 +25,21 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 
+import javax.print.DocFlavor;
+import javax.transaction.TransactionRequiredException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class SearchBarOverlayController implements Initializable{
 
@@ -62,7 +67,24 @@ public class SearchBarOverlayController implements Initializable{
     @FXML
     TableColumn<DirectionsTable,String> directionsTableViewColumn;
 
+    @FXML
+    JFXTreeTableView<DirectionsTable> directionsTreeTableView;
+
+    @FXML
+    JFXTreeTableColumn<DirectionsTable, String> directionsTreeTableColumn;
+
+
     ObservableList<DirectionsTable> directions = FXCollections.observableArrayList();
+
+
+    @FXML
+    TreeItem<DirectionsTable> floorParent;
+
+    @FXML
+    TreeItem<DirectionsTable> floorChild;
+
+    @FXML
+    TreeItem<DirectionsTable> floors;
 
     @FXML
     JFXButton directionsButton;
@@ -88,6 +110,9 @@ public class SearchBarOverlayController implements Initializable{
     @FXML
     JFXToggleButton mapToggleButton;
 
+    ArrayList<TreeItem<DirectionsTable>> floorChildren;
+    ArrayList<TreeItem<DirectionsTable>> parents;
+
     private MapScreenController mapScreenController;
     private ThreeDMapScreenController threeDMapScreenController;
     private Boolean is3D = false;
@@ -95,8 +120,9 @@ public class SearchBarOverlayController implements Initializable{
     public void startUp(MapScreenController mapScreenController){
         threeDButton.setText("3D");
         this.mapScreenController = mapScreenController;
+
         if (!mapScreenController.getPathDrawn()) {
-            directionsTableView.setVisible(false);
+            directionsTreeTableView.setVisible(false);
             directionsButton.setVisible(false);
             emailButton.setVisible(false);
             phoneButton.setVisible(false);
@@ -109,8 +135,9 @@ public class SearchBarOverlayController implements Initializable{
     public void startUp3D(ThreeDMapScreenController threeDMapScreenController){
         threeDButton.setText("2D");
         this.threeDMapScreenController = threeDMapScreenController;
+        mapToggleButton.setVisible(false);
         if (!threeDMapScreenController.getPathDrawn()) {
-            directionsTableView.setVisible(false);
+            directionsTreeTableView.setVisible(false);
             directionsButton.setVisible(false);
             emailButton.setVisible(false);
             phoneButton.setVisible(false);
@@ -129,10 +156,12 @@ public class SearchBarOverlayController implements Initializable{
 
     public void setSourceSearchBar(String startNode){
         sourceSearchBar.setText(startNode);
+        hideDirections();
     }
 
     public void setDestinationSearchBar(String endNode){
         destinationSearchBar.setText(endNode);
+        hideDirections();
     }
 
     ArrayList<String> destinationWords = new ArrayList<>();
@@ -163,6 +192,21 @@ public class SearchBarOverlayController implements Initializable{
 
         destBinding.setPrefWidth(destinationSearchBar.getPrefWidth());
         sourceBinding.setPrefWidth(sourceSearchBar.getPrefWidth());
+
+        floorChildren = new ArrayList<>();
+        parents = new ArrayList<>();
+        floorParent = new TreeItem<>();
+        floors = new TreeItem<>();
+
+
+        directionsTreeTableColumn = new JFXTreeTableColumn<>("Directions");
+        directionsTreeTableColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("directions"));
+        directionsTreeTableColumn.setPrefWidth(340);
+        directionsTreeTableColumn.setResizable(false);
+        directionsTreeTableColumn.setSortable(false);
+        directionsTreeTableColumn.getStyleClass().addAll("table-row-cell");
+        directionsTreeTableView.getColumns().addAll(directionsTreeTableColumn);
+
     }
 
     /**
@@ -203,6 +247,7 @@ public class SearchBarOverlayController implements Initializable{
     public Boolean searchButtonOp(ActionEvent e) {
         if (pathDrawn && !is3D) {
             mapScreenController.resetPath();
+            clearTable();
         }
         else if (pathDrawn) {
             threeDMapScreenController.resetPath();
@@ -292,6 +337,7 @@ public class SearchBarOverlayController implements Initializable{
      */
     public Node parseDestinationInput(Node srcNode, String string) {
         Node aNode = srcNode;
+
 //        System.out.println("Input string: " + string);
 //        System.out.println("source node:" + srcNode);
 
@@ -452,40 +498,51 @@ public class SearchBarOverlayController implements Initializable{
      */
     @FXML
     public Boolean directionsButtonOp(ActionEvent e) {
+        directionsTreeTableColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("directions"));
+        directionsTreeTableView.setTreeColumn(directionsTreeTableColumn);
         if (directionsVisible){
-            refresh();
-
-            directionsTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("directions"));
-            directionsTableView.setVisible(false);
+            clearTable();
+            directionsTreeTableView.setVisible(false);
             emailButton.setVisible(false);
             phoneButton.setVisible(false);
             directionsRectangle.setVisible(false);
-            directionsButton.setText("Directions >");
+            directionsButton.setText("Directions");
             directionsVisible = false;
         }
         else {
             emailButton.setVisible(true);
             phoneButton.setVisible(true);
             directionsRectangle.setVisible(true);
-            directionsTableView.setVisible(true);
+            directionsTreeTableView.setVisible(true);
             if (directionsList.getDirections() == null) {
                 directions.add(new DirectionsTable("Path needs to be set first!"));
-                directionsTableView.setItems(directions);
-                directionsTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("directions"));
+//                directionsTreeTableView.setPredicate(directions);
+//                directionsTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("directions"));
                 directionsButton.setText("Directions X");
                 directionsVisible = true;
             }
             else {
-                for (String line : directionsList.getDirections()) {
-                    directions.add(new DirectionsTable(line));
+                if (!is3D) {
+                    rootSetUp(mapScreenController.getFloorsList());
                 }
-                directionsTableView.setItems(directions);
-                directionsTableViewColumn.setCellValueFactory(new PropertyValueFactory<>("directions"));
+                else {
+                    rootSetUp(threeDMapScreenController.getFloorsList());
+                }
+
+                setChildren(directionsList.getDirections());
+
+                directionsTreeTableView.setShowRoot(false);
+
 
                 directionsButton.setText("Directions X");
                 directionsVisible = true;
+                if (!is3D) {
+                    expandDirections(mapScreenController.getCurrentFloor());
+                }
             }
+
         }
+
         return true;
     }
 
@@ -546,8 +603,103 @@ public class SearchBarOverlayController implements Initializable{
         }
     }
 
+    public void clearTable(){
+
+        floorChildren.clear();
+        parents.clear();
+        floors.getChildren().removeAll(parents);
+        directionsTreeTableView.setRoot(floors);
+    }
+
     public void setSearchButtonFocus(){
         goButton.requestFocus();
+    }
+
+    public void setChildren(ArrayList<String> directions){
+
+        int directionsIndex = 0;
+
+        for(int i = 1; i < directionsTreeTableView.getRoot().getChildren().size(); i++){
+            while(directionsIndex < directions.size() && !directions.get(directionsIndex).equals("Buffer")) {
+                floorChildren.add(new TreeItem<>(new DirectionsTable(directions.get(directionsIndex))));
+                directionsIndex++;
+            }
+            directionsIndex++;
+            if(i == directionsTreeTableView.getRoot().getChildren().size() - 1){
+                floorChildren.add(new TreeItem<>(new DirectionsTable("You have arrived at your destination!")));
+            }
+            directionsTreeTableView.getRoot().getChildren().get(i).getChildren().setAll(floorChildren);
+            floorChildren.clear();
+        }
+        directionsTreeTableView.setRoot(floors);
+    }
+
+    public void expandDirections(Node.floorType floor){
+        String level;
+        String parentLevel;
+        switch (floor){
+            case LEVEL_1:
+                level = "Floor 1";
+                break;
+            case LEVEL_3:
+                level = "Floor 3";
+                break;
+            case LEVEL_G:
+                level = "Floor G";
+                break;
+            case LEVEL_L1:
+                level = "Floor L1";
+                break;
+            case LEVEL_L2:
+                level = "Floor L2";
+                break;
+            default:
+                level = "Floor 2";
+                break;
+        }
+
+        for(int i = 1; i < directionsTreeTableView.getRoot().getChildren().size(); i++){
+            parentLevel = directionsTreeTableView.getRoot().getChildren().get(i).getValue().getDirections().toString();
+            if(parentLevel.equals(level)){
+                directionsTreeTableView.getRoot().getChildren().get(i).setExpanded(true);
+            } else {
+                directionsTreeTableView.getRoot().getChildren().get(i).setExpanded(false);
+            }
+        }
+    }
+    public void hideDirections(){
+        directionsTreeTableView.setVisible(false);
+        directionsButton.setVisible(false);
+        emailButton.setVisible(false);
+        phoneButton.setVisible(false);
+        directionsRectangle.setVisible(false);
+        directionsVisible = false;
+        directionsButton.setText("Directions");
+
+    }
+
+    public Boolean getDirectionsVisible() {
+        return directionsVisible;
+    }
+
+    public void setDirectionsVisible(Boolean directionsVisible) {
+        this.directionsVisible = directionsVisible;
+    }
+
+    public void rootSetUp(ArrayList<Node.floorType> floorList){
+        parents.add(new TreeItem<>(new DirectionsTable("Starting Route!")));
+        if(floorList.size() == 0){
+            parents.add(new TreeItem<>(new DirectionsTable("Floor " + mapScreenController.getCurrentFloor().toString())));
+        }else {
+            for (Node.floorType floor : floorList) {
+                parents.add(new TreeItem<>(new DirectionsTable("Floor " + floor.toString())));
+                System.out.println("HERE");
+            }
+        }
+
+
+        floors.getChildren().setAll(parents);
+        directionsTreeTableView.setRoot(floors);
     }
 }
 

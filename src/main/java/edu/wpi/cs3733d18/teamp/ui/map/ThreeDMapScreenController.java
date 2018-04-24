@@ -88,6 +88,7 @@ public class ThreeDMapScreenController implements Initializable{
     private ArrayList<Node> stairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentStairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentElevNodeSet = new ArrayList<Node>();
+    private ArrayList<Node.floorType> floorsList = new ArrayList<>();
     private Boolean pathDrawn = false;
     ArrayList<Node> pathMade;
     Node.floorType currentFloor;
@@ -1080,7 +1081,7 @@ public class ThreeDMapScreenController implements Initializable{
                 }
             }
         }
-
+        getFloors();
 
         System.out.println("list of stair nodes: " + stairNodeSet.toString());
         minXCoord -= 200;
@@ -1274,5 +1275,21 @@ public class ThreeDMapScreenController implements Initializable{
                 break;
         }
         return floorScale;
+    }
+
+    /**
+     * this method will determine what floors the path goes on
+     */
+    public void getFloors(){
+        floorsList.clear();
+        for (int i = 0; i < stairNodeSet.size(); i+=2){
+            floorsList.add(stairNodeSet.get(i).getFloor());
+        }
+        if (stairNodeSet.size() > 1)
+            floorsList.add(stairNodeSet.get(stairNodeSet.size()-1).getFloor());
+    }
+
+    public ArrayList<Node.floorType> getFloorsList(){
+        return floorsList;
     }
 }

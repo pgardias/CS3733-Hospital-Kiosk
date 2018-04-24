@@ -4,6 +4,7 @@ import com.jfoenix.controls.*;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Employee;
 import edu.wpi.cs3733d18.teamp.Exceptions.EmployeeNotFoundException;
+import edu.wpi.cs3733d18.teamp.ui.home.ShakeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -185,6 +186,7 @@ public class EmployeePopUpController {
         String employeeSubType = "DEFAULT";
 
         passwordErrorLabel.setText("");
+        firstNameTextField.requestFocus();
         String firstName = firstNameTextField.getText();
         String lastName = lastNameTextField.getText();
 
@@ -234,11 +236,13 @@ public class EmployeePopUpController {
 
             }
 
-            manageEmployeeScreenController.refresh();
+            manageEmployeeScreenController.reBuildTable();
 
             Stage stage = (Stage) submitButton.getScene().getWindow();
             stage.close();
         } else {
+            ShakeTransition anim = new ShakeTransition(reEnterPasswordPasswordField);
+            anim.playFromStart();
             passwordErrorLabel.setText("Passwords do not match. Please re-enter passwords.");
         }
     }
@@ -267,11 +271,11 @@ public class EmployeePopUpController {
 
     public void startUpModify(ManageEmployeeScreenController manageEmployeeScreenController){
         this.manageEmployeeScreenController = manageEmployeeScreenController;
-        userID = (manageEmployeeScreenController.employeeListTableView.getSelectionModel().getSelectedItem().getEmployeeID());
-        operationOnEmployee = "modify";
-        employeeFormLabel.setText("Modify Employee Information");
-
         try{
+            userID = manageEmployeeScreenController.getEmployeeTreeTableView().getSelectionModel().getSelectedItem().getValue().getEmployeeID();
+            operationOnEmployee = "modify";
+            employeeFormLabel.setText("Modify Employee Information");
+
             Employee employee = db.getOneEmployee(userID);
 
             firstNameTextField.setText(employee.getFirstName());

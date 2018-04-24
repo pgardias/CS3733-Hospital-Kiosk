@@ -77,7 +77,7 @@
                   <Insets right="20.0" />
                </padding>
             </Label>
-            <Label alignment="CENTER" text="Mess:" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+            <Label alignment="CENTER" text="Spill:" GridPane.halignment="LEFT" GridPane.rowIndex="2">
                <font>
                   <Font size="24.0" />
                </font>
@@ -101,7 +101,7 @@
                   <Insets left="20.0" />
                </GridPane.margin>
             </JFXTextArea>
-            <JFXComboBox fx:id="sanitationComboBox" maxWidth="300.0" promptText="Select a mess" unFocusColor="BLACK" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <JFXComboBox fx:id="sanitationComboBox" maxWidth="300.0" promptText="Select a spill" unFocusColor="BLACK" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="20.0" />
                </GridPane.margin>

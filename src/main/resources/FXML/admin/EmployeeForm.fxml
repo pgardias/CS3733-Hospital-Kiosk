@@ -80,7 +80,7 @@
             <Font size="30.0" />
          </font>
       </Label>
-      <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="45.0" prefWidth="300.0" textFill="RED" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
+      <Label fx:id="passwordErrorLabel" alignment="CENTER" prefHeight="45.0" prefWidth="300.0" textFill="RED" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.rowSpan="2" GridPane.valignment="CENTER" />
       <JFXButton fx:id="cancelButton" buttonType="RAISED" cancelButton="true" onAction="#cancelButtonOp" style="-fx-background-color: WHITE;" text="Cancel" GridPane.halignment="RIGHT" GridPane.rowIndex="6">
          <font>
             <Font size="24.0" />

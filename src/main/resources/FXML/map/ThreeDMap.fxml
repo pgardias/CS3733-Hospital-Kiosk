@@ -64,6 +64,16 @@
                   <Font size="36.0" />
                </font>
             </JFXButton>
+               <JFXButton id="defaultButton" fx:id="defaultButton" onAction="#defaultButtonOP" prefHeight="80.0" prefWidth="100.0" styleClass="blue-button" stylesheets="@../../css/common.css" text="Default" GridPane.columnIndex="3" GridPane.valignment="TOP">
+                  <GridPane.margin>
+                     <Insets top="60.0" />
+                  </GridPane.margin>
+               </JFXButton>
+               <JFXButton id="topDownButton" fx:id="topDownButton" onAction="#topDownButtonOP" prefHeight="80.0" prefWidth="100.0" styleClass="blue-button" stylesheets="@../../css/common.css" text="Top Down" GridPane.columnIndex="4" GridPane.valignment="TOP">
+                  <GridPane.margin>
+                     <Insets top="60.0" />
+                  </GridPane.margin>
+               </JFXButton>
          </children>
       </GridPane>
    </right>
@@ -76,18 +86,6 @@
            <rowConstraints>
                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
            </rowConstraints>
-            <children>
-               <JFXButton id="defaultButton" fx:id="defaultButton" onAction="#defaultButtonOP" prefHeight="80.0" prefWidth="80.0" styleClass="blue-button" stylesheets="@../../css/common.css" text="Default">
-                  <GridPane.margin>
-                     <Insets left="30.0" top="60.0" />
-                  </GridPane.margin>
-               </JFXButton>
-               <JFXButton id="topDownButton" fx:id="topDownButton" onAction="#topDownButtonOP" prefHeight="80.0" prefWidth="80.0" styleClass="blue-button" stylesheets="@../../css/common.css" text="Top Down" GridPane.columnIndex="1">
-                  <GridPane.margin>
-                     <Insets left="30.0" top="60.0" />
-                  </GridPane.margin>
-               </JFXButton>
-            </children>
             <padding>
                <Insets left="150.0" />
             </padding>
