@@ -805,7 +805,7 @@ public class ThreeDMapScreenController implements Initializable{
                 Cylinder line = new Cylinder(2, height);
                 if((edge.getStart().getType() == Node.nodeType.STAI && edge.getEnd().getType() == Node.nodeType.STAI) ||
                         (edge.getStart().getType() == Node.nodeType.ELEV && edge.getEnd().getType() == Node.nodeType.ELEV)) {
-                    line.setMaterial(fillPurple);
+                    line.setMaterial(fillBlue);
                 } else {
                     line.setMaterial(fillOrange);
                 }
