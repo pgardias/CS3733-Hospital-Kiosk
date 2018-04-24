@@ -155,6 +155,10 @@ public class ThreeDMapScreenController implements Initializable{
     @FXML
     JFXButton backButton;
 
+    @FXML
+    static PopOver popOver;
+    Boolean popOverHidden = true;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -862,10 +866,10 @@ public class ThreeDMapScreenController implements Initializable{
                 System.out.println("MOUSE_ENTERED event at " + event.getSource());
                 for (String string : nodeDispSet.keySet()) {
                     if (nodeDispSet.get(string) == event.getSource()) {
-                        /*if (popOver != null && popOver.getOpacity() == 0) {
+                        if (popOver != null && popOver.getOpacity() == 0) {
                             popOver.hide();
                             popOver = null;
-                        }*/
+                        }
                         Node node = nodeSet.get(string);
                         Label nodeTypeLabel = new Label(node.getType().toString().toUpperCase());
                         Label nodeLongNameLabel = new Label("Name: " + node.getLongName());
@@ -876,18 +880,18 @@ public class ThreeDMapScreenController implements Initializable{
                         nodeBuildingLabel.setStyle("-fx-font-size: 24px; -fx-padding: 0 10px 10px 10px;");
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
 //                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
-                        //popOver = new PopOver(popOverVBox);
-                        //popOver.show((javafx.scene.Node) event.getSource());
-                        //popOverHidden = false;
-                        //popOver.setCloseButtonEnabled(false);
+                        popOver = new PopOver(popOverVBox);
+                        popOver.show((javafx.scene.Node) event.getSource());
+                        popOverHidden = false;
+                        popOver.setCloseButtonEnabled(false);
 //                        popOver.setCornerRadius(20);
-                        //popOver.setAutoFix(true);
-                        //popOver.setDetachable(false);
+                        popOver.setAutoFix(true);
+                        popOver.setDetachable(false);
                     }
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
-                //popOver.hide();
-                //popOverHidden = true;
+                popOver.hide();
+                popOverHidden = true;
             }
             // This makes it so that the pane doesn't spaz out as much for some reason
             threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),

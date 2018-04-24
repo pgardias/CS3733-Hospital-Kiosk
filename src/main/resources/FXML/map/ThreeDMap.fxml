@@ -2,7 +2,6 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -13,7 +12,7 @@
 <AnchorPane onScroll="#zoomScrollWheel" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: LIGHTSTEELBLUE;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.map.ThreeDMapScreenController">
    <AnchorPane fx:id="threeDAnchorPane" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    <AnchorPane fx:id="nodeAnchorPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-   <BorderPane fx:id="buttonOverlayPane" layoutX="50.0" layoutY="50.0" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0">
+   <BorderPane fx:id="buttonOverlayPane" pickOnBounds="false" prefHeight="1080.0" prefWidth="1920.0">
    <right>
       <GridPane pickOnBounds="false" prefHeight="388.0" prefWidth="716.0" stylesheets="@../../css/map.css" BorderPane.alignment="CENTER">
          <columnConstraints>
@@ -32,7 +31,6 @@
             <Insets right="50.0" />
          </padding>
          <children>
-            <Slider fx:id="zoomSlider" blockIncrement="0.1" max="10.0" maxHeight="-Infinity" maxWidth="-Infinity" min="1.0" orientation="VERTICAL" prefHeight="444.0" prefWidth="28.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.valignment="BOTTOM" />
             <JFXButton fx:id="floor2Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor2ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="highlight-floor-button" stylesheets="@../../css/map.css" text="2" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <font>
                   <Font size="36.0" />
@@ -61,7 +59,7 @@
                   <Font size="36.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="floor3Button" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor3ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="highlight-floor-button" stylesheets="@../../css/map.css" text="3" GridPane.columnIndex="5" GridPane.rowIndex="1">
+            <JFXButton fx:id="floor3Button" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor3ButtonOp" prefHeight="85.0" prefWidth="85.0" styleClass="highlight-floor-button" stylesheets="@../../css/map.css" text="3" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <font>
                   <Font size="36.0" />
                </font>
@@ -70,7 +68,7 @@
       </GridPane>
    </right>
       <left>
-         <GridPane maxHeight="100.0" minWidth="400.0" BorderPane.alignment="TOP_LEFT">
+         <GridPane maxHeight="150.0" minWidth="400.0" BorderPane.alignment="TOP_LEFT">
            <columnConstraints>
              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -81,12 +79,12 @@
             <children>
                <JFXButton id="defaultButton" fx:id="defaultButton" onAction="#defaultButtonOP" prefHeight="80.0" prefWidth="80.0" styleClass="blue-button" stylesheets="@../../css/common.css" text="Default">
                   <GridPane.margin>
-                     <Insets />
+                     <Insets left="30.0" top="60.0" />
                   </GridPane.margin>
                </JFXButton>
                <JFXButton id="topDownButton" fx:id="topDownButton" onAction="#topDownButtonOP" prefHeight="80.0" prefWidth="80.0" styleClass="blue-button" stylesheets="@../../css/common.css" text="Top Down" GridPane.columnIndex="1">
                   <GridPane.margin>
-                     <Insets />
+                     <Insets left="30.0" top="60.0" />
                   </GridPane.margin>
                </JFXButton>
             </children>
