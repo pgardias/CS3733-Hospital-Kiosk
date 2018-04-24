@@ -183,7 +183,7 @@
                               <Insets bottom="5.0" />
                            </padding>
                         </Label>
-                        <JFXTreeTableView fx:id="newRequestTable" onContextMenuRequested="#disableMenu1OptionsOp" onMouseClicked="#onNewRequestTableClickOp" prefHeight="534.0" prefWidth="619.0" styleClass="table-row-cell" stylesheets="@../../css/tableview.css">
+                        <JFXTreeTableView fx:id="newRequestTable" maxHeight="-Infinity" maxWidth="-Infinity" onContextMenuRequested="#disableMenu1OptionsOp" onMouseClicked="#onNewRequestTableClickOp" prefHeight="528.0" prefWidth="516.0" styleClass="table-row-cell" stylesheets="@../../css/tableview.css">
                            <VBox.margin>
                               <Insets bottom="5.0" />
                            </VBox.margin>
@@ -205,7 +205,7 @@
                               <Insets bottom="5.0" />
                            </padding>
                         </Label>
-                        <JFXTreeTableView fx:id="inProgRequestTable" onContextMenuRequested="#disableMenu2OptionsOp" onMouseClicked="#onInProgRequestTableClickOp" prefHeight="534.0" prefWidth="619.0" styleClass="table-row-cell" stylesheets="@../../css/tableview.css">
+                        <JFXTreeTableView fx:id="inProgRequestTable" maxHeight="-Infinity" maxWidth="-Infinity" onContextMenuRequested="#disableMenu2OptionsOp" onMouseClicked="#onInProgRequestTableClickOp" prefHeight="528.0" prefWidth="516.0" styleClass="table-row-cell" stylesheets="@../../css/tableview.css">
                            <VBox.margin>
                               <Insets bottom="5.0" />
                            </VBox.margin>
@@ -227,7 +227,7 @@
                               <Insets bottom="5.0" />
                            </padding>
                         </Label>
-                        <JFXTreeTableView fx:id="completedRequestTable" onMouseClicked="#onCompletedRequestTableClickOp" prefHeight="534.0" prefWidth="619.0" styleClass="table-row-cell" stylesheets="@../../css/tableview.css">
+                        <JFXTreeTableView fx:id="completedRequestTable" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#onCompletedRequestTableClickOp" prefHeight="528.0" prefWidth="516.0" styleClass="table-row-cell" stylesheets="@../../css/tableview.css">
                            <VBox.margin>
                               <Insets bottom="5.0" />
                            </VBox.margin>

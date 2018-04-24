@@ -245,13 +245,13 @@ public class ServiceRequestScreen implements Initializable{
         rID3.setResizable(false);
         rID3.setSortable(true);
 
-        rType1.setPrefWidth(475);
+        rType1.setPrefWidth(441);
         rType1.setResizable(false);
         rType1.setSortable(true);
-        rType2.setPrefWidth(475);
+        rType2.setPrefWidth(441);
         rType2.setResizable(false);
         rType2.setSortable(true);
-        rType3.setPrefWidth(475);
+        rType3.setPrefWidth(441);
         rType3.setResizable(false);
         rType3.setSortable(true);
 
@@ -451,37 +451,40 @@ public class ServiceRequestScreen implements Initializable{
     @FXML
     public void claimRequestButtonOp(ActionEvent e) {
         serviceRequestErrorLabel.setText("");
-        int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
-            Request r = db.getOneRequest(requestID);
-            if (r.getRequestType() == Request.requesttype.LANGUAGEINTERP || r.getRequestType() == Request.requesttype.HOLYPERSON) {
-                if (Main.currentUser.getIsAdmin() ||
-                        (db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType())) &&
-                                Main.currentUser.getSubType().equals(r.getSubType()))) {
-                    r.setCompleted(1);
-                    String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
-                    r.setCompletedBy(firstAndLastName);
-                    db.modifyRequest(r);
+            int requestID = newRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
+            try {
+                Request r = db.getOneRequest(requestID);
+                if (r.getRequestType() == Request.requesttype.LANGUAGEINTERP || r.getRequestType() == Request.requesttype.HOLYPERSON) {
+                    if (Main.currentUser.getIsAdmin() ||
+                            (db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType())) &&
+                                    Main.currentUser.getSubType().equals(r.getSubType()))) {
+                        r.setCompleted(1);
+                        String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+                        r.setCompletedBy(firstAndLastName);
+                        db.modifyRequest(r);
+                    } else {
+                        serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
+                    }
                 } else {
-                    serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
+                    if (Main.currentUser.getIsAdmin() || db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType()))) {
+                        r.setCompleted(1);
+                        String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+                        r.setCompletedBy(firstAndLastName);
+                        db.modifyRequest(r);
+                    } else {
+                        System.out.println("hi");
+                        serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
+                        serviceRequestErrorLabel.setVisible(true);
+                    }
                 }
-            }
-            else {
-                if (Main.currentUser.getIsAdmin() || db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType()))) {
-                    r.setCompleted(1);
-                    String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
-                    r.setCompletedBy(firstAndLastName);
-                    db.modifyRequest(r);
-                } else {
-                    System.out.println("hi");
-                    serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
-                    serviceRequestErrorLabel.setVisible(true);
-                }
-            }
 
+            } catch (RequestNotFoundException re) {
+                re.printStackTrace();
+            }
         }
-        catch (RequestNotFoundException re) {
-            re.printStackTrace();
+        catch (NullPointerException npe) {
+
         }
         refresh();
     }
@@ -493,21 +496,24 @@ public class ServiceRequestScreen implements Initializable{
     @FXML
     public void completeRequestButtonOp(ActionEvent e) {
         serviceRequestErrorLabel.setText("");
-        int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
         try {
-            Request r = db.getOneRequest(requestID);
-            String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
-            if (Main.currentUser.getIsAdmin() || firstAndLastName.equals(r.getCompletedBy())) {
-                r.setCompleted(2);
-                r.setCompletedBy(firstAndLastName);
-                db.completeRequest(r);
-            }
-            else {
-                serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
+            int requestID = inProgRequestTable.getSelectionModel().getSelectedItem().getValue().getRequestID();
+            try {
+                Request r = db.getOneRequest(requestID);
+                String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
+                if (Main.currentUser.getIsAdmin() || firstAndLastName.equals(r.getCompletedBy())) {
+                    r.setCompleted(2);
+                    r.setCompletedBy(firstAndLastName);
+                    db.completeRequest(r);
+                } else {
+                    serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
+                }
+            } catch (RequestNotFoundException re) {
+                re.printStackTrace();
             }
         }
-        catch (RequestNotFoundException re) {
-            re.printStackTrace();
+        catch (NullPointerException npe) {
+            
         }
         refresh();
     }
