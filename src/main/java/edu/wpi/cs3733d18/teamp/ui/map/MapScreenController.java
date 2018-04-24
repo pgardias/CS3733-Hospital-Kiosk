@@ -913,31 +913,31 @@ public class MapScreenController {
         System.out.println("WHAT THE FUCK"+currentFloor);
         System.out.println(" is the endNode on the current floor: " + endNode.getFloor().equals(currentFloor));
         if (endNode.getFloor().equals(currentFloor)) {
-            javafx.scene.Node iconNode = iconDispSet.get(startNode.getID());
-            iconNode.setScaleX(nodeIconScale);
-            iconNode.setScaleY(nodeIconScale);
-            iconNode.toFront();
-            iconNode.setOpacity(0.2);
-            BounceTransition anim3 = new BounceTransition(iconNode);
+            javafx.scene.Node iconNode2 = iconDispSet.get(startNode.getID());
+            iconNode2.setScaleX(nodeIconScale);
+            iconNode2.setScaleY(nodeIconScale);
+            iconNode2.toFront();
+            iconNode2.setOpacity(0.2);
+            BounceTransition anim3 = new BounceTransition(iconNode2);
             animSet.add(anim3);
             anim3.playFromStart();
         } else {
-            javafx.scene.Node node = iconDispSet.get(endNode.getID());
-            node.setScaleX(nodeIconScale);
-            node.setScaleY(nodeIconScale);
-            node.setOpacity(0.6);
-            node.toFront();
-            BounceTransition anim4 = new BounceTransition(node);
+            javafx.scene.Node node2 = iconDispSet.get(endNode.getID());
+            node2.setScaleX(nodeIconScale);
+            node2.setScaleY(nodeIconScale);
+            node2.setOpacity(0.6);
+            node2.toFront();
+            BounceTransition anim4 = new BounceTransition(node2);
             animSet.add(anim4);
             anim4.playFromStart();
             if (!toggleOn) {
-                node.setLayoutX((endNode.getX() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
-                node.setLayoutY((endNode.getY() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
+                node2.setLayoutX((endNode.getX() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
+                node2.setLayoutY((endNode.getY() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
             } else {
-                node.setLayoutX((endNode.getxDisplay() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
-                node.setLayoutY((endNode.getyDisplay() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
+                node2.setLayoutX((endNode.getxDisplay() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
+                node2.setLayoutY((endNode.getyDisplay() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
             }
-            nodesPane.getChildren().add(node);
+            nodesPane.getChildren().add(node2);
         }
 
         stairNodeSet.clear();
