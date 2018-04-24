@@ -1311,6 +1311,7 @@ public class MapScreenController {
                 button.setButtonType(JFXButton.ButtonType.RAISED);
                 button.setOnAction(e -> floorSequenceButtonOp(e));
                 button.setText("Floor " + floorsList.get(i).toString());
+                button.setFont(new Font(18));
                 button.setStyle("-fx-background-color: red;");
             }
         }
