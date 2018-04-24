@@ -252,8 +252,6 @@ public class SearchBarOverlayController implements Initializable{
         else {
             threeDMapScreenController.drawPath(path);
         }
-        System.out.println(path);
-        pathDrawn = true;
 
         directionsList.generateTextDirections(path);
         ArrayList<String> directions = directionsList.getDirections();
