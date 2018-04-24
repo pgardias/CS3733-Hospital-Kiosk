@@ -59,11 +59,14 @@ public class MapBuilderOverlayController {
         Stage stage;
         Parent root;
         FXMLLoader loader;
+        AdminMenuController adminMenuController;
 
         //setting stage back to home screen
         stage = (Stage) backButton.getScene().getWindow();
         loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
         root = loader.load();
+        adminMenuController = loader.getController();
+        adminMenuController.onStartup();
 
         backButton.getScene().setRoot(root);
     }

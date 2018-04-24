@@ -1,0 +1,12 @@
+.admin-button {
+    -jfx-button-type: RAISED;
+    -fx-font-size: 40px;
+    -fx-text-fill: WHITE;
+    -fx-background-color: #113868;
+    -fx-effect: dropshadow(gaussian, GRAY, 1, 0, 0, 0);
+}
+
+.admin-button:hover {
+    -fx-background-color: #4178b8;
+    -fx-effect: dropshadow(gaussian, GRAY, 2, 0, 0, 0);
+}

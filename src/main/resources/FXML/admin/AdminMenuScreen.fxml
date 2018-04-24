@@ -26,7 +26,7 @@
         </AnchorPane>
         <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
             <center>
-                <GridPane alignment="CENTER" hgap="20.0" maxHeight="1.7976931348623157E308" maxWidth="1208.0" minHeight="-Infinity" minWidth="1200.0" prefHeight="663.0" prefWidth="1200.0" BorderPane.alignment="TOP_CENTER">
+                <GridPane alignment="CENTER" hgap="20.0" maxHeight="1.7976931348623157E308" maxWidth="1208.0" minHeight="-Infinity" minWidth="1200.0" prefHeight="663.0" prefWidth="1200.0" stylesheets="@../../css/adminHome.css" BorderPane.alignment="TOP_CENTER">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="400.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="400.0" />
@@ -43,7 +43,7 @@
                   <RowConstraints maxHeight="655.6381530761719" minHeight="10.0" prefHeight="605.6381530761719" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
-                        <JFXButton fx:id="employeeButton" buttonType="RAISED" maxHeight="250.0" maxWidth="450.0" onAction="#employeeButtonOp" style="-fx-background-color: #113868;" text="Employees              &gt;" textAlignment="CENTER" textFill="WHITE" wrapText="true" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                        <JFXButton fx:id="employeeButton" buttonType="RAISED" maxHeight="250.0" maxWidth="450.0" onAction="#employeeButtonOp" styleClass="admin-button" text="Employees              &gt;" textAlignment="CENTER" textFill="WHITE" wrapText="true" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                             <font>
                                 <Font size="40.0" />
                             </font>
@@ -51,7 +51,7 @@
                                 <Insets bottom="20.0" />
                             </GridPane.margin>
                         </JFXButton>
-                        <JFXButton fx:id="mapManagementButton" buttonType="RAISED" maxHeight="250.0" maxWidth="450.0" onAction="#mapManagementButtonOp" style="-fx-background-color: #113868;" text="Map Components   &gt;" textAlignment="CENTER" textFill="WHITE" wrapText="true" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                        <JFXButton fx:id="mapManagementButton" buttonType="RAISED" maxHeight="250.0" maxWidth="450.0" onAction="#mapManagementButtonOp" styleClass="admin-button" text="Map Components   &gt;" textAlignment="CENTER" textFill="WHITE" wrapText="true" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                             <font>
                                 <Font size="40.0" />
                             </font>
@@ -67,7 +67,7 @@
                                 <Insets />
                             </GridPane.margin>
                         </Label>
-                        <JFXButton fx:id="serviceRequestScreenButton" buttonType="RAISED" maxHeight="250.0" maxWidth="450.0" onAction="#serviceRequestScreenButtonOp" style="-fx-background-color: #113868;" text="Service Requests   &gt;" textAlignment="CENTER" textFill="WHITE" wrapText="true" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
+                        <JFXButton fx:id="serviceRequestScreenButton" buttonType="RAISED" maxHeight="250.0" maxWidth="450.0" onAction="#serviceRequestScreenButtonOp" styleClass="admin-button" text="Service Requests   &gt;" textAlignment="CENTER" textFill="WHITE" wrapText="true" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                             <font>
                                 <Font size="40.0" />
                             </font>
@@ -75,7 +75,7 @@
                         <Insets bottom="20.0" />
                      </GridPane.margin>
                         </JFXButton>
-                        <JFXButton fx:id="settingsButton" buttonType="RAISED" maxHeight="250.0" maxWidth="450.0" onAction="#settingsButtonOp" style="-fx-background-color: #113868;" text="Settings                  &gt;" textAlignment="CENTER" textFill="WHITE" wrapText="true" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+                        <JFXButton fx:id="settingsButton" buttonType="RAISED" maxHeight="250.0" maxWidth="450.0" onAction="#settingsButtonOp" styleClass="admin-button" text="Settings                  &gt;" textAlignment="CENTER" textFill="WHITE" wrapText="true" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
                             <font>
                                 <Font size="40.0" />
                             </font>
@@ -83,7 +83,7 @@
                         <Insets bottom="20.0" />
                      </GridPane.margin>
                         </JFXButton>
-                        <Label fx:id="helloMessage" text="sampleText" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
+                        <Label fx:id="helloMessage" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
                             <font>
                                 <Font size="40.0" />
                             </font>

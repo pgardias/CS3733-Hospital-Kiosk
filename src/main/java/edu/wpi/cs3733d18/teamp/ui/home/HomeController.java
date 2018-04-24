@@ -147,7 +147,6 @@ public class HomeController {
         }
 
         if (Main.currentUser.getIsAdmin()) {
-            System.out.println("Logging in Admin");
             FXMLLoader loader;
             Stage stage;
             Parent root;
@@ -163,7 +162,6 @@ public class HomeController {
             adminMenuController.onStartup();
             loginButton.getScene().setRoot(root);
         } else {
-            System.out.println("Logging in Employee");
             FXMLLoader loader;
             Stage stage;
             Parent root;
