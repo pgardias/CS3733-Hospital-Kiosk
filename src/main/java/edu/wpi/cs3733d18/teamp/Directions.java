@@ -20,8 +20,10 @@ public class Directions {
     private static final int ELEVATORS = 8;
     private static final int STAIRS = 9;
     private static final int TURN_AROUND = 10;
+    private boolean firstDirection = false;
 
     private ArrayList<String> directions;
+
 
     public Directions(){
 
@@ -49,7 +51,11 @@ public class Directions {
         boolean changeDirections = false;
         boolean floorChange = false;
         int direction;
-        directions.add("Starting Route!");
+
+//        if(path.get(0).getType() == Node.nodeType.ELEV || path.get(0).getType() == Node.nodeType.STAI){
+//            directions.add("Floor change to " + path.get(0).getFloor().toString());
+//            firstElevator = false;
+//        }
 
         for (int i = 0; i < path.size()-1; i++) {
             // Set new nodes
@@ -59,6 +65,7 @@ public class Directions {
 
             System.out.println("pastNode: " + pastNode + " node: " + node + " nextNode: " + nextNode);
 
+
             if (pastNode != null) {
                 // Set new values according to new nodes
                 distance += node.distanceBetweenNodes(pastNode);
@@ -66,7 +73,14 @@ public class Directions {
                 pastAngle = pastNode.angleBetweenNodes(node);
 
                 direction = angleState(angle, pastAngle, node, pastNode);
+
+
+                if(floorChange){
+                    directions.add("Buffer");
+
+                }
                 floorChange = false;
+
 
                 switch (direction) {
                     case STAIRS:
@@ -145,11 +159,11 @@ public class Directions {
                     directions.add(words);
                     distance = 0;
                 }
+
                 System.out.println("");
             }
         }
         directions.add(getDistanceString(distance, nextNode, node));
-        directions.add("You have arrived at your destination!");
         setDirections(directions);
     }
 
@@ -192,7 +206,7 @@ public class Directions {
                 break;
 
             case 1:
-                message += "1 floors to floor " + node2.getFloor().toString() + ".";
+                message += "1 floor to floor " + node2.getFloor().toString() + ".";
                 break;
         }
         return message;
@@ -260,5 +274,6 @@ public class Directions {
     public  void clearDirections(){
         this.directions.clear();
     }
+
 
 }

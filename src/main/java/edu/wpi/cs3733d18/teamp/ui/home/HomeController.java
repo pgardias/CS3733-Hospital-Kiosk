@@ -314,7 +314,13 @@ public class HomeController {
                 try {
                     Main.currentUser = db.checkLoginID(loginString);
                 } catch (LoginInvalidException le) {
-                    le.printStackTrace();
+                    swipeDetected = false;
+                    loginID = new ArrayList<>();
+                    usernameTxt.setText("");
+                    usernameTxt.positionCaret(0);
+                    passwordTxt.setText("");
+                    passwordTxt.positionCaret(0);
+//                    le.printStackTrace();
                     ShakeTransition anim = new ShakeTransition(usernameTxt, passwordTxt);
                     anim.playFromStart();
                     return;
@@ -324,9 +330,16 @@ public class HomeController {
                 passwordTxt.setText(Main.currentUser.getPassword());
 
                 loginButtonOp(new ActionEvent());
-            } else if (invalidSwipe) {
-                ShakeTransition anim = new ShakeTransition(usernameTxt, passwordTxt);
-                anim.playFromStart();
+            } else {
+                loginID = new ArrayList<>();
+                usernameTxt.setText("");
+                usernameTxt.positionCaret(0);
+                passwordTxt.setText("");
+                passwordTxt.positionCaret(0);
+                if(invalidSwipe) {
+                    ShakeTransition anim = new ShakeTransition(usernameTxt, passwordTxt);
+                    anim.playFromStart();
+                }
             }
         }
     }
