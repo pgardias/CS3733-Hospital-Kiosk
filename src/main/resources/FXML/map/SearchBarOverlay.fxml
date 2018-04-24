@@ -51,7 +51,7 @@
                         <Insets right="10.0" top="10.0" />
                     </GridPane.margin>
                 </JFXToggleButton>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f0f0" height="70.0" stroke="#e5e5e5" strokeType="INSIDE" width="675.0" GridPane.valignment="TOP">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f0f0" height="70.0" stroke="#e5e5e5" strokeType="INSIDE" strokeWidth="2.0" width="675.0" GridPane.valignment="TOP">
                <GridPane.margin>
                   <Insets left="35.0" top="20.0" />
                </GridPane.margin>
@@ -61,7 +61,7 @@
                         <Insets left="50.0" />
                     </GridPane.margin>
                 </JFXComboBox>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f0f0" height="70.0" stroke="#e5e5e5" strokeType="INSIDE" width="675.0" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f0f0" height="70.0" stroke="#e5e5e5" strokeType="INSIDE" strokeWidth="2.0" width="675.0" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
                   <Insets bottom="20.0" left="35.0" />
                </GridPane.margin>
@@ -89,19 +89,19 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
         </GridPane>
-        <Rectangle fx:id="directionsRectangle" arcHeight="20.0" arcWidth="20.0" fill="#113868" height="860.0" stroke="BLACK" strokeType="INSIDE" style="-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 0);" width="375.0" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+        <Rectangle fx:id="directionsRectangle" fill="#f0f0f0" height="860.0" stroke="#e8e8e8" strokeType="INSIDE" strokeWidth="2.0" style="-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 0);" width="375.0" GridPane.halignment="LEFT" GridPane.valignment="TOP">
             <GridPane.margin>
-                <Insets left="15.0" top="150.0" />
+                <Insets left="15.0" top="160.0" />
             </GridPane.margin>
         </Rectangle>
         <JFXTreeTableView fx:id="directionsTreeTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="340.0" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.halignment="LEFT" GridPane.valignment="TOP">
             <GridPane.margin>
-                <Insets left="32.5" top="165.0" />
+                <Insets left="32.5" top="175.0" />
             </GridPane.margin>
         </JFXTreeTableView>
         <TableView fx:id="directionsTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="700.0" prefWidth="290.0" stylesheets="@../../css/tableview.css" visible="false" GridPane.halignment="LEFT" GridPane.valignment="TOP">
             <GridPane.margin>
-                <Insets left="32.5" top="165.0" />
+                <Insets left="32.5" top="175.0" />
             </GridPane.margin>
             <columns>
                 <TableColumn fx:id="directionsTableViewColumn" editable="false" maxWidth="305.0" minWidth="279.0" prefWidth="305.0" resizable="false" sortable="false" text="Directions" />
@@ -136,7 +136,7 @@
                 <Font size="20.0" />
             </font>
             <GridPane.margin>
-                <Insets bottom="20.0" left="250.0" />
+                <Insets bottom="20.0" left="250.0" top="15.0" />
             </GridPane.margin>
         </JFXButton>
     </children>

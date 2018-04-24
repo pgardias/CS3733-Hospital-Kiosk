@@ -72,6 +72,7 @@ public class MapScreenController {
 
     private static HashMap<String, Circle> nodeDispSet = new HashMap<>();
     private static HashMap<String, javafx.scene.Node> iconDispSet = new HashMap<>();
+    private static ArrayList<BounceTransition> animSet = new ArrayList<>();
     private static ArrayList<Polygon> arrowDispSet = new ArrayList<>();
     private static ArrayList<String> arrowFloorSet = new ArrayList<>();
     private static HashMap<String, Line> edgeDispSet = new HashMap<>();
@@ -450,16 +451,11 @@ public class MapScreenController {
         HashMap<String, Node> nodeSet;
         nodeSet = db.getAllNodes();
         System.out.println("drawing icons");
-
-        long startTime = System.currentTimeMillis();
         List<Node> orderedNodes = new ArrayList<>();
         for (Node node : nodeSet.values()) {
             orderedNodes.add(node);
         }
         orderedNodes.sort(Comparator.comparing(Node::getY));
-
-        long endTime = System.currentTimeMillis();
-        System.out.println("Ordering nodes took " + (endTime - startTime) + " ms");
 
         for (Node node : orderedNodes) {
             if (node.getFloor() == currentFloor && node.getType() != Node.nodeType.HALL) {
@@ -604,7 +600,6 @@ public class MapScreenController {
                                 popOver.setArrowLocation(ArrowLocation.RIGHT_TOP);
                             }
                         }
-
                         popOver.show((javafx.scene.Node) event.getSource(), -6);
 
                         popOverHidden = false;
@@ -668,8 +663,8 @@ public class MapScreenController {
                 break;
             }
             case LABS: {
-                iconShape.setStyle("-fx-fill: PALEVIOLETRED;");
-                iconArrow.setStyle("-fx-fill: PALEVIOLETRED;");
+                iconShape.setStyle("-fx-fill: CYAN;");
+                iconArrow.setStyle("-fx-fill: CYAN;");
                 icon = new MaterialIconView(MaterialIcon.HEALING);
                 break;
             }
@@ -719,7 +714,6 @@ public class MapScreenController {
         iconShapeVBox.setAlignment(Pos.CENTER);
         iconShapeVBox.setSpacing(-1);
         if (usingDesignIcon) {
-            designIcon.setStyle("-icons-color: WHITE;"); // TODO color switching for application in icon hover feedback styling
             designIcon.setSize(Integer.toString(MAP_ICON_SIZE - 3));
             designIcon.setTranslateY(-2);
             return new StackPane(iconShapeVBox, designIcon);
@@ -793,16 +787,16 @@ public class MapScreenController {
         @Override
         public void handle(MouseEvent event) {
             System.out.println("mouseEvent: " + event.getEventType().toString());
-            if (event.getEventType() == MouseEvent.MOUSE_CLICKED){
+            if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
                 System.out.println("Label Clicked");
 
             }
         }
     };
 
-    public void floorSequenceButtonOp(ActionEvent e){
+    public void floorSequenceButtonOp(ActionEvent e) {
         String floor = "";
-        for (JFXButton button: floorSequenceList) {
+        for (JFXButton button : floorSequenceList) {
             button.setOpacity(0.5);
             if (e.getSource().equals(button)) {
                 String regex = "Floor ";
@@ -812,7 +806,7 @@ public class MapScreenController {
                 button.setOpacity(1.0);
             }
         }
-        switch (floor){
+        switch (floor) {
             case "3":
                 floor3ButtonOp(null);
                 break;
@@ -860,7 +854,6 @@ public class MapScreenController {
         edgePane.getChildren().clear();
         arrowPane.getChildren().clear();
         getMap();
-//        drawEdges();
         drawNodes();
     }
 
@@ -870,9 +863,9 @@ public class MapScreenController {
      * Used to draw the list of nodes returned by AStar
      * it will also create the start and end labels, color the path, change the color of certain nodes
      * (end = red, start = green, stair = blue) and it will create the label for the stairs
+     *
      * @param path List of Nodes to be drawn
      */
-    //removed static hope it didn't break anything
     public void drawPath(ArrayList<Node> path) {
         double width, height, angle;
         double distanceCounter = 0;
@@ -888,15 +881,15 @@ public class MapScreenController {
         }
 
         startNode = path.get(0);
-        endNode = path.get(path.size() - 1);
         if (startNode.getFloor() == currentFloor) {
             javafx.scene.Node iconNode = iconDispSet.get(startNode.getID());
             iconNode.setScaleX(nodeIconScale);
             iconNode.setScaleY(nodeIconScale);
             iconNode.toFront();
-            BounceTransition anim = new BounceTransition(iconNode);
-            anim.playFromStart();
-//        iconDispSet.get(startNode.getID()).setTranslateX(scaleOffset);
+            System.out.println("WHAT THE FUCK 1");
+            BounceTransition anim1 = new BounceTransition(iconNode);
+            animSet.add(anim1);
+            anim1.playFromStart();
         } else {
             javafx.scene.Node node = iconDispSet.get(startNode.getID());
             BounceTransition anim = new BounceTransition(node);
@@ -905,29 +898,49 @@ public class MapScreenController {
             node.setScaleY(nodeIconScale);
             node.setOpacity(0.6);
             node.toFront();
+            System.out.println("WHAT THE FUCK 2");
             BounceTransition anim2 = new BounceTransition(node);
+            animSet.add(anim2);
             anim2.playFromStart();
+            if (!toggleOn) {
+                node.setLayoutX((startNode.getX() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
+                node.setLayoutY((startNode.getY() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
+            } else {
+                node.setLayoutX((startNode.getxDisplay() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
+                node.setLayoutY((startNode.getyDisplay() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
+            }
             nodesPane.getChildren().add(node);
         }
 
+        endNode = path.get(path.size() - 1);
         if (endNode.getFloor() == currentFloor) {
             javafx.scene.Node iconNode = iconDispSet.get(startNode.getID());
             iconNode.setScaleX(nodeIconScale);
             iconNode.setScaleY(nodeIconScale);
             iconNode.toFront();
-            BounceTransition anim = new BounceTransition(iconNode);
-            anim.playFromStart();
-//        iconDispSet.get(endNode.getID()).setTranslateX(scaleOffset);
+            System.out.println("WHAT THE FUCK 3");
+            BounceTransition anim3 = new BounceTransition(iconNode);
+            animSet.add(anim3);
+            anim3.playFromStart();
         } else {
             javafx.scene.Node node = iconDispSet.get(endNode.getID());
-            BounceTransition anim = new BounceTransition(node);
-            anim.playFromStart();
+            BounceTransition anim2 = new BounceTransition(node);
+            anim2.playFromStart();
             node.setScaleX(nodeIconScale);
             node.setScaleY(nodeIconScale);
             node.setOpacity(0.6);
             node.toFront();
-            BounceTransition anim2 = new BounceTransition(node);
-            anim2.playFromStart();
+            System.out.println("WHAT THE FUCK 4");
+            BounceTransition anim4 = new BounceTransition(node);
+            animSet.add(anim4);
+            anim4.playFromStart();
+            if (!toggleOn) {
+                node.setLayoutX((endNode.getX() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
+                node.setLayoutY((endNode.getY() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
+            } else {
+                node.setLayoutX((endNode.getxDisplay() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
+                node.setLayoutY((endNode.getyDisplay() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
+            }
             nodesPane.getChildren().add(node);
         }
 
@@ -1126,7 +1139,7 @@ public class MapScreenController {
     public void checkStairNodeSet(Node currentNode) {
 
         if (currentNode.getType().equals(Node.nodeType.STAI)) {
-            if(recentElevNodeSet.size() > 1)
+            if (recentElevNodeSet.size() > 1)
                 addToStairNodeSet();
             recentElevNodeSet.clear();
             recentStairNodeSet.add(currentNode);
@@ -1156,38 +1169,24 @@ public class MapScreenController {
     /**
      * Used to draw the list of nodes returned by AStar
      */
-    //TODO fix this with icons
     public void resetPath() {
-
-//        searchBarOverlayController.directionsButton.setVisible(false);
-//        searchBarOverlayController.emailButton.setVisible(false);
-//        searchBarOverlayController.phoneButton.setVisible(false);
-//        searchBarOverlayController.directionsRectangle.setVisible(false);
-//        searchBarOverlayController.directionsTableView.setVisible(false);
-//        searchBarOverlayController.directionsButton.setText("Directions >");
-//        searchBarOverlayController.setDirectionsVisible(false);
-
-//        iconDispSet.get(startNode.getID()).setTranslateX(-scaleOffset);
         iconDispSet.get(startNode.getID()).setScaleX(1);
         iconDispSet.get(startNode.getID()).setScaleY(1);
-//        iconDispSet.get(endNode.getID()).setTranslateX(-scaleOffset);
         iconDispSet.get(endNode.getID()).setScaleX(1);
         iconDispSet.get(endNode.getID()).setScaleY(1);
 
-        Node currentNode = null, pastNode = null;
         stairNodeSet.clear();
-        for (Node n : pathMade) {
-            pastNode = currentNode;
-            currentNode = n;
-
-            edgeDispSet.clear();
-            edgePane.getChildren().clear();
-
-            arrowDispSet.clear();
-            arrowFloorSet.clear();
-            arrowPane.getChildren().clear();
-        }
+        edgeDispSet.clear();
+        edgePane.getChildren().clear();
+        arrowDispSet.clear();
+        arrowFloorSet.clear();
+        arrowPane.getChildren().clear();
         pathDrawn = false;
+
+        for (BounceTransition anim : animSet) {
+            anim.stop();
+        }
+        animSet.clear();
     }
 
     public void setToggleOn(Boolean toggleOn) {
@@ -1280,13 +1279,13 @@ public class MapScreenController {
     /**
      * this method will determin what floors the path goes on
      */
-    public void getFloors(){
+    public void getFloors() {
         floorsList.clear();
-        for (int i = 0; i < stairNodeSet.size(); i+=2){
-                floorsList.add(stairNodeSet.get(i).getFloor());
+        for (int i = 0; i < stairNodeSet.size(); i += 2) {
+            floorsList.add(stairNodeSet.get(i).getFloor());
         }
         if (stairNodeSet.size() > 1)
-            floorsList.add(stairNodeSet.get(stairNodeSet.size()-1).getFloor());
+            floorsList.add(stairNodeSet.get(stairNodeSet.size() - 1).getFloor());
         System.out.println("size of stairNodeSet: " + stairNodeSet.size());
         System.out.println("Floors in floorslist: " + floorsList.toString());
     }
@@ -1294,13 +1293,13 @@ public class MapScreenController {
     /**
      * creates the labels and puts them in the hbox
      */
-    public void createFloorSequence(){
+    public void createFloorSequence() {
         clearFloorSequenceHBox();
         floorSequenceList.clear();
         Polygon arrowHead = new Polygon();
         Polygon arrowEnd = new Polygon();
         Polygon arrow = new Polygon();
-        arrowHead.getPoints().addAll( new Double[]{
+        arrowHead.getPoints().addAll(new Double[]{
                 0.0, 0.0,
                 200.0, 0.0,
                 300.0, 50.0,
@@ -1309,20 +1308,20 @@ public class MapScreenController {
         });
 
         arrowEnd.getPoints().addAll(new Double[]{
-                0.0,0.0,
-                300.0,0.0,
-                300.0,100.0,
+                0.0, 0.0,
+                300.0, 0.0,
+                300.0, 100.0,
                 0.0, 100.0,
                 100.0, 50.0
         });
 
         arrow.getPoints().addAll(new Double[]{
-                0.0,0.0,
-                200.0,0.0,
-                300.0,50.0,
-                200.0,100.0,
-                0.0,100.0,
-                100.0,50.0
+                0.0, 0.0,
+                200.0, 0.0,
+                300.0, 50.0,
+                200.0, 100.0,
+                0.0, 100.0,
+                100.0, 50.0
         });
 
 
@@ -1343,7 +1342,7 @@ public class MapScreenController {
                     button.setShape(arrow);
                     button.setAlignment(Pos.CENTER_RIGHT);
                 }
-                if (!currentFloor.equals(floorsList.get(i))){
+                if (!currentFloor.equals(floorsList.get(i))) {
                     button.setOpacity(0.5);
                 }
                 button.setMinHeight(75);
@@ -1358,7 +1357,7 @@ public class MapScreenController {
 
     }
 
-    public void clearFloorSequenceHBox(){
+    public void clearFloorSequenceHBox() {
         floorSequenceHBox.getChildren().clear();
     }
 

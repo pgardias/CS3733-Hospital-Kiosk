@@ -135,7 +135,7 @@
         </BorderPane>
         <AnchorPane focusTraversable="true" pickOnBounds="false" prefHeight="800.0" prefWidth="1500.0" stylesheets="@../../css/home.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <ImageView fx:id="aboutButton" fitHeight="350.0" fitWidth="375.0" mouseTransparent="false" onMouseClicked="#aboutButtonOp" pickOnBounds="true" preserveRatio="true" styleClass="reactive-logo" x="30.0" y="25.0">
+                <ImageView fx:id="aboutButton" fitHeight="350.0" fitWidth="375.0" mouseTransparent="false" onMouseClicked="#aboutButtonOp" pickOnBounds="true" preserveRatio="true" styleClass="reactive-logo" x="27.0" y="27.0">
                     <image>
                         <Image url="@../../img/icons/BrighamWomensHospitalLogo.png" />
                     </image>
