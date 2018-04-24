@@ -221,25 +221,6 @@ public class MapBuilderNodeFormController implements Initializable{
         floorComboBox.setItems(floorOptions);
 
         editFlag = true;
-
-        /*
-        submitFormButton.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                Task task = new Task() {
-                    @Override
-                    protected Integer call() {
-                        submitFormButton.getScene().setCursor(Cursor.WAIT); //Change cursor to wait style
-                        //scene.setCursor(Cursor.DEFAULT); //Change cursor to default style
-                        return 1;
-                    }
-                };
-                Thread th = new Thread(task);
-                th.setDaemon(true);
-                th.start();
-            }
-        });
-        */
     }
 
     /**
