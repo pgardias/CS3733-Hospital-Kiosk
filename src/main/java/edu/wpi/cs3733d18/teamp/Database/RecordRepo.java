@@ -340,20 +340,16 @@ public class RecordRepo {
             Statement stmt = conn.createStatement();
             ResultSet results = stmt.executeQuery(sql);
 
-            if(!results.next()) { // If no records, is first one
-                count = 1;
-            }else { // Otherwise return count + 1
-                count =  results.getInt(1) + 1;
-            }
+            count = results.getInt(1);
 
             stmt.close();
             conn.close();
+            return count + 1;
         } catch (SQLException se) {
             se.printStackTrace();
         }
-
         return count;
-    }
+}
 
 
     /**
