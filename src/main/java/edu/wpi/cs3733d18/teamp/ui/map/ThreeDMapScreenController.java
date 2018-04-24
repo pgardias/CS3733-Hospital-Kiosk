@@ -220,7 +220,7 @@ public class ThreeDMapScreenController implements Initializable{
         threeDAnchorPane.getChildren().add(group);
         threeDAnchorPane.getChildren().add(allLights);
         curScale = 1;
-        curXRotation = 20;
+        curXRotation = 0;
 
         // Add searchbar overlay
         addOverlay();
@@ -297,12 +297,18 @@ public class ThreeDMapScreenController implements Initializable{
                     // Change Rotation X
                     if (yChange < 0) {
                         curXRotation += ROTATION_SPEED;
+                        //curXRotation += Math.sin(curYTranslation)*ROTATION_SPEED;
+                        //curZRotation += Math.cos(curYTranslation)*ROTATION_SPEED;
                         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
-                                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+                                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS));
+                                //new Rotate(curZRotation, 1920/2, 1080/2, 0, Rotate.Z_AXIS)); // Rotate Map
                     } else if (yChange > 0) {
                         curXRotation -= ROTATION_SPEED;
+                        //curXRotation -= Math.sin(curYTranslation)*ROTATION_SPEED;
+                        //curZRotation -= Math.cos(curYTranslation)*ROTATION_SPEED;
                         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
-                                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+                                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS));
+                                //new Rotate(curZRotation, 1920/2, 1080/2, 0, Rotate.Z_AXIS)); // Rotate Map
                     }
                     mouseInSceneX = newMouseInSceneX;
                     mouseInSceneY = newMouseInSceneY;
@@ -533,12 +539,6 @@ public class ThreeDMapScreenController implements Initializable{
         threeDAnchorPane.setTranslateY(curYTranslation);
         threeDAnchorPane.setTranslateZ(curZTranslation);
 
-        /* Set Zoom
-        threeDAnchorPane.setScaleX(15);
-        threeDAnchorPane.setScaleY(15);
-        threeDAnchorPane.setScaleZ(15);
-        */
-
     }
 
     @FXML
@@ -700,7 +700,6 @@ public class ThreeDMapScreenController implements Initializable{
         Group nodeGroup = new Group();
         HashMap<String, Node> nodeSet;
         nodeSet = db.getAllNodes();
-        System.out.println("drawing nodes");
         MeshView mv = getMesh();
         ArrayList<Integer> nodeYPos = nodeFloorPos(); // Get the correct y values for the different floors
 
@@ -768,7 +767,6 @@ public class ThreeDMapScreenController implements Initializable{
                 }
             }
         }
-        System.out.println("Printed All Nodes");
         return nodeGroup;
     }
 
@@ -802,7 +800,8 @@ public class ThreeDMapScreenController implements Initializable{
                 Cylinder line = new Cylinder(2, height);
                 line.setMaterial(fillOrange);
                 line.getTransforms().addAll(moveToMidpoint, rotateAroundCenter);
-                line.setVisible(false);
+                line.setDisable(true);
+                line.setOpacity(0.0);
                 edgeGroup.getChildren().add(line);
 
                 String label = edge.getID();
@@ -940,9 +939,9 @@ public class ThreeDMapScreenController implements Initializable{
             for (Edge e : currentNode.getEdges()) {
                 if (pastNode != null) {
                     if (e.contains(pastNode)) {
-                        edgeDispSet.get(e.getID()).setVisible(false);
+                        edgeDispSet.get(e.getID()).setOpacity(0.0);
                         if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
-                            edgeDispSet.get(e.getID()).setVisible(false);
+                            edgeDispSet.get(e.getID()).setOpacity(0.0);
                         }
                     }
                 }
@@ -1038,10 +1037,10 @@ public class ThreeDMapScreenController implements Initializable{
                 //nodesEdgesPane.getChildren().add(endLabel); //TODO again put this on its own pane
             }
             //Color in the path appropriately
-            for (Edge e : currentNode.getEdges()) {
+            for (Edge e : currentNode.getEdges()) { //TODO MAYBE HERE
                 if (pastNode != null) {
                     if (e.contains(pastNode)) {
-                        edgeDispSet.get(e.getID()).setVisible(true);
+                        //edgeDispSet.get(e.getID()).setVisible(true);
                         edgeDispSet.get(e.getID()).setOpacity(1.0);
                     }
                 }
