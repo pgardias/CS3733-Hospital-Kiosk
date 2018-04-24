@@ -87,7 +87,6 @@ public class AudioVisualController implements Initializable {
 
         destBinding.setPrefWidth(AVLocationTxt.getPrefWidth());
 
-        AVComboBox.setValue("Choose a device");
         AVComboBox.setItems(AVDevices);
     }
 
@@ -138,12 +137,12 @@ public class AudioVisualController implements Initializable {
             return;
         }
         try {
-            AVDevice = AVComboBox.getValue().toString();
-            if (AVDevice.equals("Choose a device")) {
+            AVDevice = AVComboBox.getSelectionModel().getSelectedItem().toString();
+            if (AVDevice.equals("Select an audio/visual device")) {
                 throw new NothingSelectedException();
             }
         } catch (NothingSelectedException nse) {
-            AVErrorLabel.setText("Please select a device.");
+            AVErrorLabel.setText("Please select an audio/visual device.");
             AVErrorLabel.setVisible(true);
             return;
         }

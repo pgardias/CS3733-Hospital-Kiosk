@@ -1,9 +1,11 @@
 package edu.wpi.cs3733d18.teamp.ui.service;
 
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class ServiceRequestTable {
+public class ServiceRequestTable extends RecursiveTreeObject<ServiceRequestTable> {
 
     private SimpleIntegerProperty requestID;
     private SimpleStringProperty requestType;

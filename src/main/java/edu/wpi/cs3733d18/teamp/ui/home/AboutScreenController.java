@@ -1,14 +1,11 @@
 package edu.wpi.cs3733d18.teamp.ui.home;
 
 import com.jfoenix.controls.JFXButton;
-import edu.wpi.cs3733d18.teamp.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -18,6 +15,9 @@ public class AboutScreenController {
     JFXButton backButton;
 
     @FXML
+    JFXButton creditsButton;
+
+    @FXML
     Label introLabel;
 
     @FXML
@@ -25,6 +25,8 @@ public class AboutScreenController {
 
     @FXML
     Label finalLabel;
+
+
 
     public void StartUp() {
         introLabel.setText(
@@ -66,5 +68,25 @@ public class AboutScreenController {
             return;
         }
         backButton.getScene().setRoot(root);
+    }
+
+    @FXML
+    public Boolean creditsButtonOp(ActionEvent e) {
+        Parent root;
+        FXMLLoader loader;
+        CreditsScreenController creditsScreenController;
+
+        loader = new FXMLLoader(getClass().getResource("/FXML/home/CreditsScreen.fxml"));
+
+        try {
+            root = loader.load();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return false;
+        }
+        creditsScreenController = loader.getController();
+        creditsScreenController.StartUp();
+        creditsButton.getScene().setRoot(root);
+        return true;
     }
 }

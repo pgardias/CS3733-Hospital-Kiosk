@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -25,18 +24,7 @@
                   <Font size="30.0" />
                </font>
             </Label>
-            <MenuButton fx:id="serviceRequestMenu" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefWidth="500.0" text="Choose Service Request" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-              <items>
-                <MenuItem fx:id="languageInterpreter" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Language Interpreter Request" />
-                  <MenuItem fx:id="religiousPeople" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Religious Request" />
-                  <MenuItem fx:id="computerService" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Computer Service Request" />
-                  <MenuItem fx:id="securityIssue" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Security Request" />
-                  <MenuItem fx:id="maintenanceProblem" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Maintenance Request" />
-                  <MenuItem fx:id="sanitationMess" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Sanitation Request" />
-                  <MenuItem fx:id="audioVisualHelp" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Audio or Visual Help Request" />
-                  <MenuItem fx:id="giftDelivery" mnemonicParsing="false" onAction="#serviceRequestFormSelectOp" text="Gift Delivery Request" />
-              </items>
-            </MenuButton>
+            <JFXComboBox fx:id="selectFormComboBox" maxWidth="500.0" onAction="#serviceRequestFormSelectOp" prefWidth="300.0" promptText=" Choose Service Request" style="-fx-border-width: 1; -fx-border-color: black;" unFocusColor="BLACK" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </top>

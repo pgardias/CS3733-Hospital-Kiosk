@@ -61,7 +61,7 @@ public class EmergencyRequestButtonScreenController {
 
         Request.requesttype requestType = Request.requesttype.EMERGENCY;
         String subType;
-        String nodeID = "PKIOS00102"; // default kiosk?
+        String nodeID = "Current Kiosk"; // default kiosk?
         Timestamp timeMade = new Timestamp(System.currentTimeMillis());
 
         switch(typeOfEmergency){
@@ -92,7 +92,6 @@ public class EmergencyRequestButtonScreenController {
         try {
             root = loader.load();
         } catch (IOException ie) {
-            ie.getMessage();
             ie.printStackTrace();
             return false;
         }

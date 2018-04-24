@@ -158,6 +158,8 @@ public class DBSystem {
         return requestRepo.completeRequest(request);
     }
 
+    public Boolean deleteRequest(Request request) { return requestRepo.deleteRequest(request); }
+
     public Request.requesttype StringToRequestType(String type) { return requestRepo.StringToRequestType(type); }
 
     public String RequestTypeToString(Request.requesttype type) { return requestRepo.RequestTypeToString(type); }
