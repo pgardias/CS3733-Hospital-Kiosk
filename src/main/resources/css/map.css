@@ -22,3 +22,7 @@
     -jfx-button-type: RAISED;
     -fx-background-radius: 20;
 }
+
+.linear-grad-to-bottom{
+    -fx-background-color: linear-gradient(to bottom, #79a6d2, #000000);
+}
