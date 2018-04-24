@@ -120,9 +120,6 @@ public class ServiceRequestScreen implements Initializable{
     @FXML
     JFXComboBox newRequestComboBox;
 
-    final ObservableList<ServiceRequestTable> newRequests = FXCollections.observableArrayList();
-    final ObservableList<ServiceRequestTable> inProgRequests = FXCollections.observableArrayList();
-    final ObservableList<ServiceRequestTable> completedRequests = FXCollections.observableArrayList();
     static ObservableList<String> requestTypes = FXCollections.observableArrayList(
             "Create New Service Request",
             "Language Interpreter Request",
