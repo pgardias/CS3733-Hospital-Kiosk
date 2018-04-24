@@ -275,8 +275,8 @@ public class ThreeDMapScreenController implements Initializable{
         @Override
         public void handle(MouseEvent event) {
 
-            // Left Mouse Button, Rotating
-            if (event.getButton() == MouseButton.PRIMARY) {
+            // Right Mouse Button, Rotating
+            if (event.getButton() == MouseButton.SECONDARY) {
                 if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
                     //mouseInSceneX = event.getSceneX();
                     //mouseInSceneY = event.getSceneY();
@@ -320,8 +320,8 @@ public class ThreeDMapScreenController implements Initializable{
                 }
             }
 
-            // Right Mouse Button, Panning
-            else if (event.getButton() == MouseButton.SECONDARY) {
+            // Left Mouse Button, Panning
+            else if (event.getButton() == MouseButton.PRIMARY) {
                 if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
                     mouseInSceneX = event.getSceneX();
                     mouseInSceneY = event.getSceneY();
@@ -531,11 +531,6 @@ public class ThreeDMapScreenController implements Initializable{
     @FXML
     public void defaultButtonOP(ActionEvent e) {
 
-        curYRotation = 0;
-        curXRotation = 0;
-        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
-                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
-
         // Set panning
         curXTranslation = 0;
         curYTranslation = 0;
@@ -544,15 +539,14 @@ public class ThreeDMapScreenController implements Initializable{
         threeDAnchorPane.setTranslateY(curYTranslation);
         threeDAnchorPane.setTranslateZ(curZTranslation);
 
+        curYRotation = 0;
+        curXRotation = 0;
+        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
     }
 
     @FXML
     public void topDownButtonOP(ActionEvent e) {
-        // Rotate
-        curYRotation = 0;
-        curXRotation = 70;
-        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
-                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
 
         // Panning
         curXTranslation = 0;
@@ -561,6 +555,12 @@ public class ThreeDMapScreenController implements Initializable{
         threeDAnchorPane.setTranslateX(curXTranslation);
         threeDAnchorPane.setTranslateY(curYTranslation);
         threeDAnchorPane.setTranslateZ(curZTranslation);
+
+        // Rotate
+        curYRotation = 0;
+        curXRotation = 70;
+        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
     }
 
     /**
@@ -1102,9 +1102,8 @@ public class ThreeDMapScreenController implements Initializable{
 
         pathDrawn = true;
         // This makes it so that the pane doesn't spaz out as much for some reason
-        //threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
-                //new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
-
+        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
 
     }
 
