@@ -152,6 +152,9 @@ public class ThreeDMapScreenController implements Initializable{
     @FXML
     JFXButton topDownButton;
 
+    @FXML
+    JFXButton backButton;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -270,8 +273,8 @@ public class ThreeDMapScreenController implements Initializable{
             // Left Mouse Button, Rotating
             if (event.getButton() == MouseButton.PRIMARY) {
                 if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                    mouseInSceneX = event.getSceneX();
-                    mouseInSceneY = event.getSceneY();
+                    //mouseInSceneX = event.getSceneX();
+                    //mouseInSceneY = event.getSceneY();
                     isDragging = false;
                 } else if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
                     isDragging = true;
@@ -343,6 +346,24 @@ public class ThreeDMapScreenController implements Initializable{
             }
         }
     };
+
+    @FXML
+    public void backButtonOp() {
+        Stage stage;
+        Parent root;
+        FXMLLoader loader;
+
+        stage = (Stage) backButton.getScene().getWindow();
+        loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+        try {
+            root = loader.load();
+        } catch (IOException ie) {
+            ie.printStackTrace();
+            return;
+        }
+
+        backButton.getScene().setRoot(root);
+    }
 
     @FXML
     public void floorL2ButtonOp(ActionEvent e) {
@@ -524,14 +545,14 @@ public class ThreeDMapScreenController implements Initializable{
     public void topDownButtonOP(ActionEvent e) {
         // Rotate
         curYRotation = 0;
-        curXRotation = 90;
+        curXRotation = 70;
         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
                 new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
 
         // Panning
         curXTranslation = 0;
-        curYTranslation = 300;
-        curZTranslation = 500;
+        curYTranslation = 800;
+        curZTranslation = 600;
         threeDAnchorPane.setTranslateX(curXTranslation);
         threeDAnchorPane.setTranslateY(curYTranslation);
         threeDAnchorPane.setTranslateZ(curZTranslation);
@@ -793,6 +814,7 @@ public class ThreeDMapScreenController implements Initializable{
         edgeGroup.getTransforms().setAll(new Rotate(curXRotation, mv.getTranslateX() - edgeGroup.getTranslateX(), mv.getTranslateY() - edgeGroup.getTranslateY(), mv.getTranslateZ() - edgeGroup.getTranslateZ(), Rotate.X_AXIS),
                         new Rotate(curYRotation, mv.getTranslateX() - edgeGroup.getTranslateX(), mv.getTranslateY() - edgeGroup.getTranslateY(), mv.getTranslateZ() - edgeGroup.getTranslateZ(), Rotate.Y_AXIS));
         root.getChildren().add(edgeGroup);
+
     }
 
     /**
@@ -1056,6 +1078,7 @@ public class ThreeDMapScreenController implements Initializable{
             }
         }
 
+
         System.out.println("list of stair nodes: " + stairNodeSet.toString());
         minXCoord -= 200;
         minYCoord -= 400;
@@ -1075,8 +1098,10 @@ public class ThreeDMapScreenController implements Initializable{
 
         pathDrawn = true;
         // This makes it so that the pane doesn't spaz out as much for some reason
-        threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
-                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+        //threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
+                //new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS)); // Rotate Map
+
+
     }
 
     private void checkStairNodeSet(Node currentNode) {
