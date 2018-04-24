@@ -12,11 +12,11 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #dadada;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.admin.AdminMenuController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: LIGHTGRAY;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.admin.AdminMenuController">
     <children>
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
             <children>
-                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="WHITE" height="1050.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, GRAY, 5, 0.0, 0, 0);" width="1890.0" x="15.0" y="15.0" />
+                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#dadada" height="1050.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, GRAY, 5, 0.0, 0, 0);" width="1890.0" x="15.0" y="15.0" />
                 <Label prefWidth="100.0" text="Logout" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="150.0">
                     <font>
                         <Font size="30.0" />
