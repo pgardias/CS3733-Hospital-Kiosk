@@ -28,10 +28,11 @@ public class CreditsController {
 
     public void StartUp() {
         introLabel.setText(
-                "\nWe used the following API's from other teams"
+                "\nWe used the following API's"
         );
         teamLabel.setText(
-                "\nName of the request API - Team name"
+                "\nPrescriptions API - Team R" +
+                "\n Obj importer API - Interactive Mesh"
         );
     }
 
