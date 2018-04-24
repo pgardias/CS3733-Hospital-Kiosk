@@ -45,8 +45,7 @@ public class Dijkstra extends Pathfinder{
      */
     // Dijkstra's algorithm to find shortest path from s to all other nodes
     public void findPath (Node strNode, Node destNode) {
-        
-        System.out.println("dijkstra");
+
         HashMap<Node, Double> dist = new HashMap<>();  // shortest known distance from "s"
         ArrayList<Node> visited = new ArrayList<>(); // all false initially
         ArrayList<Node> children;
@@ -60,7 +59,6 @@ public class Dijkstra extends Pathfinder{
         if (!destNode.equals(strNode)) {
             while (!queue.isEmpty()) {
                 currentNode = queue.firstElement();
-                System.out.println(currentNode);
                 queue.remove(currentNode);
                 if (!visited.contains(currentNode)) {
                     if (currentNode.equals(destNode)) {
@@ -69,7 +67,6 @@ public class Dijkstra extends Pathfinder{
                     visited.add(currentNode);
 
                     children = getChildren(currentNode);
-                    System.out.println(children);
                     // check if the node has no children
                     //iterate through the children nodes
                     for (Node n : children) {

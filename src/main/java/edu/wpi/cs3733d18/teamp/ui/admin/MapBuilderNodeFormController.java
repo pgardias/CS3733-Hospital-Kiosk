@@ -196,10 +196,8 @@ public class MapBuilderNodeFormController implements Initializable{
         nodey3Txt.setText(Double.toString(y3d));
         buildingComboBox.setValue(nodeBuilding);
         floorComboBox.setValue(nodeFloor);
-        System.out.println("Node type: " + nodeType);
         nodeTypeComboBox.setValue(nodeType);
         isActiveNodeCheckBox.setSelected(isActive);
-        System.out.println("Initialized is active check box: " + isActiveNodeCheckBox.isSelected());
         editedNodeID = nodeID;
         connectingNodeTextBox.setDisable(true);
         connectingNodeTextBox.setVisible(false);
@@ -317,7 +315,6 @@ public class MapBuilderNodeFormController implements Initializable{
             } catch (NodeNotFoundException nnfe) {
                 nodeFormErrorLabel.setText("Please choose a valid node to connect to this node.");
                 nodeFormErrorLabel.setVisible(true);
-                System.out.println(nnfe.getNodeID());
                 return;
             }
         }
@@ -365,19 +362,15 @@ public class MapBuilderNodeFormController implements Initializable{
                     if (yDisplay > 0 && yDisplay < FULL_HEIGHT) {
                         return true;
                     } else {
-                        System.out.println("3D Y-coordinate entered is not within bounds.");
                         return false;
                     }
                 } else {
-                    System.out.println("3D X-coordinate entered is not within bounds.");
                     return false;
                 }
             } else {
-                System.out.println("2D Y-coordinate entered is not within bounds.");
                 return false;
             }
         } else {
-            System.out.println("2D X-coordinate entered is not within bounds.");
             return false;
         }
     }

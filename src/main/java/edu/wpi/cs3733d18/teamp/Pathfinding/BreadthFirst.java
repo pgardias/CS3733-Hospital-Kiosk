@@ -15,22 +15,18 @@ public class BreadthFirst extends Pathfinder {
 
     @Override
     public void findPath(Node srcNode, Node destNode) {
-        System.out.println("breadthfirst");
-        //System.out.println("breadth first");
         Queue<Node> openSet = new LinkedList<>();
         HashSet<Node> closedSet = new HashSet<>();
         Node currentNode = srcNode;
         openSet.add(currentNode);
         srcNode.setParent(null);
 
-        //System.out.println("Source node: " + srcNode + " Destination node: " + destNode);
 
         while (!openSet.isEmpty()) {
             currentNode = openSet.remove();
             closedSet.add(currentNode);
 
             if (currentNode.equals(destNode)) {
-                //System.out.println(getPath(currentNode));
                 return;
             }
 
@@ -57,7 +53,6 @@ public class BreadthFirst extends Pathfinder {
                 }
             }
         }
-        //System.out.println("Path not found!");
         return;
     }
 }

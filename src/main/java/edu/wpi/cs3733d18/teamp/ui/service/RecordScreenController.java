@@ -155,7 +155,6 @@ public class RecordScreenController implements Initializable {
         children.clear();
 
         for(Record record: records) {
-            System.out.println(db.RequestTypeToString(record.getRequestType()));
             if(filterType != null && record.getRequestType().equals(filterType)) {
 
                 children.add(new TreeItem<>(new RecordsTable(db.RequestTypeToString(record.getRequestType()), record.getSubType(),

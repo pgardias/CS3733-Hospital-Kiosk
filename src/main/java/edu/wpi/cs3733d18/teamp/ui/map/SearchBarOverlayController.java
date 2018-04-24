@@ -251,10 +251,8 @@ public class SearchBarOverlayController implements Initializable{
         else if (pathDrawn) {
             threeDMapScreenController.resetPath();
         }
-        System.out.println("get path");
         //get all nodes
         HashMap<String, Node> nodeSet = db.getAllNodes();
-        System.out.println(" size: " + nodeSet.size());
 
         //Declare source node, destination node, and get the typed in inputs for both search boxes
         Node srcNode, dstNode;
@@ -287,7 +285,6 @@ public class SearchBarOverlayController implements Initializable{
         Font font = new Font("verdana", 24.0);
 
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
-        System.out.println(path);
         if (!is3D) {
             mapScreenController.drawPath(path);
         }
@@ -298,9 +295,6 @@ public class SearchBarOverlayController implements Initializable{
         directionsList.generateTextDirections(path);
         ArrayList<String> directions = directionsList.getDirections();
         pathDirections = directions;
-        for (String s : directions) {
-            System.out.println(s);
-        }
 
         pathDrawn = true;
         directionsButton.setVisible(true);
@@ -335,8 +329,6 @@ public class SearchBarOverlayController implements Initializable{
     public Node parseDestinationInput(Node srcNode, String string) {
         Node aNode = srcNode;
 
-//        System.out.println("Input string: " + string);
-//        System.out.println("source node:" + srcNode);
 
         switch (string) {
             case "NEAREST HALLWAY":
@@ -407,17 +399,13 @@ public class SearchBarOverlayController implements Initializable{
     private Node getNearestOfType(Node srcNode, Node.nodeType type) {
         HashMap<String, Node> nodeSet = db.getNodesOfType(type);
 
-//        System.out.println(srcNode);
         Node shortestDistanceNode = srcNode;
         double distance = Double.POSITIVE_INFINITY;
 
         for (Node node : nodeSet.values()) {
-//            System.out.println(node.getID());
-//            System.out.println(srcNode.getID());
             if (srcNode.distanceBetweenNodes(node) < distance && srcNode.getFloor() == node.getFloor()) {
                 shortestDistanceNode = node;
                 distance = srcNode.distanceBetweenNodes(node);
-//                System.out.println("distance: " + srcNode.distanceBetweenNodes(node));
             }
         }
 
@@ -684,7 +672,6 @@ public class SearchBarOverlayController implements Initializable{
         }else {
             for (Node.floorType floor : floorList) {
                 parents.add(new TreeItem<>(new DirectionsTable("Floor " + floor.toString())));
-                System.out.println("HERE");
             }
         }
 
