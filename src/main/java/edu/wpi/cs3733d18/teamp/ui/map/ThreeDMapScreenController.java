@@ -803,7 +803,12 @@ public class ThreeDMapScreenController implements Initializable{
                 Rotate rotateAroundCenter = new Rotate(-Math.toDegrees(angle), axisOfRotation);
 
                 Cylinder line = new Cylinder(2, height);
-                line.setMaterial(fillOrange);
+                if((edge.getStart().getType() == Node.nodeType.STAI && edge.getEnd().getType() == Node.nodeType.STAI) ||
+                        (edge.getStart().getType() == Node.nodeType.ELEV && edge.getEnd().getType() == Node.nodeType.ELEV)) {
+                    line.setMaterial(fillPurple);
+                } else {
+                    line.setMaterial(fillOrange);
+                }
                 line.getTransforms().addAll(moveToMidpoint, rotateAroundCenter);
                 line.setDisable(true);
                 line.setOpacity(0.0);
@@ -848,6 +853,7 @@ public class ThreeDMapScreenController implements Initializable{
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setMaterial(fillGreen);
+                            nodeDispSet.get(string).setRadius(4.0);
                             searchBarOverlayController.setSourceSearchBar(node.getLongName());
                         }
                     }
@@ -858,12 +864,13 @@ public class ThreeDMapScreenController implements Initializable{
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setMaterial(fillRed);
+                            nodeDispSet.get(string).setRadius(4.0);
                             searchBarOverlayController.setDestinationSearchBar(node.getLongName());
                         }
                     }
                     firstSelected = false;
                 }
-            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED) { // TODO Check zoom level to prevent graphical glitches
+            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 System.out.println("MOUSE_ENTERED event at " + event.getSource());
                 for (String string : nodeDispSet.keySet()) {
                     if (nodeDispSet.get(string) == event.getSource()) {
@@ -882,7 +889,7 @@ public class ThreeDMapScreenController implements Initializable{
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
 //                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
                         popOver = new PopOver(popOverVBox);
-                        popOver.show((javafx.scene.Node) event.getSource());
+                        popOver.show((javafx.scene.Node) event.getSource(), -7);
                         popOverHidden = false;
                         popOver.setCloseButtonEnabled(false);
 //                        popOver.setCornerRadius(20);
@@ -940,6 +947,7 @@ public class ThreeDMapScreenController implements Initializable{
             pastNode = currentNode;
             currentNode = n;
             nodeDispSet.get(n.getID()).setMaterial(fillBlue);
+            nodeDispSet.get(n.getID()).setRadius(NODE_RADIUS);
 
             for (Edge e : currentNode.getEdges()) {
                 if (pastNode != null) {
@@ -1137,6 +1145,7 @@ public class ThreeDMapScreenController implements Initializable{
         for (Sphere s: nodeDispSet.values()) {
             if (s.getMaterial() == fillGreen) {
                s.setMaterial(fillBlue);
+               s.setRadius(NODE_RADIUS);
            }
         }
     }
@@ -1146,6 +1155,7 @@ public class ThreeDMapScreenController implements Initializable{
         for (Sphere s : nodeDispSet.values()) {
             if (s.getMaterial() == fillRed) {
                 s.setMaterial(fillBlue);
+                s.setRadius(NODE_RADIUS);
             }
         }
     }
