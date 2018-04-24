@@ -33,15 +33,16 @@ public class BounceTransition extends CachedTimelineTransition {
                         .keyFrames(
                                 new KeyFrame(Duration.millis(0), new KeyValue(node.translateYProperty(), 0, WEB_EASE)),
                                 new KeyFrame(Duration.millis(200), new KeyValue(node.translateYProperty(), 0, WEB_EASE)),
-                                new KeyFrame(Duration.millis(400), new KeyValue(node.translateYProperty(), -0.30*node.getBoundsInParent().getHeight(), WEB_EASE)),
+                                new KeyFrame(Duration.millis(400), new KeyValue(node.translateYProperty(), -0.30 * node.getBoundsInParent().getHeight(), WEB_EASE)),
                                 new KeyFrame(Duration.millis(500), new KeyValue(node.translateYProperty(), 0, WEB_EASE)),
-                                new KeyFrame(Duration.millis(600), new KeyValue(node.translateYProperty(), -0.15*node.getBoundsInParent().getHeight(), WEB_EASE)),
+                                new KeyFrame(Duration.millis(600), new KeyValue(node.translateYProperty(), -0.15 * node.getBoundsInParent().getHeight(), WEB_EASE)),
                                 new KeyFrame(Duration.millis(800), new KeyValue(node.translateYProperty(), 0, WEB_EASE)),
                                 new KeyFrame(Duration.millis(1000), new KeyValue(node.translateYProperty(), 0, WEB_EASE))
                         )
                         .build()
         );
-        setCycleDuration(Duration.seconds(1));
+        setCycleDuration(Duration.seconds(1.5));
+        setCycleCount(INDEFINITE);
         setDelay(Duration.seconds(0.2));
     }
 }

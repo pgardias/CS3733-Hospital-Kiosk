@@ -197,15 +197,20 @@ public class HomeController {
 
         loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
 
+        long startTime = System.currentTimeMillis();
         try {
             root = loader.load();
         } catch (IOException ie) {
             ie.printStackTrace();
             return false;
         }
+
         mapScreenController = loader.getController();
         mapScreenController.onStartUp();
         mapButton.getScene().setRoot(root);
+        long endTime = System.currentTimeMillis();
+        System.out.println("Loading map screen took " + (endTime - startTime) + " ms");
+
         return true;
     }
 
