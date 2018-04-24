@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
+import edu.wpi.cs3733d18.teamp.Settings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -37,6 +38,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class ThreeDMapScreenController implements Initializable{
 
@@ -194,24 +196,13 @@ public class ThreeDMapScreenController implements Initializable{
         allModels.add(loadMeshView(pathName));
 
         // Load all model textures
-        PhongMaterial floorL2Texture = new PhongMaterial();
-        floorL2Texture.setDiffuseMap(new Image(getClass().getResource("/models/textures/L2Floor_UV.png").toExternalForm()));
-        allTextures.add(floorL2Texture);
-        PhongMaterial floorL1Texture = new PhongMaterial();
-        floorL1Texture.setDiffuseMap(new Image(getClass().getResource("/models/textures/L1Floor_UV.png").toExternalForm()));
-        allTextures.add(floorL1Texture);
-        PhongMaterial floorGTexture = new PhongMaterial();
-        floorGTexture.setDiffuseMap(new Image(getClass().getResource("/models/textures/groundFloor_UV.png").toExternalForm()));
-        allTextures.add(floorGTexture);
-        PhongMaterial floor1stTexture = new PhongMaterial();
-        floor1stTexture.setDiffuseMap(new Image(getClass().getResource("/models/textures/1stFloor_UV.png").toExternalForm()));
-        allTextures.add(floor1stTexture);
-        PhongMaterial floor2ndTexture = new PhongMaterial();
-        floor2ndTexture.setDiffuseMap(new Image(getClass().getResource("/models/textures/2ndFloor_UV.png").toExternalForm()));
-        allTextures.add(floor2ndTexture);
-        PhongMaterial floor3rdTexture = new PhongMaterial();
-        floor3rdTexture.setDiffuseMap(new Image(getClass().getResource("/models/textures/3rdFloor_UV.png").toExternalForm()));
-        allTextures.add(floor3rdTexture);
+
+        allTextures.add(Settings.getSettings().getFloorL2Texture());
+        allTextures.add(Settings.getSettings().getFloorL1Texture());
+        allTextures.add(Settings.getSettings().getFloorGTexture());
+        allTextures.add(Settings.getSettings().getFloor1stTexture());
+        allTextures.add(Settings.getSettings().getFloor2ndTexture());
+        allTextures.add(Settings.getSettings().getFloor3rdTexture());
 
         // Build scene
         currentFloor = Node.floorType.LEVEL_L2;
