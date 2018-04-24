@@ -1,3 +1,0 @@
-employeeID,username,firstName,lastName,password,isAdmin,employeeType,subtype
-12345,admin,cem,test,password,1,admin,cem
-67890,notadmin,cem1,test,password,0,language interpreter,cem

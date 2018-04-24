@@ -220,6 +220,7 @@ public class SendEmail {
         for (String s: message) {
             rtnMessage = rtnMessage.concat(s+"<p></p>");
         }
+        rtnMessage = rtnMessage.concat("You have arrived at your destination!" + "<p></p>");
         return rtnMessage;
     }
 

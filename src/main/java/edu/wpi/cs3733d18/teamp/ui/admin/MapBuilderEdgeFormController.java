@@ -11,7 +11,6 @@ import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Exceptions.OrphanNodeException;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
-import edu.wpi.cs3733d18.teamp.ui.admin.MapBuilderController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,7 +25,7 @@ import java.io.IOException;
 
 public class MapBuilderEdgeFormController {
 
-    DeletePopUpController deletePopUpController;
+    ConfirmationPopUpController confirmationPopUpController;
 
     DBSystem db = DBSystem.getInstance();
 
@@ -195,15 +194,15 @@ public class MapBuilderEdgeFormController {
             return;
         }
 
-        deletePopUpController = loader.getController();
-        deletePopUpController.StartUp(this);
+        confirmationPopUpController = loader.getController();
+        confirmationPopUpController.StartUp(this);
         stage.setScene(new Scene(root, 600, 150));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(deleteButton.getScene().getWindow());
         stage.showAndWait();
 
         // If user confirms, delete edge if it will not orphan a node
-        if (deletePopUpController.getChoice()) {
+        if (confirmationPopUpController.getChoice()) {
             try {
                 db.deleteEdge(editedEdgeID);
             }

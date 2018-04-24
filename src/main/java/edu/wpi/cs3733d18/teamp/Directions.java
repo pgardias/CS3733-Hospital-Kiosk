@@ -206,7 +206,7 @@ public class Directions {
                 break;
 
             case 1:
-                message += "1 floors to floor " + node2.getFloor().toString() + ".";
+                message += "1 floor to floor " + node2.getFloor().toString() + ".";
                 break;
         }
         return message;

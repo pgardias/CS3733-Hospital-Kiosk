@@ -51,6 +51,7 @@ public class AdminMenuController {
     public void employeeButtonOp(ActionEvent e) {
         Parent root;
         FXMLLoader loader;
+        ManageEmployeeScreenController manageEmployeeScreenController;
 
         loader = new FXMLLoader(getClass().getResource("/FXML/admin/ManageEmployeeScreen.fxml"));
         try {
@@ -59,6 +60,8 @@ public class AdminMenuController {
             ioe.printStackTrace();
             return;
         }
+        manageEmployeeScreenController = loader.getController();
+        manageEmployeeScreenController.onStartUp();
         employeeButton.getScene().setRoot(root);
     }
 

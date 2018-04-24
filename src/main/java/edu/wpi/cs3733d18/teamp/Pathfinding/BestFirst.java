@@ -1,9 +1,6 @@
 package edu.wpi.cs3733d18.teamp.Pathfinding;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.PriorityQueue;
-import java.util.Vector;
+import java.util.*;
 
 public class BestFirst extends Pathfinder{
 
@@ -16,21 +13,23 @@ public class BestFirst extends Pathfinder{
 
         edges = node.getEdges();
         for (Edge edge : edges) {
-            Node iterateNode;
-            if (edge.getEnd() == node) {
-                iterateNode = edge.getStart();
-                nodes.add(iterateNode);
-            } else {
-                iterateNode = edge.getEnd();
-                nodes.add(iterateNode);
+            if (edge.getActive()) {
+                Node iterateNode;
+                if (edge.getEnd() == node) {
+                    iterateNode = edge.getStart();
+                    nodes.add(iterateNode);
+                } else {
+                    iterateNode = edge.getEnd();
+                    nodes.add(iterateNode);
+                }
             }
         }
 
         while(!nodes.isEmpty()){
             Node smallest = new Node();
             double weight = Double.MAX_VALUE;
-            for (Node n:nodes){
-                if (n.getEdge(node).getWeight() < weight){
+            for (Node n : nodes){
+                if (n.getEdge(node).getWeight() < weight) {
                     smallest = n;
                 }
             }
@@ -47,12 +46,13 @@ public class BestFirst extends Pathfinder{
 
         ArrayList<Node> alreadyVisited = new ArrayList<>();
         ArrayList<Node> children = new ArrayList<>();
-        Vector<Node> queue = new Vector<>();
+        Queue<Node> queue = new LinkedList<>();
+        startNode.setParent(null);
 
         Node currentNode;
         queue.add(startNode);
         while (!queue.isEmpty()){
-            currentNode = queue.firstElement();
+            currentNode = queue.remove();
 
             queue.remove(currentNode);
             if (queue.contains(endNode)){
@@ -61,7 +61,7 @@ public class BestFirst extends Pathfinder{
             alreadyVisited.add(currentNode);
             children = getChildren(currentNode);
             for (Node n:children){
-                if (!alreadyVisited.contains(n)){
+                if (!alreadyVisited.contains(n) && n.getActive()){
                     queue.add(n);
                     n.setParent(currentNode);
                 }

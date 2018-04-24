@@ -6,11 +6,11 @@ requestID,requestType,subType,location,additionalInfo,madeBy,completedBy,timeMad
 5,sanitation,Clean Biohazard Spill,AmbExit 1,Mess Type: Clean Biohazard Spill Additional Info: test,BuildingOwner,BuildingOwner,2018-04-16 16:18:17.481,2018-04-16 16:20:04.921,2,0
 6,audio+visual,Drawing Pad,Bathroom Lobby,Audio or Visual Device: Drawing Pad Additional Info: tw,BuildingOwner,BuildingOwner,2018-04-16 16:19:09.582,2018-04-16 16:20:06.203,2,0
 7,delivergift,A Dozen Flowers,Bretholtz WR,Gift: A Dozen Flowers Additional Info: test,BuildingOwner,BuildingOwner,2018-04-16 16:19:32.66,2018-04-16 16:20:07.309,2,0
-8,emergency,ACTIVE SHOOTER,PKIOS00102,Emergency: ACTIVE SHOOTER,CurrentUser, ,2018-04-18 09:39:00.622,null,0,1
+8,emergency,ACTIVE SHOOTER,PKIOS00102,Emergency: ACTIVE SHOOTER,CurrentUser,BuildingOwner,2018-04-18 09:39:00.622,2018-04-21 21:56:02.742,2,1
 9,delivergift,Stuffed Animal,Chest Diseases,Gift: Stuffed Animal Additional Info:  For Little Timmy,NickPacheco,BuildingOwner,2018-04-18 13:03:53.136,2018-04-18 14:43:36.285,2,0
-10,emergency,FIRE,PKIOS00102,Emergency: FIRE,CurrentUser, ,2018-04-18 13:08:48.44,null,0,1
+10,emergency,FIRE,PKIOS00102,Emergency: FIRE,CurrentUser,BuildingOwner,2018-04-18 13:08:48.44,2018-04-21 21:56:04.573,2,1
 11,computer service,Desktop Computer,Information Desk,Device: Desktop Computer Additional Info: Blue screened,NickPacheco,BuildingOwner,2018-04-18 14:30:55.08,2018-04-18 14:43:45.153,2,0
-12,emergency,ACTIVE SHOOTER,PKIOS00102,Emergency: ACTIVE SHOOTER,CurrentUser, ,2018-04-18 14:33:47.755,null,0,1
+12,emergency,ACTIVE SHOOTER,PKIOS00102,Emergency: ACTIVE SHOOTER,CurrentUser,BuildingOwner,2018-04-18 14:33:47.755,2018-04-21 21:56:06.427,2,1
 13,delivergift,Balloons,Information Desk,Gift: Balloons Additional Info: Tell sue its from jim,BuildingOwner,BuildingOwner,2018-04-18 14:45:08.948,2018-04-18 14:45:25.699,2,0
 14,computer service,Desktop Computer,Information Desk,Device: Desktop Computer Additional Info: Blue Screen,BuildingOwner,BuildingOwner,2018-04-18 14:50:36.675,2018-04-18 14:51:37.608,2,0
 15,sanitation,Clean Water Spill,75 Lobby,Mess Type: Clean Water Spill Additional Info: watah,BuildingOwner,BuildingOwner,2018-04-18 14:52:17.864,2018-04-18 14:52:25.046,2,0
