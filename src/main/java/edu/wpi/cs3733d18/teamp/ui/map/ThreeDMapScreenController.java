@@ -296,19 +296,19 @@ public class ThreeDMapScreenController implements Initializable{
                     }
                     // Change Rotation X
                     if (yChange < 0) {
-                        //curXRotation += ROTATION_SPEED;
-                        curXRotation += Math.sin(curYTranslation)*ROTATION_SPEED;
-                        curZRotation += Math.cos(curYTranslation)*ROTATION_SPEED;
+                        curXRotation += ROTATION_SPEED;
+                        //curXRotation += Math.sin(curYTranslation)*ROTATION_SPEED;
+                        //curZRotation += Math.cos(curYTranslation)*ROTATION_SPEED;
                         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
-                                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS),
-                                new Rotate(curZRotation, 1920/2, 1080/2, 0, Rotate.Z_AXIS)); // Rotate Map
+                                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS));
+                                //new Rotate(curZRotation, 1920/2, 1080/2, 0, Rotate.Z_AXIS)); // Rotate Map
                     } else if (yChange > 0) {
-                        //curXRotation -= ROTATION_SPEED;
-                        curXRotation -= Math.sin(curYTranslation)*ROTATION_SPEED;
-                        curZRotation -= Math.cos(curYTranslation)*ROTATION_SPEED;
+                        curXRotation -= ROTATION_SPEED;
+                        //curXRotation -= Math.sin(curYTranslation)*ROTATION_SPEED;
+                        //curZRotation -= Math.cos(curYTranslation)*ROTATION_SPEED;
                         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
-                                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS),
-                                new Rotate(curZRotation, 1920/2, 1080/2, 0, Rotate.Z_AXIS)); // Rotate Map
+                                new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS));
+                                //new Rotate(curZRotation, 1920/2, 1080/2, 0, Rotate.Z_AXIS)); // Rotate Map
                     }
                     mouseInSceneX = newMouseInSceneX;
                     mouseInSceneY = newMouseInSceneY;
@@ -539,12 +539,6 @@ public class ThreeDMapScreenController implements Initializable{
         threeDAnchorPane.setTranslateY(curYTranslation);
         threeDAnchorPane.setTranslateZ(curZTranslation);
 
-        /* Set Zoom
-        threeDAnchorPane.setScaleX(15);
-        threeDAnchorPane.setScaleY(15);
-        threeDAnchorPane.setScaleZ(15);
-        */
-
     }
 
     @FXML
@@ -706,7 +700,6 @@ public class ThreeDMapScreenController implements Initializable{
         Group nodeGroup = new Group();
         HashMap<String, Node> nodeSet;
         nodeSet = db.getAllNodes();
-        System.out.println("drawing nodes");
         MeshView mv = getMesh();
         ArrayList<Integer> nodeYPos = nodeFloorPos(); // Get the correct y values for the different floors
 
@@ -774,7 +767,6 @@ public class ThreeDMapScreenController implements Initializable{
                 }
             }
         }
-        System.out.println("Printed All Nodes");
         return nodeGroup;
     }
 
