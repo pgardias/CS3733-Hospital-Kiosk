@@ -20,7 +20,7 @@
 }
 
 .red-button:hover {
-    -fx-background-color: #dba111;
+    -fx-background-color: #ff7777;
     -fx-effect: dropshadow(gaussian, GRAY, 2, 0, 0, 0);
 }
 
