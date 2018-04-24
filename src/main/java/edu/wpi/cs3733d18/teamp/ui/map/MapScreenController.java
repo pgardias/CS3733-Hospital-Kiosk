@@ -911,6 +911,7 @@ public class MapScreenController {
         endNode = path.get(path.size() - 1);
         System.out.println("WHAT THE FUCK" +endNode.getFloor().toString());
         System.out.println("WHAT THE FUCK"+currentFloor);
+        System.out.println(" is the endNode on the current floor: " + endNode.getFloor().equals(currentFloor));
         if (endNode.getFloor().equals(currentFloor)) {
             javafx.scene.Node iconNode = iconDispSet.get(startNode.getID());
             iconNode.setScaleX(nodeIconScale);
