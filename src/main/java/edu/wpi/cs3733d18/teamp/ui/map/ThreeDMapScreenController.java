@@ -220,7 +220,7 @@ public class ThreeDMapScreenController implements Initializable{
         threeDAnchorPane.getChildren().add(group);
         threeDAnchorPane.getChildren().add(allLights);
         curScale = 1;
-        curXRotation = 20;
+        curXRotation = 0;
 
         // Add searchbar overlay
         addOverlay();
