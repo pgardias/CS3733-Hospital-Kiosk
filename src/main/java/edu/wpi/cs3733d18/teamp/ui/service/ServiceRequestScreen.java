@@ -209,6 +209,8 @@ public class ServiceRequestScreen implements Initializable{
         newRequestTable.setShowRoot(false);
         inProgRequestTable.setShowRoot(false);
         completedRequestTable.setShowRoot(false);
+
+        newRequestComboBox.setPromptText(" Create New Service Request");
     }
 
     /**
@@ -559,9 +561,9 @@ public class ServiceRequestScreen implements Initializable{
         Stage stage;
         Parent root;
         FXMLLoader loader;
-        System.out.println("HEY");
+
         String selection = newRequestComboBox.getValue().toString();
-        System.out.println("HI");
+
         if (selection.equals("Create New Service Request")) {
             return false;
         }
@@ -577,7 +579,6 @@ public class ServiceRequestScreen implements Initializable{
             catch (ServiceException se) {
                 se.printStackTrace();
             }
-//            newRequestComboBox.setValue("Create New Service Request");
             return true;
         }
         else if (selection.equals("Prescription Request")) {
@@ -592,7 +593,6 @@ public class ServiceRequestScreen implements Initializable{
             catch (edu.wpi.cs3733d18.teamR.ServiceException se) {
                 se.printStackTrace();
             }
-//            newRequestComboBox.setValue("Create New Service Request");
             return true;
         }
         else {
@@ -612,7 +612,6 @@ public class ServiceRequestScreen implements Initializable{
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(newRequestComboBox.getScene().getWindow());
             stage.show();
-//            newRequestComboBox.setValue("Create New Service Request");
             return true;
         }
     }

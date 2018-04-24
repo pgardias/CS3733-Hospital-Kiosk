@@ -54,7 +54,7 @@
                   <Insets top="10.0" />
                </GridPane.margin>
                 </Label>
-            <JFXComboBox fx:id="newRequestComboBox" maxWidth="350.0" onAction="#selectNewRequestOp" prefHeight="52.0" prefWidth="295.0" promptText=" Create New Service Request" style="-fx-border-width: 1; -fx-border-color: black;" unFocusColor="BLACK" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
+            <JFXComboBox fx:id="newRequestComboBox" maxWidth="350.0" onAction="#selectNewRequestOp" prefHeight="52.0" prefWidth="295.0" style="-fx-border-width: 1; -fx-border-color: black;" unFocusColor="BLACK" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
                <GridPane.margin>
                   <Insets bottom="25.0" right="10.0" />
                </GridPane.margin>
