@@ -116,9 +116,9 @@
                         <Font size="18.0" />
                     </font>
                 </JFXButton>
-            <JFXTreeTableView fx:id="newRequestTable" onContextMenuRequested="#disableMenu1OptionsOp" onMouseClicked="#onNewRequestTableClickOp" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.rowIndex="1" />
-            <JFXTreeTableView fx:id="inProgRequestTable" onContextMenuRequested="#disableMenu2OptionsOp" onMouseClicked="#onInProgRequestTableClickOp" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <JFXTreeTableView fx:id="completedRequestTable" onMouseClicked="#onCompletedRequestTableClickOp" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <JFXTreeTableView fx:id="newRequestTable" onContextMenuRequested="#disableMenu1OptionsOp" onMouseClicked="#onNewRequestTableClickOp" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <JFXTreeTableView fx:id="inProgRequestTable" onContextMenuRequested="#disableMenu2OptionsOp" onMouseClicked="#onInProgRequestTableClickOp" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <JFXTreeTableView fx:id="completedRequestTable" onMouseClicked="#onCompletedRequestTableClickOp" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
             </children>
         </GridPane>
     </center>

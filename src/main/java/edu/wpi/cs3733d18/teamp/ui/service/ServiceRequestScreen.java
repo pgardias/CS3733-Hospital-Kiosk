@@ -10,6 +10,7 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Exceptions.RequestNotFoundException;
 import edu.wpi.cs3733d18.teamp.api.Exceptions.ServiceException;
 import edu.wpi.cs3733d18.teamp.api.TransportationRequest;
+import edu.wpi.cs3733d18.teamp.ui.admin.ConfirmationPopUpController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,6 +32,7 @@ import java.util.ResourceBundle;
 
 public class ServiceRequestScreen implements Initializable{
     PopUpController popUpController;
+    ConfirmationPopUpController confirmationPopUpController;
     DBSystem db = DBSystem.getInstance();
     ArrayList<Request> requests;
     ArrayList<Request> emergencyRequests = new ArrayList<>();
@@ -569,29 +571,65 @@ public class ServiceRequestScreen implements Initializable{
         }
         else if (selection.equals("Transportation Request")) {
 
-            TransportationRequest tr = new TransportationRequest();
+            stage = new Stage();
+            loader = new FXMLLoader(getClass().getResource("/FXML/general/ConfirmationPopUp.fxml"));
 
             try {
-                tr.run(0,0,0,0, null, null, null);
-                stage = (Stage) newRequestComboBox.getScene().getWindow();
-                stage.setFullScreen(true);
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return false;
             }
-            catch (ServiceException se) {
-                se.printStackTrace();
+
+            confirmationPopUpController = loader.getController();
+            confirmationPopUpController.StartUp(this);
+            stage.setScene(new Scene(root, 600, 150));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(newRequestComboBox.getScene().getWindow());
+            stage.showAndWait();
+
+            if(confirmationPopUpController.getChoice()) {
+                TransportationRequest tr = new TransportationRequest();
+
+                try {
+                    tr.run(0, 0, 0, 0, null, null, null);
+                    stage = (Stage) newRequestComboBox.getScene().getWindow();
+                    stage.setFullScreen(true);
+                } catch (ServiceException se) {
+                    se.printStackTrace();
+                }
             }
             return true;
         }
         else if (selection.equals("Prescription Request")) {
 
-            RaikouAPI r = new RaikouAPI();
+            stage = new Stage();
+            loader = new FXMLLoader(getClass().getResource("/FXML/general/ConfirmationPopUp.fxml"));
 
             try {
-                r.run(0,0,1920,1080, null, null, null);
-                stage = (Stage) newRequestComboBox.getScene().getWindow();
-                stage.setFullScreen(true);
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return false;
             }
-            catch (edu.wpi.cs3733d18.teamR.ServiceException se) {
-                se.printStackTrace();
+
+            confirmationPopUpController = loader.getController();
+            confirmationPopUpController.StartUp(this);
+            stage.setScene(new Scene(root, 600, 150));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(newRequestComboBox.getScene().getWindow());
+            stage.showAndWait();
+
+            if(confirmationPopUpController.getChoice()) {
+                RaikouAPI r = new RaikouAPI();
+
+                try {
+                    r.run(0, 0, 1920, 1080, null, null, null);
+                    stage = (Stage) newRequestComboBox.getScene().getWindow();
+                    stage.setFullScreen(true);
+                } catch (edu.wpi.cs3733d18.teamR.ServiceException se) {
+                    se.printStackTrace();
+                }
             }
             return true;
         }
