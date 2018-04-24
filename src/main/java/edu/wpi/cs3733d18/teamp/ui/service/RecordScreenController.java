@@ -238,14 +238,7 @@ public class RecordScreenController implements Initializable {
                 setChartSubType(GiftDeliveryController.gifts);
                 break;
             case "Emergency Request":
-                recordTable.getItems().clear();
-                for (Record record: records) {
-                    if (db.RequestTypeToString(record.getRequestType()).equals("emergency")) {
-                        recordTable.getItems().add(record);
-                    }
-                }
-                statsGridPane.getChildren().remove(pieChart);
-                statsGridPane.getChildren().remove(barChart);
+                filterType = Request.requesttype.EMERGENCY;
                 setChartSubType(emergencyTypes);
                 break;
             default:
