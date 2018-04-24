@@ -881,7 +881,7 @@ public class MapScreenController {
         }
 
         startNode = path.get(0);
-        if (startNode.getFloor() == currentFloor) {
+        if (startNode.getFloor().equals(currentFloor)) {
             javafx.scene.Node iconNode = iconDispSet.get(startNode.getID());
             iconNode.setScaleX(nodeIconScale);
             iconNode.setScaleY(nodeIconScale);
@@ -909,7 +909,7 @@ public class MapScreenController {
         }
 
         endNode = path.get(path.size() - 1);
-        if (endNode.getFloor() == currentFloor) {
+        if (endNode.getFloor().equals(currentFloor)) {
             javafx.scene.Node iconNode = iconDispSet.get(startNode.getID());
             iconNode.setScaleX(nodeIconScale);
             iconNode.setScaleY(nodeIconScale);
