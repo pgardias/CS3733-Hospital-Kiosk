@@ -20,8 +20,6 @@ public class TimeConverter {
      * @return The total amount of minutes between the times
      */
     long timeDiffMinutes() {
-        System.out.println(startTime);
-        System.out.println(endTime);
         long start = startTime.getTime() / (60 * 1000); // Milliseconds / ((Seconds in Minute) * (Ms in Second))
         long end = endTime.getTime() / (60 * 1000);
 

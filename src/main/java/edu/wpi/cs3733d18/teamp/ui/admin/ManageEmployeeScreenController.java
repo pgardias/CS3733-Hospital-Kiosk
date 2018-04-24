@@ -265,7 +265,6 @@ public class ManageEmployeeScreenController implements Initializable {
         stage.showAndWait();
 
         if (confirmationPopUpController.getChoice()) {
-            System.out.println( employeeTreeTableView.getSelectionModel().getSelectedItem().getValue().getEmployeeID());
             int employeeID = employeeTreeTableView.getSelectionModel().getSelectedItem().getValue().getEmployeeID();
 
             db.deleteEmployee(employeeID);

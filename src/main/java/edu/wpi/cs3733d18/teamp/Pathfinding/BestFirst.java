@@ -42,7 +42,6 @@ public class BestFirst extends Pathfinder{
 
 
     public void findPath(Node startNode, Node endNode){
-        System.out.println("Best first");
 
         ArrayList<Node> alreadyVisited = new ArrayList<>();
         ArrayList<Node> children = new ArrayList<>();

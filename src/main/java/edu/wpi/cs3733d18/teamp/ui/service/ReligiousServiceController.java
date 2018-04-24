@@ -154,7 +154,6 @@ public class ReligiousServiceController implements Initializable {
 
     public Node parseSourceInput(String string) {
         Node aNode = new Node();
-//        System.out.println("Input string: " + string);
 
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
