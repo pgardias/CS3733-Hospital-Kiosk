@@ -1,12 +1,10 @@
 recordID,requestType,subType,totalOfType,totalTime,avgTime
-1,language interpreter,French,7,5,0
-2,language interpreter,Portuguese,3,6,2
-3,language interpreter,Japanese,1,2,2
-4,language interpreter,Spanish,2,3,1
-5,religion handler,Buddhism,1,0,0
-6,religion handler,Christianity,4,1,0
-8,computer service,Podium,2,8,4
-10,maintenance,Piping,2,4,2
-11,sanitation,Clean Biohazard Spill,2,4,2
-12,audio+visual,Drawing Pad,2,2,1
-13,delivergift,A Dozen Flowers,2,2,1
+1,religion handler,Judaism,1,1,1
+2,language interpreter,Spanish,1,0,0
+3,computer service,Laptop,1,0,0
+4,security,Patient Injuring Hospital Employees,1,0,0
+5,maintenance,Elevator,1,0,0
+6,sanitation,Clean Vomit,1,1,1
+7,audio+visual,Hearing Aid,1,0,0
+8,delivergift,Puzzle,1,0,0
+9,emergency,FIRE,1,0,0
