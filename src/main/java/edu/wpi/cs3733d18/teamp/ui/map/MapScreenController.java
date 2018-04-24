@@ -916,6 +916,7 @@ public class MapScreenController {
             iconNode.setScaleX(nodeIconScale);
             iconNode.setScaleY(nodeIconScale);
             iconNode.toFront();
+            iconNode.setOpacity(0.2);
             BounceTransition anim3 = new BounceTransition(iconNode);
             animSet.add(anim3);
             anim3.playFromStart();
