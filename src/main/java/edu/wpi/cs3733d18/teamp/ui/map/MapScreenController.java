@@ -629,9 +629,10 @@ public class MapScreenController {
 
                     for (String string : iconDispSet.keySet()) {
                         if (iconDispSet.get(string).equals(event.getSource())) {
-
+                            //if this is the icon that was pressed
                             for (int i = 0; i < stairNodeSet.size(); i += 2) {
                                 if (stairNodeSet.get(i).getID().equals(string)) {
+                                    //going down a stair node
                                     currentFloor = stairNodeSet.get(i + 1).getFloor();
                                     floorState = currentFloor.toString();
                                     foundStair = true;
@@ -644,6 +645,7 @@ public class MapScreenController {
                             }
                             for (int i = 1; i < stairNodeSet.size(); i += 2) {
                                 if (stairNodeSet.get(i).getID().equals(string)) {
+                                    //going back up a stair node
                                     currentFloor = stairNodeSet.get(i - 1).getFloor();
                                     floorState = currentFloor.toString();
                                     foundStair = true;
@@ -656,6 +658,7 @@ public class MapScreenController {
                             }
                             if (!foundStair) {
                                 clearEndNode();
+                                resetPath();
                                 Node node = nodeSet.get(string);
                                 // TODO mark stair node
                                 searchBarOverlayController.setDestinationSearchBar(node.getLongName());
@@ -892,6 +895,8 @@ public class MapScreenController {
         double maxYCoord = 0;
         double minXCoord = 5000;
         double minYCoord = 3400;
+        double xDistance = 0;
+        double yDistance = 0;
 
         for (Node n : path) {
             if (toggleOn) {
@@ -912,28 +917,6 @@ public class MapScreenController {
             //checks if if the current node should go in stair set
             checkStairNodeSet(currentNode);
 
-            //Draws the arrows
-            if (!path.get(0).equals(n)) {
-                if (toggleOn) {
-                    width = currentNode.getxDisplay() - pastNode.getxDisplay();
-                    height = currentNode.getyDisplay() - pastNode.getyDisplay();
-                } else {
-                    width = currentNode.getX() - pastNode.getX();
-                    height = currentNode.getY() - pastNode.getY();
-                }
-                angle = Math.atan2(height, width);
-                //increment the distanceCounter
-                distanceCounter += currentNode.distanceBetweenNodes(pastNode);
-                if (distanceCounter >= 0) {
-                    distanceCounter = 0;
-                    arrowFloorSet.add(currentNode.getFloor().toString());
-                    if (toggleOn) {
-                        drawTriangle(angle, pastNode.getxDisplay(), pastNode.getyDisplay());
-                    } else {
-                        drawTriangle(angle, pastNode.getX(), pastNode.getY());
-                    }
-                }
-            }
 
             //set start node to Green and end node to red
             if (path.get(0).equals(n)) {
@@ -944,16 +927,18 @@ public class MapScreenController {
                     addToStairNodeSet();
                 }
             }
+
             //Color in the path appropriately
             drawEdge(currentNode, pastNode);
 
-            //this sets the proper opacity for the arrows based on floor
-            for (int i = 0; i < arrowDispSet.size(); i++) {
-                System.out.println(arrowFloorSet.get(i));
-                if (arrowFloorSet.get(i).equals(currentFloor.toString())) {
-                    arrowDispSet.get(i).setOpacity(1.0);
+            //total up the x and y distance of the path
+            if (pastNode != null) {
+                if (toggleOn) {
+                    xDistance += (currentNode.getxDisplay() - pastNode.getxDisplay());
+                    yDistance += (currentNode.getyDisplay() - pastNode.getyDisplay());
                 } else {
-                    arrowDispSet.get(i).setOpacity(0.5);
+                    xDistance += (currentNode.getX() - pastNode.getX());
+                    yDistance += (currentNode.getY() - pastNode.getY());
                 }
             }
 
@@ -988,6 +973,27 @@ public class MapScreenController {
             searchBarOverlayController.clearTable();
             searchBarOverlayController.setDirectionsVisible(false);
             searchBarOverlayController.directionsButtonOp(null);
+        }
+
+        //Draws the arrows
+        if (toggleOn) {
+            width = path.get(1).getxDisplay() - path.get(0).getxDisplay();
+            height = path.get(1).getyDisplay() - path.get(0).getyDisplay();
+        } else {
+            width = path.get(1).getX() - path.get(0).getX();
+            height = path.get(1).getY() - path.get(0).getY();
+        }
+        angle = Math.atan2(height, width);
+        //increment the distanceCounter
+        double totalDistance = Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+        int arrowNumber = (int)(totalDistance * 1/100.0);
+        for(int i = 0; i < arrowNumber; i++){
+            arrowFloorSet.add(currentNode.getFloor().toString());
+            if (toggleOn) {
+                drawTriangle(angle, path.get(0).getxDisplay(), path.get(0).getyDisplay());
+            } else {
+                drawTriangle(angle, path.get(0).getX(), path.get(0).getY());
+            }
         }
 
         getFloors();
@@ -1040,6 +1046,12 @@ public class MapScreenController {
                         line.setStartY((e.getStart().getY() - Y_OFFSET) * Y_SCALE);
                         line.setEndX((e.getEnd().getX() - X_OFFSET) * X_SCALE);
                         line.setEndY((e.getEnd().getY() - Y_OFFSET) * Y_SCALE);
+                        if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
+                            line.setOpacity(1.0);
+                        } else {
+                            line.getStrokeDashArray().addAll(1.0, 10.0);
+                            line.setOpacity(0.5);
+                        }
                     } else {
                         line.setStartX((e.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
                         line.setStartY((e.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);

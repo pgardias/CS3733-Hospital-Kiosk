@@ -94,10 +94,11 @@ public class ArrowPathTransition {
             rotateTransition[i - 1].setByAngle(changeInAngle);
             System.out.println("end angle - current Angle = " + (endAngle - currentAngle));
             rotateTransition[i - 1].setInterpolator(Interpolator.LINEAR);
-            rotateTransition[i - 1].setDuration(new Duration(1));
+            double duration = Math.abs(changeInAngle * 5);
+            rotateTransition[i - 1].setDuration(new Duration(duration));
             rotateTransition[i - 1].setCycleCount(1);
             currentAngle = endAngle;
-            jumpDuration += 1;
+            jumpDuration += duration;
 
             //Fade Transition
             fadeTransition[i-1] = new FadeTransition();
