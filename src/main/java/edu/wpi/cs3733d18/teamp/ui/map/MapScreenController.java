@@ -744,6 +744,7 @@ public class MapScreenController {
 
         @Override
         public void handle(MouseEvent event) {
+
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
                 System.out.println("Mouse_Pressed");
                 getMouseValue(event);
@@ -923,7 +924,7 @@ public class MapScreenController {
                 angle = Math.atan2(height, width);
                 //increment the distanceCounter
                 distanceCounter += currentNode.distanceBetweenNodes(pastNode);
-                if (distanceCounter >= 175) {
+                if (distanceCounter >= 0) {
                     distanceCounter = 0;
                     arrowFloorSet.add(currentNode.getFloor().toString());
                     if (toggleOn) {
@@ -1013,9 +1014,14 @@ public class MapScreenController {
         System.out.println(toggleOn.toString());
 
         pathDrawn = true;
-        ArrowPathTransition arrowPathTransition = new ArrowPathTransition(pathMade, arrowDispSet.get(0));
-        arrowPathTransition.setPathAnim();
-        arrowPathTransition.playAnim();
+        int counter = 0;
+        for (Polygon shape: arrowDispSet) {
+            counter++;
+            ArrowPathTransition arrowPathTransition = new ArrowPathTransition(pathMade, shape, arrowDispSet.size(), currentFloor);
+            arrowPathTransition.setPathAnim();
+            arrowPathTransition.jumpToDuration(counter);
+            arrowPathTransition.playAnim();
+        }
 
     }
 
@@ -1082,9 +1088,9 @@ public class MapScreenController {
 
 
         arrow.getPoints().addAll(new Double[]{
-                x1, y1,
-                x2, y2,
                 initX, initY,
+                x2, y2,
+                x1, y1,
                 x3, y3});
         arrow.setFill(Color.rgb(200, 30, 0));
 
