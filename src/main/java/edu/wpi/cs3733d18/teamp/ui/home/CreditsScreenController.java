@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class CreditsController {
+public class CreditsScreenController {
 
     @FXML
     JFXButton backButton;
@@ -23,12 +23,9 @@ public class CreditsController {
     @FXML
     Label teamLabel;
 
-    //@FXML
-    //Label finalLabel;
-
     public void StartUp() {
         introLabel.setText(
-                "\nWe used the following API's"
+                "\nWe used the following API's:"
         );
         teamLabel.setText(
                 "\nPrescriptions API - Team R" +
