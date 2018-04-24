@@ -888,7 +888,6 @@ public class MapScreenController {
             iconNode.toFront();
             BounceTransition anim1 = new BounceTransition(iconNode);
             animSet.add(anim1);
-            System.out.println("WTF1");
             anim1.playFromStart();
         } else {
             javafx.scene.Node node = iconDispSet.get(startNode.getID());
@@ -898,7 +897,6 @@ public class MapScreenController {
             node.toFront();
             BounceTransition anim2 = new BounceTransition(node);
             animSet.add(anim2);
-            System.out.println("WTF2");
             anim2.playFromStart();
             if (!toggleOn) {
                 node.setLayoutX((startNode.getX() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
@@ -911,18 +909,13 @@ public class MapScreenController {
         }
 
         endNode = path.get(path.size() - 1);
-        System.out.println("WHAT THE FUCK" +endNode.getFloor().toString());
-        System.out.println("WHAT THE FUCK"+currentFloor);
-        System.out.println(" is the endNode on the current floor: " + endNode.getFloor().equals(currentFloor));
         if (endNode.getFloor().equals(currentFloor)) {
-            javafx.scene.Node iconNode2 = iconDispSet.get(startNode.getID());
+            javafx.scene.Node iconNode2 = iconDispSet.get(endNode.getID());
             iconNode2.setScaleX(nodeIconScale);
             iconNode2.setScaleY(nodeIconScale);
             iconNode2.toFront();
-            iconNode2.setOpacity(0.2);
             BounceTransition anim3 = new BounceTransition(iconNode2);
             animSet.add(anim3);
-            System.out.println("WTF3");
             anim3.playFromStart();
         } else {
             javafx.scene.Node node2 = iconDispSet.get(endNode.getID());
@@ -932,7 +925,6 @@ public class MapScreenController {
             node2.toFront();
             BounceTransition anim4 = new BounceTransition(node2);
             animSet.add(anim4);
-            System.out.println("WTF4");
             anim4.playFromStart();
             if (!toggleOn) {
                 node2.setLayoutX((endNode.getX() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
