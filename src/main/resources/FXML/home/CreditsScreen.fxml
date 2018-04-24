@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.home.AboutScreenController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.home.CreditsScreenController">
    <children>
       <Rectangle fill="#dadada" height="1050.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, GRAY, 5, 0.0, 0, 0);" width="1890.0" x="15.0" y="15.0" />
       <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0">
@@ -37,15 +37,7 @@
                         <Insets left="50.0" top="50.0" />
                      </GridPane.margin>
                   </JFXButton>
-                  <JFXButton fx:id="creditsButton" alignment="TOP_RIGHT" buttonType="RAISED" onAction="#creditsButtonOp" styleClass="blue-button" stylesheets="@../../css/common.css" text="Credits" textFill="WHITE" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
-                     <font>
-                        <Font size="25.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets right="150.0" top="25.0" />
-                     </GridPane.margin>
-                  </JFXButton>
-                  <Label text="About Us" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                  <Label text="Credits" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                      <font>
                         <Font size="30.0" />
                      </font>
@@ -64,7 +56,7 @@
                   <RowConstraints maxHeight="736.0" minHeight="600.0" prefHeight="736.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label fx:id="teamLabel" textAlignment="CENTER" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                  <Label fx:id="teamLabel" textAlignment="CENTER" wrapText="true" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                      <font>
                         <Font name="System Italic" size="25.0" />
                      </font>
@@ -74,15 +66,10 @@
                   </Label>
                   <Label fx:id="introLabel" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
                      <GridPane.margin>
-                        <Insets top="5.0" />
+                        <Insets />
                      </GridPane.margin>
                      <font>
                         <Font size="28.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="finalLabel" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                     <font>
-                        <Font size="25.0" />
                      </font>
                   </Label>
                   <ImageView fitHeight="150.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
@@ -131,21 +118,16 @@
             </GridPane>
          </right>
          <bottom>
-            <GridPane prefHeight="43.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
+            <GridPane prefHeight="16.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
-               <children>
-                  <Label text="The Brigham &amp; Women’s Hospital maps and data used in this application are copyrighted and provided for the sole use of educational purposes." GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="TOP">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Label>
-               </children>
             </GridPane>
          </bottom>
       </BorderPane>
