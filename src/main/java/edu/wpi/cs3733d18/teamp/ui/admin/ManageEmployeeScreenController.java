@@ -69,6 +69,10 @@ public class ManageEmployeeScreenController implements Initializable {
 
     ArrayList<TreeItem<EmployeeTable>> employeeTableChildren;
 
+    MenuItem mi7 = new MenuItem("Modify Employee");
+    MenuItem mi8 = new MenuItem("Delete Employee");
+    ContextMenu menu3 = new ContextMenu();
+
     @FXML
     public boolean onStartUp(){
         employees = db.getAllEmployees();
@@ -164,6 +168,18 @@ public class ManageEmployeeScreenController implements Initializable {
 
         employeeTreeTableView.getColumns().addAll(employeeIDTableViewColumn, userNameColumn, firstNameColumn,lastNameColumn,
                 permissionsColumn, employeeTypeColumn, employeeSubTypeColumn);
+
+        mi7.setOnAction((ActionEvent event) -> {
+            modifyEmployeeInfoButtonOp(event);
+        });
+
+        mi8.setOnAction((ActionEvent event) -> {
+            removeEmployeeButtonOp(event);
+        });
+
+        menu3.getItems().add(mi7);
+        menu3.getItems().add(mi8);
+        employeeTreeTableView.setContextMenu(menu3);
     }
 
     @FXML
