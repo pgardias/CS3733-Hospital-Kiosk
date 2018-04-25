@@ -100,37 +100,7 @@ public class EmergencyRequestButtonScreenController {
             return null;
         }
     };
-
-    public Thread timer = new Thread(() -> {
-        try {
-            int timeout = 5000;
-            int counter = 0;
-            while(!Thread.interrupted()){
-                Thread.sleep(5);
-                counter += 5;
-                if (counter >= timeout){
-                    Scene scene;
-                    Parent root;
-                    FXMLLoader loader;
-
-                    scene = backButton.getScene();
-
-                    loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
-                    try {
-                        root = loader.load();
-                        scene.setRoot(root);
-                    } catch (IOException ie) {
-                        ie.printStackTrace();
-                    }
-                    break;
-                }
-            }
-        } catch (InterruptedException v) {
-            System.out.println(v);
-        }
-
-    });
-
+    
     EventHandler<MouseEvent> testMouseEvent = new EventHandler<MouseEvent>() {
 
         @Override
