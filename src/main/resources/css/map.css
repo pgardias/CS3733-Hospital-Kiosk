@@ -1,14 +1,41 @@
 .floor-buttons {
     -jfx-button-type: RAISED;
-    -fx-background-color: #0b2f5b;
-    -fx-text-fill: #F5BC3A;
-    -fx-background-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
+    -fx-background-color: WHITE;
+    -fx-text-fill: #0b2f5b;
+    -fx-background-radius: 5;
 }
+
+.floor-buttons:hover {
+    -fx-background-color: #f5f5f5;
+}
+
+.highlight-floor-button {
+    -fx-background-color: #F5BC3A;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
+    -fx-text-fill: #0b2f5b;
+    -jfx-button-type: RAISED;
+    -fx-background-radius: 5;
+}
+
+/*.floor-buttons {*/
+    /*-jfx-button-type: RAISED;*/
+    /*-fx-background-color: #0b2f5b;*/
+    /*-fx-text-fill: #F5BC3A;*/
+    /*-fx-background-radius: 20;*/
+/*}*/
+
+/*.highlight-floor-button {*/
+    /*-fx-background-color: #F5BC3A;*/
+    /*-fx-text-fill: #0b2f5b;*/
+    /*-jfx-button-type: RAISED;*/
+    /*-fx-background-radius: 20;*/
+/*}*/
 
 .yellow-button {
     -jfx-button-type: RAISED;
     -fx-background-color: WHITESMOKE;
-    /*-fx-background-radius: 40;*/
+    -fx-background-radius: 5;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
 }
 .yellow-button:hover {
@@ -16,9 +43,3 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
 }
 
-.highlight-floor-button {
-    -fx-background-color: #F5BC3A;
-    -fx-text-fill: #0b2f5b;
-    -jfx-button-type: RAISED;
-    -fx-background-radius: 20;
-}

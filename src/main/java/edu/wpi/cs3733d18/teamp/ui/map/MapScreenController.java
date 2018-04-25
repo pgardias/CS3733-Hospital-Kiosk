@@ -1,7 +1,7 @@
 package edu.wpi.cs3733d18.teamp.ui.map;
 
 import com.jfoenix.controls.JFXButton;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import de.jensd.fx.glyphs.GlyphIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
@@ -713,12 +713,15 @@ public class MapScreenController {
         if (usingDesignIcon) {
             designIcon.setSize(Integer.toString(MAP_ICON_SIZE - 3));
             designIcon.setTranslateY(-2);
-            return new StackPane(iconShapeVBox, designIcon);
+            StackPane sp = new StackPane(iconShapeVBox, designIcon);
+            sp.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0)");
+            return sp;
         } else {
-            icon.setStyle("-icons-color: WHITE;");
             icon.setSize(Integer.toString(MAP_ICON_SIZE - 3));
             icon.setTranslateY(-2);
-            return new StackPane(iconShapeVBox, icon);
+            StackPane sp = new StackPane(iconShapeVBox, icon);
+            sp.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0)");
+            return sp;
         }
     }
 
@@ -870,6 +873,7 @@ public class MapScreenController {
         startNode = path.get(0);
         if (startNode.getFloor().equals(currentFloor)) {
             javafx.scene.Node iconNode = iconDispSet.get(startNode.getID());
+//            ((GlyphIcon) ((StackPane) iconNode).getChildren().get(1)).setSize(Double.toString(MAP_ICON_SIZE * nodeIconScale));
             iconNode.setScaleX(nodeIconScale);
             iconNode.setScaleY(nodeIconScale);
             iconNode.toFront();

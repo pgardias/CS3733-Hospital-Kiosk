@@ -35,23 +35,23 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <JFXButton fx:id="goButton" buttonType="RAISED" defaultButton="true" onAction="#searchButtonOp" prefHeight="65.0" prefWidth="179.0" ripplerFill="#f0f0f0" styleClass="yellow-button" stylesheets="@../../css/map.css" text="Find Path" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                <JFXButton fx:id="goButton" buttonType="RAISED" defaultButton="true" onAction="#searchButtonOp" prefHeight="70.0" prefWidth="179.0" ripplerFill="WHITE" styleClass="blue-button" stylesheets="@../../css/map.css" text="Find Path" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                     <font>
                         <Font size="25.0" />
                     </font>
                     <GridPane.margin>
-                        <Insets bottom="10.0" right="20.0" />
+                        <Insets bottom="20.0" right="20.0" />
                     </GridPane.margin>
                 </JFXButton>
-                <JFXToggleButton fx:id="mapToggleButton" onAction="#mapToggleButtonOp" prefWidth="242.0" selected="true" size="15.0" stylesheets="@../../css/map.css" text="3D View" toggleColor="#0b2f5b" toggleLineColor="#bfbfbf" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                <JFXToggleButton fx:id="mapToggleButton" onAction="#mapToggleButtonOp" selected="true" size="15.0" stylesheets="@../../css/map.css" text="3D View" toggleColor="#0b2f5b" toggleLineColor="#bfbfbf" unToggleColor="#d0d0d0" unToggleLineColor="#949494" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                     <font>
                         <Font size="24.0" />
                     </font>
                     <GridPane.margin>
-                        <Insets right="10.0" top="10.0" />
+                        <Insets right="20.0" top="15.0" />
                     </GridPane.margin>
                 </JFXToggleButton>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f0f0" height="70.0" stroke="#e5e5e5" strokeType="INSIDE" strokeWidth="2.0" width="675.0" GridPane.valignment="TOP">
+            <Rectangle arcHeight="10.0" arcWidth="10.0" fill="WHITE" height="70.0" stroke="#e5e5e5" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);" width="675.0" GridPane.valignment="TOP">
                <GridPane.margin>
                   <Insets left="35.0" top="20.0" />
                </GridPane.margin>
@@ -61,14 +61,14 @@
                         <Insets left="50.0" />
                     </GridPane.margin>
                 </JFXComboBox>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f0f0f0" height="70.0" stroke="#e5e5e5" strokeType="INSIDE" strokeWidth="2.0" width="675.0" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
+            <Rectangle arcHeight="10.0" arcWidth="10.0" fill="WHITE" height="70.0" stroke="#e5e5e5" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);" width="675.0" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
                <GridPane.margin>
-                  <Insets bottom="20.0" left="35.0" />
+                  <Insets bottom="25.0" left="35.0" />
                </GridPane.margin>
             </Rectangle>
                 <JFXComboBox fx:id="destinationSearchBar" editable="true" focusColor="#f5bc3a" prefHeight="50.0" prefWidth="650.0" promptText="End Location" style="-fx-font-size: 25px;" unFocusColor="#0b2f5b" GridPane.rowIndex="1">
                     <GridPane.margin>
-                        <Insets bottom="15.0" left="50.0" />
+                        <Insets bottom="20.0" left="50.0" />
                     </GridPane.margin>
                 </JFXComboBox>
             </children>
@@ -131,9 +131,9 @@
                     </GridPane.margin></JFXButton>
             </children>
         </GridPane>
-        <JFXButton fx:id="directionsButton" buttonType="RAISED" onAction="#directionsButtonOp" prefHeight="95.0" prefWidth="185.0" styleClass="yellow-button" stylesheets="@../../css/map.css" text="Directions" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+        <JFXButton fx:id="directionsButton" buttonType="RAISED" onAction="#directionsButtonOp" prefHeight="80.0" prefWidth="160.0" styleClass="yellow-button" stylesheets="@../../css/map.css" text="Directions" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
             <font>
-                <Font size="20.0" />
+                <Font size="24.0" />
             </font>
             <GridPane.margin>
                 <Insets bottom="20.0" left="250.0" top="15.0" />
