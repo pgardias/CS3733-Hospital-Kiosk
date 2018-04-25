@@ -27,6 +27,16 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
 }
 
+.delete-button {
+    -fx-background-color: RED;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
+}
+
+.submit-button {
+    -fx-background-color: #add8e6;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
+}
+
 .mobile {
     -fx-background-color: #F5BC3A;
     -fx-background-image: url(../img/icons/mobile.png) no-repeat center center fixed;
