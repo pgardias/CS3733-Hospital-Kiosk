@@ -25,19 +25,13 @@ abstract public class Pathfinder {
      */
     public ArrayList<Node> getPath(Node node) {
         ArrayList<Node> tempPath = new ArrayList<Node>();
-//        System.out.println("Node given: " + n.toString());
         while (node.hasParent()) {
-//            System.out.println("Parent: " + n.getParent());
             tempPath.add(node);
             node = node.getParent();
         }
         tempPath.add(node);
-//        System.out.println("tempPath: " + tempPath);
         ArrayList<Node> path = (ArrayList<Node>) tempPath.clone();
 
-//        System.out.println("tempPath.size(): " + tempPath.size());
-//        System.out.println("path: " + path);
-//        System.out.println("path.size(): " + path.size());
         for (int i = 0; i < tempPath.size() / 2; i++) {
             path.set(tempPath.size() - i - 1, tempPath.get(i));
             path.set(i, tempPath.get(tempPath.size() - i - 1));

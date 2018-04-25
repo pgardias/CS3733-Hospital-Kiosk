@@ -215,7 +215,6 @@ public class MapScreenController {
 
     @FXML
     public void floorL1ButtonOp(ActionEvent e) {
-        System.out.println("level L1");
         floorState = floorL1Button.getText();
         currentFloor = Node.floorType.LEVEL_L1;
 
@@ -385,38 +384,28 @@ public class MapScreenController {
     @FXML
     public void zoomScrollWheel(ScrollEvent s) {
         double newValue = (s.getDeltaY()) / 200.0 + zoomSlider.getValue();
-        System.out.println("mouse scroll change: " + s.getDeltaY());
-        System.out.println("source: " + s.getSource().toString());
         double change = 0;
 
         if ((s.getDeltaY() < 0) && (zoomSlider.getValue() != zoomSlider.getMin())) change = 1;
         if ((s.getDeltaY() > 0) && (zoomSlider.getValue() != zoomSlider.getMax())) change = 1;
-        System.out.println("s.getDeltaY: " + s.getDeltaY());
-        System.out.println("change: " + change);
 
         double mouseX = s.getSceneX();
         double mouseY = s.getSceneY();
-        System.out.println("mouseX: " + mouseX + " mouseY: " + mouseY);
 
         double orgTranslateX = mapImage.getTranslateX();
         double orgTranslateY = mapImage.getTranslateY();
-        System.out.println("orgTranslate X: " + orgTranslateX + " orgTranslate Y: " + orgTranslateY);
 
         double mouseAdjustX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE * (mouseX / 1920.0)));
         double mouseAdjustY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE * (mouseY / 1080.0)));
-        System.out.println("mouse adjustX: " + mouseAdjustX + " mouse adjustY: " + mouseAdjustY);
 
         double imageCenterX = (orgTranslateX + (IMG_WIDTH * zoomSlider.getValue() * X_SCALE * 0.5));
         double imageCenterY = (orgTranslateY + (IMG_HEIGHT * zoomSlider.getValue() * Y_SCALE * 0.5));
-        System.out.println(" image centerx : " + imageCenterX + " image centery: " + imageCenterY);
 
         double mouseChangeX = mouseAdjustX - imageCenterX;
         double mouseChangeY = mouseAdjustY - imageCenterY;
-        System.out.println("Mouse ChangeX: " + mouseChangeX + " Mouse Change Y: " + mouseChangeY);
 
         newTranslateX = (orgTranslateX * zoomSlider.getValue() / zoomForTranslate) - (change * mouseChangeX * s.getDeltaY() / 256.0);
         newTranslateY = (orgTranslateY * zoomSlider.getValue() / zoomForTranslate) - (change * mouseChangeY * s.getDeltaY() / 256.0);
-        System.out.println("new translate x: " + newTranslateX + " new translate Y: " + newTranslateY);
 
         zoomSlider.setValue(newValue);
 
@@ -450,7 +439,6 @@ public class MapScreenController {
     public void drawNodes() {
         HashMap<String, Node> nodeSet;
         nodeSet = db.getAllNodes();
-        System.out.println("drawing icons");
         List<Node> orderedNodes = new ArrayList<>();
         for (Node node : nodeSet.values()) {
             orderedNodes.add(node);
@@ -554,7 +542,6 @@ public class MapScreenController {
                     }
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED && popOverHidden) {
-                System.out.println("MOUSE_ENTERED event at " + event.getSource());
                 for (String string : iconDispSet.keySet()) {
                     if (iconDispSet.get(string) == event.getSource()) {
                         if (popOver != null && popOver.getOpacity() == 0) {
@@ -707,7 +694,6 @@ public class MapScreenController {
                 break;
             }
             default: {
-                System.out.println("Attempting to construct an icon for an unknown node type failed.");
                 return null;
             }
         }
@@ -728,7 +714,6 @@ public class MapScreenController {
     EventHandler<ScrollEvent> nodeScrollHandler = new EventHandler<ScrollEvent>() {
         @Override
         public void handle(ScrollEvent event) {
-            System.out.println("handle node scroll event");
             zoomScrollWheel(event);
             event.consume();
         }
@@ -743,14 +728,11 @@ public class MapScreenController {
         @Override
         public void handle(MouseEvent event) {
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                System.out.println("Mouse_Pressed");
                 getMouseValue(event);
                 isDragging = false;
             } else if (event.getEventType() == MouseEvent.DRAG_DETECTED) {
-                System.out.println("Drag_Detected");
                 isDragging = true;
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-                System.out.println("Mouse_Dragged");
                 double offsetX = event.getSceneX() - orgSceneX;
                 double offsetY = event.getSceneY() - orgSceneY;
                 newTranslateX = orgTranslateX + offsetX;
@@ -761,7 +743,6 @@ public class MapScreenController {
                 double translateSlopeX = X_SCALE * mapImage.getScaleX() * IMG_WIDTH;
                 double translateSlopeY = Y_SCALE * mapImage.getScaleY() * IMG_HEIGHT;
 
-                System.out.println("Offset X: " + offsetX + " Offset Y: " + offsetY);
                 if (newTranslateX > (translateSlopeX - 1920) / 2)
                     newTranslateX = (translateSlopeX - 1920) / 2;
                 if (newTranslateX < -(translateSlopeX - 1920) / 2)
@@ -786,11 +767,6 @@ public class MapScreenController {
     EventHandler<MouseEvent> labelEventHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
-            System.out.println("mouseEvent: " + event.getEventType().toString());
-            if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
-                System.out.println("Label Clicked");
-
-            }
         }
     };
 
@@ -802,7 +778,6 @@ public class MapScreenController {
                 String regex = "Floor ";
                 floor = button.getText();
                 floor = floor.replace(regex, "");
-                System.out.println(floor);
                 button.setOpacity(1.0);
             }
         }
@@ -1001,7 +976,6 @@ public class MapScreenController {
 
             //this sets the proper opacity for the arrows based on floor
             for (int i = 0; i < arrowDispSet.size(); i++) {
-                System.out.println(arrowFloorSet.get(i));
                 if (arrowFloorSet.get(i).equals(currentFloor.toString())) {
                     arrowDispSet.get(i).setOpacity(1.0);
                 } else {
@@ -1009,7 +983,6 @@ public class MapScreenController {
                 }
             }
 
-            System.out.println("list of stair nodes: " + stairNodeSet.toString());
             minXCoord -= 200;
             minYCoord -= 400;
             maxXCoord += 200;
@@ -1019,14 +992,11 @@ public class MapScreenController {
 
             double desiredZoomX = 1920 / (rangeX * X_SCALE);
             double desiredZoomY = 1080 / (rangeY * Y_SCALE);
-            System.out.println("desired X zoom: " + desiredZoomX + " desired Zoom Y: " + desiredZoomY);
 
             double centerX = (maxXCoord + minXCoord) / 2;
             double centerY = (maxYCoord + minYCoord) / 2;
 
             autoTranslateZoom(desiredZoomX, desiredZoomY, centerX, centerY);
-
-            System.out.println(toggleOn.toString());
 
             pathDrawn = true;
         }
@@ -1061,7 +1031,6 @@ public class MapScreenController {
             }
         }
 
-        System.out.println("list of stair nodes: " + stairNodeSet.toString());
         minXCoord -= 200;
         minYCoord -= 400;
         maxXCoord += 200;
@@ -1071,14 +1040,11 @@ public class MapScreenController {
 
         double desiredZoomX = 1920 / (rangeX * X_SCALE);
         double desiredZoomY = 1080 / (rangeY * Y_SCALE);
-        System.out.println("desired X zoom: " + desiredZoomX + " desired Zoom Y: " + desiredZoomY);
 
         double centerX = (maxXCoord + minXCoord) / 2;
         double centerY = (maxYCoord + minYCoord) / 2;
 
         autoTranslateZoom(desiredZoomX, desiredZoomY, centerX, centerY);
-
-        System.out.println(toggleOn.toString());
 
         pathDrawn = true;
     }
@@ -1102,8 +1068,6 @@ public class MapScreenController {
 
         initX = (initX - X_OFFSET) * X_SCALE;
         initY = (initY - Y_OFFSET) * Y_SCALE;
-
-        //System.out.println("X:  " + initX + "  Y:  " + initY);
 
         x1 = initX + (9 * Math.cos(angle));
         y1 = initY + (9 * Math.sin(angle));
@@ -1217,20 +1181,16 @@ public class MapScreenController {
         if (zoom > zoomSlider.getMax()) zoom = zoomSlider.getMax();
         if (zoom < zoomSlider.getMin()) zoom = zoomSlider.getMin();
 
-        System.out.println("chosen zoom: " + zoom);
 
         zoomSlider.setValue(zoom);
 
-        System.out.println("Center X: " + centerX + " Center Y: " + centerY);
         double screenX = (centerX - X_OFFSET) * X_SCALE;
         double screenY = (centerY - Y_OFFSET) * Y_SCALE;
-        System.out.println("Screen x: " + screenX + " Screen Y: " + screenY);
 
         double translateX = 960 - screenX;
         double translateY = 540 - screenY;
         double screenTranslateX = (translateX * zoom);
         double screenTranslateY = (translateY * zoom);
-        System.out.println("translate X: " + translateX + " translate Y: " + translateY);
 
         double translateSlopeX = X_SCALE * mapImage.getScaleX() * IMG_WIDTH;
         double translateSlopeY = Y_SCALE * mapImage.getScaleY() * IMG_HEIGHT;
@@ -1243,7 +1203,6 @@ public class MapScreenController {
         if (screenTranslateY < -(translateSlopeY - 1080) / 2)
             screenTranslateY = -(translateSlopeY - 1080) / 2;
 
-        System.out.println("Chosen translate X: " + screenTranslateX + " Chosen translate Y: " + screenTranslateY);
         mapImage.setTranslateX(screenTranslateX);
         mapImage.setTranslateY(screenTranslateY);
         nodesPane.setTranslateX(screenTranslateX);
@@ -1268,9 +1227,7 @@ public class MapScreenController {
         }
         if (stairNodeSet.size() > 1)
             floorsList.add(stairNodeSet.get(stairNodeSet.size() - 1).getFloor());
-        System.out.println("size of stairNodeSet: " + stairNodeSet.size());
-        System.out.println("Floors in floorslist: " + floorsList.toString());
-    }
+        }
 
     /**
      * creates the labels and puts them in the hbox
@@ -1309,7 +1266,6 @@ public class MapScreenController {
 
         if (!floorsList.equals(null)) {
             for (int i = 0; i < floorsList.size(); i++) {
-                System.out.println("Created new LabeL");
 
                 JFXButton button = new JFXButton();
                 floorSequenceHBox.getChildren().add(button);
