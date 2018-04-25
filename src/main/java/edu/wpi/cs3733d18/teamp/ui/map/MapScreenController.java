@@ -715,13 +715,13 @@ public class MapScreenController {
             designIcon.setSize(Integer.toString(MAP_ICON_SIZE - 3));
             designIcon.setTranslateY(-2);
             StackPane sp = new StackPane(iconShapeVBox, designIcon);
-            sp.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0)");
+            sp.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 2.0, 0.7, 0.0, 0.0)");
             return sp;
         } else {
             icon.setSize(Integer.toString(MAP_ICON_SIZE - 3));
             icon.setTranslateY(-2);
             StackPane sp = new StackPane(iconShapeVBox, icon);
-            sp.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0)");
+            sp.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 2.0, 0.7, 0.0, 0.0)");
             return sp;
         }
     }
@@ -1060,7 +1060,7 @@ public class MapScreenController {
                             line.setOpacity(1.0);
                         } else {
                             line.getStrokeDashArray().addAll(1.0, 10.0);
-                            line.setOpacity(0.5);
+                            line.setOpacity(0.75);
                         }
                     } else {
                         line.setStartX((e.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
@@ -1071,7 +1071,8 @@ public class MapScreenController {
                             line.setOpacity(1.0);
                         } else {
                             line.getStrokeDashArray().addAll(1.0, 10.0);
-                            line.setOpacity(0.5);
+                            line.setStrokeDashOffset(0);
+                            line.setOpacity(0.75);
                         }
                     }
                     System.out.println("Line start x: " + line.getStartX() + " line start y: " + line.getStartY());
@@ -1295,16 +1296,18 @@ public class MapScreenController {
                     button.setShape(arrow);
                     button.setAlignment(Pos.CENTER_RIGHT);
                 }
+                button.setStyle("-fx-background-color: #ADD8E6;");
                 if (!currentFloor.equals(floorsList.get(i))) {
-                    button.setOpacity(0.5);
+                    button.setStyle("-fx-background-color: #F5BC3A;");
                 }
                 button.setMinHeight(75);
-                button.setMinWidth(125);
-                button.setPadding(new Insets(20));
+                button.setMinWidth(150);
+                button.setPadding(new Insets(30));
                 button.setButtonType(JFXButton.ButtonType.RAISED);
+                button.setFont(new Font(18));
                 button.setOnAction(e -> floorSequenceButtonOp(e));
                 button.setText("Floor " + floorsList.get(i).toString());
-                button.setStyle("-fx-background-color: red;");
+
             }
         }
 
