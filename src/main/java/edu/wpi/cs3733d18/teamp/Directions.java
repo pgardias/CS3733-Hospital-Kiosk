@@ -63,9 +63,6 @@ public class Directions {
             node = path.get(i);
             nextNode = path.get(i+1);
 
-            System.out.println("pastNode: " + pastNode + " node: " + node + " nextNode: " + nextNode);
-
-
             if (pastNode != null) {
                 // Set new values according to new nodes
                 distance += node.distanceBetweenNodes(pastNode);
@@ -84,7 +81,6 @@ public class Directions {
 
                 switch (direction) {
                     case STAIRS:
-                        System.out.println("Stairs");
                         words = "Take the stairs " + floorsMessage(pastNode, node);
                         directions.add(words);
                         changeDirections = true;
@@ -92,7 +88,6 @@ public class Directions {
                         break;
 
                     case ELEVATORS:
-                        System.out.println("Elevator");
                         words = "Take the elevator " + floorsMessage(pastNode, node);
                         directions.add(words);
                         changeDirections = true;
@@ -100,49 +95,41 @@ public class Directions {
                         break;
 
                     case TURN_AROUND:
-                        System.out.println("Turn around");
                         words = "Turn around at " + node.getLongName();
                         changeDirections = true;
                         break;
 
                     case HARD_LEFT:
-                        System.out.println("Hard left");
                         words = "Make a hard left at " + node.getLongName();
                         changeDirections = true;
                         break;
 
                     case HARD_RIGHT:
-                        System.out.println("Hard right");
                         words = "Make a hard right at " + node.getLongName();
                         changeDirections = true;
                         break;
 
                     case LEFT:
-                        System.out.println("Left");
                         words = "Make a left at " + node.getLongName();
                         changeDirections = true;
                         break;
 
                     case RIGHT:
-                        System.out.println("Right");
                         words = "Make a right at " + node.getLongName();
                         changeDirections = true;
                         break;
 
                     case SLIGHT_LEFT:
-                        System.out.println("Slight left");
                         words = "Make a slight left at " + node.getLongName();
                         changeDirections = true;
                         break;
 
                     case SLIGHT_RIGHT:
-                        System.out.println("Slight right");
                         words = "Make a slight right at " + node.getLongName();
                         changeDirections = true;
                         break;
 
                     case STRAIGHT:
-                        System.out.println("Straight");
                         if (!changeDirections) {
 //                            distance += node.distanceBetweenNodes(pastNode);
                         } else {
@@ -153,14 +140,11 @@ public class Directions {
                 }
 
                 if (changeDirections && !floorChange) {
-                    System.out.println("direction changes!");
-                    System.out.println("distance: " + distance * Main.settings.getFeetPerPixel());
                     directions.add(getDistanceString(distance, node, pastNode));
                     directions.add(words);
                     distance = 0;
                 }
 
-                System.out.println("");
             }
         }
         directions.add(getDistanceString(distance, nextNode, node));
@@ -222,8 +206,6 @@ public class Directions {
         if (angleDiff > 180) {
             angleDiff -= 360;
         }
-
-//        System.out.println("angleDiff: " + angleDiff);
 
         if (node1.getType().equals(Node.nodeType.STAI) && node2.getType().equals(Node.nodeType.STAI)) {
             return STAIRS;

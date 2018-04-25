@@ -227,7 +227,6 @@ public class EdgeRepo {
             ResultSet results = pstmt.executeQuery();
 
             if (!results.next()) {
-                System.out.println(node.getID());
                 throw new EdgeNotFoundException();
             } else {
                 do {
@@ -251,7 +250,6 @@ public class EdgeRepo {
             se.printStackTrace();
         } catch (NodeNotFoundException e) {
             e.printStackTrace();
-            System.out.println(e.getNodeID());
         }
         return edges;
     }

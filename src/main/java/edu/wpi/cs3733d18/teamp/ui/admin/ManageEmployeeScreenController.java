@@ -65,27 +65,12 @@ public class ManageEmployeeScreenController implements Initializable {
     final ObservableList<EmployeeTable> employed = FXCollections.observableArrayList();
 
 
-//    public void populateEmployeeTableView(){
-//
-//        employees = db.getAllEmployees();
-//
-//
-//
-//        for(HashMap.Entry<String, Employee> employee: employees.entrySet()){
-//            System.out.println(employee.getValue().isAdminToString());
-//            employed.add(new EmployeeTable(employee.getValue().getUserName(), employee.getValue().getFirstName(), employee.getValue().getLastName(),
-//                    employee.getValue().isAdminToString(), employee.getValue().getEmployeeType().toString(), employee.getValue().getSubType()));
-//        }
-//
-//        //employeeListTableView.setItems(employed);
-//    }
 
     @FXML
     public boolean onStartUp(){
         employees = db.getAllEmployees();
 
         for(HashMap.Entry<String, Employee> employee: employees.entrySet()){
-            System.out.println(employee.getValue().isAdminToString());
             employed.add(new EmployeeTable(employee.getValue().getEmployeeID(), employee.getValue().getUserName(), employee.getValue().getFirstName(), employee.getValue().getLastName(),
                     employee.getValue().isAdminToString(), employee.getValue().getEmployeeType().toString(), employee.getValue().getSubType()));
         }

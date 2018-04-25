@@ -229,7 +229,6 @@ public class RecordRepo {
             pstmt.setString(1, type);
             ResultSet results = pstmt.executeQuery();
             if (!results.next()) {
-                System.out.println("No requests of subtype "+type);
                 return 0; // No requests of this subtype
             }else{
                 do {
@@ -258,7 +257,6 @@ public class RecordRepo {
             pstmt.setString(1, subType);
             ResultSet results = pstmt.executeQuery();
             if (!results.next()) {
-                System.out.println("No requests of subtype "+subType);
                 return 0; // No requests of this subtype
             }
             totalCount =  results.getInt(4); // Return row count
@@ -284,7 +282,6 @@ public class RecordRepo {
             pstmt.setString(1, type);
             ResultSet results = pstmt.executeQuery();
             if (!results.next()) {
-                System.out.println("No requests of type "+type);
                 return 0; // No requests of this subtype
             }else{
                 do {
@@ -313,7 +310,6 @@ public class RecordRepo {
             pstmt.setString(1, subType);
             ResultSet results = pstmt.executeQuery();
             if (!results.next()) {
-                System.out.println("No requests of subtype "+subType);
                 return 0; // No requests of this subtype
             }
             totalCount = results.getInt(6);
@@ -375,11 +371,9 @@ public class RecordRepo {
 
         // If record exists, update it
         else {
-            System.out.println("UPDATING RECORD");
             updateRecord(curRecord, newRequest);
         }
 
-        System.out.println("TIME AT END OF RECORD HANDLING: "+newRequest.getTimeCompleted());
 
         return true;
     }

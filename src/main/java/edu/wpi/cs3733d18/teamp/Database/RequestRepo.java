@@ -160,7 +160,6 @@ public class RequestRepo {
     Boolean modifyRequest(Request request){
         try {
             conn = DriverManager.getConnection(DB_URL);
-            System.out.println("MODIFY REQUEST: "+request.getTimeCompleted());
 
             // Prepare statement
             String sql = "UPDATE REQUEST_INFO " +
@@ -215,7 +214,6 @@ public class RequestRepo {
             pstmt.setInt(4, request.getRequestID());
 
             // Make sure statement executes correctly
-            System.out.println("Hello: " + pstmt.executeUpdate());
             if(pstmt.executeUpdate() >= 0){
                 success = true;
             }
