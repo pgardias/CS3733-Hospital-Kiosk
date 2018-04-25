@@ -77,6 +77,7 @@ public class ThreeDMapScreenController implements Initializable{
 
     // DB instance
     DBSystem db = DBSystem.getInstance();
+    String floorState;
 
     // Display hashmaps
     private ArrayList<MeshView[]> allModels = new ArrayList<>();
@@ -990,6 +991,10 @@ public class ThreeDMapScreenController implements Initializable{
         Node currentNode = null, pastNode = null;
         if (pathMade != null) {
             resetPath();
+        }else{
+            Node.floorType floor = path.get(0).getFloor();
+            floorState = floor.toString();
+            currentFloor = floor;
         }
 
         stairNodeSet.clear();
@@ -1084,6 +1089,7 @@ public class ThreeDMapScreenController implements Initializable{
                 arrowDispSet.get(i).setOpacity(0.3);
             }
         }*/
+
 
         // Create PopOver for Stair or Elevator nodes
         for (int i = 0; i < stairNodeSet.size(); i += 2) {
@@ -1312,7 +1318,15 @@ public class ThreeDMapScreenController implements Initializable{
             floorsList.add(stairNodeSet.get(stairNodeSet.size()-1).getFloor());
     }
 
+    public Node.floorType getCurrentFloor() {
+        return currentFloor;
+    }
+
     public ArrayList<Node.floorType> getFloorsList(){
         return floorsList;
+    }
+
+    public boolean getDirVisible(){
+        return searchBarOverlayController.getDirectionsVisible();
     }
 }
