@@ -151,15 +151,16 @@ public class SearchBarOverlayController implements Initializable{
         threeDButton.setOpacity(0.0);
         threeDButton.setDisable(true);
         this.threeDMapScreenController = threeDMapScreenController;
+
         mapToggleButton.setVisible(false);
-        if (!threeDMapScreenController.getPathDrawn()) {
+        if (!threeDMapScreenController.getPathDrawn() && !directionsVisible) {
             directionsTreeTableView.setVisible(false);
             directionsButton.setVisible(false);
             emailButton.setVisible(false);
             phoneButton.setVisible(false);
             directionsRectangle.setVisible(false);
-            is3D = true;
         }
+        is3D = true;
     }
 
     public Boolean isSourceFocused(){
@@ -270,6 +271,7 @@ public class SearchBarOverlayController implements Initializable{
         }
         else if (pathDrawn) {
             threeDMapScreenController.resetPath();
+            clearTable();
         }
         //get all nodes
         HashMap<String, Node> nodeSet = db.getAllNodes();
@@ -314,7 +316,6 @@ public class SearchBarOverlayController implements Initializable{
         }
 
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
-        mapScreenController.drawPath(path);
         pathDrawn = true;
         if (!is3D) {
             mapScreenController.drawPath(path);
@@ -551,17 +552,18 @@ public class SearchBarOverlayController implements Initializable{
                     setParents(threeDMapScreenController.getFloorsList());
                 }
 
-                setChildren(directionsList.getDirections());
+            setChildren(directionsList.getDirections());
 
-                directionsTreeTableView.setShowRoot(false);
+            directionsTreeTableView.setShowRoot(false);
 
 
-                directionsButton.setText("Directions X");
-                directionsVisible = true;
-                if (!is3D) {
-                    expandDirections(mapScreenController.getCurrentFloor());
-                }
+            directionsButton.setText("Directions X");
+            directionsVisible = true;
+
+            if (!is3D) {
+                expandDirections(mapScreenController.getCurrentFloor());
             }
+        }
 
         }
 
@@ -574,37 +576,9 @@ public class SearchBarOverlayController implements Initializable{
      */
     @FXML
     public void threeDButtonOp() {
-        // If 3D, switch to 2D
-        if (is3D) {
-            FXMLLoader loader;
-            Parent root;
-            MapScreenController mapScreenController;
-
-            loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
-
-            try {
-                root = loader.load();
-            } catch (IOException ie) {
-                ie.printStackTrace();
-                return;
-            }
-            mapScreenController = loader.getController();
-            mapScreenController.onStartUp();
-            if (threeDMapScreenController.getPathDrawn()) {
-                mapScreenController = loader.getController();
-                mapScreenController.onStartUp3D(threeDMapScreenController.getPathDrawn(), threeDMapScreenController.getPathMade(), sourceSearchBar.getValue(), destinationSearchBar.getValue());
-            } else {
-                mapScreenController = loader.getController();
-                mapScreenController.onNoPathStartup(sourceSearchBar.getValue(), destinationSearchBar.getValue());
-            }
-            threeDButton.getScene().setCamera(perspectiveCamera);
-            threeDButton.getScene().setRoot(root);
-        }
-        // If 2D, switch to 3D
-        else {
-            FXMLLoader loader;
-            Parent root;
-            ThreeDMapScreenController threeDMapScreenController;
+        FXMLLoader loader;
+        Parent root;
+        ThreeDMapScreenController threeDMapScreenController;
 
         loader = new FXMLLoader(getClass().getResource("/FXML/map/ThreeDMap.fxml"));
 
@@ -623,14 +597,12 @@ public class SearchBarOverlayController implements Initializable{
             }
             threeDButton.getScene().setCamera(perspectiveCamera);
             threeDButton.getScene().setRoot(root);
-        }
     }
 
     public void clearTable(){
 
         floorChildren.clear();
         parents.clear();
-        floors.getChildren().removeAll(parents);
         directionsTreeTableView.setRoot(floors);
     }
 
@@ -710,14 +682,24 @@ public class SearchBarOverlayController implements Initializable{
     }
 
     public void setParents(ArrayList<Node.floorType> floorList){
-        parents.add(new TreeItem<>(new DirectionsTable("Starting Route!")));
-        if(floorList.size() == 0){
-            parents.add(new TreeItem<>(new DirectionsTable("Floor " + mapScreenController.getCurrentFloor().toString())));
+
+        floorParent = new TreeItem<>(new DirectionsTable("Starting Route!"));
+        parents.add(floorParent);
+//        if(floorList.size() == 0){
+//            floorParent = new TreeItem<>(new DirectionsTable("Floor " + mapScreenController.getCurrentFloor().toString()));
+//            parents.add(floorParent);
+//        }else {
+        if(!is3D) {
+            floorParent = new TreeItem<>(new DirectionsTable("Floor " + mapScreenController.getCurrentFloor().toString()));
         }else {
-            for (Node.floorType floor : floorList) {
-                parents.add(new TreeItem<>(new DirectionsTable("Floor " + floor.toString())));
-            }
+            floorParent = new TreeItem<>(new DirectionsTable("Floor " + threeDMapScreenController.getCurrentFloor().toString()));
         }
+        parents.add(floorParent);
+        for (Node.floorType floor : floorList) {
+            floorParent = new TreeItem<>(new DirectionsTable("Floor " + floor.toString()));
+            parents.add(floorParent);
+        }
+
 
         floors.getChildren().setAll(parents);
         directionsTreeTableView.setRoot(floors);

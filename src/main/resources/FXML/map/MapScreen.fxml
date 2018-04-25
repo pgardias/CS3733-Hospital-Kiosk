@@ -44,7 +44,7 @@
                      <children>
                         <JFXButton fx:id="floor3Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor3ButtonOp" prefHeight="80.0" prefWidth="80.0" styleClass="floor-buttons" text="3">
                            <font>
-                              <Font size="36.0" />
+                              <Font size="32.0" />
                            </font>
                            <VBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -52,7 +52,7 @@
                         </JFXButton>
                         <JFXButton fx:id="floor2Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor2ButtonOp" prefHeight="80.0" prefWidth="80.0" styleClass="floor-buttons" text="2">
                            <font>
-                              <Font size="36.0" />
+                              <Font size="32.0" />
                            </font>
                            <VBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -60,7 +60,7 @@
                         </JFXButton>
                         <JFXButton fx:id="floor1Button" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floor1ButtonOp" prefHeight="80.0" prefWidth="80.0" styleClass="floor-buttons" text="1">
                            <font>
-                              <Font size="36.0" />
+                              <Font size="32.0" />
                            </font>
                            <VBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -68,7 +68,7 @@
                         </JFXButton>
                         <JFXButton fx:id="floorGButton" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#floorGButtonOp" prefHeight="80.0" prefWidth="80.0" styleClass="floor-buttons" text="G">
                            <font>
-                              <Font size="36.0" />
+                              <Font size="32.0" />
                            </font>
                            <VBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -76,7 +76,7 @@
                         </JFXButton>
                         <JFXButton fx:id="floorL1Button" onAction="#floorL1ButtonOp" prefHeight="80.0" prefWidth="80.0" ripplerFill="WHITE" styleClass="floor-buttons" text="L1">
                            <font>
-                              <Font size="36.0" />
+                              <Font size="32.0" />
                            </font>
                            <VBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -84,7 +84,7 @@
                         </JFXButton>
                         <JFXButton fx:id="floorL2Button" maxHeight="-Infinity" maxWidth="80.0" onAction="#floorL2ButtonOp" prefHeight="80.0" prefWidth="80.0" styleClass="floor-buttons" stylesheets="@../../css/common.css" text="L2">
                            <font>
-                              <Font size="36.0" />
+                              <Font size="32.0" />
                            </font>
                            <VBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

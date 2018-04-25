@@ -77,6 +77,7 @@ public class ThreeDMapScreenController implements Initializable{
 
     // DB instance
     DBSystem db = DBSystem.getInstance();
+    String floorState;
 
     // Display hashmaps
     private ArrayList<MeshView[]> allModels = new ArrayList<>();
@@ -305,14 +306,14 @@ public class ThreeDMapScreenController implements Initializable{
                         //curZRotation += Math.cos(curYTranslation)*ROTATION_SPEED;
                         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
                                 new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS));
-                                //new Rotate(curZRotation, 1920/2, 1080/2, 0, Rotate.Z_AXIS)); // Rotate Map
+                        //new Rotate(curZRotation, 1920/2, 1080/2, 0, Rotate.Z_AXIS)); // Rotate Map
                     } else if (yChange > 0) {
                         curXRotation -= ROTATION_SPEED;
                         //curXRotation -= Math.sin(curYTranslation)*ROTATION_SPEED;
                         //curZRotation -= Math.cos(curYTranslation)*ROTATION_SPEED;
                         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
                                 new Rotate(curXRotation, 1920/2, 1080/2, 0, Rotate.X_AXIS));
-                                //new Rotate(curZRotation, 1920/2, 1080/2, 0, Rotate.Z_AXIS)); // Rotate Map
+                        //new Rotate(curZRotation, 1920/2, 1080/2, 0, Rotate.Z_AXIS)); // Rotate Map
                     }
                     mouseInSceneX = newMouseInSceneX;
                     mouseInSceneY = newMouseInSceneY;
@@ -389,7 +390,7 @@ public class ThreeDMapScreenController implements Initializable{
             mv.setOpacity(0);
             L2Visible = false;
             hideNodes(currentFloor);
-            floorL2Button.getStyleClass().remove("highlight-floor-button");
+            floorL2Button.getStyleClass().remove("highlight-floor-3dbutton");
             floorL2Button.getStyleClass().add("floor-buttons");
 
         }
@@ -399,7 +400,7 @@ public class ThreeDMapScreenController implements Initializable{
             L2Visible = true;
             unhideNodes(currentFloor);
             floorL2Button.getStyleClass().remove("floor-buttons");
-            floorL2Button.getStyleClass().add("highlight-floor-button");
+            floorL2Button.getStyleClass().add("highlight-floor-3dbutton");
         }
         // This makes it so that the pane doesn't spaz out as much for some reason
         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
@@ -415,7 +416,7 @@ public class ThreeDMapScreenController implements Initializable{
             mv.setOpacity(0);
             L1Visible = false;
             hideNodes(currentFloor);
-            floorL1Button.getStyleClass().remove("highlight-floor-button");
+            floorL1Button.getStyleClass().remove("highlight-floor-3dbutton");
             floorL1Button.getStyleClass().add("floor-buttons");
         }
         else {
@@ -424,7 +425,7 @@ public class ThreeDMapScreenController implements Initializable{
             L1Visible = true;
             unhideNodes(currentFloor);
             floorL1Button.getStyleClass().remove("floor-buttons");
-            floorL1Button.getStyleClass().add("highlight-floor-button");
+            floorL1Button.getStyleClass().add("highlight-floor-3dbutton");
         }
         // This makes it so that the pane doesn't spaz out as much for some reason
         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
@@ -440,7 +441,7 @@ public class ThreeDMapScreenController implements Initializable{
             mv.setOpacity(0);
             GVisible = false;
             hideNodes(currentFloor);
-            floorGButton.getStyleClass().remove("highlight-floor-button");
+            floorGButton.getStyleClass().remove("highlight-floor-3dbutton");
             floorGButton.getStyleClass().add("floor-buttons");
         }
         else {
@@ -449,7 +450,7 @@ public class ThreeDMapScreenController implements Initializable{
             GVisible = true;
             unhideNodes(currentFloor);
             floorGButton.getStyleClass().remove("floor-buttons");
-            floorGButton.getStyleClass().add("highlight-floor-button");
+            floorGButton.getStyleClass().add("highlight-floor-3dbutton");
         }
         // This makes it so that the pane doesn't spaz out as much for some reason
         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
@@ -465,7 +466,7 @@ public class ThreeDMapScreenController implements Initializable{
             mv.setOpacity(0);
             FirstVisible = false;
             hideNodes(currentFloor);
-            floor1Button.getStyleClass().remove("highlight-floor-button");
+            floor1Button.getStyleClass().remove("highlight-floor-3dbutton");
             floor1Button.getStyleClass().add("floor-buttons");
         }
         else {
@@ -474,7 +475,7 @@ public class ThreeDMapScreenController implements Initializable{
             FirstVisible = true;
             unhideNodes(currentFloor);
             floor1Button.getStyleClass().remove("floor-buttons");
-            floor1Button.getStyleClass().add("highlight-floor-button");
+            floor1Button.getStyleClass().add("highlight-floor-3dbutton");
         }
         // This makes it so that the pane doesn't spaz out as much for some reason
         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
@@ -490,7 +491,7 @@ public class ThreeDMapScreenController implements Initializable{
             mv.setOpacity(0);
             SecondVisible = false;
             hideNodes(currentFloor);
-            floor2Button.getStyleClass().remove("highlight-floor-button");
+            floor2Button.getStyleClass().remove("highlight-floor-3dbutton");
             floor2Button.getStyleClass().add("floor-buttons");
 
         }
@@ -500,7 +501,7 @@ public class ThreeDMapScreenController implements Initializable{
             SecondVisible = true;
             unhideNodes(currentFloor);
             floor2Button.getStyleClass().remove("floor-buttons");
-            floor2Button.getStyleClass().add("highlight-floor-button");
+            floor2Button.getStyleClass().add("highlight-floor-3dbutton");
         }
         // This makes it so that the pane doesn't spaz out as much for some reason
         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
@@ -516,7 +517,7 @@ public class ThreeDMapScreenController implements Initializable{
             mv.setOpacity(0);
             ThirdVisible = false;
             hideNodes(currentFloor);
-            floor3Button.getStyleClass().remove("highlight-floor-button");
+            floor3Button.getStyleClass().remove("highlight-floor-3dbutton");
             floor3Button.getStyleClass().add("floor-buttons");
         }
         else {
@@ -525,7 +526,7 @@ public class ThreeDMapScreenController implements Initializable{
             ThirdVisible = true;
             unhideNodes(currentFloor);
             floor3Button.getStyleClass().remove("floor-buttons");
-            floor3Button.getStyleClass().add("highlight-floor-button");
+            floor3Button.getStyleClass().add("highlight-floor-3dbutton");
         }
         // This makes it so that the pane doesn't spaz out as much for some reason
         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
@@ -838,7 +839,7 @@ public class ThreeDMapScreenController implements Initializable{
 
         // Set translations and move edges to behind nodes
         edgeGroup.getTransforms().setAll(new Rotate(curXRotation, mv.getTranslateX() - edgeGroup.getTranslateX(), mv.getTranslateY() - edgeGroup.getTranslateY(), mv.getTranslateZ() - edgeGroup.getTranslateZ(), Rotate.X_AXIS),
-                        new Rotate(curYRotation, mv.getTranslateX() - edgeGroup.getTranslateX(), mv.getTranslateY() - edgeGroup.getTranslateY(), mv.getTranslateZ() - edgeGroup.getTranslateZ(), Rotate.Y_AXIS));
+                new Rotate(curYRotation, mv.getTranslateX() - edgeGroup.getTranslateX(), mv.getTranslateY() - edgeGroup.getTranslateY(), mv.getTranslateZ() - edgeGroup.getTranslateZ(), Rotate.Y_AXIS));
         root.getChildren().add(edgeGroup);
 
     }
@@ -990,6 +991,10 @@ public class ThreeDMapScreenController implements Initializable{
         Node currentNode = null, pastNode = null;
         if (pathMade != null) {
             resetPath();
+        }else{
+            Node.floorType floor = path.get(0).getFloor();
+            floorState = floor.toString();
+            currentFloor = floor;
         }
 
         stairNodeSet.clear();
@@ -1038,7 +1043,7 @@ public class ThreeDMapScreenController implements Initializable{
             //set start node to Green and end node to red
             if (path.get(0).equals(n)) {
                 nodeDispSet.get(currentNode.getID()).setVisible(true);
-                    if (!currentNode.getFloor().equals(currentFloor))
+                if (!currentNode.getFloor().equals(currentFloor))
                     nodeDispSet.get(currentNode.getID()).setOpacity(0.5);
                 /*startLabel.setLayoutX((n.getX() + 5 - curXOffset) * X_SCALE);
                 startLabel.setLayoutY((n.getY() - 40 - Y_OFFSET) * Z_SCALE);
@@ -1084,6 +1089,7 @@ public class ThreeDMapScreenController implements Initializable{
                 arrowDispSet.get(i).setOpacity(0.3);
             }
         }*/
+
 
         // Create PopOver for Stair or Elevator nodes
         for (int i = 0; i < stairNodeSet.size(); i += 2) {
@@ -1158,9 +1164,9 @@ public class ThreeDMapScreenController implements Initializable{
         if (pathDrawn) resetPath();
         for (Sphere s: nodeDispSet.values()) {
             if (s.getMaterial() == fillGreen) {
-               s.setMaterial(fillBlue);
-               s.setRadius(NODE_RADIUS);
-           }
+                s.setMaterial(fillBlue);
+                s.setRadius(NODE_RADIUS);
+            }
         }
     }
 
@@ -1312,7 +1318,15 @@ public class ThreeDMapScreenController implements Initializable{
             floorsList.add(stairNodeSet.get(stairNodeSet.size()-1).getFloor());
     }
 
+    public Node.floorType getCurrentFloor() {
+        return currentFloor;
+    }
+
     public ArrayList<Node.floorType> getFloorsList(){
         return floorsList;
+    }
+
+    public boolean getDirVisible(){
+        return searchBarOverlayController.getDirectionsVisible();
     }
 }

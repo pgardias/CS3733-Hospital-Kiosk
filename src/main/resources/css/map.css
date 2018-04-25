@@ -18,6 +18,14 @@
     -fx-background-radius: 5;
 }
 
+.highlight-floor-3dbutton {
+    -fx-background-color: #F5BC3A;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
+    -fx-text-fill: #0b2f5b;
+    -jfx-button-type: RAISED;
+    -fx-background-radius: 5;
+}
+
 .highlight-floor-button:hover {
     -fx-background-color: #4178b8;
 }
@@ -31,5 +39,9 @@
 .yellow-button:hover {
     -fx-background-color: WHITESMOKE;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
+}
+
+.linear-grad-to-bottom {
+    -fx-background-color: linear-gradient(to bottom, #79a6d2, #000000);
 }
 
