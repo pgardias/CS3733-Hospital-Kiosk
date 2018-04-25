@@ -1,9 +1,7 @@
 package edu.wpi.cs3733d18.teamp.ui.map;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXToggleButton;
 import com.jfoenix.controls.*;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Directions;
 import edu.wpi.cs3733d18.teamp.Main;
@@ -19,21 +17,29 @@ import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 
+import javax.print.DocFlavor;
+import javax.transaction.TransactionRequiredException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
 public class SearchBarOverlayController implements Initializable{
-    /*
+
     public static final int X_OFFSET = -523;
     public static final int Y_OFFSET = 0;
     public static final double X_SCALE = 1588.235294/5000.0;
@@ -49,7 +55,7 @@ public class SearchBarOverlayController implements Initializable{
     private static final double TURN_AROUND_BOUNDS = 180;
 
     Label startLabel = new Label();
-    Label endLabel = new Label();*/
+    Label endLabel = new Label();
 
     // Camera for 3D
     PerspectiveCamera perspectiveCamera = new PerspectiveCamera();
@@ -66,17 +72,30 @@ public class SearchBarOverlayController implements Initializable{
     Rectangle directionsRectangle;
 
     @FXML
+    Rectangle sourceRectangle;
+
+    @FXML
+    Rectangle destinationRectangle;
+
+    @FXML
+    TableView<DirectionsTable> directionsTableView;
+
+    @FXML
+    TableColumn<DirectionsTable,String> directionsTableViewColumn;
+
+    @FXML
     JFXTreeTableView<DirectionsTable> directionsTreeTableView;
 
     @FXML
     JFXTreeTableColumn<DirectionsTable, String> directionsTreeTableColumn;
 
-
     ObservableList<DirectionsTable> directions = FXCollections.observableArrayList();
-
 
     @FXML
     TreeItem<DirectionsTable> floorParent;
+
+    @FXML
+    TreeItem<DirectionsTable> floorChild;
 
     @FXML
     TreeItem<DirectionsTable> floors;
@@ -97,10 +116,10 @@ public class SearchBarOverlayController implements Initializable{
     JFXButton goButton;
 
     @FXML
-    JFXTextField sourceSearchBar;
+    JFXComboBox<String> sourceSearchBar;
 
     @FXML
-    JFXTextField destinationSearchBar;
+    JFXComboBox<String> destinationSearchBar;
 
     @FXML
     JFXToggleButton mapToggleButton;
@@ -108,41 +127,9 @@ public class SearchBarOverlayController implements Initializable{
     ArrayList<TreeItem<DirectionsTable>> floorChildren;
     ArrayList<TreeItem<DirectionsTable>> parents;
 
-    private MapScreenController mapScreenController;
+    MapScreenController mapScreenController;
     private ThreeDMapScreenController threeDMapScreenController;
     private Boolean is3D = false;
-
-
-    /**
-     * sets up the search bars so they can be autofilled
-     * @param url
-     * @param rb
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb){
-        setWordArrays();
-
-        AutoCompletionBinding<String> destBinding = TextFields.bindAutoCompletion(destinationSearchBar, destinationWords);
-        AutoCompletionBinding<String> sourceBinding = TextFields.bindAutoCompletion(sourceSearchBar, sourceWords);
-
-        destBinding.setPrefWidth(destinationSearchBar.getPrefWidth());
-        sourceBinding.setPrefWidth(sourceSearchBar.getPrefWidth());
-
-        floorChildren = new ArrayList<>();
-        parents = new ArrayList<>();
-        floorParent = new TreeItem<>();
-        floors = new TreeItem<>();
-
-
-        directionsTreeTableColumn = new JFXTreeTableColumn<>("Directions");
-        directionsTreeTableColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("directions"));
-        directionsTreeTableColumn.setPrefWidth(340);
-        directionsTreeTableColumn.setResizable(false);
-        directionsTreeTableColumn.setSortable(false);
-        directionsTreeTableColumn.getStyleClass().addAll("table-row-cell");
-        directionsTreeTableView.getColumns().addAll(directionsTreeTableColumn);
-
-    }
 
     public void startUp(MapScreenController mapScreenController){
         threeDButton.setText("3D");
@@ -183,12 +170,12 @@ public class SearchBarOverlayController implements Initializable{
     }
 
     public void setSourceSearchBar(String startNode){
-        sourceSearchBar.setText(startNode);
+        sourceSearchBar.getSelectionModel().select(startNode);
         hideDirections();
     }
 
     public void setDestinationSearchBar(String endNode){
-        destinationSearchBar.setText(endNode);
+        destinationSearchBar.getSelectionModel().select(endNode);
         hideDirections();
     }
 
@@ -206,7 +193,39 @@ public class SearchBarOverlayController implements Initializable{
         mapScreenController.setToggleOn(toggledOn);
     }
 
+    /**
+     * sets up the search bars so they can be autofilled
+     * @param url
+     * @param rb
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb){
+        setWordArrays();
 
+        sourceSearchBar.getItems().addAll(sourceWords);
+        destinationSearchBar.getItems().addAll(destinationWords);
+
+        AutoCompletionBinding<String> destBinding = TextFields.bindAutoCompletion(destinationSearchBar.getEditor(), destinationWords);
+        AutoCompletionBinding<String> sourceBinding = TextFields.bindAutoCompletion(sourceSearchBar.getEditor(), sourceWords);
+
+        destBinding.setPrefWidth(destinationSearchBar.getPrefWidth());
+        sourceBinding.setPrefWidth(sourceSearchBar.getPrefWidth());
+
+        floorChildren = new ArrayList<>();
+        parents = new ArrayList<>();
+        floorParent = new TreeItem<>();
+        floors = new TreeItem<>();
+
+
+        directionsTreeTableColumn = new JFXTreeTableColumn<>("Directions");
+        directionsTreeTableColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("directions"));
+        directionsTreeTableColumn.setPrefWidth(340);
+        directionsTreeTableColumn.setResizable(false);
+        directionsTreeTableColumn.setSortable(false);
+        directionsTreeTableColumn.getStyleClass().addAll("table-row-cell");
+        directionsTreeTableView.getColumns().addAll(directionsTreeTableColumn);
+
+    }
 
     /**
      * sets up the word array both search bars will be using
@@ -221,7 +240,6 @@ public class SearchBarOverlayController implements Initializable{
                 sourceWords.add(node.getLongName());
             }
         }
-        destinationWords.addAll(sourceWords);
         destinationWords.add("NEAREST HALLWAY");
         destinationWords.add("NEAREST ELEVATOR");
         destinationWords.add("NEAREST RESTROOM");
@@ -233,6 +251,7 @@ public class SearchBarOverlayController implements Initializable{
         destinationWords.add("NEAREST EXIT");
         destinationWords.add("NEAREST SHOP");
         destinationWords.add("NEAREST SERVICE STATION");
+        destinationWords.addAll(sourceWords);
     }
 
 
@@ -256,11 +275,16 @@ public class SearchBarOverlayController implements Initializable{
 
         //Declare source node, destination node, and get the typed in inputs for both search boxes
         Node srcNode, dstNode;
-        String src = sourceSearchBar.getText();
-        String dst = destinationSearchBar.getText();
+        String src = sourceSearchBar.getValue();
+        String dst = destinationSearchBar.getValue();
 
         // Check if the source node was input
-        if (src.length() > 0 && !src.equals("Current Kiosk")) {
+        if (src.length() == 0) {
+//            sourceSearchBar.setUnFocusColor(Color.rgb(255,0,0));
+            ShakeTransition anim = new ShakeTransition(sourceSearchBar, sourceRectangle);
+            anim.playFromStart();
+            return false;
+        } else if (src.length() > 0 && !src.equals("Current Kiosk")) {
             // Source has been chosen by user, get Node entity from nodeID through NodeRepo
             srcNode = nodeSet.get(parseSourceInput(src).getID());
         } else {
@@ -276,15 +300,14 @@ public class SearchBarOverlayController implements Initializable{
         } else {
             // Destination has not been set, set search bar to red and shake
             destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
-            ShakeTransition anim = new ShakeTransition(destinationSearchBar);
+            ShakeTransition anim = new ShakeTransition(destinationSearchBar, destinationRectangle);
             anim.playFromStart();
             return false;
-            //dstNode = nodeSet.get(endNode.getID());
         }
 
-        Font font = new Font("verdana", 24.0);
-
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
+        mapScreenController.drawPath(path);
+        pathDrawn = true;
         if (!is3D) {
             mapScreenController.drawPath(path);
         }
@@ -555,10 +578,10 @@ public class SearchBarOverlayController implements Initializable{
             mapScreenController.onStartUp();
             if (threeDMapScreenController.getPathDrawn()) {
                 mapScreenController = loader.getController();
-                mapScreenController.onStartUp3D(threeDMapScreenController.getPathDrawn(), threeDMapScreenController.getPathMade(), sourceSearchBar.getText(), destinationSearchBar.getText());
+                mapScreenController.onStartUp3D(threeDMapScreenController.getPathDrawn(), threeDMapScreenController.getPathMade(), sourceSearchBar.getValue(), destinationSearchBar.getValue());
             } else {
                 mapScreenController = loader.getController();
-                mapScreenController.onNoPathStartup(sourceSearchBar.getText(), destinationSearchBar.getText());
+                mapScreenController.onNoPathStartup(sourceSearchBar.getValue(), destinationSearchBar.getValue());
             }
             threeDButton.getScene().setCamera(perspectiveCamera);
             threeDButton.getScene().setRoot(root);
@@ -579,10 +602,10 @@ public class SearchBarOverlayController implements Initializable{
             }
             if (mapScreenController.getPathDrawn()) {
                 threeDMapScreenController = loader.getController();
-                threeDMapScreenController.onStartUp(mapScreenController.getPathDrawn(), mapScreenController.getPathMade(), sourceSearchBar.getText(), destinationSearchBar.getText());
+                threeDMapScreenController.onStartUp(mapScreenController.getPathDrawn(), mapScreenController.getPathMade(), sourceSearchBar.getValue(), destinationSearchBar.getValue());
             } else {
                 threeDMapScreenController = loader.getController();
-                threeDMapScreenController.onNoPathStartup(sourceSearchBar.getText(), destinationSearchBar.getText());
+                threeDMapScreenController.onNoPathStartup(sourceSearchBar.getValue(), destinationSearchBar.getValue());
             }
             threeDButton.getScene().setCamera(perspectiveCamera);
             threeDButton.getScene().setRoot(root);
@@ -681,7 +704,6 @@ public class SearchBarOverlayController implements Initializable{
                 parents.add(new TreeItem<>(new DirectionsTable("Floor " + floor.toString())));
             }
         }
-
 
         floors.getChildren().setAll(parents);
         directionsTreeTableView.setRoot(floors);

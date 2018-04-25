@@ -375,7 +375,7 @@ public class ThreeDMapScreenController implements Initializable{
         mapScreenController.onStartUp();
         if (pathDrawn) {
             mapScreenController = loader.getController();
-            mapScreenController.onStartUp3D(pathDrawn, pathMade, searchBarOverlayController.sourceSearchBar.getText(), searchBarOverlayController.destinationSearchBar.getText());
+            mapScreenController.onStartUp3D(pathDrawn, pathMade, searchBarOverlayController.sourceSearchBar.getValue(), searchBarOverlayController.destinationSearchBar.getValue());
         }
         backButton.getScene().setRoot(root);
     }

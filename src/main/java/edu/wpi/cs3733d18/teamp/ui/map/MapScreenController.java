@@ -2,11 +2,20 @@ package edu.wpi.cs3733d18.teamp.ui.map;
 
 import com.jfoenix.controls.JFXButton;
 import com.sun.scenario.effect.Effect;
+import com.jfoenix.controls.JFXSlider;
+import de.jensd.fx.glyphs.GlyphIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import de.jensd.fx.glyphs.materialicons.MaterialIcon;
+import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import edu.wpi.cs3733d18.teamp.ui.home.BounceTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.PathTransition;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -23,20 +32,34 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+
+import javafx.stage.Stage;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.Font;
 import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import jdk.nashorn.internal.runtime.regexp.joni.constants.NodeType;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.*;
+
+import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.PopOver.ArrowLocation;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import java.math.*;
+import java.util.List;
 
 public class MapScreenController {
 
@@ -51,8 +74,14 @@ public class MapScreenController {
     private final double ZOOM_3D_MIN = 1.013878875;
     private final double ZOOM_2D_MIN = 1.208888889;
     private double zoomForTranslate = 0;
+    private static int MAP_ICON_SIZE = 18;
 
+    double maxXCoord = 0;
+    double maxYCoord = 0;
+    double minXCoord = 5000;
+    double minYCoord = 3400;
 
+    double nodeIconScale = 1.2;
     private Node startNode;
     private Node endNode;
     private Edge selectedEdge;
@@ -65,18 +94,17 @@ public class MapScreenController {
     private Boolean pathDrawn = false;
     private Boolean toggleOn = false;
 
-    private HashMap<String, Circle> nodeDispSet = new HashMap<>();
-    private ArrayList<Polygon> arrowDispSet = new ArrayList<>();
-    private ArrayList<String> arrowFloorSet = new ArrayList<>();
-    private HashMap<String, Line> edgeDispSet = new HashMap<>();
-    private ArrayList<Label> labelDispSet = new ArrayList<>();
-    private ArrayList<Line> lineDispSet = new ArrayList<>();
+    private static HashMap<String, Circle> nodeDispSet = new HashMap<>();
+    private static HashMap<String, javafx.scene.Node> iconDispSet = new HashMap<>();
+    private static ArrayList<BounceTransition> animSet = new ArrayList<>();
+    private static ArrayList<Polygon> arrowDispSet = new ArrayList<>();
+    private static ArrayList<String> arrowFloorSet = new ArrayList<>();
+    private static HashMap<String, Line> edgeDispSet = new HashMap<>();
     private ArrayList<Node> stairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentStairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentElevNodeSet = new ArrayList<Node>();
     private ArrayList<Node.floorType> floorsList = new ArrayList<>();
     private ArrayList<JFXButton> floorSequenceList = new ArrayList<>();
-
 
     DBSystem db = DBSystem.getInstance();
 
@@ -90,13 +118,10 @@ public class MapScreenController {
     BorderPane searchBarOverlayPane;
 
     @FXML
-    AnchorPane labelPane;
-
-    @FXML
     JFXButton backButton;
 
     @FXML
-    Slider zoomSlider;
+    JFXSlider zoomSlider;
 
     @FXML
     StackPane mapPane;
@@ -105,7 +130,13 @@ public class MapScreenController {
     ImageView mapImage;
 
     @FXML
-    AnchorPane nodesEdgesPane;
+    AnchorPane nodesPane;
+
+    @FXML
+    AnchorPane edgePane;
+
+    @FXML
+    AnchorPane arrowPane;
 
     @FXML
     HBox floorSequenceHBox;
@@ -129,7 +160,7 @@ public class MapScreenController {
     JFXButton floor3Button;
 
     @FXML
-    PopOver popOver;
+    static PopOver popOver;
     Boolean popOverHidden = true;
 
     SearchBarOverlayController searchBarOverlayController = null;
@@ -158,18 +189,21 @@ public class MapScreenController {
         mapImage.setImage(newImage);
         mapImage.scaleXProperty().bind(zoomSlider.valueProperty());
         mapImage.scaleYProperty().bind(zoomSlider.valueProperty());
-        nodesEdgesPane.scaleXProperty().bind(zoomSlider.valueProperty());
-        nodesEdgesPane.scaleYProperty().bind(zoomSlider.valueProperty());
+        nodesPane.scaleXProperty().bind(zoomSlider.valueProperty());
+        nodesPane.scaleYProperty().bind(zoomSlider.valueProperty());
+        edgePane.scaleXProperty().bind(zoomSlider.valueProperty());
+        edgePane.scaleYProperty().bind(zoomSlider.valueProperty());
+        arrowPane.scaleXProperty().bind(zoomSlider.valueProperty());
+        arrowPane.scaleYProperty().bind(zoomSlider.valueProperty());
+
         firstSelected = true;
 
         mapImage.addEventHandler(MouseEvent.ANY, mouseEventEventHandler);
-        drawEdges();
         drawNodes();
         getMap();
         addOverlay();
 
-        searchBarOverlayController.setSourceSearchBar("Primary Kiosk");
-        nodeDispSet.get("PKIOS00102").setFill(Color.GREEN);
+        searchBarOverlayController.setSourceSearchBar("Current Kiosk");
     }
 
     @FXML
@@ -187,22 +221,15 @@ public class MapScreenController {
         searchBarOverlayController.setDestinationSearchBar(endLocation);
     }
 
-    public Boolean getPathDrawn(){
-        return this.pathDrawn;
-    }
-
     public ArrayList<Node> getPathMade() {
         return this.pathMade;
     }
 
-
     @FXML
     public void backButtonOp() {
-        Stage stage;
         Parent root;
         FXMLLoader loader;
 
-        stage = (Stage) backButton.getScene().getWindow();
         loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
         try {
             root = loader.load();
@@ -281,7 +308,6 @@ public class MapScreenController {
         }
     }
 
-
     /**
      * switch statement that determines which map is loaded in
      */
@@ -300,27 +326,27 @@ public class MapScreenController {
             zoomForTranslate = zoomSlider.getValue();
             switch (floorState) {
                 case "3":
-                    image = new Image("/img/maps/3d/3-ICONS.png"); //TODO use this bit of information for image drawing
+                    image = new Image("/img/maps/3d/3-NO-ICONS.png");
                     setFloorStyleClass(Node.floorType.LEVEL_3);
                     break;
                 case "2":
-                    image = new Image("/img/maps/3d/2-ICONS.png");
+                    image = new Image("/img/maps/3d/2-NO-ICONS.png");
                     setFloorStyleClass(Node.floorType.LEVEL_2);
                     break;
                 case "1":
-                    image = new Image("/img/maps/3d/1-ICONS.png");
+                    image = new Image("/img/maps/3d/1-NO-ICONS.png");
                     setFloorStyleClass(Node.floorType.LEVEL_1);
                     break;
                 case "G":
-                    image = new Image("/img/maps/3d/1-ICONS.png");
+                    image = new Image("/img/maps/3d/1-NO-ICONS.png");
                     setFloorStyleClass(Node.floorType.LEVEL_G);
                     break;
                 case "L1":
-                    image = new Image("/img/maps/3d/L1-ICONS.png");
+                    image = new Image("/img/maps/3d/L1-NO-ICONS.png");
                     setFloorStyleClass(Node.floorType.LEVEL_L1);
                     break;
                 default:
-                    image = new Image("/img/maps/3d/L2-ICONS.png");
+                    image = new Image("/img/maps/3d/L2-NO-ICONS.png");
                     setFloorStyleClass(Node.floorType.LEVEL_L2);
                     break;
             }
@@ -439,85 +465,46 @@ public class MapScreenController {
 
         mapImage.setTranslateX(newTranslateX);
         mapImage.setTranslateY(newTranslateY);
-        nodesEdgesPane.setTranslateX(newTranslateX);
-        nodesEdgesPane.setTranslateY(newTranslateY);
+        nodesPane.setTranslateX(newTranslateX);
+        nodesPane.setTranslateY(newTranslateY);
+        edgePane.setTranslateX(newTranslateX);
+        edgePane.setTranslateY(newTranslateY);
+        arrowPane.setTranslateX(newTranslateX);
+        arrowPane.setTranslateY(newTranslateY);
     }
-
 
     /**
      * Draws the nodes according to what was given back from the database
      */
     public void drawNodes() {
         HashMap<String, Node> nodeSet;
-
         nodeSet = db.getAllNodes();
+        System.out.println("drawing icons");
+
+        long startTime = System.currentTimeMillis();
+        List<Node> orderedNodes = new ArrayList<>();
         for (Node node : nodeSet.values()) {
-            Circle circle = new Circle();
-            circle.setRadius(NODE_RADIUS);
-            if (node.getFloor() != currentFloor || node.getType() == Node.nodeType.HALL) {
-                circle.setVisible(false);
-                circle.setDisable(true);
-                circle.setPickOnBounds(false);
-            }
-
-            nodesEdgesPane.getChildren().add(circle);
-            if (!toggleOn) {
-                circle.setCenterX((node.getX() - X_OFFSET) * X_SCALE);
-                circle.setCenterY((node.getY() - Y_OFFSET) * Y_SCALE);
-            } else {
-                circle.setCenterX((node.getxDisplay() - X_OFFSET) * X_SCALE);
-                circle.setCenterY((node.getyDisplay() - Y_OFFSET) * Y_SCALE);
-            }
-            circle.setFill(Color.DODGERBLUE);
-            circle.setStroke(Color.BLACK);
-            circle.setStrokeType(StrokeType.INSIDE);
-            if (!node.getActive()) {
-                circle.setOpacity(0.5);
-                circle.setFill(Color.GRAY);
-            }
-            circle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
-            circle.setOnScroll(nodeScrollHandler);
-
-//                circle.setOnMouseClicked(clickCallback());
-
-            String label = node.getID();
-            nodeDispSet.put(label, circle);
-
+            orderedNodes.add(node);
         }
-    }
+        orderedNodes.sort(Comparator.comparing(Node::getY));
 
+        long endTime = System.currentTimeMillis();
+        System.out.println("Ordering nodes took " + (endTime - startTime) + " ms");
 
-    /**
-     * Draws the edges according to what was given back from the database
-     */
-    public void drawEdges() {
-        HashMap<String, Edge> edgeSet;
-
-        edgeSet = db.getAllEdges();
-
-        for (Edge edge : edgeSet.values()) {
-            if (edge.getActive()) {
-                Line line = new Line();
-                nodesEdgesPane.getChildren().add(line);
+        for (Node node : orderedNodes) {
+            if (node.getFloor() == currentFloor && node.getType() != Node.nodeType.HALL) {
+                StackPane container = constructIcon(node.getType());
                 if (!toggleOn) {
-                    line.setStartX((edge.getStart().getX() - X_OFFSET) * X_SCALE);
-                    line.setStartY((edge.getStart().getY() - Y_OFFSET) * Y_SCALE);
-                    line.setEndX((edge.getEnd().getX() - X_OFFSET) * X_SCALE);
-                    line.setEndY((edge.getEnd().getY() - Y_OFFSET) * Y_SCALE);
+                    container.setLayoutX((node.getX() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
+                    container.setLayoutY((node.getY() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
                 } else {
-                    line.setStartX((edge.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
-                    line.setStartY((edge.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);
-                    line.setEndX((edge.getEnd().getxDisplay() - X_OFFSET) * X_SCALE);
-                    line.setEndY((edge.getEnd().getyDisplay() - Y_OFFSET) * Y_SCALE);
+                    container.setLayoutX((node.getxDisplay() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
+                    container.setLayoutY((node.getyDisplay() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
                 }
-                line.setStrokeWidth(5.0);
-                line.setStrokeType(StrokeType.CENTERED);
-                line.setVisible(false);
-                line.setPickOnBounds(false);
-                line.setDisable(true);
-
-                String label = edge.getID();
-                edgeDispSet.put(label, line);
+                nodesPane.getChildren().add(container);
+                container.addEventHandler(MouseEvent.ANY, nodeClickHandler);
+                container.setOnScroll(nodeScrollHandler);
+                iconDispSet.put(node.getID(), container);
             }
         }
     }
@@ -545,20 +532,18 @@ public class MapScreenController {
             if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
                 if (searchBarOverlayController.isSourceFocused()) {
                     clearStartNode();
-                    for (String string : nodeDispSet.keySet()) {
-                        if (nodeDispSet.get(string) == event.getSource()) {
+                    for (String string : iconDispSet.keySet()) {
+                        if (iconDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
-                            nodeDispSet.get(string).setFill(Color.GREEN);
                             searchBarOverlayController.setSourceSearchBar(node.getLongName());
                         }
                     }
                     removeFocus();
                 } else if (searchBarOverlayController.isDestinationFocused()) {
                     clearEndNode();
-                    for (String string : nodeDispSet.keySet()) {
-                        if (nodeDispSet.get(string) == event.getSource()) {
+                    for (String string : iconDispSet.keySet()) {
+                        if (iconDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
-                            nodeDispSet.get(string).setFill(Color.RED);
                             searchBarOverlayController.setDestinationSearchBar(node.getLongName());
 
                         }
@@ -566,11 +551,13 @@ public class MapScreenController {
                     removeFocus();
                 } else {
                     Boolean foundStair = false;
-                    for (String string : nodeDispSet.keySet()) {
-                        if (nodeDispSet.get(string).equals(event.getSource())) {
-                            //The node clicked was a stair node so we swap the floor cuz a path was drawn
+                    for (String string : iconDispSet.keySet()) {
+                        if (iconDispSet.get(string).equals(event.getSource())) {
+                            //if this is the icon that was pressed
+
                             for (int i = 0; i < stairNodeSet.size(); i += 2) {
                                 if (stairNodeSet.get(i).getID().equals(string)) {
+                                    //going down a stair node
                                     currentFloor = stairNodeSet.get(i + 1).getFloor();
                                     floorState = currentFloor.toString();
                                     foundStair = true;
@@ -583,6 +570,7 @@ public class MapScreenController {
                             }
                             for (int i = 1; i < stairNodeSet.size(); i += 2) {
                                 if (stairNodeSet.get(i).getID().equals(string)) {
+                                    //going back up a stair node
                                     currentFloor = stairNodeSet.get(i - 1).getFloor();
                                     floorState = currentFloor.toString();
                                     foundStair = true;
@@ -596,7 +584,6 @@ public class MapScreenController {
                             if (!foundStair) {
                                 clearEndNode();
                                 Node node = nodeSet.get(string);
-                                nodeDispSet.get(string).setFill(Color.RED);
                                 searchBarOverlayController.setDestinationSearchBar(node.getLongName());
                             }
                             foundStair = false;
@@ -605,14 +592,14 @@ public class MapScreenController {
                     }
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED && popOverHidden) {
-                for (String string : nodeDispSet.keySet()) {
-                    if (nodeDispSet.get(string) == event.getSource()) {
+                for (String string : iconDispSet.keySet()) {
+                    if (iconDispSet.get(string) == event.getSource()) {
                         if (popOver != null && popOver.getOpacity() == 0) {
                             popOver.hide();
                             popOver = null;
                         }
                         Node node = nodeSet.get(string);
-                        // Correcting enum toString conversion
+                        iconDispSet.get(node.getID()).toFront();
                         String type = node.getType().toString().toUpperCase();
                         if (type.equals("STAIR")) {
                             type = "STAIRS";
@@ -637,11 +624,18 @@ public class MapScreenController {
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
                         popOver = new PopOver(popOverVBox);
 
-                        if (event.getSceneX() < 960) {
-                            popOver.setArrowLocation(ArrowLocation.LEFT_TOP);
-                        }
-                       else {
-                            popOver.setArrowLocation(ArrowLocation.RIGHT_TOP);
+                        if (event.getSceneX() < 1920 / 2) {
+                            if (event.getSceneY() > 1080 / 2) {
+                                popOver.setArrowLocation(ArrowLocation.LEFT_BOTTOM);
+                            } else {
+                                popOver.setArrowLocation(ArrowLocation.LEFT_TOP);
+                            }
+                        } else {
+                            if (event.getSceneY() > 1080 / 2) {
+                                popOver.setArrowLocation(ArrowLocation.RIGHT_BOTTOM);
+                            } else {
+                                popOver.setArrowLocation(ArrowLocation.RIGHT_TOP);
+                            }
                         }
 
                         popOver.show((javafx.scene.Node) event.getSource(), -6);
@@ -650,8 +644,6 @@ public class MapScreenController {
                         popOver.setCloseButtonEnabled(false);
                         popOver.setAutoFix(true);
                         popOver.setDetachable(false);
-
-                        nodeDispSet.get(string).setStroke(Color.YELLOW);
                     }
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_EXITED) {
@@ -667,6 +659,111 @@ public class MapScreenController {
             event.consume();
         }
     };
+
+    public StackPane constructIcon(Node.nodeType type) {
+        Rectangle iconShape = new Rectangle(MAP_ICON_SIZE, MAP_ICON_SIZE);
+        iconShape.setArcHeight(5);
+        iconShape.setArcWidth(5);
+        MaterialIconView icon = null;
+        MaterialDesignIconView designIcon = null;
+        Boolean usingDesignIcon = false;
+        Polygon iconArrow = new Polygon();
+        VBox iconShapeVBox = new VBox(iconShape, iconArrow);
+        iconArrow.getPoints().addAll(new Double[]{
+                (MAP_ICON_SIZE * 0.25), 0.0,
+                (MAP_ICON_SIZE * 0.75), 0.0,
+                (MAP_ICON_SIZE * 0.5), (MAP_ICON_SIZE * 0.25)
+        });
+
+        switch (type) {
+            case KIOS: {
+                iconShape.setStyle("-fx-fill: LIGHTGRAY;");
+                iconArrow.setStyle("-fx-fill: LIGHTGRAY;");
+                icon = new MaterialIconView(MaterialIcon.HOME);
+                break;
+            }
+            case CONF: {
+                iconShape.setStyle("-fx-fill: TAN;");
+                iconArrow.setStyle("-fx-fill: TAN;");
+                icon = new MaterialIconView(MaterialIcon.INSERT_CHART);
+                break;
+            }
+            case DEPT: {
+                iconShape.setStyle("-fx-fill: TOMATO;");
+                iconArrow.setStyle("-fx-fill: TOMATO;");
+                icon = new MaterialIconView(MaterialIcon.RECENT_ACTORS);
+                break;
+            }
+            case INFO: {
+                iconShape.setStyle("-fx-fill: VIOLET;");
+                iconArrow.setStyle("-fx-fill: VIOLET;");
+                icon = new MaterialIconView(MaterialIcon.INFO);
+                break;
+            }
+            case LABS: {
+                iconShape.setStyle("-fx-fill: CYAN;");
+                iconArrow.setStyle("-fx-fill: CYAN;");
+                icon = new MaterialIconView(MaterialIcon.HEALING);
+                break;
+            }
+            case REST: {
+                iconShape.setStyle("-fx-fill: DODGERBLUE;");
+                iconArrow.setStyle("-fx-fill: DODGERBLUE;");
+                icon = new MaterialIconView(MaterialIcon.WC);
+                break;
+            }
+            case SERV: {
+                iconShape.setStyle("-fx-fill: LIGHTPINK;");
+                iconArrow.setStyle("-fx-fill: LIGHTPINK;");
+                icon = new MaterialIconView(MaterialIcon.ROOM_SERVICE);
+                break;
+            }
+            case STAI: {
+                iconShape.setStyle("-fx-fill: DARKSEAGREEN;");
+                iconArrow.setStyle("-fx-fill: DARKSEAGREEN;");
+                designIcon = new MaterialDesignIconView(MaterialDesignIcon.STAIRS);
+                usingDesignIcon = true;
+                break;
+            }
+            case EXIT: {
+                iconShape.setStyle("-fx-fill: RED;");
+                iconArrow.setStyle("-fx-fill: RED;");
+                icon = new MaterialIconView(MaterialIcon.EXIT_TO_APP);
+                break;
+            }
+            case RETL: {
+                iconShape.setStyle("-fx-fill: GREEN;");
+                iconArrow.setStyle("-fx-fill: GREEN;");
+                icon = new MaterialIconView(MaterialIcon.SHOPPING_CART);
+                break;
+            }
+            case ELEV: {
+                iconShape.setStyle("-fx-fill: LIGHTSEAGREEN;");
+                iconArrow.setStyle("-fx-fill: LIGHTSEAGREEN;");
+                designIcon = new MaterialDesignIconView(MaterialDesignIcon.ELEVATOR);
+                usingDesignIcon = true;
+                break;
+            }
+            default: {
+                return null;
+            }
+        }
+        iconShapeVBox.setAlignment(Pos.CENTER);
+        iconShapeVBox.setSpacing(-1);
+        if (usingDesignIcon) {
+            designIcon.setSize(Integer.toString(MAP_ICON_SIZE - 3));
+            designIcon.setTranslateY(-2);
+            StackPane sp = new StackPane(iconShapeVBox, designIcon);
+            sp.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 2.0, 0.7, 0.0, 0.0)");
+            return sp;
+        } else {
+            icon.setSize(Integer.toString(MAP_ICON_SIZE - 3));
+            icon.setTranslateY(-2);
+            StackPane sp = new StackPane(iconShapeVBox, icon);
+            sp.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 2.0, 0.7, 0.0, 0.0)");
+            return sp;
+        }
+    }
 
     EventHandler<ScrollEvent> nodeScrollHandler = new EventHandler<ScrollEvent>() {
         @Override
@@ -711,8 +808,12 @@ public class MapScreenController {
 
                 mapImage.setTranslateX(newTranslateX);
                 mapImage.setTranslateY(newTranslateY);
-                nodesEdgesPane.setTranslateX(newTranslateX);
-                nodesEdgesPane.setTranslateY(newTranslateY);
+                nodesPane.setTranslateX(newTranslateX);
+                nodesPane.setTranslateY(newTranslateY);
+                edgePane.setTranslateX(newTranslateX);
+                edgePane.setTranslateY(newTranslateY);
+                arrowPane.setTranslateX(newTranslateX);
+                arrowPane.setTranslateY(newTranslateY);
             }
         }
     };
@@ -720,15 +821,17 @@ public class MapScreenController {
     EventHandler<MouseEvent> labelEventHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
+            System.out.println("mouseEvent: " + event.getEventType().toString());
             if (event.getEventType() == MouseEvent.MOUSE_CLICKED){
+                System.out.println("Label Clicked");
 
             }
         }
     };
 
-    public void floorSequenceButtonOp(ActionEvent e){
+    public void floorSequenceButtonOp(ActionEvent e) {
         String floor = "";
-        for (JFXButton button: floorSequenceList) {
+        for (JFXButton button : floorSequenceList) {
             button.setOpacity(0.5);
             if (e.getSource().equals(button)) {
                 String regex = "Floor ";
@@ -737,7 +840,7 @@ public class MapScreenController {
                 button.setOpacity(1.0);
             }
         }
-        switch (floor){
+        switch (floor) {
             case "3":
                 floor3ButtonOp(null);
                 break;
@@ -761,7 +864,6 @@ public class MapScreenController {
 
     public void addOverlay() {
         Parent root;
-        Stage stage;
         FXMLLoader loader;
 
         loader = new FXMLLoader(getClass().getResource("/FXML/map/SearchBarOverlay.fxml"));
@@ -782,9 +884,10 @@ public class MapScreenController {
      */
     public void updateMap() {
         nodeDispSet.clear();
-        nodesEdgesPane.getChildren().clear();
+        nodesPane.getChildren().clear();
+        edgePane.getChildren().clear();
+        arrowPane.getChildren().clear();
         getMap();
-        drawEdges();
         drawNodes();
     }
 
@@ -794,15 +897,14 @@ public class MapScreenController {
      * Used to draw the list of nodes returned by AStar
      * it will also create the start and end labels, color the path, change the color of certain nodes
      * (end = red, start = green, stair = blue) and it will create the label for the stairs
+     *
      * @param path List of Nodes to be drawn
      */
-    //removed static hope it didn't break anything
     public void drawPath(ArrayList<Node> path) {
         double width, height, angle;
         double distanceCounter = 0;
 
-
-        Node currentNode = null, pastNode = null;
+        Node currentNode = null, pastNode;
         if (pathDrawn) {
             resetPath();
         } else {
@@ -812,6 +914,63 @@ public class MapScreenController {
             updateMap();
         }
 
+        startNode = path.get(0);
+        if (startNode.getFloor().equals(currentFloor)) {
+            javafx.scene.Node iconNode = iconDispSet.get(startNode.getID());
+//            ((GlyphIcon) ((StackPane) iconNode).getChildren().get(1)).setSize(Double.toString(MAP_ICON_SIZE * nodeIconScale));
+            iconNode.setScaleX(nodeIconScale);
+            iconNode.setScaleY(nodeIconScale);
+            iconNode.toFront();
+            BounceTransition anim1 = new BounceTransition(iconNode);
+            animSet.add(anim1);
+            anim1.playFromStart();
+        } else {
+            javafx.scene.Node node = iconDispSet.get(startNode.getID());
+            node.setScaleX(nodeIconScale);
+            node.setScaleY(nodeIconScale);
+            node.setOpacity(0.6);
+            node.toFront();
+            BounceTransition anim2 = new BounceTransition(node);
+            animSet.add(anim2);
+            anim2.playFromStart();
+            if (!toggleOn) {
+                node.setLayoutX((startNode.getX() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
+                node.setLayoutY((startNode.getY() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
+            } else {
+                node.setLayoutX((startNode.getxDisplay() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
+                node.setLayoutY((startNode.getyDisplay() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
+            }
+            nodesPane.getChildren().add(node);
+        }
+
+        endNode = path.get(path.size() - 1);
+        if (endNode.getFloor().equals(currentFloor)) {
+            javafx.scene.Node iconNode2 = iconDispSet.get(endNode.getID());
+            iconNode2.setScaleX(nodeIconScale);
+            iconNode2.setScaleY(nodeIconScale);
+            iconNode2.toFront();
+            BounceTransition anim3 = new BounceTransition(iconNode2);
+            animSet.add(anim3);
+            anim3.playFromStart();
+        } else {
+            javafx.scene.Node node2 = iconDispSet.get(endNode.getID());
+            node2.setScaleX(nodeIconScale);
+            node2.setScaleY(nodeIconScale);
+            node2.setOpacity(0.6);
+            node2.toFront();
+            BounceTransition anim4 = new BounceTransition(node2);
+            animSet.add(anim4);
+            anim4.playFromStart();
+            if (!toggleOn) {
+                node2.setLayoutX((endNode.getX() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
+                node2.setLayoutY((endNode.getY() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
+            } else {
+                node2.setLayoutX((endNode.getxDisplay() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
+                node2.setLayoutY((endNode.getyDisplay() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
+            }
+            nodesPane.getChildren().add(node2);
+        }
+
         stairNodeSet.clear();
         this.pathMade = path;
 
@@ -819,13 +978,10 @@ public class MapScreenController {
         double maxYCoord = 0;
         double minXCoord = 5000;
         double minYCoord = 3400;
-        Font font = new Font("verdana", 10.0);
-
-        Label startLabel = new Label();
-        Label endLabel = new Label();
+        double xDistance = 0;
+        double yDistance = 0;
 
         for (Node n : path) {
-
             if (toggleOn) {
                 if (n.getxDisplay() < minXCoord) minXCoord = n.getxDisplay();
                 if (n.getxDisplay() > maxXCoord) maxXCoord = n.getxDisplay();
@@ -844,143 +1000,42 @@ public class MapScreenController {
             //checks if if the current node should go in stair set
             checkStairNodeSet(currentNode);
 
-            //Draws the arrows
-            if (!path.get(0).equals(n)) {
-                if (toggleOn) {
-                    width = currentNode.getxDisplay() - pastNode.getxDisplay();
-                    height = currentNode.getyDisplay() - pastNode.getyDisplay();
-                } else {
-                    width = currentNode.getX() - pastNode.getX();
-                    height = currentNode.getY() - pastNode.getY();
-                }
-                angle = Math.atan2(height, width);
-                //increment the distanceCounter
-                distanceCounter += currentNode.distanceBetweenNodes(pastNode);
-                if (distanceCounter >= 175) {
-                    distanceCounter = 0;
-
-                    arrowFloorSet.add(currentNode.getFloor().toString());
-                    if (toggleOn) {
-                        drawTriangle(angle, pastNode.getxDisplay(), pastNode.getyDisplay());
-                    } else {
-                        drawTriangle(angle, pastNode.getX(), pastNode.getY());
-                    }
-                }
-            }
 
             //set start node to Green and end node to red
             if (path.get(0).equals(n)) {
-                nodeDispSet.get(currentNode.getID()).setFill(Color.GREEN);
-                nodeDispSet.get(currentNode.getID()).setVisible(true);
-                if (!currentNode.getFloor().equals(currentFloor))
-                    nodeDispSet.get(currentNode.getID()).setOpacity(0.5);
-
-                if (toggleOn) {
-                    startLabel.setLayoutX((n.getxDisplay() + 5 - X_OFFSET) * X_SCALE);
-                    startLabel.setLayoutY((n.getyDisplay() - 40 - Y_OFFSET) * Y_SCALE);
-                } else {
-                    startLabel.setLayoutX((n.getX() + 5 - X_OFFSET) * X_SCALE);
-                    startLabel.setLayoutY((n.getY() - 40 - Y_OFFSET) * Y_SCALE);
-                }
-                startLabel.setText(n.getLongName());
-                startLabel.setFont(font);
-                startLabel.toFront();
-                labelDispSet.add(startLabel);
-                nodesEdgesPane.getChildren().add(startLabel);
 
             } else if (path.get(path.size() - 1).equals(n)) {
-                nodeDispSet.get(currentNode.getID()).setFill(Color.RED);
-                nodeDispSet.get(currentNode.getID()).setVisible(true);
-                if (!currentNode.getFloor().equals(currentFloor))
-                    nodeDispSet.get(currentNode.getID()).setOpacity(0.5);
 
                 //if the last node was a stair or an elevator then it should check the else in the checkStairNode function
                 if (currentNode.getType().equals(Node.nodeType.ELEV) || currentNode.getType().equals(Node.nodeType.STAI)) {
                     addToStairNodeSet();
                 }
-                if (toggleOn) {
-                    endLabel.setLayoutX((n.getxDisplay() + 5 - X_OFFSET) * X_SCALE);
-                    endLabel.setLayoutY((n.getyDisplay() - 34 - Y_OFFSET) * Y_SCALE);
-                } else {
-                    endLabel.setLayoutX((n.getX() + 5 - X_OFFSET) * X_SCALE);
-                    endLabel.setLayoutY((n.getY() - 34 - Y_OFFSET) * Y_SCALE);
-                }
-                endLabel.setText(n.getLongName());
-                endLabel.setFont(font);
-                endLabel.toFront();
-                labelDispSet.add(endLabel);
-                nodesEdgesPane.getChildren().add(endLabel);
             }
             //Color in the path appropriately
-            for (Edge e : currentNode.getEdges()) {
-                if (pastNode != null) {
-                    if (e.contains(pastNode)) {
-                        edgeDispSet.get(e.getID()).setStroke(Color.rgb(250, 150, 0));
-                        edgeDispSet.get(e.getID()).setVisible(true);
+            drawEdge(currentNode, pastNode);
 
-                        if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
-                            edgeDispSet.get(e.getID()).setOpacity(1.0);
-                        } else {
-                            edgeDispSet.get(e.getID()).getStrokeDashArray().addAll(1.0, 10.0);
-                            edgeDispSet.get(e.getID()).setOpacity(0.5);
-
-                        }
-                    }
+            //total up the x and y distance of the path
+            if (pastNode != null) {
+                if (toggleOn) {
+                    xDistance += (currentNode.getxDisplay() - pastNode.getxDisplay());
+                    yDistance += (currentNode.getyDisplay() - pastNode.getyDisplay());
+                } else {
+                    xDistance += (currentNode.getX() - pastNode.getX());
+                    yDistance += (currentNode.getY() - pastNode.getY());
                 }
             }
         }
-
-        if(searchBarOverlayController.getDirectionsVisible()){
+        if (searchBarOverlayController.getDirectionsVisible()) {
             searchBarOverlayController.clearTable();
             searchBarOverlayController.setDirectionsVisible(false);
             searchBarOverlayController.directionsButtonOp(null);
         }
-        //this sets the proper opacity for the arrows based on floor
-        for (int i = 0; i < arrowDispSet.size(); i++) {
-            if (arrowFloorSet.get(i).equals(currentFloor.toString())) {
-                arrowDispSet.get(i).setOpacity(1.0);
-            } else {
-                arrowDispSet.get(i).setOpacity(0.5);
-            }
-        }
 
-        // Create PopOver for Stair or Elevator nodes
-        for (int i = 0; i < stairNodeSet.size(); i += 2) {
-            for (String str : nodeDispSet.keySet()) {
-                if (str.equals(stairNodeSet.get(i).getID()) && stairNodeSet.get(i).getFloor().equals(currentFloor)) {
-                    nodeDispSet.get(str).setFill(Color.PURPLE);
-                    Label clickMeLabel = new Label("Click me to follow the path");
-                    clickMeLabel.setFont(font);
-                    labelDispSet.add(clickMeLabel);
-                    nodesEdgesPane.getChildren().add(clickMeLabel);
-                    if (!toggleOn) {
-                        // 2d view
-                        double actualX = (stairNodeSet.get(i).getX() + 10 - X_OFFSET) * X_SCALE;
-                        double actualY = (stairNodeSet.get(i).getY() + 10 - Y_OFFSET) * Y_SCALE;
-                        clickMeLabel.setLayoutX(actualX + 20);
-                        clickMeLabel.setLayoutY(actualY + 20);
-                        Line line = new Line(actualX, actualY, actualX + 20, actualY + 20);
-                        nodesEdgesPane.getChildren().add(line);
-                        lineDispSet.add(line);
-                        break;
-                    } else {
-                        // 3d view
-                        double actualX = (stairNodeSet.get(i).getxDisplay() + 10 - X_OFFSET) * X_SCALE;
-                        double actualY = (stairNodeSet.get(i).getyDisplay() + 10 - Y_OFFSET) * Y_SCALE;
-                        clickMeLabel.setLayoutX(actualX + 20);
-                        clickMeLabel.setLayoutY(actualY + 20);
-                        Line line = new Line(actualX, actualY, actualX + 20, actualY + 20);
-                        nodesEdgesPane.getChildren().add(line);
-                        lineDispSet.add(line);
-                        break;
-                    }
-                }
-            }
-        }
         getFloors();
         createFloorSequence();
 
 
+        System.out.println("list of stair nodes: " + stairNodeSet.toString());
         minXCoord -= 400;
         minYCoord -= 400;
         maxXCoord += 400;
@@ -990,55 +1045,100 @@ public class MapScreenController {
 
         double desiredZoomX = 1920 / (rangeX * X_SCALE);
         double desiredZoomY = 1080 / (rangeY * Y_SCALE);
+        System.out.println("desired X zoom: " + desiredZoomX + " desired Zoom Y: " + desiredZoomY);
 
         double centerX = (maxXCoord + minXCoord) / 2;
         double centerY = (maxYCoord + minYCoord) / 2;
 
         autoTranslateZoom(desiredZoomX, desiredZoomY, centerX, centerY);
 
+        System.out.println(toggleOn.toString());
 
         pathDrawn = true;
+        //Draws the arrows
+        if (toggleOn) {
+            width = path.get(1).getxDisplay() - path.get(0).getxDisplay();
+            height = path.get(1).getyDisplay() - path.get(0).getyDisplay();
+        } else {
+            width = path.get(1).getX() - path.get(0).getX();
+            height = path.get(1).getY() - path.get(0).getY();
+        }
+        angle = Math.atan2(height, width);
+        //increment the distanceCounter
+        double totalDistance = Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+        int arrowNumber = (int) (totalDistance * 1 / 100.0);
+        for (int i = 0; i < arrowNumber; i++) {
+            arrowFloorSet.add(currentNode.getFloor().toString());
+            drawTriangle();
+        }
+
+        int counter = 0;
+        for (Polygon shape : arrowDispSet) {
+            counter++;
+            ArrowPathTransition arrowPathTransition = new ArrowPathTransition(pathMade, shape, arrowDispSet.size(),
+                    currentFloor, toggleOn);
+            arrowPathTransition.setPathAnim();
+            arrowPathTransition.jumpToDuration(counter);
+            arrowPathTransition.playAnim();
+        }
+    }
+
+    public void drawEdge(Node currentNode, Node pastNode) {
+        for (Edge e : currentNode.getEdges()) {
+            if (pastNode != null) {
+                if (e.contains(pastNode)) {
+                    Line line = new Line();
+                    edgePane.getChildren().add(line);
+                    edgeDispSet.put(e.getID(), line);
+                    line.setStroke(Color.rgb(250, 150, 0));
+                    line.setStrokeWidth(5.0);
+                    if (!toggleOn) {
+                        line.setStartX((e.getStart().getX() - X_OFFSET) * X_SCALE);
+                        line.setStartY((e.getStart().getY() - Y_OFFSET) * Y_SCALE);
+                        line.setEndX((e.getEnd().getX() - X_OFFSET) * X_SCALE);
+                        line.setEndY((e.getEnd().getY() - Y_OFFSET) * Y_SCALE);
+                        if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
+                            line.setOpacity(1.0);
+                        } else {
+                            line.getStrokeDashArray().addAll(1.0, 10.0);
+                            line.setOpacity(0.75);
+                        }
+                    } else {
+                        line.setStartX((e.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
+                        line.setStartY((e.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);
+                        line.setEndX((e.getEnd().getxDisplay() - X_OFFSET) * X_SCALE);
+                        line.setEndY((e.getEnd().getyDisplay() - Y_OFFSET) * Y_SCALE);
+                        if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
+                            line.setOpacity(1.0);
+                        } else {
+                            line.getStrokeDashArray().addAll(1.0, 10.0);
+                            line.setStrokeDashOffset(0);
+                            line.setOpacity(0.75);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
      * drawTriangle is the function that draws directional arrows for the function
-     * @param angle is the angle used to generate this
-     * @param initX is where it starts on the X axis
-     * @param initY is where it starts on the Y axis
      *
-     * This outputs an arrow on the screen along the line.
+     *              <p>
+     *              This outputs an arrow on the screen along the line.
      */
-    public void drawTriangle(double angle, double initX, double initY) {
-
-        double x1, x2, x3, y1, y2, y3;
-
+    public void drawTriangle() {
 
         Polygon arrow = new Polygon();
 
-
-        initX = (initX - X_OFFSET) * X_SCALE;
-        initY = (initY - Y_OFFSET) * Y_SCALE;
-
-
-        x1 = initX + (9 * Math.cos(angle));
-        y1 = initY + (9 * Math.sin(angle));
-
-        x2 = initX + (4 * Math.cos(angle - (2 * Math.PI / 3)));
-        y2 = initY + (4 * Math.sin(angle - (2 * Math.PI / 3)));
-
-        x3 = initX + (4 * Math.cos(angle + (2 * Math.PI / 3)));
-        y3 = initY + (4 * Math.sin(angle + (2 * Math.PI / 3)));
-
-
         arrow.getPoints().addAll(new Double[]{
-                initX, initY,
-                x2, y2,
-                x1, y1,
-                x3, y3});
-        arrow.setFill(Color.rgb(200, 30, 0));
+                2.5, 2.5,
+                0.0, 0.0,
+                9.0, 2.5,
+                0.0, 5.0});
+        arrow.setFill(Color.rgb(11, 47, 91));
 
-        nodesEdgesPane.getChildren().add(arrow);
-
+        arrowPane.getChildren().add(arrow);
         arrowDispSet.add(arrow);
     }
 
@@ -1046,7 +1146,7 @@ public class MapScreenController {
     public void checkStairNodeSet(Node currentNode) {
 
         if (currentNode.getType().equals(Node.nodeType.STAI)) {
-            if(recentElevNodeSet.size() > 1)
+            if (recentElevNodeSet.size() > 1)
                 addToStairNodeSet();
             recentElevNodeSet.clear();
             recentStairNodeSet.add(currentNode);
@@ -1077,60 +1177,25 @@ public class MapScreenController {
      * Used to draw the list of nodes returned by AStar
      */
     public void resetPath() {
+        iconDispSet.get(startNode.getID()).setScaleX(1);
+        iconDispSet.get(startNode.getID()).setScaleY(1);
+        iconDispSet.get(endNode.getID()).setScaleX(1);
+        iconDispSet.get(endNode.getID()).setScaleY(1);
 
-//        searchBarOverlayController.directionsButton.setVisible(false);
-//        searchBarOverlayController.emailButton.setVisible(false);
-//        searchBarOverlayController.phoneButton.setVisible(false);
-//        searchBarOverlayController.directionsRectangle.setVisible(false);
-//        searchBarOverlayController.directionsTableView.setVisible(false);
-//        searchBarOverlayController.directionsButton.setText("Directions >");
-//        searchBarOverlayController.setDirectionsVisible(false);
-        clearFloorSequenceHBox();
-        Node currentNode = null, pastNode = null;
-        Circle waypoint;
-        Line line;
         stairNodeSet.clear();
-        for (Node n : pathMade) {
-            pastNode = currentNode;
-            currentNode = n;
-            //nodeDispSet.get(n.getID()).setFill(Color.DODGERBLUE);
-            if (nodeDispSet.get(n.getID()).getFill().equals(Color.PURPLE)) {
-                nodeDispSet.get(n.getID()).setFill(Color.DODGERBLUE);
-            }
-            if (n.getFloor().equals(currentFloor)) {
-                nodeDispSet.get(n.getID()).setOpacity(1.0);
-            } else {
-                nodeDispSet.get(n.getID()).setVisible(false);
-            }
-
-            for (Edge e : currentNode.getEdges()) {
-                if (pastNode != null) {
-                    if (e.contains(pastNode)) {
-
-                        edgeDispSet.get(e.getID()).setVisible(false);
-                    }
-                }
-            }
-            for (Polygon p : arrowDispSet) {
-                p.setVisible(false);
-                p.setPickOnBounds(false);
-            }
-            arrowDispSet.clear();
-            arrowFloorSet.clear();
-            for (Label l : labelDispSet) {
-                l.setVisible(false);
-                l.setPickOnBounds(false);
-                nodesEdgesPane.getChildren().remove(l);
-            }
-            labelDispSet.clear();
-            for (Line l : lineDispSet) {
-                l.setVisible(false);
-                l.setPickOnBounds(false);
-                nodesEdgesPane.getChildren().remove(l);
-            }
-            lineDispSet.clear();
-        }
+        edgeDispSet.clear();
+        edgePane.getChildren().clear();
+        arrowDispSet.clear();
+        arrowFloorSet.clear();
+        arrowPane.getChildren().clear();
         pathDrawn = false;
+
+        for (BounceTransition anim : animSet) {
+            anim.stop();
+        }
+        animSet.clear();
+        nodesPane.getChildren().clear();
+        drawNodes();
     }
 
     public void setToggleOn(Boolean toggleOn) {
@@ -1140,27 +1205,14 @@ public class MapScreenController {
         if (pathDrawn) {
             drawPath(pathMade);
         }
-
     }
 
     public void clearStartNode() {
         if (pathDrawn) resetPath();
-        for (Circle c : nodeDispSet.values()) {
-            if (c.getFill().equals(Color.GREEN)) {
-                c.setFill(Color.DODGERBLUE);
-            }
-
-        }
     }
 
     public void clearEndNode() {
         if (pathDrawn) resetPath();
-        for (Circle c : nodeDispSet.values()) {
-            if (c.getFill().equals(Color.RED)) {
-                c.setFill(Color.DODGERBLUE);
-            }
-
-        }
     }
 
     public void removeFocus() {
@@ -1203,14 +1255,22 @@ public class MapScreenController {
 
         mapImage.setTranslateX(screenTranslateX);
         mapImage.setTranslateY(screenTranslateY);
-        nodesEdgesPane.setTranslateX(screenTranslateX);
-        nodesEdgesPane.setTranslateY(screenTranslateY);
+        nodesPane.setTranslateX(screenTranslateX);
+        nodesPane.setTranslateY(screenTranslateY);
+        edgePane.setTranslateX(screenTranslateX);
+        edgePane.setTranslateY(screenTranslateY);
+        arrowPane.setTranslateX(screenTranslateX);
+        arrowPane.setTranslateY(screenTranslateY);
+    }
+
+    public Boolean getPathDrawn() {
+        return this.pathDrawn;
     }
 
     /**
      * this method will determine what floors the path goes on
      */
-    public void getFloors(){
+    public void getFloors() {
         floorsList.clear();
         for (int i = 0; i < stairNodeSet.size(); i+=2){
                 floorsList.add(stairNodeSet.get(i).getFloor());
@@ -1222,13 +1282,13 @@ public class MapScreenController {
     /**
      * creates the labels and puts them in the hbox
      */
-    public void createFloorSequence(){
+    public void createFloorSequence() {
         clearFloorSequenceHBox();
         floorSequenceList.clear();
         Polygon arrowHead = new Polygon();
         Polygon arrowEnd = new Polygon();
         Polygon arrow = new Polygon();
-        arrowHead.getPoints().addAll( new Double[]{
+        arrowHead.getPoints().addAll(new Double[]{
                 0.0, 0.0,
                 200.0, 0.0,
                 300.0, 50.0,
@@ -1237,20 +1297,20 @@ public class MapScreenController {
         });
 
         arrowEnd.getPoints().addAll(new Double[]{
-                0.0,0.0,
-                300.0,0.0,
-                300.0,100.0,
+                0.0, 0.0,
+                300.0, 0.0,
+                300.0, 100.0,
                 0.0, 100.0,
                 100.0, 50.0
         });
 
         arrow.getPoints().addAll(new Double[]{
-                0.0,0.0,
-                200.0,0.0,
-                300.0,50.0,
-                200.0,100.0,
-                0.0,100.0,
-                100.0,50.0
+                0.0, 0.0,
+                200.0, 0.0,
+                300.0, 50.0,
+                200.0, 100.0,
+                0.0, 100.0,
+                100.0, 50.0
         });
 
 
@@ -1260,33 +1320,39 @@ public class MapScreenController {
                 JFXButton button = new JFXButton();
                 floorSequenceHBox.getChildren().add(button);
                 floorSequenceList.add(button);
+                button.setPadding(new Insets(30));
                 if (i == 0) {
                     button.setShape(arrowHead);
                     button.setAlignment(Pos.CENTER_LEFT);
                 } else if (i == floorsList.size() - 1) {
                     button.setShape(arrowEnd);
                     button.setAlignment(Pos.CENTER_RIGHT);
+                    button.setPadding(new Insets(20));
                 } else {
                     button.setShape(arrow);
                     button.setAlignment(Pos.CENTER_RIGHT);
                 }
-                if (!currentFloor.equals(floorsList.get(i))){
-                    button.setOpacity(0.5);
+
+                button.setTextFill(Color.color(0.96,0.737,0.227));
+                button.setStyle("-fx-background-color: #0b2f5b;");
+                if (!currentFloor.equals(floorsList.get(i))) {
+                    button.setTextFill(Color.BLACK);
+                    button.setStyle("-fx-background-color: #DADADA;");
                 }
                 button.setMinHeight(75);
-                button.setMinWidth(125);
-                button.setPadding(new Insets(20));
+                button.setMinWidth(150);
+
                 button.setButtonType(JFXButton.ButtonType.RAISED);
+                button.setFont(new Font(18));
                 button.setOnAction(e -> floorSequenceButtonOp(e));
                 button.setText("Floor " + floorsList.get(i).toString());
-                button.setFont(new Font(18));
-                button.setStyle("-fx-background-color: red;");
+
             }
         }
 
     }
 
-    public void clearFloorSequenceHBox(){
+    public void clearFloorSequenceHBox() {
         floorSequenceHBox.getChildren().clear();
     }
 

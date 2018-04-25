@@ -66,10 +66,8 @@ public class Main extends Application {
             db.updateStorage();
         } catch (NodeNotFoundException n) {
             n.printStackTrace();
-            System.out.println(n.getNodeID());
         } catch (EdgeNotFoundException e) {
             e.printStackTrace();
-            System.out.println();
         }
 
 
