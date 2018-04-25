@@ -60,7 +60,7 @@
          <bottom>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dadada" height="169.0" layoutX="28.0" layoutY="24.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,1.5);" width="1840.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="24.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b9b9b9" height="169.0" layoutX="28.0" layoutY="24.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,1.5);" width="1840.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="24.0" />
                   <GridPane gridLinesVisible="true" layoutX="28.0" layoutY="25.0" prefHeight="168.0" prefWidth="1868.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="24.0">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="200.0" prefWidth="110.0" />
