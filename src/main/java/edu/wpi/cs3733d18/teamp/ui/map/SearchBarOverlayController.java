@@ -78,7 +78,6 @@ public class SearchBarOverlayController implements Initializable{
     @FXML
     TreeItem<DirectionsTable> floorParent;
 
-
     @FXML
     TreeItem<DirectionsTable> floors;
 
@@ -678,13 +677,15 @@ public class SearchBarOverlayController implements Initializable{
     }
 
     public void setParents(ArrayList<Node.floorType> floorList){
-        parents.add(new TreeItem<>(new DirectionsTable("Starting Route!")));
+        floorParent = new TreeItem<>(new DirectionsTable("Starting Route!"));
+        parents.add(floorParent);
         if(floorList.size() == 0){
-            parents.add(new TreeItem<>(new DirectionsTable("Floor " + mapScreenController.getCurrentFloor().toString())));
+            floorParent = new TreeItem<>(new DirectionsTable("Floor " + mapScreenController.getCurrentFloor().toString()));
+            parents.add(floorParent);
         }else {
             for (Node.floorType floor : floorList) {
-                parents.add(new TreeItem<>(new DirectionsTable("Floor " + floor.toString())));
-                System.out.println("HERE");
+                floorParent = new TreeItem<>(new DirectionsTable("Floor " + floor.toString()));
+                parents.add(floorParent);
             }
         }
 

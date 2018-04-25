@@ -21,6 +21,7 @@ import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
@@ -42,6 +43,9 @@ public class RecordScreenController implements Initializable {
 
     @FXML
     GridPane statsGridPane;
+
+    @FXML
+    VBox statsVBox;
 
     @FXML
     JFXComboBox filterRecordComboBox;
@@ -157,7 +161,6 @@ public class RecordScreenController implements Initializable {
         for(Record record: records) {
             System.out.println(db.RequestTypeToString(record.getRequestType()));
             if(filterType != null && record.getRequestType().equals(filterType)) {
-
                 children.add(new TreeItem<>(new RecordsTable(db.RequestTypeToString(record.getRequestType()), record.getSubType(),
                         record.getTotalOfType(), record.getTotalTime(), record.getAvgTime())));
             }else if (filterType == null){
@@ -202,8 +205,8 @@ public class RecordScreenController implements Initializable {
     public boolean filterRecordComboBoxOp(ActionEvent e) {
         String type = filterRecordComboBox.getValue().toString();
         type = type.toLowerCase();
-        statsGridPane.getChildren().remove(pieChart);
-        statsGridPane.getChildren().remove(barChart);
+        statsVBox.getChildren().remove(pieChart);
+        statsVBox.getChildren().remove(barChart);
         switch (type) {
             case "language interpreter":
                 filterType = Request.requesttype.LANGUAGEINTERP;
@@ -299,7 +302,6 @@ public class RecordScreenController implements Initializable {
         requestPieChart.setLabelLineLength(20);
         requestPieChart.setLabelsVisible(true);
         requestPieChart.setStartAngle(180);
-        statsGridPane.add(requestPieChart, 0, 0);
         pieChart = requestPieChart;
 
         // Make the bar chart
@@ -364,7 +366,8 @@ public class RecordScreenController implements Initializable {
             series8.getData().add(new XYChart.Data<>("Average Time", db.recordAverageTime("emergency")));
             requestBarChart.getData().add(series8);
         }
-        statsGridPane.add(requestBarChart, 0, 1);
+
+        statsVBox.getChildren().setAll(requestPieChart, requestBarChart);
         barChart = requestBarChart;
 
 
@@ -390,7 +393,6 @@ public class RecordScreenController implements Initializable {
         curPieChart.setLabelLineLength(20);
         curPieChart.setLabelsVisible(true);
         curPieChart.setStartAngle(180);
-        statsGridPane.add(curPieChart, 0, 0);
         pieChart = curPieChart;
 
         // Make the bar chart
@@ -410,7 +412,7 @@ public class RecordScreenController implements Initializable {
                 curBarChart.getData().add(series1);
             }
         }
-        statsGridPane.add(curBarChart, 0, 1);
+        statsVBox.getChildren().setAll(curPieChart, curBarChart);
         barChart = curBarChart;
 
         return true;

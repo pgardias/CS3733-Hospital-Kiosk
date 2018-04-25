@@ -9,11 +9,13 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../../css/common.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.service.RecordScreenController">
    <children>
       <Rectangle fill="#dadada" height="1050.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian,GREY,5,0.0,0,0);" width="1890.0" x="15.0" y="15.0" />
+      <Rectangle fill="WHITESMOKE" height="850.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="395.0" x="1500.0" y="100.0" AnchorPane.bottomAnchor="79.0" AnchorPane.rightAnchor="25.0" />
       <BorderPane prefHeight="1080.0" prefWidth="1920.0">
          <top>
             <GridPane prefHeight="164.0" prefWidth="1920.0" BorderPane.alignment="CENTER">
@@ -35,7 +37,7 @@
          <center>
             <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="810.0" prefWidth="1440.0" BorderPane.alignment="CENTER">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1440.0" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -43,7 +45,7 @@
               </rowConstraints>
                <children>
                   <JFXComboBox fx:id="filterRecordComboBox" focusColor="#f5bc3a" onAction="#filterRecordComboBoxOp" prefWidth="400.0" promptText="Filter Records" unFocusColor="BLACK" GridPane.halignment="RIGHT" />
-                  <JFXTreeTableView fx:id="recordsTreeTable" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.rowIndex="1" />
+                  <JFXTreeTableView fx:id="recordsTreeTable" stylesheets="@../../css/tableview.css" GridPane.rowIndex="1" />
                </children>
                <BorderPane.margin>
                   <Insets bottom="50.0" />
@@ -51,14 +53,26 @@
             </GridPane>
          </center>
          <right>
-            <GridPane fx:id="statsGridPane" prefHeight="1050.0" prefWidth="394.0" BorderPane.alignment="CENTER">
+            <GridPane fx:id="statsGridPane" prefHeight="1050.0" prefWidth="400.0" BorderPane.alignment="CENTER">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
+               <children>
+                  <VBox fx:id="statsVBox" alignment="CENTER" minWidth="-Infinity" prefHeight="979.0" prefWidth="400.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </VBox>
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="32.5" right="25.0" top="-50.0" />
+               </BorderPane.margin>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
             </GridPane>
          </right>
       </BorderPane>
