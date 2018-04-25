@@ -544,7 +544,6 @@ public class MapScreenController {
                             }
                             if (!foundStair) {
                                 clearEndNode();
-                                resetPath();
                                 Node node = nodeSet.get(string);
                                 searchBarOverlayController.setDestinationSearchBar(node.getLongName());
                             }
@@ -976,34 +975,11 @@ public class MapScreenController {
                     yDistance += (currentNode.getY() - pastNode.getY());
                 }
             }
-
-
-            if (searchBarOverlayController.getDirectionsVisible()) {
-                searchBarOverlayController.clearTable();
-                searchBarOverlayController.setDirectionsVisible(false);
-                searchBarOverlayController.directionsButtonOp(null);
-            }
-
-            //Draws the arrows
-            if (toggleOn) {
-                width = path.get(1).getxDisplay() - path.get(0).getxDisplay();
-                height = path.get(1).getyDisplay() - path.get(0).getyDisplay();
-            } else {
-                width = path.get(1).getX() - path.get(0).getX();
-                height = path.get(1).getY() - path.get(0).getY();
-            }
-            angle = Math.atan2(height, width);
-            //increment the distanceCounter
-            double totalDistance = Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
-            int arrowNumber = (int) (totalDistance * 1 / 100.0);
-            for (int i = 0; i < arrowNumber; i++) {
-                arrowFloorSet.add(currentNode.getFloor().toString());
-                if (toggleOn) {
-                    drawTriangle(angle, path.get(0).getxDisplay(), path.get(0).getyDisplay());
-                } else {
-                    drawTriangle(angle, path.get(0).getX(), path.get(0).getY());
-                }
-            }
+        }
+        if (searchBarOverlayController.getDirectionsVisible()) {
+            searchBarOverlayController.clearTable();
+            searchBarOverlayController.setDirectionsVisible(false);
+            searchBarOverlayController.directionsButtonOp(null);
         }
 
         getFloors();
@@ -1030,6 +1006,27 @@ public class MapScreenController {
         System.out.println(toggleOn.toString());
 
         pathDrawn = true;
+        //Draws the arrows
+        if (toggleOn) {
+            width = path.get(1).getxDisplay() - path.get(0).getxDisplay();
+            height = path.get(1).getyDisplay() - path.get(0).getyDisplay();
+        } else {
+            width = path.get(1).getX() - path.get(0).getX();
+            height = path.get(1).getY() - path.get(0).getY();
+        }
+        angle = Math.atan2(height, width);
+        //increment the distanceCounter
+        double totalDistance = Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+        int arrowNumber = (int) (totalDistance * 1 / 100.0);
+        for (int i = 0; i < arrowNumber; i++) {
+            arrowFloorSet.add(currentNode.getFloor().toString());
+            if (toggleOn) {
+                drawTriangle(angle, path.get(0).getxDisplay(), path.get(0).getyDisplay());
+            } else {
+                drawTriangle(angle, path.get(0).getX(), path.get(0).getY());
+            }
+        }
+
         int counter = 0;
         for (Polygon shape: arrowDispSet) {
             counter++;
