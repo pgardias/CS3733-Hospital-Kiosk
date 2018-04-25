@@ -84,7 +84,6 @@ public class AStar extends Pathfinder {
 
                     // Add neighbor gScore value to gScore
                     tempGScore = gScore.get(currentNode.getID()) + e.getWeight();
-                    System.out.println(e.getWeight());
 
                     if (!gScore.containsKey(neighbor.getID())) {
 
@@ -106,7 +105,6 @@ public class AStar extends Pathfinder {
                 }
             }
         }
-        System.out.println("Path not found!");
         return;
     }
 }

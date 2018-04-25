@@ -66,7 +66,6 @@ public class SettingsController {
                 break;
             }
             default: {
-                System.out.println("Admin Settings Panel was unable to set the current Pathfinding Algorithm Context");
                 break;
             }
         }

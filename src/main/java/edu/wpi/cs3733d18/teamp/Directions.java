@@ -20,6 +20,7 @@ public class Directions {
     private static final int ELEVATORS = 8;
     private static final int STAIRS = 9;
     private static final int TURN_AROUND = 10;
+    private boolean firstDirection = false;
 
     private ArrayList<String> directions;
 
@@ -48,16 +49,19 @@ public class Directions {
         Node pastNode = null;
         Node nextNode = null;
         boolean changeDirections = false;
-        boolean floorChange = true;
+        boolean floorChange = false;
         int direction;
-        directions.add("Starting Route!");
+
+//        if(path.get(0).getType() == Node.nodeType.ELEV || path.get(0).getType() == Node.nodeType.STAI){
+//            directions.add("Floor change to " + path.get(0).getFloor().toString());
+//            firstElevator = false;
+//        }
+
         for (int i = 0; i < path.size()-1; i++) {
             // Set new nodes
             pastNode = node;
             node = path.get(i);
             nextNode = path.get(i+1);
-
-            System.out.println("pastNode: " + pastNode + " node: " + node + " nextNode: " + nextNode);
 
             if (pastNode != null) {
                 // Set new values according to new nodes
@@ -66,14 +70,17 @@ public class Directions {
                 pastAngle = pastNode.angleBetweenNodes(node);
 
                 direction = angleState(angle, pastAngle, node, pastNode);
+
+
                 if(floorChange){
-                    directions.add("Floor change to " + node.getFloor().toString());
+                    directions.add("Buffer");
+
                 }
                 floorChange = false;
 
+
                 switch (direction) {
                     case STAIRS:
-                        System.out.println("Stairs");
                         words = "Take the stairs " + floorsMessage(pastNode, node);
                         directions.add(words);
                         changeDirections = true;
@@ -81,7 +88,6 @@ public class Directions {
                         break;
 
                     case ELEVATORS:
-                        System.out.println("Elevator");
                         words = "Take the elevator " + floorsMessage(pastNode, node);
                         directions.add(words);
                         changeDirections = true;
@@ -89,49 +95,41 @@ public class Directions {
                         break;
 
                     case TURN_AROUND:
-                        System.out.println("Turn around");
                         words = "Turn around at " + node.getLongName();
                         changeDirections = true;
                         break;
 
                     case HARD_LEFT:
-                        System.out.println("Hard left");
                         words = "Make a hard left at " + node.getLongName();
                         changeDirections = true;
                         break;
 
                     case HARD_RIGHT:
-                        System.out.println("Hard right");
                         words = "Make a hard right at " + node.getLongName();
                         changeDirections = true;
                         break;
 
                     case LEFT:
-                        System.out.println("Left");
                         words = "Make a left at " + node.getLongName();
                         changeDirections = true;
                         break;
 
                     case RIGHT:
-                        System.out.println("Right");
                         words = "Make a right at " + node.getLongName();
                         changeDirections = true;
                         break;
 
                     case SLIGHT_LEFT:
-                        System.out.println("Slight left");
                         words = "Make a slight left at " + node.getLongName();
                         changeDirections = true;
                         break;
 
                     case SLIGHT_RIGHT:
-                        System.out.println("Slight right");
                         words = "Make a slight right at " + node.getLongName();
                         changeDirections = true;
                         break;
 
                     case STRAIGHT:
-                        System.out.println("Straight");
                         if (!changeDirections) {
 //                            distance += node.distanceBetweenNodes(pastNode);
                         } else {
@@ -142,18 +140,14 @@ public class Directions {
                 }
 
                 if (changeDirections && !floorChange) {
-                    System.out.println("direction changes!");
-                    System.out.println("distance: " + distance * Main.settings.getFeetPerPixel());
                     directions.add(getDistanceString(distance, node, pastNode));
                     directions.add(words);
                     distance = 0;
                 }
 
-                System.out.println("");
             }
         }
         directions.add(getDistanceString(distance, nextNode, node));
-        directions.add("You have arrived at your destination!");
         setDirections(directions);
     }
 
@@ -213,8 +207,6 @@ public class Directions {
             angleDiff -= 360;
         }
 
-//        System.out.println("angleDiff: " + angleDiff);
-
         if (node1.getType().equals(Node.nodeType.STAI) && node2.getType().equals(Node.nodeType.STAI)) {
             return STAIRS;
 
@@ -264,5 +256,6 @@ public class Directions {
     public  void clearDirections(){
         this.directions.clear();
     }
+
 
 }

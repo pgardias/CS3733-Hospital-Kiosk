@@ -104,7 +104,6 @@ public class MapBuilderEdgeFormController {
         } catch (NodeNotFoundException nnfe) {
             edgeFormErrorLabel.setText("Please choose two valid nodes.");
             edgeFormErrorLabel.setVisible(true);
-            System.out.println(nnfe.getNodeID());
             return;
         }
         Edge edge = new Edge(startNode, endNode, isActive);

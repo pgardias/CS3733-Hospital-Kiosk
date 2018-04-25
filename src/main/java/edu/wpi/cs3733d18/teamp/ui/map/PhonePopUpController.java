@@ -88,7 +88,6 @@ public class PhonePopUpController implements Initializable {
                 emailAddr = emailAddr.concat(phoneNum);
                 emailAddr = emailAddr.concat(parseCarrier(phoneCarrier));
                 SendEmail email = new SendEmail(emailAddr);
-                System.out.println(email.getTo());
                 email.sendText(pathDirections);
                 Stage stage = (Stage) submitButton.getScene().getWindow();
                 stage.close();

@@ -126,7 +126,6 @@ public class Node {
             case "Elevator":
                 return nodeType.ELEV;
             default:
-                System.out.println("EnumConstantNotPresentException THROWN WITH STRING: " + str);
                 return null;
         }
     }
@@ -188,7 +187,6 @@ public class Node {
             case "15 Francis":
                 return buildingType.FRANCIS_15;
             default:
-                System.out.println("EnumConstantNotPresentException THROWN WITH STRING: " + str);
                 return null;
         }
     }
@@ -259,7 +257,6 @@ public class Node {
             case "3":
                 return floorType.LEVEL_3;
             default:
-                System.out.println("EnumConstantNotPresentException THROWN WITH STRING: " + str);
                 return null;
         }
     }
@@ -340,19 +337,12 @@ public class Node {
      * @return the edge between teh two nodes, or null if none exist
      */
     public Edge getEdge(Node n) {
-//        System.out.println("this node in getEdge: " + this.toString());
-//        System.out.println("dest node in getEdge: " + n.toString());
         Edge edge = null;
         for (Edge e : this.edges) {
-//            System.out.println("Edge in getEdge: " + e.toString());
-//            System.out.println("node1 in getEdge: " + e.getNode1().toString());
-//            System.out.println("node2 in getEdge: " + e.getNode2().toString());
             if (e.getStart().equals(n)) {
-//                System.out.println("gucci");
                 edge = e;
             }
             if (e.getEnd().equals(n)) {
-//                System.out.println("gucci");
                 edge = e;
             }
         }
