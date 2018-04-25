@@ -363,7 +363,7 @@ public class SearchBarOverlayController implements Initializable{
      */
     public Node parseDestinationInput(Node srcNode, String string) throws NodeNotFoundException {
         Node aNode = srcNode;
-
+        hideDirections();
 
         switch (string) {
             case "NEAREST HALLWAY":
@@ -703,14 +703,16 @@ public class SearchBarOverlayController implements Initializable{
     }
 
     public void setParents(ArrayList<Node.floorType> floorList){
-
-
-        parents.add(new TreeItem<>(new DirectionsTable("Starting Route!")));
-        if(!is3D) {
-            parents.add(new TreeItem<>(new DirectionsTable("Floor " + mapScreenController.getCurrentFloor().toString())));
-        }
-        for (Node.floorType floor : floorList) {
-            parents.add( new TreeItem<>(new DirectionsTable("Floor " + floor.toString())));
+        floorParent = new TreeItem<>(new DirectionsTable("Starting Route!"));
+        parents.add(floorParent);
+        if(floorList.size() == 0 && !is3D){
+            floorParent = new TreeItem<>(new DirectionsTable("Floor " + mapScreenController.getCurrentFloor().toString()));
+            parents.add(floorParent);
+        }else {
+            for (Node.floorType floor : floorList) {
+                floorParent = new TreeItem<>(new DirectionsTable("Floor " + floor.toString()));
+                parents.add(floorParent);
+            }
         }
 
 

@@ -568,14 +568,21 @@ public class ServiceRequestScreen implements Initializable{
             try {
                 Request r = db.getOneRequest(requestID);
                 if (r.getRequestType() == Request.requesttype.LANGUAGEINTERP || r.getRequestType() == Request.requesttype.HOLYPERSON) {
+                    System.out.println(Main.currentUser.getEmployeeType());
+                    System.out.println(db.EmployeeTypeToString(Main.currentUser.getEmployeeType()));
+                    System.out.println(db.RequestTypeToString(r.getRequestType()));
+                    System.out.println(Main.currentUser.getSubType());
+                    System.out.println(r.getSubType());
                     if (Main.currentUser.getIsAdmin() ||
                             (db.EmployeeTypeToString(Main.currentUser.getEmployeeType()).equals(db.RequestTypeToString(r.getRequestType())) &&
                                     Main.currentUser.getSubType().equals(r.getSubType()))) {
+                        System.out.println("ENTERED LOGIN");
                         r.setCompleted(1);
                         String firstAndLastName = Main.currentUser.getFirstName() + Main.currentUser.getLastName();
                         r.setCompletedBy(firstAndLastName);
                         db.modifyRequest(r);
                     } else {
+                        System.out.println("DID NOT ENTER");
                         serviceRequestErrorLabel.setText("You are not authorized to claim this service request");
                     }
                 } else {
