@@ -35,7 +35,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <JFXButton fx:id="goButton" buttonType="RAISED" defaultButton="true" onAction="#searchButtonOp" prefHeight="70.0" prefWidth="179.0" ripplerFill="WHITE" styleClass="blue-button" stylesheets="@../../css/map.css" text="Find Path" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                <JFXButton fx:id="goButton" buttonType="RAISED" defaultButton="true" onAction="#searchButtonOp" prefHeight="70.0" prefWidth="179.0" ripplerFill="WHITE" styleClass="blue-button" stylesheets="@../../css/common.css" text="Find Path" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                     <font>
                         <Font size="25.0" />
                     </font>
