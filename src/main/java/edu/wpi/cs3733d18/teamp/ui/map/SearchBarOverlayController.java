@@ -8,12 +8,15 @@ import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.ui.home.ShakeTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
@@ -576,27 +579,45 @@ public class SearchBarOverlayController implements Initializable{
      */
     @FXML
     public void threeDButtonOp() {
-        FXMLLoader loader;
-        Parent root;
-        ThreeDMapScreenController threeDMapScreenController;
+        threeDButton.getScene().setCursor(Cursor.WAIT); //Change cursor to wait style
 
-        loader = new FXMLLoader(getClass().getResource("/FXML/map/ThreeDMap.fxml"));
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() {
+                Platform.runLater(new Runnable() {
+                    @Override public void run() {
 
-            try {
-                root = loader.load();
-            } catch (IOException ie) {
-                ie.printStackTrace();
-                return;
+                        FXMLLoader loader;
+                        Parent root;
+                        ThreeDMapScreenController threeDMapScreenController;
+
+                        loader = new FXMLLoader(getClass().getResource("/FXML/map/ThreeDMap.fxml"));
+
+                        try {
+                            root = loader.load();
+                        } catch (IOException ie) {
+                            ie.printStackTrace();
+                            return;
+                        }
+                        if (mapScreenController.getPathDrawn()) {
+                            threeDMapScreenController = loader.getController();
+                            threeDMapScreenController.onStartUp(mapScreenController.getPathDrawn(), mapScreenController.getPathMade(), sourceSearchBar.getValue(), destinationSearchBar.getValue());
+                        } else {
+                            threeDMapScreenController = loader.getController();
+                            threeDMapScreenController.onNoPathStartup(sourceSearchBar.getValue(), destinationSearchBar.getValue());
+                        }
+                        threeDButton.getScene().setCamera(perspectiveCamera);
+                        threeDButton.getScene().setRoot(root);
+
+                        threeDMapScreenController.threeDAnchorPane.getScene().setCursor(Cursor.DEFAULT); //Change cursor to default style
+                    }
+                });
+                return null;
             }
-            if (mapScreenController.getPathDrawn()) {
-                threeDMapScreenController = loader.getController();
-                threeDMapScreenController.onStartUp(mapScreenController.getPathDrawn(), mapScreenController.getPathMade(), sourceSearchBar.getValue(), destinationSearchBar.getValue());
-            } else {
-                threeDMapScreenController = loader.getController();
-                threeDMapScreenController.onNoPathStartup(sourceSearchBar.getValue(), destinationSearchBar.getValue());
-            }
-            threeDButton.getScene().setCamera(perspectiveCamera);
-            threeDButton.getScene().setRoot(root);
+        };
+
+        Thread th = new Thread(task);
+        th.start();
     }
 
     public void clearTable(){
