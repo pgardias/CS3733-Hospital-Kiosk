@@ -308,7 +308,6 @@ public class SearchBarOverlayController implements Initializable{
         }
 
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
-        mapScreenController.drawPath(path);
         pathDrawn = true;
         if (!is3D) {
             mapScreenController.drawPath(path);
