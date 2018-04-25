@@ -94,7 +94,7 @@
                 <Insets left="15.0" top="160.0" />
             </GridPane.margin>
         </Rectangle>
-        <JFXTreeTableView fx:id="directionsTreeTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="340.0" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+        <JFXTreeTableView fx:id="directionsTreeTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="340.0" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.halignment="LEFT" GridPane.valignment="TOP">
             <GridPane.margin>
                 <Insets left="32.5" top="175.0" />
             </GridPane.margin>
@@ -120,15 +120,21 @@
                 <Insets />
             </GridPane.margin>
             <children>
-                <JFXButton fx:id="emailButton" buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#emailButtonOp" pickOnBounds="false" prefHeight="100.0" prefWidth="100.0" styleClass="envelope" stylesheets="@../../css/common.css" text=" " GridPane.halignment="LEFT" GridPane.valignment="TOP">
+                <JFXButton fx:id="emailButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#emailButtonOp" pickOnBounds="false" prefHeight="50.0" prefWidth="160.0" styleClass="blue-button" stylesheets="@../../css/common.css" text="EMAIL" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.valignment="TOP">
                     <GridPane.margin>
-                        <Insets left="275.0" top="885.0" />
+                        <Insets left="210.0" top="950.0" />
                     </GridPane.margin>
+               <font>
+                  <Font size="24.0" />
+               </font>
                 </JFXButton>
-                <JFXButton fx:id="phoneButton" buttonType="RAISED" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#phoneButtonOp" pickOnBounds="false" prefHeight="100.0" prefWidth="100.0" styleClass="mobile" stylesheets="@../../css/common.css" text=" " GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                <JFXButton fx:id="phoneButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#phoneButtonOp" pickOnBounds="false" prefHeight="50.0" prefWidth="160.0" styleClass="blue-button" stylesheets="@../../css/common.css" text="TEXT SMS" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
                     <GridPane.margin>
-                        <Insets left="30.0" top="885.0" />
-                    </GridPane.margin></JFXButton>
+                        <Insets left="30.0" top="950.0" />
+                    </GridPane.margin>
+               <font>
+                  <Font size="24.0" />
+               </font></JFXButton>
             </children>
         </GridPane>
         <JFXButton fx:id="directionsButton" buttonType="RAISED" onAction="#directionsButtonOp" prefHeight="80.0" prefWidth="160.0" styleClass="yellow-button" stylesheets="@../../css/map.css" text="Directions" textAlignment="CENTER" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
