@@ -570,7 +570,10 @@ public class SearchBarOverlayController implements Initializable{
             mapScreenController.onStartUp();
             if (threeDMapScreenController.getPathDrawn()) {
                 mapScreenController = loader.getController();
-                mapScreenController.onStartUp3D(threeDMapScreenController.getPathDrawn(), threeDMapScreenController.getPathMade());
+                mapScreenController.onStartUp3D(threeDMapScreenController.getPathDrawn(), threeDMapScreenController.getPathMade(), sourceSearchBar.getText(), destinationSearchBar.getText());
+            } else {
+                mapScreenController = loader.getController();
+                mapScreenController.onNoPathStartup(sourceSearchBar.getText(), destinationSearchBar.getText());
             }
             threeDButton.getScene().setRoot(root);
         }
@@ -590,7 +593,10 @@ public class SearchBarOverlayController implements Initializable{
             }
             if (mapScreenController.getPathDrawn()) {
                 threeDMapScreenController = loader.getController();
-                threeDMapScreenController.onStartUp(mapScreenController.getPathDrawn(), mapScreenController.getPathMade());
+                threeDMapScreenController.onStartUp(mapScreenController.getPathDrawn(), mapScreenController.getPathMade(), sourceSearchBar.getText(), destinationSearchBar.getText());
+            } else {
+                threeDMapScreenController = loader.getController();
+                threeDMapScreenController.onNoPathStartup(sourceSearchBar.getText(), destinationSearchBar.getText());
             }
             threeDButton.getScene().setCamera(perspectiveCamera);
             threeDButton.getScene().setRoot(root);

@@ -228,10 +228,18 @@ public class ThreeDMapScreenController implements Initializable{
      * @param pathMade pathMade array from 2D map
      */
     @FXML
-    public void onStartUp(Boolean pathDrawn, ArrayList<Node> pathMade) {
+    public void onStartUp(Boolean pathDrawn, ArrayList<Node> pathMade, String startLocation, String endLocation) {
         this.pathDrawn = pathDrawn;
         this.pathMade = pathMade;
+        searchBarOverlayController.setSourceSearchBar(startLocation);
+        searchBarOverlayController.setDestinationSearchBar(endLocation);
         drawPath(this.pathMade);
+    }
+
+    @FXML
+    public void onNoPathStartup(String startLocation, String endLocation) {
+        searchBarOverlayController.setSourceSearchBar(startLocation);
+        searchBarOverlayController.setDestinationSearchBar(endLocation);
     }
 
     public Boolean getPathDrawn() {
