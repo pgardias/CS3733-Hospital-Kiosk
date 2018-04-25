@@ -13,8 +13,6 @@ public class AStar extends Pathfinder {
      */
     @Override
     public void findPath(Node srcNode, Node destNode) {
-        System.out.println("ASTAR");
-        System.out.println("Astar");
         // Total cost from start node
         HashMap<String, Double> gScore = new HashMap<String, Double>();
 
@@ -85,7 +83,6 @@ public class AStar extends Pathfinder {
 
                         // Add neighbor gScore value to gScore
                         tempGScore = gScore.get(currentNode.getID()) + e.getWeight();
-                        System.out.println(e.getWeight());
 
                         if (!gScore.containsKey(neighbor.getID())) {
 
@@ -108,7 +105,6 @@ public class AStar extends Pathfinder {
                 }
             }
         }
-        System.out.println("Path not found!");
         return;
     }
 }

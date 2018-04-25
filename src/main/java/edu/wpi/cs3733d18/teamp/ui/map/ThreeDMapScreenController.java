@@ -159,7 +159,7 @@ public class ThreeDMapScreenController implements Initializable{
     JFXButton backButton;
 
     @FXML
-    static PopOver popOver;
+    PopOver popOver;
     Boolean popOverHidden = true;
 
     @Override
@@ -359,19 +359,24 @@ public class ThreeDMapScreenController implements Initializable{
 
     @FXML
     public void backButtonOp() {
-        Stage stage;
-        Parent root;
         FXMLLoader loader;
+        Parent root;
+        MapScreenController mapScreenController;
 
-        stage = (Stage) backButton.getScene().getWindow();
-        loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
+
         try {
             root = loader.load();
         } catch (IOException ie) {
             ie.printStackTrace();
             return;
         }
-
+        mapScreenController = loader.getController();
+        mapScreenController.onStartUp();
+        if (pathDrawn) {
+            mapScreenController = loader.getController();
+            mapScreenController.onStartUp3D(pathDrawn, pathMade, searchBarOverlayController.sourceSearchBar.getText(), searchBarOverlayController.destinationSearchBar.getText());
+        }
         backButton.getScene().setRoot(root);
     }
 
@@ -596,7 +601,7 @@ public class ThreeDMapScreenController implements Initializable{
         curZoom = newZoom; // Set next zoom value to compare to
     }
 
-    static private MeshView[] loadMeshView(URL fileName) {
+    private MeshView[] loadMeshView(URL fileName) {
         ObjModelImporter importer = new ObjModelImporter();
         importer.read(fileName);
 
@@ -869,8 +874,7 @@ public class ThreeDMapScreenController implements Initializable{
                     }
                     firstSelected = false;
                 }
-            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
-                System.out.println("MOUSE_ENTERED event at " + event.getSource());
+            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED) { // TODO Check zoom level to prevent graphical glitches
                 for (String string : nodeDispSet.keySet()) {
                     if (nodeDispSet.get(string) == event.getSource()) {
                         if (popOver != null && popOver.getOpacity() == 0) {
@@ -1090,7 +1094,6 @@ public class ThreeDMapScreenController implements Initializable{
         }
         getFloors();
 
-        System.out.println("list of stair nodes: " + stairNodeSet.toString());
         minXCoord -= 200;
         minYCoord -= 400;
         maxXCoord += 200;
@@ -1100,7 +1103,6 @@ public class ThreeDMapScreenController implements Initializable{
 
         double desiredZoomX = 1920 / (rangeX * X_SCALE);
         double desiredZoomY = 1080 / (rangeY * Z_SCALE);
-        System.out.println("desired X zoom: " + desiredZoomX + " desired Zoom Y: " + desiredZoomY);
 
         double centerX = (maxXCoord + minXCoord) / 2;
         double centerY = (maxYCoord + minYCoord) / 2;

@@ -52,7 +52,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <JFXTreeTableView fx:id="employeeTreeTableView" prefHeight="824.0" prefWidth="1914.0" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.rowIndex="1" />
+                  <JFXTreeTableView fx:id="employeeTreeTableView" prefHeight="824.0" prefWidth="1914.0" styleClass="table-row-cell" stylesheets="@../../css/tableview.css" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.rowSpan="2147483647" GridPane.valignment="CENTER" />
                   <GridPane maxWidth="-Infinity" prefWidth="800.0" GridPane.halignment="RIGHT">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" />

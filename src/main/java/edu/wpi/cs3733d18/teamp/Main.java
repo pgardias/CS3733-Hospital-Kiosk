@@ -44,7 +44,6 @@ public class Main extends Application {
     }
     //Logs out the current user, employee, or admin so they are no longer the currentUser at the kiosk
     public static void logoutCurrentUser() {
-        System.out.println("Logging out user with username " + currentUser.getUserName());
         basicUser.setFirstName("Current");
         basicUser.setLastName("User");
         currentUser = basicUser;

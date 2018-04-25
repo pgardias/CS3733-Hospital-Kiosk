@@ -53,7 +53,6 @@ public class MapStorage {
 
     //Returns information about a node given a nodeID, throws exception if node is not in HashMap of nodes
     Node getOneNode(String nodeID) throws NodeNotFoundException {
-        System.out.println("HERE");
         Node node = nodes.get(nodeID);
         if (node == null) {
             throw new NodeNotFoundException();

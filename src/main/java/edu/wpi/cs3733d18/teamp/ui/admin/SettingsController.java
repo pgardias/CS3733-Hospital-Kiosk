@@ -68,7 +68,6 @@ public class SettingsController {
                 algorithmComboBox.setValue("BestFirst");
                 break;
             default:
-                System.out.println("Admin Settings Panel was unable to set the current Pathfinding Algorithm Context");
                 break;
         }
         feetPerPixelTextField.setText(Double.toString(Settings.getFeetPerPixel()));

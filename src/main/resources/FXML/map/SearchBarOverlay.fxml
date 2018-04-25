@@ -5,8 +5,6 @@
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -115,14 +113,6 @@
                 <Insets left="32.5" top="165.0" />
             </GridPane.margin>
         </JFXTreeTableView>
-        <TableView fx:id="directionsTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="700.0" prefWidth="290.0" stylesheets="@../../css/tableview.css" visible="false" GridPane.halignment="LEFT" GridPane.valignment="TOP">
-            <GridPane.margin>
-                <Insets left="32.5" top="165.0" />
-            </GridPane.margin>
-            <columns>
-                <TableColumn fx:id="directionsTableViewColumn" editable="false" maxWidth="305.0" minWidth="279.0" prefWidth="305.0" resizable="false" sortable="false" text="Directions" />
-            </columns>
-        </TableView>
         <!--<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />      -->
         <GridPane maxWidth="-Infinity" pickOnBounds="false" prefWidth="450.0">
             <columnConstraints>
