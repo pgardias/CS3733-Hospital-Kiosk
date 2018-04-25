@@ -1270,9 +1270,9 @@ public class ThreeDMapScreenController implements Initializable{
                 floorOffsets.add(2, 47); // Z Offset
                 break;
             case 4: // Floor 2
-                floorOffsets.add(0, 32); // X Offset
+                floorOffsets.add(0, 40); // X Offset
                 floorOffsets.add(1, 0); // Y Offset
-                floorOffsets.add(2, 32); // Z Offset
+                floorOffsets.add(2, 43); // Z Offset
                 break;
             case 5: // Floor 3
                 floorOffsets.add(0, 25); // X Offset
