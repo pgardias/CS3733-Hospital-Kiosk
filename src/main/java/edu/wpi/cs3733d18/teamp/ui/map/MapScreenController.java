@@ -492,7 +492,7 @@ public class MapScreenController {
         System.out.println("Ordering nodes took " + (endTime - startTime) + " ms");
 
         for (Node node : orderedNodes) {
-            if (node.getFloor() == currentFloor && node.getType() != Node.nodeType.HALL) {
+            if (node.getType() != Node.nodeType.HALL) {
                 StackPane container = constructIcon(node.getType());
                 if (!toggleOn) {
                     container.setLayoutX((node.getX() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
@@ -501,9 +501,11 @@ public class MapScreenController {
                     container.setLayoutX((node.getxDisplay() - X_OFFSET) * X_SCALE - MAP_ICON_SIZE * 0.5);
                     container.setLayoutY((node.getyDisplay() - Y_OFFSET) * Y_SCALE - MAP_ICON_SIZE * 1.25);
                 }
-                nodesPane.getChildren().add(container);
-                container.addEventHandler(MouseEvent.ANY, nodeClickHandler);
-                container.setOnScroll(nodeScrollHandler);
+                if (node.getFloor() == currentFloor) {
+                    nodesPane.getChildren().add(container);
+                    container.addEventHandler(MouseEvent.ANY, nodeClickHandler);
+                    container.setOnScroll(nodeScrollHandler);
+                }
                 iconDispSet.put(node.getID(), container);
             }
         }
