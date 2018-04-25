@@ -294,22 +294,22 @@ public class SearchBarOverlayController implements Initializable{
         }
 
         // Check if the destination node was input
-        if (dst.length() > 0) {
+        if (dst != null && dst.length() > 0) {
             // Destination has been chosen by user, get Node entity from nodeID through NodeRepo
             destinationSearchBar.setUnFocusColor(Color.rgb(245,188,58));
             try {
                 dstNode = nodeSet.get(parseDestinationInput(srcNode, dst).getID());
             } catch (NodeNotFoundException ne) {
                 destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
-                ShakeTransition anim = new ShakeTransition(destinationSearchBar, destinationRectangle);
-                anim.playFromStart();
+                ShakeTransition anim1 = new ShakeTransition(destinationSearchBar);
+                anim1.playFromStart();
                 return false;
             }
         } else {
             // Destination has not been set, set search bar to red and shake
             destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
-            ShakeTransition anim = new ShakeTransition(destinationSearchBar, destinationRectangle);
-            anim.playFromStart();
+            ShakeTransition anim2 = new ShakeTransition(destinationSearchBar);
+            anim2.playFromStart();
             return false;
         }
 
