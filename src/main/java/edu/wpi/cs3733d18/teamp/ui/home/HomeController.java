@@ -142,7 +142,6 @@ public class HomeController {
 
         if (Main.currentUser.getIsAdmin()) {
             FXMLLoader loader;
-            Stage stage;
             Parent root;
 
             loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
@@ -189,7 +188,6 @@ public class HomeController {
 
         loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
 
-        long startTime = System.currentTimeMillis();
         try {
             root = loader.load();
         } catch (IOException ie) {
@@ -200,7 +198,6 @@ public class HomeController {
         mapScreenController = loader.getController();
         mapScreenController.onStartUp();
         mapButton.getScene().setRoot(root);
-        long endTime = System.currentTimeMillis();
 
         return true;
     }
