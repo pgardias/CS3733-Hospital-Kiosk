@@ -103,7 +103,7 @@ public class ArrowPathTransition {
             fadeTransition[i-1] = new FadeTransition();
             fadeTransition[i - 1].setNode(shape);
             if (!currentFloor.equals(currentNode.getFloor())){
-                fadeTransition[i - 1].setToValue(0.5);
+                fadeTransition[i - 1].setToValue(0.75);
             }else {
                 fadeTransition[i - 1].setToValue(1.0);
             }

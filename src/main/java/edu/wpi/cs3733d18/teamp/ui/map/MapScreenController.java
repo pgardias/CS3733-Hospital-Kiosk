@@ -1059,7 +1059,7 @@ public class MapScreenController {
                             line.setOpacity(1.0);
                         } else {
                             line.getStrokeDashArray().addAll(1.0, 10.0);
-                            line.setOpacity(0.5);
+                            line.setOpacity(0.75);
                         }
                     } else {
                         line.setStartX((e.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
@@ -1070,7 +1070,8 @@ public class MapScreenController {
                             line.setOpacity(1.0);
                         } else {
                             line.getStrokeDashArray().addAll(1.0, 10.0);
-                            line.setOpacity(0.5);
+                            line.setStrokeDashOffset(0);
+                            line.setOpacity(0.75);
                         }
                     }
                     System.out.println("Line start x: " + line.getStartX() + " line start y: " + line.getStartY());
@@ -1294,8 +1295,9 @@ public class MapScreenController {
                     button.setShape(arrow);
                     button.setAlignment(Pos.CENTER_RIGHT);
                 }
+                button.setStyle("-fx-background-color: #ADD8E6;");
                 if (!currentFloor.equals(floorsList.get(i))) {
-                    button.setOpacity(0.5);
+                    button.setStyle("-fx-background-color: #F5BC3A;");
                 }
                 button.setMinHeight(75);
                 button.setMinWidth(150);
@@ -1304,7 +1306,7 @@ public class MapScreenController {
                 button.setFont(new Font(18));
                 button.setOnAction(e -> floorSequenceButtonOp(e));
                 button.setText("Floor " + floorsList.get(i).toString());
-                button.setStyle("-fx-background-color: red;");
+
             }
         }
 
