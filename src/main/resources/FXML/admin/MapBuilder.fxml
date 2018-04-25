@@ -94,7 +94,7 @@
             <top>
                 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
                     <children>
-                  <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#113868" height="185.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 0);" width="1000.0" />
+                  <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#113868" height="185.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);" width="1000.0" />
                   <GridPane alignment="TOP_CENTER" maxWidth="1000.0" pickOnBounds="false" prefHeight="200.0" prefWidth="1000.0">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="650.0" />
@@ -113,7 +113,7 @@
                               <Insets bottom="15.0" right="20.0" />
                            </GridPane.margin>
                         </JFXButton>
-                        <JFXTextField fx:id="sourceSearchBar" focusColor="#e6e6e6" maxWidth="700.0" promptText="Start Location" style="-fx-text-fill: #F5BC3A; -fx-prompt-text-fill: #e6e6e6;" unFocusColor="#f5bc3a">
+                        <JFXTextField fx:id="sourceSearchBar" focusColor="#e6e6e6" maxWidth="700.0" promptText="Start Location" style="-fx-text-fill: #F5BC3A; -fx-prompt-text-fill: #e6e6e6; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);" unFocusColor="#f5bc3a">
                            <GridPane.margin>
                               <Insets left="50.0" />
                            </GridPane.margin>
@@ -123,20 +123,14 @@
                            <opaqueInsets>
                               <Insets />
                            </opaqueInsets>
-                           <effect>
-                              <DropShadow blurType="GAUSSIAN" height="5.0" radius="2.0" width="5.0" />
-                           </effect>
                         </JFXTextField>
-                        <JFXTextField fx:id="destinationSearchBar" focusColor="#e6e6e6" maxWidth="700.0" promptText="End Location" style="-fx-text-fill: #F5BC3A; -fx-prompt-text-fill: #e6e6e6;" unFocusColor="#f5bc3a" GridPane.rowIndex="1">
+                        <JFXTextField fx:id="destinationSearchBar" focusColor="#e6e6e6" maxWidth="700.0" promptText="End Location" style="-fx-text-fill: #F5BC3A; -fx-prompt-text-fill: #e6e6e6; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);" unFocusColor="#f5bc3a" GridPane.rowIndex="1">
                            <font>
                               <Font name="Marlett" size="25.0" />
                            </font>
                            <GridPane.margin>
                               <Insets bottom="25.0" left="50.0" />
                            </GridPane.margin>
-                           <effect>
-                              <DropShadow height="5.0" radius="2.0" width="5.0" />
-                           </effect>
                         </JFXTextField>
                         <JFXToggleButton fx:id="mapToggleButton" maxHeight="54.0" onAction="#mapToggleButtonOp" prefHeight="66.0" prefWidth="179.0" styleClass="yellow-button" stylesheets="@../../css/map.css" text="3D Map" toggleColor="#eeda20" toggleLineColor="#0b2f5b" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                            <font>

@@ -21,7 +21,7 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#f0f0f0" height="185.0" stroke="#e8e8e8" strokeType="INSIDE" style="-fx-effect: dropshadow(gaussian, GRAY, 10, 0, 0, 0);" width="920.0" GridPane.halignment="CENTER" GridPane.valignment="TOP">
+        <Rectangle arcHeight="10.0" arcWidth="10.0" fill="#f0f0f0" height="185.0" stroke="#e8e8e8" strokeType="INSIDE" style="-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);" width="920.0" GridPane.halignment="CENTER" GridPane.valignment="TOP">
             <GridPane.margin>
                 <Insets top="5.0" />
             </GridPane.margin></Rectangle>
@@ -89,7 +89,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
         </GridPane>
-        <Rectangle fx:id="directionsRectangle" fill="#f0f0f0" height="860.0" stroke="#e8e8e8" strokeType="INSIDE" strokeWidth="2.0" style="-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 0);" width="375.0" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+        <Rectangle fx:id="directionsRectangle" fill="#f0f0f0" height="860.0" stroke="#e8e8e8" strokeType="INSIDE" strokeWidth="2.0" style="-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);" width="375.0" GridPane.halignment="LEFT" GridPane.valignment="TOP">
             <GridPane.margin>
                 <Insets left="15.0" top="160.0" />
             </GridPane.margin>

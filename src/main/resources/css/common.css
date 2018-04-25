@@ -10,7 +10,7 @@
 
 .blue-button:hover {
     -fx-background-color: #4178b8;
-    -fx-effect: dropshadow(gaussian, GRAY, 2, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
 }
 
 .red-button {
@@ -21,7 +21,7 @@
 
 .red-button:hover {
     -fx-background-color: #ff7777;
-    -fx-effect: dropshadow(gaussian, GRAY, 2, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
 }
 
 .mobile {
