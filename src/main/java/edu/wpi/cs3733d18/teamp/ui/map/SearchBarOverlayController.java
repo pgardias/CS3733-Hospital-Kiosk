@@ -78,7 +78,6 @@ public class SearchBarOverlayController implements Initializable{
     @FXML
     TreeItem<DirectionsTable> floorParent;
 
-
     @FXML
     TreeItem<DirectionsTable> floors;
 
