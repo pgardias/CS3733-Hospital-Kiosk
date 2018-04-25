@@ -228,10 +228,18 @@ public class ThreeDMapScreenController implements Initializable{
      * @param pathMade pathMade array from 2D map
      */
     @FXML
-    public void onStartUp(Boolean pathDrawn, ArrayList<Node> pathMade) {
+    public void onStartUp(Boolean pathDrawn, ArrayList<Node> pathMade, String startLocation, String endLocation) {
         this.pathDrawn = pathDrawn;
         this.pathMade = pathMade;
+        searchBarOverlayController.setSourceSearchBar(startLocation);
+        searchBarOverlayController.setDestinationSearchBar(endLocation);
         drawPath(this.pathMade);
+    }
+
+    @FXML
+    public void onNoPathStartup(String startLocation, String endLocation) {
+        searchBarOverlayController.setSourceSearchBar(startLocation);
+        searchBarOverlayController.setDestinationSearchBar(endLocation);
     }
 
     public Boolean getPathDrawn() {
@@ -367,7 +375,7 @@ public class ThreeDMapScreenController implements Initializable{
         mapScreenController.onStartUp();
         if (pathDrawn) {
             mapScreenController = loader.getController();
-            mapScreenController.onStartUp3D(pathDrawn, pathMade);
+            mapScreenController.onStartUp3D(pathDrawn, pathMade, searchBarOverlayController.sourceSearchBar.getText(), searchBarOverlayController.destinationSearchBar.getText());
         }
         backButton.getScene().setRoot(root);
     }
@@ -529,12 +537,19 @@ public class ThreeDMapScreenController implements Initializable{
 
         // Set panning
         curXTranslation = 0;
-        curYTranslation = 0;
+        curYTranslation = 200;
         curZTranslation = 0;
         threeDAnchorPane.setTranslateX(curXTranslation);
         threeDAnchorPane.setTranslateY(curYTranslation);
         threeDAnchorPane.setTranslateZ(curZTranslation);
 
+        // Set scale
+        curScale = 1;
+        threeDAnchorPane.setScaleX(curScale);
+        threeDAnchorPane.setScaleY(curScale);
+        threeDAnchorPane.setScaleZ(curScale);
+
+        // Set rotation
         curYRotation = 0;
         curXRotation = 0;
         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
@@ -544,15 +559,21 @@ public class ThreeDMapScreenController implements Initializable{
     @FXML
     public void topDownButtonOP(ActionEvent e) {
 
-        // Panning
+        // Set panning
         curXTranslation = 0;
-        curYTranslation = 800;
-        curZTranslation = 600;
+        curYTranslation = 500;
+        curZTranslation = 400;
         threeDAnchorPane.setTranslateX(curXTranslation);
         threeDAnchorPane.setTranslateY(curYTranslation);
         threeDAnchorPane.setTranslateZ(curZTranslation);
 
-        // Rotate
+        // Set scale
+        curScale = 1;
+        threeDAnchorPane.setScaleX(curScale);
+        threeDAnchorPane.setScaleY(curScale);
+        threeDAnchorPane.setScaleZ(curScale);
+
+        // Set rotation
         curYRotation = 0;
         curXRotation = 70;
         threeDAnchorPane.getTransforms().setAll(new Rotate(curYRotation, 1920/2, 1080/2, 0, Rotate.Y_AXIS),
