@@ -1040,7 +1040,7 @@ public class MapScreenController {
         }
 
     }
-
+    Polyline linePath = new Polyline();
     public void drawEdge(Node currentNode, Node pastNode) {
         for (Edge e : currentNode.getEdges()) {
             if (pastNode != null) {
@@ -1085,9 +1085,6 @@ public class MapScreenController {
     /**
      * drawTriangle is the function that draws directional arrows for the function
      *
-     * @param angle is the angle used to generate this
-     * @param initX is where it starts on the X axis
-     * @param initY is where it starts on the Y axis
      *              <p>
      *              This outputs an arrow on the screen along the line.
      */
@@ -1286,23 +1283,28 @@ public class MapScreenController {
                 JFXButton button = new JFXButton();
                 floorSequenceHBox.getChildren().add(button);
                 floorSequenceList.add(button);
+                button.setPadding(new Insets(30));
                 if (i == 0) {
                     button.setShape(arrowHead);
                     button.setAlignment(Pos.CENTER_LEFT);
                 } else if (i == floorsList.size() - 1) {
                     button.setShape(arrowEnd);
                     button.setAlignment(Pos.CENTER_RIGHT);
+                    button.setPadding(new Insets(20));
                 } else {
                     button.setShape(arrow);
                     button.setAlignment(Pos.CENTER_RIGHT);
                 }
-                button.setStyle("-fx-background-color: #ADD8E6;");
+
+                button.setTextFill(Color.color(0.96,0.737,0.227));
+                button.setStyle("-fx-background-color: #0b2f5b;");
                 if (!currentFloor.equals(floorsList.get(i))) {
-                    button.setStyle("-fx-background-color: #F5BC3A;");
+                    button.setTextFill(Color.BLACK);
+                    button.setStyle("-fx-background-color: #DADADA;");
                 }
                 button.setMinHeight(75);
                 button.setMinWidth(150);
-                button.setPadding(new Insets(30));
+
                 button.setButtonType(JFXButton.ButtonType.RAISED);
                 button.setFont(new Font(18));
                 button.setOnAction(e -> floorSequenceButtonOp(e));
