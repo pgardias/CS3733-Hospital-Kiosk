@@ -1458,7 +1458,10 @@ public class MapScreenController {
                 break;
 
         }
+    }
 
+    public JFXButton getBackButton() {
+        return this.backButton;
     }
 
     public Node.floorType getCurrentFloor() {

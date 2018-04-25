@@ -10,10 +10,17 @@ import edu.wpi.cs3733d18.teamp.ui.admin.AdminMenuController;
 import edu.wpi.cs3733d18.teamp.ui.map.MapScreenController;
 import edu.wpi.cs3733d18.teamp.ui.service.ServiceRequestScreen;
 import javafx.application.Platform;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.ParallelTransition;
+import javafx.animation.Timeline;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
@@ -31,6 +38,11 @@ public class HomeController {
     private DBSystem db = DBSystem.getInstance();
     private ArrayList<Character> loginID = new ArrayList<>();
     private boolean swipeDetected = false;
+
+    // P
+    private FXMLLoader loader;
+    private Parent root;
+    private MapScreenController mapScreenController;
 
     @FXML
     JFXButton emergencyButton;
@@ -170,23 +182,35 @@ public class HomeController {
      */
     @FXML
     public Boolean mapButtonOp(ActionEvent e) {
-        FXMLLoader loader;
-        Parent root;
-        MapScreenController mapScreenController;
+        mapButton.getScene().setCursor(Cursor.WAIT); //Change cursor to wait style
 
-        loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() {
+                Platform.runLater(new Runnable() {
+                    @Override public void run() {
 
-        try {
-            root = loader.load();
-        } catch (IOException ie) {
-            ie.printStackTrace();
-            return false;
-        }
+                        loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
 
-        mapScreenController = loader.getController();
-        mapScreenController.onStartUp();
-        mapButton.getScene().setRoot(root);
+                        try {
+                            root = loader.load();
+                        } catch (IOException ie) {
+                            ie.printStackTrace();
+                            return;
+                        }
+                        mapScreenController = loader.getController();
+                        mapScreenController.onStartUp();
+                        mapButton.getScene().setRoot(root);
 
+                        mapScreenController.getBackButton().getScene().setCursor(Cursor.DEFAULT);
+                    }
+                });
+                return null;
+            }
+        };
+
+        Thread th = new Thread(task);
+        th.start();
         return true;
     }
 

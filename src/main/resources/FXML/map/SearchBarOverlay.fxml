@@ -43,9 +43,9 @@
                         <Insets bottom="20.0" right="20.0" />
                     </GridPane.margin>
                 </JFXButton>
-                <JFXToggleButton fx:id="mapToggleButton" onAction="#mapToggleButtonOp" selected="true" size="15.0" stylesheets="@../../css/map.css" text="3D View" toggleColor="#0b2f5b" toggleLineColor="#bfbfbf" unToggleColor="#d0d0d0" unToggleLineColor="#949494" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                <JFXToggleButton fx:id="mapToggleButton" onAction="#mapToggleButtonOp" selected="true" size="15.0" stylesheets="@../../css/map.css" text="Iso View" toggleColor="#0b2f5b" toggleLineColor="#bfbfbf" unToggleColor="#d0d0d0" unToggleLineColor="#949494" GridPane.columnIndex="1" GridPane.halignment="CENTER">
                     <font>
-                        <Font size="24.0" />
+                        <Font size="23.0" />
                     </font>
                     <GridPane.margin>
                         <Insets right="20.0" top="15.0" />
