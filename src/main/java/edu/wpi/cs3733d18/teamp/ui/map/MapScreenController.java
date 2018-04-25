@@ -1,6 +1,7 @@
 package edu.wpi.cs3733d18.teamp.ui.map;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXSlider;
 import de.jensd.fx.glyphs.GlyphIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
@@ -105,7 +106,7 @@ public class MapScreenController {
     JFXButton backButton;
 
     @FXML
-    Slider zoomSlider;
+    JFXSlider zoomSlider;
 
     @FXML
     StackPane mapPane;

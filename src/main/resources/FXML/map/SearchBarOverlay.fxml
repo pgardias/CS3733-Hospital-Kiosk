@@ -58,7 +58,7 @@
             </Rectangle>
                 <JFXComboBox fx:id="sourceSearchBar" editable="true" focusColor="#f5bc3a" prefHeight="50.0" prefWidth="650.0" promptText="Start Location" style="-fx-font-size: 25px;" unFocusColor="#0b2f5b">
                     <GridPane.margin>
-                        <Insets left="50.0" />
+                        <Insets left="50.0" top="10.0" />
                     </GridPane.margin>
                 </JFXComboBox>
             <Rectangle arcHeight="10.0" arcWidth="10.0" fill="WHITE" height="70.0" stroke="#e5e5e5" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);" width="675.0" GridPane.rowIndex="1" GridPane.valignment="BOTTOM">
@@ -136,7 +136,7 @@
                 <Font size="24.0" />
             </font>
             <GridPane.margin>
-                <Insets bottom="20.0" left="250.0" top="15.0" />
+                <Insets bottom="20.0" left="250.0" top="20.0" />
             </GridPane.margin>
         </JFXButton>
     </children>
