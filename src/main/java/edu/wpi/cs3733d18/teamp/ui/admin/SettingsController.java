@@ -40,6 +40,9 @@ public class SettingsController {
     JFXButton backButton;
 
     @FXML
+    JFXTextField timeoutDelayTextField;
+
+    @FXML
     JFXComboBox algorithmComboBox;
 
     @FXML
@@ -60,6 +63,7 @@ public class SettingsController {
     @FXML
     public void onStartUp() {
         algorithmComboBox.setItems(algorithmTypes);
+        timeoutDelayTextField.setText(Integer.toString(Settings.getTimeDelay() / 1000));
         switch (Settings.getPathfindingSettings()) {
             case AStar: {
                 algorithmComboBox.setValue("A*");
@@ -216,6 +220,12 @@ public class SettingsController {
             stage.initOwner(submitButton.getScene().getWindow());
             stage.showAndWait();
 
+            try {
+                Settings.setTimeDelay(Integer.parseInt(timeoutDelayTextField.getText()) * 1000);
+            } catch (NumberFormatException ne) {
+                ne.printStackTrace();
+                return;
+            }
             if(confirmationPopUpController.getChoice()){
                 switch (algorithmComboBox.getValue().toString()) {
                     case "A*":
