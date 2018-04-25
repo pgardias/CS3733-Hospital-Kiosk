@@ -659,6 +659,9 @@ public class MapBuilderController implements Initializable {
                     break;
                 }
             }
+            if (event.getEventType() == MouseEvent.MOUSE_MOVED) {
+                isDragging = false;
+            }
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
                 //the mouse was pressed so we get its location and the location of the circle it was pressed on
                 orgMouseX = event.getSceneX();
@@ -722,7 +725,6 @@ public class MapBuilderController implements Initializable {
                     } else {//3D
                         mapBuilderNodeFormController.set3XYCoords(nodex2Coord, nodey2Coord);
                     }
-
                 }
             } else if (event.getEventType() == MouseEvent.MOUSE_CLICKED) {
                 //node was clicked ot be modified
