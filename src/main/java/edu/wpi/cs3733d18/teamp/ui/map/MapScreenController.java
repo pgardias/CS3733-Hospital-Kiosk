@@ -714,13 +714,13 @@ public class MapScreenController {
             designIcon.setSize(Integer.toString(MAP_ICON_SIZE - 3));
             designIcon.setTranslateY(-2);
             StackPane sp = new StackPane(iconShapeVBox, designIcon);
-            sp.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0)");
+            sp.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 2.0, 0.7, 0.0, 0.0)");
             return sp;
         } else {
             icon.setSize(Integer.toString(MAP_ICON_SIZE - 3));
             icon.setTranslateY(-2);
             StackPane sp = new StackPane(iconShapeVBox, icon);
-            sp.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0)");
+            sp.setStyle("-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 2.0, 0.7, 0.0, 0.0)");
             return sp;
         }
     }
