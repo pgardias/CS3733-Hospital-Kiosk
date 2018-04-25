@@ -173,10 +173,18 @@ public class MapScreenController {
     }
 
     @FXML
-    public void onStartUp3D(Boolean pathDrawn, ArrayList<Node> pathMade) {
+    public void onStartUp3D(Boolean pathDrawn, ArrayList<Node> pathMade, String startLocation, String endLocation) {
         this.pathDrawn = pathDrawn;
         this.pathMade = pathMade;
+        searchBarOverlayController.setSourceSearchBar(startLocation);
+        searchBarOverlayController.setDestinationSearchBar(endLocation);
         drawPath(pathMade);
+    }
+
+    @FXML
+    public void onNoPathStartup(String startLocation, String endLocation) {
+        searchBarOverlayController.setSourceSearchBar(startLocation);
+        searchBarOverlayController.setDestinationSearchBar(endLocation);
     }
 
     public Boolean getPathDrawn(){

@@ -538,24 +538,56 @@ public class SearchBarOverlayController implements Initializable{
      */
     @FXML
     public void threeDButtonOp() {
-        FXMLLoader loader;
-        Parent root;
-        ThreeDMapScreenController threeDMapScreenController;
+        // If 3D, switch to 2D
+        if (is3D) {
+            FXMLLoader loader;
+            Parent root;
+            MapScreenController mapScreenController;
+
+            loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
+
+            try {
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return;
+            }
+            mapScreenController = loader.getController();
+            mapScreenController.onStartUp();
+            if (threeDMapScreenController.getPathDrawn()) {
+                mapScreenController = loader.getController();
+                mapScreenController.onStartUp3D(threeDMapScreenController.getPathDrawn(), threeDMapScreenController.getPathMade(), sourceSearchBar.getText(), destinationSearchBar.getText());
+            } else {
+                mapScreenController = loader.getController();
+                mapScreenController.onNoPathStartup(sourceSearchBar.getText(), destinationSearchBar.getText());
+            }
+            threeDButton.getScene().setCamera(perspectiveCamera);
+            threeDButton.getScene().setRoot(root);
+        }
+        // If 2D, switch to 3D
+        else {
+            FXMLLoader loader;
+            Parent root;
+            ThreeDMapScreenController threeDMapScreenController;
 
         loader = new FXMLLoader(getClass().getResource("/FXML/map/ThreeDMap.fxml"));
 
-        try {
-            root = loader.load();
-        } catch (IOException ie) {
-            ie.printStackTrace();
-            return;
+            try {
+                root = loader.load();
+            } catch (IOException ie) {
+                ie.printStackTrace();
+                return;
+            }
+            if (mapScreenController.getPathDrawn()) {
+                threeDMapScreenController = loader.getController();
+                threeDMapScreenController.onStartUp(mapScreenController.getPathDrawn(), mapScreenController.getPathMade(), sourceSearchBar.getText(), destinationSearchBar.getText());
+            } else {
+                threeDMapScreenController = loader.getController();
+                threeDMapScreenController.onNoPathStartup(sourceSearchBar.getText(), destinationSearchBar.getText());
+            }
+            threeDButton.getScene().setCamera(perspectiveCamera);
+            threeDButton.getScene().setRoot(root);
         }
-        if (mapScreenController.getPathDrawn()) {
-            threeDMapScreenController = loader.getController();
-            threeDMapScreenController.onStartUp(mapScreenController.getPathDrawn(), mapScreenController.getPathMade());
-        }
-        threeDButton.getScene().setCamera(perspectiveCamera);
-        threeDButton.getScene().setRoot(root);
     }
 
     public void clearTable(){
