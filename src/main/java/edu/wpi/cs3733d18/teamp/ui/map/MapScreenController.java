@@ -1201,7 +1201,7 @@ public class MapScreenController {
                     edgePane.getChildren().add(line);
                     edgeDispSet.put(e.getID(), line);
                     line.setStroke(Color.rgb(11, 70, 120));
-                    line.setStrokeWidth(5.0);
+                    line.setStrokeWidth(6.0);
                     if (!toggleOn) {
                         line.setStartX((e.getStart().getX() - X_OFFSET) * X_SCALE);
                         line.setStartY((e.getStart().getY() - Y_OFFSET) * Y_SCALE);
@@ -1242,10 +1242,10 @@ public class MapScreenController {
         Polygon arrow = new Polygon();
 
         arrow.getPoints().addAll(new Double[]{
-                2.5, 2.5,
+                2.5, 3.0,
                 0.0, 0.0,
-                9.0, 2.5,
-                0.0, 5.0});
+                9.0, 3.0,
+                0.0, 6.0});
         arrow.setFill(Color.rgb(250, 150, 0));
 
         arrowPane.getChildren().add(arrow);
