@@ -92,7 +92,6 @@ public class ArrowPathTransition {
             if ((endAngle - currentAngle) > 180) changeInAngle = (endAngle - currentAngle) - 360;
             if ((endAngle - currentAngle) < -180) changeInAngle = (endAngle - currentAngle) + 360;
             rotateTransition[i - 1].setByAngle(changeInAngle);
-            System.out.println("end angle - current Angle = " + (endAngle - currentAngle));
             rotateTransition[i - 1].setInterpolator(Interpolator.LINEAR);
             double duration = Math.abs(changeInAngle * 5);
             rotateTransition[i - 1].setDuration(new Duration(duration));
@@ -103,10 +102,10 @@ public class ArrowPathTransition {
             //Fade Transition
             fadeTransition[i-1] = new FadeTransition();
             fadeTransition[i - 1].setNode(shape);
-            if (currentFloor.equals(currentNode.getFloor())){
-                fadeTransition[i - 1].setToValue(1.0);
-            }else {
+            if (!currentFloor.equals(currentNode.getFloor())){
                 fadeTransition[i - 1].setToValue(0.5);
+            }else {
+                fadeTransition[i - 1].setToValue(1.0);
             }
             fadeTransition[i-1].setInterpolator(Interpolator.LINEAR);
             fadeTransition[i-1].setDuration(new Duration(1));
@@ -136,9 +135,6 @@ public class ArrowPathTransition {
             }
 
             double distance = Math.sqrt(Math.pow(x2-x, 2) + Math.pow(y2-y,2));
-
-            if (currentFloor.equals(currentNode.getFloor())) shape.setOpacity(0.5);
-            else shape.setOpacity(1.0);
 
             path[i-1].getElements().add(new LineTo(x2, y2));
             pathTransition[i-1] = new PathTransition();

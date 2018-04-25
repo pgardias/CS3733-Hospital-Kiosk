@@ -1,6 +1,7 @@
 package edu.wpi.cs3733d18.teamp.ui.map;
 
 import com.jfoenix.controls.JFXButton;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
@@ -1020,11 +1021,7 @@ public class MapScreenController {
         int arrowNumber = (int) (totalDistance * 1 / 100.0);
         for (int i = 0; i < arrowNumber; i++) {
             arrowFloorSet.add(currentNode.getFloor().toString());
-            if (toggleOn) {
-                drawTriangle(angle, path.get(0).getxDisplay(), path.get(0).getyDisplay());
-            } else {
-                drawTriangle(angle, path.get(0).getX(), path.get(0).getY());
-            }
+            drawTriangle();
         }
 
         int counter = 0;
@@ -1047,6 +1044,7 @@ public class MapScreenController {
                     edgePane.getChildren().add(line);
                     edgeDispSet.put(e.getID(), line);
                     line.setStroke(Color.rgb(245, 188, 58));
+                    line.setStrokeType(StrokeType.CENTERED);
                     line.setStrokeWidth(5.0);
                     if (!toggleOn) {
                         line.setStartX((e.getStart().getX() - X_OFFSET) * X_SCALE);
@@ -1071,6 +1069,8 @@ public class MapScreenController {
                             line.setOpacity(0.5);
                         }
                     }
+                    System.out.println("Line start x: " + line.getStartX() + " line start y: " + line.getStartY());
+                    System.out.println("Line end x: " + line.getEndX() + " line end y: " + line.getEndY());
                 }
             }
         }
@@ -1085,36 +1085,18 @@ public class MapScreenController {
      *              <p>
      *              This outputs an arrow on the screen along the line.
      */
-    public void drawTriangle(double angle, double initX, double initY) {
-
-        double x1, x2, x3, y1, y2, y3;
-
+    public void drawTriangle() {
 
         Polygon arrow = new Polygon();
 
-
-        initX = (initX - X_OFFSET) * X_SCALE;
-        initY = (initY - Y_OFFSET) * Y_SCALE;
-
-        x1 = initX + (9 * Math.cos(angle));
-        y1 = initY + (9 * Math.sin(angle));
-
-        x2 = initX + (4 * Math.cos(angle - (2 * Math.PI / 3)));
-        y2 = initY + (4 * Math.sin(angle - (2 * Math.PI / 3)));
-
-        x3 = initX + (4 * Math.cos(angle + (2 * Math.PI / 3)));
-        y3 = initY + (4 * Math.sin(angle + (2 * Math.PI / 3)));
-
-
         arrow.getPoints().addAll(new Double[]{
-                initX, initY,
-                x2, y2,
-                x1, y1,
-                x3, y3});
+                2.5, 2.5,
+                0.0, 0.0,
+                9.0, 2.5,
+                0.0, 5.0});
         arrow.setFill(Color.rgb(11, 47, 91));
 
         arrowPane.getChildren().add(arrow);
-
         arrowDispSet.add(arrow);
     }
 
