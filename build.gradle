@@ -1,5 +1,9 @@
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'application'
+
+mainClassName = 'edu.wpi.cs3733d18.teamp.Main'
+applicationDefaultJvmArgs = ['-Xmx1G']
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -58,7 +62,6 @@ jar {
     from configurations.runtime.collect { zipTree(it) }
 }
 
-task run(type: JavaExec) {
-	main = 'edu.wpi.cs3733d18.teamp.Main'
-	classpath = sourceSets.main.runtimeClasspath
+tasks.withType(JavaExec) {
+    jvmArgs = ['-Xmx2g']
 }
