@@ -83,18 +83,8 @@ public class SendEmail {
             MimeMultipart multipart = new MimeMultipart("related");
             // first part (the html)
             BodyPart messageBodyPart = new MimeBodyPart();
-            String htmlText = "<img src=\"cid:image\"><div align=\"center\">"+emailText+"</div>";
+            String htmlText = "<div align=\"center\">"+emailText+"</div>";
             messageBodyPart.setContent(htmlText, "text/html");
-            multipart.addBodyPart(messageBodyPart);
-            // second part (the image)
-            messageBodyPart = new MimeBodyPart();
-            DataSource fds = new FileDataSource(
-                    "screenshot.png");
-
-            messageBodyPart.setDataHandler(new DataHandler(fds));
-            messageBodyPart.setHeader("Content-ID", "<image>");
-
-            // add image to the multipart
             multipart.addBodyPart(messageBodyPart);
 
             // put everything together
