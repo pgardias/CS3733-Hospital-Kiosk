@@ -8,6 +8,7 @@ public class Settings {
     private static PathfindingContext.PathfindingSetting _pathfindingSettings;
     private static double _feetPerPixel;
 
+    private static int _timeDelay = 5000;
     private Settings() {
         _pathfindingSettings = PathfindingContext.PathfindingSetting.AStar;
         _feetPerPixel = 85./260.; // Initial value
@@ -44,5 +45,9 @@ public class Settings {
 
     public static PathfindingContext.PathfindingSetting getPathfindingSettings() {
         return _pathfindingSettings;
+    }
+
+    public static int getTimeDelay() {
+        return _timeDelay;
     }
 }

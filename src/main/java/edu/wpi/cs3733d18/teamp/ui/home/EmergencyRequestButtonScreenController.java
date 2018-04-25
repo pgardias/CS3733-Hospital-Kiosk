@@ -6,6 +6,7 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Employee;
 import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.Request;
+import edu.wpi.cs3733d18.teamp.Settings;
 import edu.wpi.cs3733d18.teamp.ui.MouseEventHandler;
 import edu.wpi.cs3733d18.teamp.ui.Originator;
 import edu.wpi.cs3733d18.teamp.ui.service.ServiceRequestScreen;
@@ -68,11 +69,15 @@ public class EmergencyRequestButtonScreenController {
         thread.start();
     }
 
+    /**
+     * Creates new thread that increments a counter while mouse is inactive, revert to homescreen if
+     * timer reaches past a set value by administrator
+     */
     Task task = new Task() {
         @Override
         protected Object call() throws Exception {
             try {
-                int timeout = 5000;
+                int timeout = Settings.getTimeDelay();
                 int counter = 0;
 
                 while(counter <= timeout) {
@@ -100,7 +105,11 @@ public class EmergencyRequestButtonScreenController {
             return null;
         }
     };
-    
+
+    /**
+     * Handles active mouse events by interrupting the current thread and setting a new thread and timer
+     * when the mouse moves. This makes sure that while the user is active, the screen will not time out.
+     */
     EventHandler<MouseEvent> testMouseEvent = new EventHandler<MouseEvent>() {
 
         @Override
@@ -121,7 +130,7 @@ public class EmergencyRequestButtonScreenController {
                     @Override
                     protected Object call() throws Exception {
                         try {
-                            int timeout = 5000;
+                            int timeout = Settings.getTimeDelay();
                             int counter = 0;
 
                             while(counter <= timeout) {
