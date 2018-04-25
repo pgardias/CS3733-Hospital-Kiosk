@@ -115,9 +115,9 @@ public class SettingsController {
                         Settings.setPathfindingAlgorithm(PathfindingSetting.Dijkstra);
                         break;
                     case "Best-first":
-                        Settings.setPathfindingAlgorithm(PathfindingSetting.BestFirst);
-                        break;
-                }
+                Settings.setPathfindingAlgorithm(PathfindingSetting.BestFirst);
+                break;
+            }
                 try {
                     Settings.setFeetPerPixel(Double.parseDouble(feetPerPixelTextField.getText()));
                 } catch (NumberFormatException nfe) {

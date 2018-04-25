@@ -186,7 +186,6 @@ public class HomeController {
         mapScreenController = loader.getController();
         mapScreenController.onStartUp();
         mapButton.getScene().setRoot(root);
-        System.out.println("MAPONSTARTUP");
         return true;
     }
 
