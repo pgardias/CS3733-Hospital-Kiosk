@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.admin.SettingsController">
+<StackPane fx:id="settingsScreenStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.cs3733d18.teamp.ui.admin.SettingsController">
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
@@ -43,6 +43,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <Label text="Program Settings:" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
@@ -60,7 +61,7 @@
                         <Font size="48.0" />
                      </font>
                   </Label>
-                  <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#submitButtonOp" ripplerFill="GREY" styleClass="yellow-button" stylesheets="@../../css/map.css" text="Submit" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                  <JFXButton fx:id="submitButton" buttonType="RAISED" onAction="#submitButtonOp" ripplerFill="GREY" styleClass="yellow-button" stylesheets="@../../css/map.css" text="Submit" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="4">
                      <font>
                         <Font size="30.0" />
                      </font>
@@ -71,11 +72,21 @@
                         <Font size="36.0" />
                      </font>
                   </JFXTextField>
-                  <Label text="ErrorText" textFill="RED" visible="false" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="TOP">
+                  <Label text="ErrorText" textFill="RED" visible="false" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="TOP">
                      <font>
                         <Font size="30.0" />
                      </font>
                   </Label>
+                  <Label text="Timeout Delay(secs): " GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                     <font>
+                        <Font size="48.0" />
+                     </font>
+                  </Label>
+                  <JFXTextField fx:id="timeoutDelayTextField" maxWidth="300.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </JFXTextField>
                </children>
             </GridPane>
          </center>
