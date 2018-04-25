@@ -4,6 +4,7 @@ import com.jfoenix.controls.*;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Directions;
+import edu.wpi.cs3733d18.teamp.Exceptions.NodeNotFoundException;
 import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.ui.home.ShakeTransition;
@@ -296,7 +297,14 @@ public class SearchBarOverlayController implements Initializable{
         if (dst.length() > 0) {
             // Destination has been chosen by user, get Node entity from nodeID through NodeRepo
             destinationSearchBar.setUnFocusColor(Color.rgb(245,188,58));
-            dstNode = nodeSet.get(parseDestinationInput(srcNode, dst).getID());
+            try {
+                dstNode = nodeSet.get(parseDestinationInput(srcNode, dst).getID());
+            } catch (NodeNotFoundException ne) {
+                destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
+                ShakeTransition anim = new ShakeTransition(destinationSearchBar, destinationRectangle);
+                anim.playFromStart();
+                return false;
+            }
         } else {
             // Destination has not been set, set search bar to red and shake
             destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
@@ -349,7 +357,7 @@ public class SearchBarOverlayController implements Initializable{
      * @param string
      * @return the node corresponding to the input string
      */
-    public Node parseDestinationInput(Node srcNode, String string) {
+    public Node parseDestinationInput(Node srcNode, String string) throws NodeNotFoundException {
         Node aNode = srcNode;
 
 
@@ -401,10 +409,16 @@ public class SearchBarOverlayController implements Initializable{
             default:
                 HashMap<String, Node> nodeSet = db.getAllNodes();
 
+                Boolean nodeFound = false;
+
                 for (Node node : nodeSet.values()) {
                     if (node.getLongName().compareTo(string) == 0) {
                         aNode = node;
+                        nodeFound = true;
                     }
+                }
+                if (!nodeFound) {
+                    throw new NodeNotFoundException();
                 }
                 break;
         }
