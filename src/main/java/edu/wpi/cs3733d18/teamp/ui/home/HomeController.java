@@ -130,7 +130,6 @@ public class HomeController {
 
         if (Main.currentUser.getIsAdmin()) {
             FXMLLoader loader;
-            Stage stage;
             Parent root;
 
             loader = new FXMLLoader(getClass().getResource("/FXML/admin/AdminMenuScreen.fxml"));
@@ -183,10 +182,11 @@ public class HomeController {
             ie.printStackTrace();
             return false;
         }
+
         mapScreenController = loader.getController();
         mapScreenController.onStartUp();
         mapButton.getScene().setRoot(root);
-        System.out.println("MAPONSTARTUP");
+
         return true;
     }
 

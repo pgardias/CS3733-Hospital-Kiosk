@@ -18,7 +18,7 @@
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
-            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#dadada" height="1050.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, GRAY, 5, 0.0, 0, 0);" width="1890.0" x="15.0" y="15.0" />
+            <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#dadada" height="1050.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);" width="1890.0" x="15.0" y="15.0" />
          </children>
       </AnchorPane>
       <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
