@@ -9,6 +9,8 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.ui.home.BounceTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.PathTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,6 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+
 import javafx.stage.Stage;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.Font;
@@ -31,6 +34,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.*;
+
+import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.controlsfx.control.PopOver;
 import org.controlsfx.control.PopOver.ArrowLocation;
 
@@ -519,8 +526,11 @@ public class MapScreenController {
                     Boolean foundStair = false;
                     for (String string : iconDispSet.keySet()) {
                         if (iconDispSet.get(string).equals(event.getSource())) {
+                            //if this is the icon that was pressed
+
                             for (int i = 0; i < stairNodeSet.size(); i += 2) {
                                 if (stairNodeSet.get(i).getID().equals(string)) {
+                                    //going down a stair node
                                     currentFloor = stairNodeSet.get(i + 1).getFloor();
                                     floorState = currentFloor.toString();
                                     foundStair = true;
@@ -533,6 +543,7 @@ public class MapScreenController {
                             }
                             for (int i = 1; i < stairNodeSet.size(); i += 2) {
                                 if (stairNodeSet.get(i).getID().equals(string)) {
+                                    //going back up a stair node
                                     currentFloor = stairNodeSet.get(i - 1).getFloor();
                                     floorState = currentFloor.toString();
                                     foundStair = true;
@@ -545,6 +556,7 @@ public class MapScreenController {
                             }
                             if (!foundStair) {
                                 clearEndNode();
+                                resetPath();
                                 Node node = nodeSet.get(string);
                                 searchBarOverlayController.setDestinationSearchBar(node.getLongName());
                             }
@@ -615,7 +627,6 @@ public class MapScreenController {
                     if (nodeDispSet.get(string) == event.getSource()) {
                         nodeDispSet.get(string).setStroke(Color.BLACK);
                     }
-
                 }
             }
             event.consume();
@@ -742,6 +753,7 @@ public class MapScreenController {
 
         @Override
         public void handle(MouseEvent event) {
+
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
                 System.out.println("Mouse_Pressed");
                 getMouseValue(event);
@@ -943,6 +955,8 @@ public class MapScreenController {
         double maxYCoord = 0;
         double minXCoord = 5000;
         double minYCoord = 3400;
+        double xDistance = 0;
+        double yDistance = 0;
 
         for (Node n : path) {
             if (toggleOn) {
@@ -963,29 +977,6 @@ public class MapScreenController {
             //checks if if the current node should go in stair set
             checkStairNodeSet(currentNode);
 
-            //Draws the arrows
-            if (!path.get(0).equals(n)) {
-                if (toggleOn) {
-                    width = currentNode.getxDisplay() - pastNode.getxDisplay();
-                    height = currentNode.getyDisplay() - pastNode.getyDisplay();
-                } else {
-                    width = currentNode.getX() - pastNode.getX();
-                    height = currentNode.getY() - pastNode.getY();
-                }
-                angle = Math.atan2(height, width);
-                //increment the distanceCounter
-                distanceCounter += currentNode.distanceBetweenNodes(pastNode);
-                if (distanceCounter >= 175) {
-                    distanceCounter = 0;
-
-                    arrowFloorSet.add(currentNode.getFloor().toString());
-                    if (toggleOn) {
-                        drawTriangle(angle, pastNode.getxDisplay(), pastNode.getyDisplay());
-                    } else {
-                        drawTriangle(angle, pastNode.getX(), pastNode.getY());
-                    }
-                }
-            }
 
             //set start node to Green and end node to red
             if (path.get(0).equals(n)) {
@@ -996,40 +987,84 @@ public class MapScreenController {
                     addToStairNodeSet();
                 }
             }
+
             //Color in the path appropriately
             drawEdge(currentNode, pastNode);
 
-            //this sets the proper opacity for the arrows based on floor
-            for (int i = 0; i < arrowDispSet.size(); i++) {
-                System.out.println(arrowFloorSet.get(i));
-                if (arrowFloorSet.get(i).equals(currentFloor.toString())) {
-                    arrowDispSet.get(i).setOpacity(1.0);
+            //total up the x and y distance of the path
+            if (pastNode != null) {
+                if (toggleOn) {
+                    xDistance += (currentNode.getxDisplay() - pastNode.getxDisplay());
+                    yDistance += (currentNode.getyDisplay() - pastNode.getyDisplay());
                 } else {
-                    arrowDispSet.get(i).setOpacity(0.3);
+                    xDistance += (currentNode.getX() - pastNode.getX());
+                    yDistance += (currentNode.getY() - pastNode.getY());
                 }
             }
 
-            System.out.println("list of stair nodes: " + stairNodeSet.toString());
-            minXCoord -= 200;
-            minYCoord -= 400;
-            maxXCoord += 200;
-            maxYCoord += 100;
-            double rangeX = maxXCoord - minXCoord;
-            double rangeY = maxYCoord - minYCoord;
 
-            double desiredZoomX = 1920 / (rangeX * X_SCALE);
-            double desiredZoomY = 1080 / (rangeY * Y_SCALE);
-            System.out.println("desired X zoom: " + desiredZoomX + " desired Zoom Y: " + desiredZoomY);
+            if (searchBarOverlayController.getDirectionsVisible()) {
+                searchBarOverlayController.clearTable();
+                searchBarOverlayController.setDirectionsVisible(false);
+                searchBarOverlayController.directionsButtonOp(null);
+            }
 
-            double centerX = (maxXCoord + minXCoord) / 2;
-            double centerY = (maxYCoord + minYCoord) / 2;
-
-            autoTranslateZoom(desiredZoomX, desiredZoomY, centerX, centerY);
-
-            System.out.println(toggleOn.toString());
-
-            pathDrawn = true;
+            //Draws the arrows
+            if (toggleOn) {
+                width = path.get(1).getxDisplay() - path.get(0).getxDisplay();
+                height = path.get(1).getyDisplay() - path.get(0).getyDisplay();
+            } else {
+                width = path.get(1).getX() - path.get(0).getX();
+                height = path.get(1).getY() - path.get(0).getY();
+            }
+            angle = Math.atan2(height, width);
+            //increment the distanceCounter
+            double totalDistance = Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+            int arrowNumber = (int) (totalDistance * 1 / 100.0);
+            for (int i = 0; i < arrowNumber; i++) {
+                arrowFloorSet.add(currentNode.getFloor().toString());
+                if (toggleOn) {
+                    drawTriangle(angle, path.get(0).getxDisplay(), path.get(0).getyDisplay());
+                } else {
+                    drawTriangle(angle, path.get(0).getX(), path.get(0).getY());
+                }
+            }
         }
+
+        getFloors();
+        createFloorSequence();
+
+
+        System.out.println("list of stair nodes: " + stairNodeSet.toString());
+        minXCoord -= 400;
+        minYCoord -= 400;
+        maxXCoord += 400;
+        maxYCoord += 400;
+        double rangeX = maxXCoord - minXCoord;
+        double rangeY = maxYCoord - minYCoord;
+
+        double desiredZoomX = 1920 / (rangeX * X_SCALE);
+        double desiredZoomY = 1080 / (rangeY * Y_SCALE);
+        System.out.println("desired X zoom: " + desiredZoomX + " desired Zoom Y: " + desiredZoomY);
+
+        double centerX = (maxXCoord + minXCoord) / 2;
+        double centerY = (maxYCoord + minYCoord) / 2;
+
+        autoTranslateZoom(desiredZoomX, desiredZoomY, centerX, centerY);
+
+        System.out.println(toggleOn.toString());
+
+        pathDrawn = true;
+        int counter = 0;
+        for (Polygon shape: arrowDispSet) {
+            counter++;
+            ArrowPathTransition arrowPathTransition = new ArrowPathTransition(pathMade, shape, arrowDispSet.size(),
+                    currentFloor, toggleOn);
+            arrowPathTransition.setPathAnim();
+            arrowPathTransition.jumpToDuration(counter);
+            arrowPathTransition.playAnim();
+        }
+
     }
 
     public void drawEdge(Node currentNode, Node pastNode) {
@@ -1046,6 +1081,12 @@ public class MapScreenController {
                         line.setStartY((e.getStart().getY() - Y_OFFSET) * Y_SCALE);
                         line.setEndX((e.getEnd().getX() - X_OFFSET) * X_SCALE);
                         line.setEndY((e.getEnd().getY() - Y_OFFSET) * Y_SCALE);
+                        if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
+                            line.setOpacity(1.0);
+                        } else {
+                            line.getStrokeDashArray().addAll(1.0, 10.0);
+                            line.setOpacity(0.5);
+                        }
                     } else {
                         line.setStartX((e.getStart().getxDisplay() - X_OFFSET) * X_SCALE);
                         line.setStartY((e.getStart().getyDisplay() - Y_OFFSET) * Y_SCALE);
@@ -1054,33 +1095,13 @@ public class MapScreenController {
                         if (e.getStart().getFloor() == currentFloor && e.getEnd().getFloor() == currentFloor) {
                             line.setOpacity(1.0);
                         } else {
-                            line.setOpacity(0.3);
+                            line.getStrokeDashArray().addAll(1.0, 10.0);
+                            line.setOpacity(0.5);
                         }
                     }
                 }
             }
         }
-
-        System.out.println("list of stair nodes: " + stairNodeSet.toString());
-        minXCoord -= 200;
-        minYCoord -= 400;
-        maxXCoord += 200;
-        maxYCoord += 100;
-        double rangeX = maxXCoord - minXCoord;
-        double rangeY = maxYCoord - minYCoord;
-
-        double desiredZoomX = 1920 / (rangeX * X_SCALE);
-        double desiredZoomY = 1080 / (rangeY * Y_SCALE);
-        System.out.println("desired X zoom: " + desiredZoomX + " desired Zoom Y: " + desiredZoomY);
-
-        double centerX = (maxXCoord + minXCoord) / 2;
-        double centerY = (maxYCoord + minYCoord) / 2;
-
-        autoTranslateZoom(desiredZoomX, desiredZoomY, centerX, centerY);
-
-        System.out.println(toggleOn.toString());
-
-        pathDrawn = true;
     }
 
     /**
@@ -1190,7 +1211,6 @@ public class MapScreenController {
         if (pathDrawn) {
             drawPath(pathMade);
         }
-
     }
 
     public void clearStartNode() {
@@ -1259,11 +1279,13 @@ public class MapScreenController {
     }
 
     /**
-     * this method will determin what floors the path goes on
+     * this method will determine what floors the path goes on
      */
     public void getFloors() {
         floorsList.clear();
+
         for (int i = 0; i < stairNodeSet.size(); i += 2) {
+
             floorsList.add(stairNodeSet.get(i).getFloor());
         }
         if (stairNodeSet.size() > 1)
@@ -1450,5 +1472,8 @@ public class MapScreenController {
 
     public Node.floorType getCurrentFloor() {
         return currentFloor;
+    }
+    public ArrayList<Node.floorType> getFloorsList(){
+        return floorsList;
     }
 }
