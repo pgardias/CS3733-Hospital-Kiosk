@@ -5,26 +5,27 @@
 .blue-button {
     -jfx-button-type: RAISED;
     -fx-background-color: #0b2f5b;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
     -fx-text-fill: #e6e6e6;
+}
+
+.blue-button:hover {
+    -fx-background-color: #4178b8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
 }
 
 .red-button {
     -jfx-button-type: RAISED;
+    -fx-background-radius: 5;
     -fx-background-color: RED;
     -fx-text-fill: BLACK;
 }
 
-.delete-button {
-    -jfx-button-type: RAISED;
-    -fx-background-color: RED;
+.red-button:hover {
+    -fx-background-color: #ff7777;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
 }
-
-.submit-button {
-    -jfx-button-type: RAISED;
-    -fx-background-color: LIGHTBLUE;
-}
-
-
 
 .mobile {
     -fx-background-color: #F5BC3A;

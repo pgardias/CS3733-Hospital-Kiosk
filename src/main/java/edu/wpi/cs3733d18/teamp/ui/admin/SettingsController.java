@@ -49,26 +49,32 @@ public class SettingsController {
      */
     @FXML
     public void onStartUp() {
-
         algorithmComboBox.setItems(algorithmTypes);
         switch (Settings.getPathfindingSettings()) {
-            case AStar:
+            case AStar: {
                 algorithmComboBox.setValue("A*");
                 break;
-            case DepthFirst:
+            }
+            case DepthFirst: {
                 algorithmComboBox.setValue("Depth-first");
                 break;
-            case BreadthFirst:
+            }
+            case BreadthFirst: {
                 algorithmComboBox.setValue("Breadth-first");
                 break;
-            case Dijkstra:
+            }
+            case Dijkstra: {
                 algorithmComboBox.setValue("Dijkstra's");
                 break;
-            case BestFirst:
+            }
+            case BestFirst: {
                 algorithmComboBox.setValue("BestFirst");
                 break;
-            default:
+            }
+            default: {
+                System.out.println("Admin Settings Panel was unable to set the current Pathfinding Algorithm Context");
                 break;
+            }
         }
         feetPerPixelTextField.setText(Double.toString(Settings.getFeetPerPixel()));
     }

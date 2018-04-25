@@ -1,28 +1,47 @@
 .floor-buttons {
     -jfx-button-type: RAISED;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
+    -fx-background-color: #eeeeee;
+    -fx-text-fill: #0b2f5b;
+    -fx-background-radius: 5;
+}
+
+.floor-buttons:hover {
+    -fx-background-color: #dddddd;
+}
+
+.highlight-floor-button {
     -fx-background-color: #0b2f5b;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
     -fx-text-fill: #F5BC3A;
-    -fx-background-radius: 20;
+    -jfx-button-type: RAISED;
+    -fx-background-radius: 5;
+}
+
+.highlight-floor-3dbutton {
+    -fx-background-color: #F5BC3A;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
+    -fx-text-fill: #0b2f5b;
+    -jfx-button-type: RAISED;
+    -fx-background-radius: 5;
+}
+
+.highlight-floor-button:hover {
+    -fx-background-color: #4178b8;
 }
 
 .yellow-button {
     -jfx-button-type: RAISED;
-    -fx-background-color: #F5BC3A;
-    -fx-background-radius: 40;
-    -fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 0);
+    -fx-background-color: WHITESMOKE;
+    -fx-background-radius: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
 }
 .yellow-button:hover {
-    -fx-background-color: #efaf1c;
-    -fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 0);
+    -fx-background-color: WHITESMOKE;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
 }
 
-.highlight-floor-button {
-    -fx-background-color: #F5BC3A;
-    -fx-text-fill: #0b2f5b;
-    -jfx-button-type: RAISED;
-    -fx-background-radius: 20;
-}
-
-.linear-grad-to-bottom{
+.linear-grad-to-bottom {
     -fx-background-color: linear-gradient(to bottom, #79a6d2, #000000);
 }
+

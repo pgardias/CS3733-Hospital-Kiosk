@@ -63,8 +63,6 @@ public class Directions {
             node = path.get(i);
             nextNode = path.get(i+1);
 
-
-
             if (pastNode != null) {
                 // Set new values according to new nodes
                 distance += node.distanceBetweenNodes(pastNode);
@@ -208,7 +206,6 @@ public class Directions {
         if (angleDiff > 180) {
             angleDiff -= 360;
         }
-
 
         if (node1.getType().equals(Node.nodeType.STAI) && node2.getType().equals(Node.nodeType.STAI)) {
             return STAIRS;
