@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXButton;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
+import edu.wpi.cs3733d18.teamp.Settings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -37,6 +38,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class ThreeDMapScreenController implements Initializable{
 
@@ -194,24 +196,13 @@ public class ThreeDMapScreenController implements Initializable{
         allModels.add(loadMeshView(pathName));
 
         // Load all model textures
-        PhongMaterial floorL2Texture = new PhongMaterial();
-        floorL2Texture.setDiffuseMap(new Image(getClass().getResource("/models/textures/L2Floor_UV.png").toExternalForm()));
-        allTextures.add(floorL2Texture);
-        PhongMaterial floorL1Texture = new PhongMaterial();
-        floorL1Texture.setDiffuseMap(new Image(getClass().getResource("/models/textures/L1Floor_UV.png").toExternalForm()));
-        allTextures.add(floorL1Texture);
-        PhongMaterial floorGTexture = new PhongMaterial();
-        floorGTexture.setDiffuseMap(new Image(getClass().getResource("/models/textures/groundFloor_UV.png").toExternalForm()));
-        allTextures.add(floorGTexture);
-        PhongMaterial floor1stTexture = new PhongMaterial();
-        floor1stTexture.setDiffuseMap(new Image(getClass().getResource("/models/textures/1stFloor_UV.png").toExternalForm()));
-        allTextures.add(floor1stTexture);
-        PhongMaterial floor2ndTexture = new PhongMaterial();
-        floor2ndTexture.setDiffuseMap(new Image(getClass().getResource("/models/textures/2ndFloor_UV.png").toExternalForm()));
-        allTextures.add(floor2ndTexture);
-        PhongMaterial floor3rdTexture = new PhongMaterial();
-        floor3rdTexture.setDiffuseMap(new Image(getClass().getResource("/models/textures/3rdFloor_UV.png").toExternalForm()));
-        allTextures.add(floor3rdTexture);
+
+        allTextures.add(Settings.getSettings().getFloorL2Texture());
+        allTextures.add(Settings.getSettings().getFloorL1Texture());
+        allTextures.add(Settings.getSettings().getFloorGTexture());
+        allTextures.add(Settings.getSettings().getFloor1stTexture());
+        allTextures.add(Settings.getSettings().getFloor2ndTexture());
+        allTextures.add(Settings.getSettings().getFloor3rdTexture());
 
         // Build scene
         currentFloor = Node.floorType.LEVEL_L2;
@@ -809,7 +800,12 @@ public class ThreeDMapScreenController implements Initializable{
                 Rotate rotateAroundCenter = new Rotate(-Math.toDegrees(angle), axisOfRotation);
 
                 Cylinder line = new Cylinder(2, height);
-                line.setMaterial(fillOrange);
+                if((edge.getStart().getType() == Node.nodeType.STAI && edge.getEnd().getType() == Node.nodeType.STAI) ||
+                        (edge.getStart().getType() == Node.nodeType.ELEV && edge.getEnd().getType() == Node.nodeType.ELEV)) {
+                    line.setMaterial(fillBlue);
+                } else {
+                    line.setMaterial(fillOrange);
+                }
                 line.getTransforms().addAll(moveToMidpoint, rotateAroundCenter);
                 line.setDisable(true);
                 line.setOpacity(0.0);
@@ -854,6 +850,7 @@ public class ThreeDMapScreenController implements Initializable{
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setMaterial(fillGreen);
+                            nodeDispSet.get(string).setRadius(4.0);
                             searchBarOverlayController.setSourceSearchBar(node.getLongName());
                         }
                     }
@@ -864,12 +861,13 @@ public class ThreeDMapScreenController implements Initializable{
                         if (nodeDispSet.get(string) == event.getSource()) {
                             Node node = nodeSet.get(string);
                             nodeDispSet.get(string).setMaterial(fillRed);
+                            nodeDispSet.get(string).setRadius(4.0);
                             searchBarOverlayController.setDestinationSearchBar(node.getLongName());
                         }
                     }
                     firstSelected = false;
                 }
-            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED) { // TODO Check zoom level to prevent graphical glitches
+            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
                 System.out.println("MOUSE_ENTERED event at " + event.getSource());
                 for (String string : nodeDispSet.keySet()) {
                     if (nodeDispSet.get(string) == event.getSource()) {
@@ -888,7 +886,7 @@ public class ThreeDMapScreenController implements Initializable{
                         VBox popOverVBox = new VBox(nodeTypeLabel, nodeLongNameLabel, nodeBuildingLabel);
 //                        popOverVBox.getParent().setStyle("-fx-effect: dropshadow(gaussian, BLACK, 10, 0, 0, 1);  ");
                         popOver = new PopOver(popOverVBox);
-                        popOver.show((javafx.scene.Node) event.getSource());
+                        popOver.show((javafx.scene.Node) event.getSource(), -7);
                         popOverHidden = false;
                         popOver.setCloseButtonEnabled(false);
 //                        popOver.setCornerRadius(20);
@@ -946,6 +944,7 @@ public class ThreeDMapScreenController implements Initializable{
             pastNode = currentNode;
             currentNode = n;
             nodeDispSet.get(n.getID()).setMaterial(fillBlue);
+            nodeDispSet.get(n.getID()).setRadius(NODE_RADIUS);
 
             for (Edge e : currentNode.getEdges()) {
                 if (pastNode != null) {
@@ -1143,6 +1142,7 @@ public class ThreeDMapScreenController implements Initializable{
         for (Sphere s: nodeDispSet.values()) {
             if (s.getMaterial() == fillGreen) {
                s.setMaterial(fillBlue);
+               s.setRadius(NODE_RADIUS);
            }
         }
     }
@@ -1152,6 +1152,7 @@ public class ThreeDMapScreenController implements Initializable{
         for (Sphere s : nodeDispSet.values()) {
             if (s.getMaterial() == fillRed) {
                 s.setMaterial(fillBlue);
+                s.setRadius(NODE_RADIUS);
             }
         }
     }
