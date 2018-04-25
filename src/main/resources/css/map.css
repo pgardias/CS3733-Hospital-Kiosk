@@ -18,6 +18,10 @@
     -fx-background-radius: 5;
 }
 
+.highlight-floor-button:hover {
+    -fx-background-color: #4178b8;
+}
+
 .yellow-button {
     -jfx-button-type: RAISED;
     -fx-background-color: WHITESMOKE;

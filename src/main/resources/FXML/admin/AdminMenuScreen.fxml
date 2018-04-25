@@ -24,9 +24,9 @@
                 </Label>
             </children>
         </AnchorPane>
-        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+        <BorderPane maxHeight="1080.0" maxWidth="1920.0">
             <center>
-                <GridPane alignment="CENTER" hgap="20.0" maxHeight="1.7976931348623157E308" maxWidth="1208.0" minHeight="-Infinity" minWidth="1200.0" prefHeight="663.0" prefWidth="1200.0" stylesheets="@../../css/adminHome.css" BorderPane.alignment="TOP_CENTER">
+                <GridPane alignment="CENTER" hgap="20.0" maxHeight="1.7976931348623157E308" maxWidth="1208.0" minHeight="-Infinity" minWidth="1200.0" prefHeight="663.0" prefWidth="1200.0" stylesheets="@../../css/admin.css" BorderPane.alignment="TOP_CENTER">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="400.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="400.0" />

@@ -3,10 +3,10 @@
     -fx-font-size: 40px;
     -fx-text-fill: WHITE;
     -fx-background-color: #113868;
-    -fx-effect: dropshadow(gaussian, BLACK, 6.0, 0.7, 0.0, 0.0);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
 }
 
 .admin-button:hover {
     -fx-background-color: #4178b8;
-    -fx-effect: dropshadow(gaussian, BLACK, 6.0, 0.7, 0.0, 0.0);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 6.0, 0.7, 0.0, 0.0);
 }

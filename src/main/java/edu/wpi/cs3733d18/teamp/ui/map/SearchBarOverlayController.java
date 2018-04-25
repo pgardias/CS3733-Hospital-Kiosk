@@ -69,6 +69,12 @@ public class SearchBarOverlayController implements Initializable{
     Rectangle directionsRectangle;
 
     @FXML
+    Rectangle sourceRectangle;
+
+    @FXML
+    Rectangle destinationRectangle;
+
+    @FXML
     TableView<DirectionsTable> directionsTableView;
 
     @FXML
@@ -80,9 +86,7 @@ public class SearchBarOverlayController implements Initializable{
     @FXML
     JFXTreeTableColumn<DirectionsTable, String> directionsTreeTableColumn;
 
-
     ObservableList<DirectionsTable> directions = FXCollections.observableArrayList();
-
 
     @FXML
     TreeItem<DirectionsTable> floorParent;
@@ -239,18 +243,21 @@ public class SearchBarOverlayController implements Initializable{
             clearTable();
         }
 
-
-
         //get all nodes
         HashMap<String, Node> nodeSet = db.getAllNodes();
 
         //Declare source node, destination node, and get the typed in inputs for both search boxes
         Node srcNode, dstNode;
-        String src = sourceSearchBar.getValue().toString();
-        String dst = destinationSearchBar.getValue().toString();
+        String src = sourceSearchBar.getValue();
+        String dst = destinationSearchBar.getValue();
 
         // Check if the source node was input
-        if (src.length() > 0 && !src.equals("Current Kiosk")) {
+        if (src.length() == 0) {
+//            sourceSearchBar.setUnFocusColor(Color.rgb(255,0,0));
+            ShakeTransition anim = new ShakeTransition(sourceSearchBar, sourceRectangle);
+            anim.playFromStart();
+            return false;
+        } else if (src.length() > 0 && !src.equals("Current Kiosk")) {
             // Source has been chosen by user, get Node entity from nodeID through NodeRepo
             srcNode = nodeSet.get(parseSourceInput(src).getID());
         } else {
@@ -265,14 +272,11 @@ public class SearchBarOverlayController implements Initializable{
             dstNode = nodeSet.get(parseDestinationInput(srcNode, dst).getID());
         } else {
             // Destination has not been set, set search bar to red and shake
-            destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
-            ShakeTransition anim = new ShakeTransition(destinationSearchBar);
+//            destinationSearchBar.setUnFocusColor(Color.rgb(255,0,0));
+            ShakeTransition anim = new ShakeTransition(destinationSearchBar, destinationRectangle);
             anim.playFromStart();
             return false;
-            //dstNode = nodeSet.get(endNode.getID());
         }
-
-        Font font = new Font("verdana", 24.0);
 
         ArrayList<Node> path = Main.pathfindingContext.findPath(srcNode, dstNode);
         mapScreenController.drawPath(path);
