@@ -1,6 +1,7 @@
 package edu.wpi.cs3733d18.teamp.ui.map;
 
 import com.jfoenix.controls.JFXButton;
+import edu.wpi.cs3733d18.teamp.Settings;
 import com.sun.scenario.effect.Effect;
 import com.jfoenix.controls.JFXSlider;
 import de.jensd.fx.glyphs.GlyphIcon;
@@ -9,10 +10,13 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import edu.wpi.cs3733d18.teamp.Database.DBSystem;
+import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
+import edu.wpi.cs3733d18.teamp.ui.Originator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import edu.wpi.cs3733d18.teamp.ui.home.BounceTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.PathTransition;
@@ -106,6 +110,8 @@ public class MapScreenController {
     private ArrayList<Node.floorType> floorsList = new ArrayList<>();
     private ArrayList<JFXButton> floorSequenceList = new ArrayList<>();
 
+    Thread thread;
+
     DBSystem db = DBSystem.getInstance();
 
     Node.floorType currentFloor;
@@ -163,6 +169,9 @@ public class MapScreenController {
     static PopOver popOver;
     Boolean popOverHidden = true;
 
+    @FXML
+    AnchorPane mapScreenAnchorPane;
+
     SearchBarOverlayController searchBarOverlayController = null;
     MapScreenController mapScreenController;
 
@@ -204,6 +213,9 @@ public class MapScreenController {
         addOverlay();
 
         searchBarOverlayController.setSourceSearchBar("Current Kiosk");
+        mapScreenAnchorPane.addEventHandler(MouseEvent.ANY, testMouseEvent);
+        thread = new Thread(task);
+        thread.start();
     }
 
     @FXML
@@ -224,6 +236,104 @@ public class MapScreenController {
     public ArrayList<Node> getPathMade() {
         return this.pathMade;
     }
+
+    /**
+     * Creates new thread that increments a counter while mouse is inactive, revert to homescreen if
+     * timer reaches past a set value by administrator
+     */
+    Task task = new Task() {
+        @Override
+        protected Object call() throws Exception {
+            try {
+                int timeout = Settings.getTimeDelay();
+                int counter = 0;
+
+                while(counter <= timeout) {
+                    Thread.sleep(5);
+                    counter += 5;
+                }
+                Scene scene;
+                Parent root;
+                FXMLLoader loader;
+                scene = backButton.getScene();
+
+                loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+                try {
+                    root = loader.load();
+                    scene.setRoot(root);
+                } catch (IOException ie) {
+                    ie.printStackTrace();
+                }
+            } catch (InterruptedException v) {
+                System.out.println(v);
+                thread = new Thread(task);
+                thread.start();
+                return null;
+            }
+            return null;
+        }
+    };
+
+    /**
+     * Handles active mouse events by interrupting the current thread and setting a new thread and timer
+     * when the mouse moves. This makes sure that while the user is active, the screen will not time out.
+     */
+    EventHandler<MouseEvent> testMouseEvent = new EventHandler<MouseEvent>() {
+
+        @Override
+        public void handle(MouseEvent event) {
+            Originator localOriginator = new Originator();
+            long start, now;
+            localOriginator.setState("Active");
+            localOriginator.saveStateToMemento();
+            thread.interrupt();
+
+            try{
+                thread.join();
+            } catch (InterruptedException ie){
+                System.out.println(ie);
+            }
+
+            Task task2 = new Task() {
+                @Override
+                protected Object call() throws Exception {
+                    try {
+                        int timeout = Settings.getTimeDelay();
+                        int counter = 0;
+
+                        while(counter <= timeout) {
+                            Thread.sleep(5);
+                            counter += 5;
+                        }
+                        Scene scene;
+                        Parent root;
+                        FXMLLoader loader;
+                        scene = backButton.getScene();
+
+                        loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+                        try {
+                            root = loader.load();
+                            scene.setRoot(root);
+                        } catch (IOException ie) {
+                            ie.printStackTrace();
+                        }
+                    } catch (InterruptedException v) {
+                        System.out.println(v);
+                        thread = new Thread(task);
+                        thread.start();
+                        return null;
+                    }
+                    return null;
+                }
+            };
+
+            thread = new Thread(task2);
+            thread.start();
+        }
+    };
+
+
+
 
     @FXML
     public void backButtonOp() {
@@ -1458,7 +1568,10 @@ public class MapScreenController {
                 break;
 
         }
+    }
 
+    public JFXButton getBackButton() {
+        return this.backButton;
     }
 
     public Node.floorType getCurrentFloor() {
