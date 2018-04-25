@@ -1138,9 +1138,7 @@ public class MapScreenController {
             }
         }
         if (searchBarOverlayController.getDirectionsVisible()) {
-            searchBarOverlayController.clearTable();
-            searchBarOverlayController.setDirectionsVisible(false);
-            searchBarOverlayController.directionsButtonOp(null);
+            searchBarOverlayController.expandDirections(currentFloor);
         }
 
         getFloors();
@@ -1178,7 +1176,7 @@ public class MapScreenController {
         angle = Math.atan2(height, width);
         //increment the distanceCounter
         double totalDistance = Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
-        int arrowNumber = (int) (totalDistance * 1 / 100.0);
+        int arrowNumber = (int) (totalDistance * 1 / 75.0);
         for (int i = 0; i < arrowNumber; i++) {
             arrowFloorSet.add(currentNode.getFloor().toString());
             drawTriangle();
@@ -1202,7 +1200,7 @@ public class MapScreenController {
                     Line line = new Line();
                     edgePane.getChildren().add(line);
                     edgeDispSet.put(e.getID(), line);
-                    line.setStroke(Color.rgb(250, 150, 0));
+                    line.setStroke(Color.rgb(11, 70, 120));
                     line.setStrokeWidth(5.0);
                     if (!toggleOn) {
                         line.setStartX((e.getStart().getX() - X_OFFSET) * X_SCALE);
@@ -1248,7 +1246,7 @@ public class MapScreenController {
                 0.0, 0.0,
                 9.0, 2.5,
                 0.0, 5.0});
-        arrow.setFill(Color.rgb(11, 47, 91));
+        arrow.setFill(Color.rgb(250, 150, 0));
 
         arrowPane.getChildren().add(arrow);
         arrowDispSet.add(arrow);
