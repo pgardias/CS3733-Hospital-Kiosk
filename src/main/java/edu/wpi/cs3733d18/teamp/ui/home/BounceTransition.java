@@ -41,7 +41,8 @@ public class BounceTransition extends CachedTimelineTransition {
                         )
                         .build()
         );
-        setCycleDuration(Duration.seconds(1));
+        setCycleDuration(Duration.seconds(1.5));
+        setCycleCount(INDEFINITE);
         setDelay(Duration.seconds(0.2));
     }
 }
