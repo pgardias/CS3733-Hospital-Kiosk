@@ -220,7 +220,6 @@ public class ThreeDMapScreenController implements Initializable{
 
         // Add searchbar overlay
         addOverlay();
-
     }
 
     /**
@@ -867,8 +866,7 @@ public class ThreeDMapScreenController implements Initializable{
                     }
                     firstSelected = false;
                 }
-            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED) {
-                System.out.println("MOUSE_ENTERED event at " + event.getSource());
+            } else if (event.getEventType() == MouseEvent.MOUSE_ENTERED) { // TODO Check zoom level to prevent graphical glitches
                 for (String string : nodeDispSet.keySet()) {
                     if (nodeDispSet.get(string) == event.getSource()) {
                         if (popOver != null && popOver.getOpacity() == 0) {
@@ -1088,7 +1086,6 @@ public class ThreeDMapScreenController implements Initializable{
         }
         getFloors();
 
-        System.out.println("list of stair nodes: " + stairNodeSet.toString());
         minXCoord -= 200;
         minYCoord -= 400;
         maxXCoord += 200;
@@ -1098,7 +1095,6 @@ public class ThreeDMapScreenController implements Initializable{
 
         double desiredZoomX = 1920 / (rangeX * X_SCALE);
         double desiredZoomY = 1080 / (rangeY * Z_SCALE);
-        System.out.println("desired X zoom: " + desiredZoomX + " desired Zoom Y: " + desiredZoomY);
 
         double centerX = (maxXCoord + minXCoord) / 2;
         double centerY = (maxYCoord + minYCoord) / 2;

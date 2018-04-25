@@ -20,7 +20,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <JFXButton fx:id="confirmationButton" buttonType="RAISED" defaultButton="true" onAction="#confirmationButtonOp" style="-fx-background-color: RED;" GridPane.columnIndex="1" GridPane.halignment="LEFT">
+            <JFXButton fx:id="confirmationButton" buttonType="RAISED" defaultButton="true" onAction="#confirmationButtonOp" styleClass="delete-button" stylesheets="@../../css/common.css" GridPane.columnIndex="1" GridPane.halignment="LEFT">
                <GridPane.margin>
                   <Insets left="50.0" />
                </GridPane.margin>

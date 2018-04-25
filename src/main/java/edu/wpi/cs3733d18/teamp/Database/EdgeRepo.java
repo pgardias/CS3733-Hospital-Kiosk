@@ -60,7 +60,6 @@ public class EdgeRepo {
             se.printStackTrace();
         } catch (NodeNotFoundException n) {
             n.printStackTrace();
-            System.out.println(n.getNodeID());
         }
 
         return allEdges;
@@ -103,7 +102,6 @@ public class EdgeRepo {
             se.printStackTrace();
         } catch (NodeNotFoundException e) {
             e.printStackTrace();
-            System.out.println(e.getNodeID());
         }
 
         return edge;
@@ -227,7 +225,6 @@ public class EdgeRepo {
             ResultSet results = pstmt.executeQuery();
 
             if (!results.next()) {
-                System.out.println(node.getID());
                 throw new EdgeNotFoundException();
             } else {
                 do {
@@ -251,7 +248,6 @@ public class EdgeRepo {
             se.printStackTrace();
         } catch (NodeNotFoundException e) {
             e.printStackTrace();
-            System.out.println(e.getNodeID());
         }
         return edges;
     }

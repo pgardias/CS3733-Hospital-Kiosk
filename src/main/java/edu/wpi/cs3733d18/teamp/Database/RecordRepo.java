@@ -229,7 +229,6 @@ public class RecordRepo {
             pstmt.setString(1, type);
             ResultSet results = pstmt.executeQuery();
             if (!results.next()) {
-                System.out.println("No requests of subtype "+type);
                 return 0; // No requests of this subtype
             }else{
                 do {
@@ -258,7 +257,6 @@ public class RecordRepo {
             pstmt.setString(1, subType);
             ResultSet results = pstmt.executeQuery();
             if (!results.next()) {
-                System.out.println("No requests of subtype "+subType);
                 return 0; // No requests of this subtype
             }
             totalCount =  results.getInt(4); // Return row count
@@ -284,7 +282,6 @@ public class RecordRepo {
             pstmt.setString(1, type);
             ResultSet results = pstmt.executeQuery();
             if (!results.next()) {
-                System.out.println("No requests of type "+type);
                 return 0; // No requests of this subtype
             }else{
                 do {
@@ -313,7 +310,6 @@ public class RecordRepo {
             pstmt.setString(1, subType);
             ResultSet results = pstmt.executeQuery();
             if (!results.next()) {
-                System.out.println("No requests of subtype "+subType);
                 return 0; // No requests of this subtype
             }
             totalCount = results.getInt(6);
@@ -336,24 +332,20 @@ public class RecordRepo {
             conn = DriverManager.getConnection(DB_URL);
 
             // Prepare statement
-            String sql = "SELECT count(*) FROM RECORD_INFO";
+            String sql = "SELECT MAX(recordID) FROM RECORD_INFO";
             Statement stmt = conn.createStatement();
             ResultSet results = stmt.executeQuery(sql);
 
-            if(!results.next()) { // If no records, is first one
-                count = 1;
-            }else { // Otherwise return count + 1
-                count =  results.getInt(1) + 1;
-            }
+            count = results.getInt(1);
 
             stmt.close();
             conn.close();
+            return count + 1;
         } catch (SQLException se) {
             se.printStackTrace();
         }
-
         return count;
-    }
+}
 
 
     /**
@@ -375,11 +367,9 @@ public class RecordRepo {
 
         // If record exists, update it
         else {
-            System.out.println("UPDATING RECORD");
             updateRecord(curRecord, newRequest);
         }
 
-        System.out.println("TIME AT END OF RECORD HANDLING: "+newRequest.getTimeCompleted());
 
         return true;
     }
