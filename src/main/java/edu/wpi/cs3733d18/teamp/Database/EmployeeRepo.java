@@ -258,6 +258,7 @@ public class EmployeeRepo {
             } else if (results.getInt("isAdmin") == 1) {
                 employee.setIsAdmin(true);
             }
+            System.out.println(StringToEmployeeType(results.getString("employeeType")));
             employee.setEmployeeType(StringToEmployeeType(results.getString("employeeType")));
             employee.setSubType(results.getString("subType"));
 
@@ -403,35 +404,35 @@ public class EmployeeRepo {
         Employee.employeeType emptype;
 
         switch(type){
-            case "Language Interpreter":
+            case "language interpreter":
                 emptype = Employee.employeeType.LANGUAGEINTERP;
                 break;
 
-            case "Religious Figure":
+            case "religion handler":
                 emptype = Employee.employeeType.HOLYPERSON;
                 break;
 
-            case "Electronics Technician":
+            case "computer service":
                 emptype = Employee.employeeType.COMPUTER;
                 break;
 
-            case "Security Guard":
+            case "security":
                 emptype = Employee.employeeType.SECURITY;
                 break;
 
-            case "Facilities Maintenance":
+            case "maintenance":
                 emptype = Employee.employeeType.MAINTENANCE;
                 break;
 
-            case "Custodian":
+            case "sanitation":
                 emptype = Employee.employeeType.SANITATION;
                 break;
 
-            case "Audio/Visual Worker":
+            case "audio+visual":
                 emptype = Employee.employeeType.AV;
                 break;
 
-            case "Delivery Man/Woman":
+            case "delivergift":
                 emptype = Employee.employeeType.GIFTS;
                 break;
 
@@ -456,35 +457,35 @@ public class EmployeeRepo {
 
         switch (type) {
             case LANGUAGEINTERP:
-                emptype = "Language Interpreter";
+                emptype = "language interpreter";
                 break;
 
             case HOLYPERSON:
-                emptype = "Religious Figure";
+                emptype = "religion handler";
                 break;
 
             case COMPUTER:
-                emptype = "Electronics Technician";
+                emptype = "computer service";
                 break;
 
             case SECURITY:
-                emptype = "Security Guard";
+                emptype = "security";
                 break;
 
             case MAINTENANCE:
-                emptype = "Facilities Maintenance";
+                emptype = "maintenance";
                 break;
 
             case SANITATION:
-                emptype = "Custodian";
+                emptype = "sanitation";
                 break;
 
             case AV:
-                emptype = "Audio/Visual Worker";
+                emptype = "audio+visual";
                 break;
 
             case GIFTS:
-                emptype = "Delivery Man/Woman";
+                emptype = "delivergift";
                 break;
 
             case EMERGENCY:
