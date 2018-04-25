@@ -704,21 +704,13 @@ public class SearchBarOverlayController implements Initializable{
 
     public void setParents(ArrayList<Node.floorType> floorList){
 
-        floorParent = new TreeItem<>(new DirectionsTable("Starting Route!"));
-        parents.add(floorParent);
-//        if(floorList.size() == 0){
-//            floorParent = new TreeItem<>(new DirectionsTable("Floor " + mapScreenController.getCurrentFloor().toString()));
-//            parents.add(floorParent);
-//        }else {
+
+        parents.add(new TreeItem<>(new DirectionsTable("Starting Route!")));
         if(!is3D) {
-            floorParent = new TreeItem<>(new DirectionsTable("Floor " + mapScreenController.getCurrentFloor().toString()));
-        }else {
-            floorParent = new TreeItem<>(new DirectionsTable("Floor " + threeDMapScreenController.getCurrentFloor().toString()));
+            parents.add(new TreeItem<>(new DirectionsTable("Floor " + mapScreenController.getCurrentFloor().toString())));
         }
-        parents.add(floorParent);
         for (Node.floorType floor : floorList) {
-            floorParent = new TreeItem<>(new DirectionsTable("Floor " + floor.toString()));
-            parents.add(floorParent);
+            parents.add( new TreeItem<>(new DirectionsTable("Floor " + floor.toString())));
         }
 
 

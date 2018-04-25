@@ -10,6 +10,7 @@ public class Settings {
     private static PathfindingContext.PathfindingSetting _pathfindingSettings;
     private static double _feetPerPixel;
 
+    private static int _timeDelay = 30000;
     PhongMaterial floorL2Texture;
     PhongMaterial floorL1Texture;
     PhongMaterial floorGTexture;
@@ -65,8 +66,16 @@ public class Settings {
         Settings._feetPerPixel = _feetPerPixel;
     }
 
+    public static void setTimeDelay(int _timeDelay) {
+        Settings._timeDelay = _timeDelay;
+    }
+
     public static PathfindingContext.PathfindingSetting getPathfindingSettings() {
         return _pathfindingSettings;
+    }
+
+    public static int getTimeDelay() {
+        return _timeDelay;
     }
 
     public PhongMaterial getFloorL2Texture() {

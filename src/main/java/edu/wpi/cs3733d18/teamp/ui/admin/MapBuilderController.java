@@ -6,9 +6,11 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Edge;
 import edu.wpi.cs3733d18.teamp.Pathfinding.Node;
 import edu.wpi.cs3733d18.teamp.Pathfinding.PathfindingContext;
+import edu.wpi.cs3733d18.teamp.ui.Originator;
 import edu.wpi.cs3733d18.teamp.ui.home.ShakeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -81,6 +84,8 @@ public class MapBuilderController implements Initializable {
     private String nodeID;
     private String dragNodeID;
     private String edgeID;
+
+    Thread thread;
 
     ImageView kioskPip = new ImageView();
 
@@ -238,8 +243,107 @@ public class MapBuilderController implements Initializable {
         nodesPane.getChildren().add(newNodeCircle);
         //newNodeCircle.addEventHandler(MouseEvent.ANY, nodeClickHandler);
         addOverlay();
+
+        basePane.addEventHandler(MouseEvent.ANY, testMouseEvent);
+        thread = new Thread(task);
+        thread.start();
+
     }
 
+    /**
+     * Creates new thread that increments a counter while mouse is inactive, revert to homescreen if
+     * timer reaches past a set value by administrator
+     */
+    Task task = new Task() {
+        @Override
+        protected Object call() throws Exception {
+            try {
+                int timeout = Settings.getTimeDelay();
+                int counter = 0;
+
+                while(counter <= timeout) {
+                    Thread.sleep(5);
+                    counter += 5;
+                }
+                Scene scene;
+                Parent root;
+                FXMLLoader loader;
+                scene = mapBuilderOverlayController.backButton.getScene();
+
+                loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+                try {
+                    root = loader.load();
+                    scene.setRoot(root);
+                } catch (IOException ie) {
+                    ie.printStackTrace();
+                }
+            } catch (InterruptedException v) {
+                System.out.println(v);
+                thread = new Thread(task);
+                thread.start();
+                return null;
+            }
+            return null;
+        }
+    };
+
+    /**
+     * Handles active mouse events by interrupting the current thread and setting a new thread and timer
+     * when the mouse moves. This makes sure that while the user is active, the screen will not time out.
+     */
+    EventHandler<MouseEvent> testMouseEvent = new EventHandler<MouseEvent>() {
+
+        @Override
+        public void handle(MouseEvent event) {
+            Originator localOriginator = new Originator();
+            long start, now;
+            localOriginator.setState("Active");
+            localOriginator.saveStateToMemento();
+            thread.interrupt();
+
+            try{
+                thread.join();
+            } catch (InterruptedException ie){
+                System.out.println(ie);
+            }
+
+            Task task2 = new Task() {
+                @Override
+                protected Object call() throws Exception {
+                    try {
+                        int timeout = Settings.getTimeDelay();
+                        int counter = 0;
+
+                        while(counter <= timeout) {
+                            Thread.sleep(5);
+                            counter += 5;
+                        }
+                        Scene scene;
+                        Parent root;
+                        FXMLLoader loader;
+                        scene = mapBuilderOverlayController.backButton.getScene();
+
+                        loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+                        try {
+                            root = loader.load();
+                            scene.setRoot(root);
+                        } catch (IOException ie) {
+                            ie.printStackTrace();
+                        }
+                    } catch (InterruptedException v) {
+                        System.out.println(v);
+                        thread = new Thread(task);
+                        thread.start();
+                        return null;
+                    }
+                    return null;
+                }
+            };
+
+            thread = new Thread(task2);
+            thread.start();
+        }
+    };
 
     @FXML
     void aStarSetOp(ActionEvent event) {
