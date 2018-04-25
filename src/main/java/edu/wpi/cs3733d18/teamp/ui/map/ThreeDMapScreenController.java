@@ -360,6 +360,25 @@ public class ThreeDMapScreenController implements Initializable{
 
     @FXML
     public void backButtonOp() {
+//        FXMLLoader loader;
+//        Parent root;
+//        MapScreenController mapScreenController;
+//
+//        loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
+//
+//        try {
+//            root = loader.load();
+//        } catch (IOException ie) {
+//            ie.printStackTrace();
+//            return;
+//        }
+//        mapScreenController = loader.getController();
+//        mapScreenController.onStartUp();
+//        if (pathDrawn) {
+//            mapScreenController = loader.getController();
+//            mapScreenController.onStartUp3D(pathDrawn, pathMade, searchBarOverlayController.sourceSearchBar.getValue(), searchBarOverlayController.destinationSearchBar.getValue());
+//        }
+//        backButton.getScene().setRoot(root);
         FXMLLoader loader;
         Parent root;
         MapScreenController mapScreenController;
@@ -372,12 +391,9 @@ public class ThreeDMapScreenController implements Initializable{
             ie.printStackTrace();
             return;
         }
+
         mapScreenController = loader.getController();
         mapScreenController.onStartUp();
-        if (pathDrawn) {
-            mapScreenController = loader.getController();
-            mapScreenController.onStartUp3D(pathDrawn, pathMade, searchBarOverlayController.sourceSearchBar.getValue(), searchBarOverlayController.destinationSearchBar.getValue());
-        }
         backButton.getScene().setRoot(root);
     }
 
