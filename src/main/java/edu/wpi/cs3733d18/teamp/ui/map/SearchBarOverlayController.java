@@ -133,7 +133,8 @@ public class SearchBarOverlayController implements Initializable{
     }
 
     public void startUp3D(ThreeDMapScreenController threeDMapScreenController){
-        threeDButton.setText("2D");
+        threeDButton.setOpacity(0.0);
+        threeDButton.setDisable(true);
         this.threeDMapScreenController = threeDMapScreenController;
         mapToggleButton.setVisible(false);
         if (!threeDMapScreenController.getPathDrawn()) {
@@ -552,49 +553,24 @@ public class SearchBarOverlayController implements Initializable{
      */
     @FXML
     public void threeDButtonOp() {
-        // If 3D, switch to 2D
-        if (is3D) {
-            FXMLLoader loader;
-            Parent root;
-            MapScreenController mapScreenController;
+        FXMLLoader loader;
+        Parent root;
+        ThreeDMapScreenController threeDMapScreenController;
 
-            loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/map/ThreeDMap.fxml"));
 
-            try {
-                root = loader.load();
-            } catch (IOException ie) {
-                ie.printStackTrace();
-                return;
-            }
-            mapScreenController = loader.getController();
-            mapScreenController.onStartUp();
-            if (threeDMapScreenController.getPathDrawn()) {
-                mapScreenController = loader.getController();
-                mapScreenController.onStartUp3D(threeDMapScreenController.getPathDrawn(), threeDMapScreenController.getPathMade());
-            }
-            threeDButton.getScene().setRoot(root);
+        try {
+            root = loader.load();
+        } catch (IOException ie) {
+            ie.printStackTrace();
+            return;
         }
-        // If 2D, switch to 3D
-        else {
-            FXMLLoader loader;
-            Parent root;
-            ThreeDMapScreenController threeDMapScreenController;
-
-            loader = new FXMLLoader(getClass().getResource("/FXML/map/ThreeDMap.fxml"));
-
-            try {
-                root = loader.load();
-            } catch (IOException ie) {
-                ie.printStackTrace();
-                return;
-            }
-            if (mapScreenController.getPathDrawn()) {
-                threeDMapScreenController = loader.getController();
-                threeDMapScreenController.onStartUp(mapScreenController.getPathDrawn(), mapScreenController.getPathMade());
-            }
-            threeDButton.getScene().setCamera(perspectiveCamera);
-            threeDButton.getScene().setRoot(root);
+        if (mapScreenController.getPathDrawn()) {
+            threeDMapScreenController = loader.getController();
+            threeDMapScreenController.onStartUp(mapScreenController.getPathDrawn(), mapScreenController.getPathMade());
         }
+        threeDButton.getScene().setCamera(perspectiveCamera);
+        threeDButton.getScene().setRoot(root);
     }
 
     public void refresh() {

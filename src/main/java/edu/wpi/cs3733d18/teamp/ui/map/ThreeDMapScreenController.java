@@ -157,7 +157,7 @@ public class ThreeDMapScreenController implements Initializable{
     JFXButton backButton;
 
     @FXML
-    static PopOver popOver;
+    PopOver popOver;
     Boolean popOverHidden = true;
 
     @Override
@@ -229,6 +229,7 @@ public class ThreeDMapScreenController implements Initializable{
 
         // Add searchbar overlay
         addOverlay();
+
     }
 
     /**
@@ -360,19 +361,24 @@ public class ThreeDMapScreenController implements Initializable{
 
     @FXML
     public void backButtonOp() {
-        Stage stage;
-        Parent root;
         FXMLLoader loader;
+        Parent root;
+        MapScreenController mapScreenController;
 
-        stage = (Stage) backButton.getScene().getWindow();
-        loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+        loader = new FXMLLoader(getClass().getResource("/FXML/map/MapScreen.fxml"));
+
         try {
             root = loader.load();
         } catch (IOException ie) {
             ie.printStackTrace();
             return;
         }
-
+        mapScreenController = loader.getController();
+        mapScreenController.onStartUp();
+        if (pathDrawn) {
+            mapScreenController = loader.getController();
+            mapScreenController.onStartUp3D(pathDrawn, pathMade);
+        }
         backButton.getScene().setRoot(root);
     }
 
@@ -597,7 +603,7 @@ public class ThreeDMapScreenController implements Initializable{
         curZoom = newZoom; // Set next zoom value to compare to
     }
 
-    static private MeshView[] loadMeshView(URL fileName) {
+    private MeshView[] loadMeshView(URL fileName) {
         ObjModelImporter importer = new ObjModelImporter();
         importer.read(fileName);
 

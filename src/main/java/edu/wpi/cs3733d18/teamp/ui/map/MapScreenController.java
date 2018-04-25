@@ -44,12 +44,12 @@ public class MapScreenController {
     private int Y_OFFSET = 0;
     private double X_SCALE = 1588.235294 / 5000.0;
     private double Y_SCALE = 1080.0 / 3400.0;
-    public static final double NODE_RADIUS = 3.0;
-    public static final double EDGE_WIDTH = 1.0;
-    public static final int IMG_WIDTH = 5000;
-    public int IMG_HEIGHT = 3400;
-    private static final double ZOOM_3D_MIN = 1.013878875;
-    private static final double ZOOM_2D_MIN = 1.208888889;
+    private final double NODE_RADIUS = 3.0;
+    private final double EDGE_WIDTH = 1.0;
+    private final int IMG_WIDTH = 5000;
+    private int IMG_HEIGHT = 3400;
+    private final double ZOOM_3D_MIN = 1.013878875;
+    private final double ZOOM_2D_MIN = 1.208888889;
     private double zoomForTranslate = 0;
 
 
@@ -65,12 +65,12 @@ public class MapScreenController {
     private Boolean pathDrawn = false;
     private Boolean toggleOn = false;
 
-    private static HashMap<String, Circle> nodeDispSet = new HashMap<>();
-    private static ArrayList<Polygon> arrowDispSet = new ArrayList<>();
-    private static ArrayList<String> arrowFloorSet = new ArrayList<>();
-    private static HashMap<String, Line> edgeDispSet = new HashMap<>();
-    private static ArrayList<Label> labelDispSet = new ArrayList<>();
-    private static ArrayList<Line> lineDispSet = new ArrayList<>();
+    private HashMap<String, Circle> nodeDispSet = new HashMap<>();
+    private ArrayList<Polygon> arrowDispSet = new ArrayList<>();
+    private ArrayList<String> arrowFloorSet = new ArrayList<>();
+    private HashMap<String, Line> edgeDispSet = new HashMap<>();
+    private ArrayList<Label> labelDispSet = new ArrayList<>();
+    private ArrayList<Line> lineDispSet = new ArrayList<>();
     private ArrayList<Node> stairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentStairNodeSet = new ArrayList<Node>();
     private ArrayList<Node> recentElevNodeSet = new ArrayList<Node>();
@@ -129,7 +129,7 @@ public class MapScreenController {
     JFXButton floor3Button;
 
     @FXML
-    static PopOver popOver;
+    PopOver popOver;
     Boolean popOverHidden = true;
 
     SearchBarOverlayController searchBarOverlayController = null;
