@@ -6,13 +6,19 @@ import edu.wpi.cs3733d18.teamp.Database.DBSystem;
 import edu.wpi.cs3733d18.teamp.Employee;
 import edu.wpi.cs3733d18.teamp.Main;
 import edu.wpi.cs3733d18.teamp.Request;
+import edu.wpi.cs3733d18.teamp.ui.MouseEventHandler;
+import edu.wpi.cs3733d18.teamp.ui.Originator;
 import edu.wpi.cs3733d18.teamp.ui.service.ServiceRequestScreen;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.omg.PortableInterceptor.ACTIVE;
 
@@ -27,6 +33,8 @@ public class EmergencyRequestButtonScreenController {
 
     private int typeOfEmergency;
     HomeController homeController;
+    private MouseEventHandler mouseEventHandler2;
+    Thread thread;
 
     DBSystem db = DBSystem.getInstance();
 
@@ -46,13 +54,136 @@ public class EmergencyRequestButtonScreenController {
     JFXButton backButton;
 
     @FXML
+    StackPane emergencyStackPane;
+
+    @FXML
     public void onStartUp(HomeController homeController){
         this.homeController = homeController;
         emergencyPinPassword.requestFocus();
         activeShooterEmergencyButton.setVisible(false);
         fireEmergencyButton.setVisible(false);
         medicalEmergencyButton.setVisible(false);
+        emergencyStackPane.addEventHandler(MouseEvent.ANY, testMouseEvent);
+        thread = new Thread(task);
+        thread.start();
     }
+
+    Task task = new Task() {
+        @Override
+        protected Object call() throws Exception {
+            try {
+                int timeout = 5000;
+                int counter = 0;
+
+                while(counter <= timeout) {
+                    Thread.sleep(5);
+                    counter += 5;
+                }
+                Scene scene;
+                Parent root;
+                FXMLLoader loader;
+                scene = backButton.getScene();
+
+                loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+                try {
+                    root = loader.load();
+                    scene.setRoot(root);
+                } catch (IOException ie) {
+                    ie.printStackTrace();
+                }
+            } catch (InterruptedException v) {
+                System.out.println(v);
+                thread = new Thread(task);
+                thread.start();
+                return null;
+            }
+            return null;
+        }
+    };
+
+    public Thread timer = new Thread(() -> {
+        try {
+            int timeout = 5000;
+            int counter = 0;
+            while(!Thread.interrupted()){
+                Thread.sleep(5);
+                counter += 5;
+                if (counter >= timeout){
+                    Scene scene;
+                    Parent root;
+                    FXMLLoader loader;
+
+                    scene = backButton.getScene();
+
+                    loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+                    try {
+                        root = loader.load();
+                        scene.setRoot(root);
+                    } catch (IOException ie) {
+                        ie.printStackTrace();
+                    }
+                    break;
+                }
+            }
+        } catch (InterruptedException v) {
+            System.out.println(v);
+        }
+
+    });
+
+    EventHandler<MouseEvent> testMouseEvent = new EventHandler<MouseEvent>() {
+
+        @Override
+        public void handle(MouseEvent event) {
+                Originator localOriginator = new Originator();
+                long start, now;
+                localOriginator.setState("Active");
+                localOriginator.saveStateToMemento();
+                thread.interrupt();
+
+                try{
+                    thread.join();
+                } catch (InterruptedException ie){
+                    System.out.println(ie);
+                }
+
+                Task task2 = new Task() {
+                    @Override
+                    protected Object call() throws Exception {
+                        try {
+                            int timeout = 5000;
+                            int counter = 0;
+
+                            while(counter <= timeout) {
+                                Thread.sleep(5);
+                                counter += 5;
+                            }
+                            Scene scene;
+                            Parent root;
+                            FXMLLoader loader;
+                            scene = backButton.getScene();
+
+                            loader = new FXMLLoader(getClass().getResource("/FXML/home/HomeScreen.fxml"));
+                            try {
+                                root = loader.load();
+                                scene.setRoot(root);
+                            } catch (IOException ie) {
+                                ie.printStackTrace();
+                            }
+                        } catch (InterruptedException v) {
+                            System.out.println(v);
+                            thread = new Thread(task);
+                            thread.start();
+                            return null;
+                        }
+                        return null;
+                    }
+                };
+
+                thread = new Thread(task2);
+                thread.start();
+            }
+    };
 
     public boolean emergencyOp(){
         FXMLLoader loader;
