@@ -104,7 +104,7 @@
                <children>
                   <AnchorPane VBox.vgrow="ALWAYS">
                      <children>
-                            <JFXButton fx:id="mapButton" alignment="BOTTOM_CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#mapButtonOp" prefHeight="820.0" prefWidth="1890.0" ripplerFill="#ebebeb" styleClass="map-button" text="Touch to Explore" textAlignment="CENTER">
+                            <JFXButton fx:id="mapButton" alignment="BOTTOM_CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#mapButtonOp" prefHeight="820.0" prefWidth="1890.0" ripplerFill="#ebebeb" styleClass="map-button" text="Find Your Destination" textAlignment="CENTER">
                                 <font>
                                     <Font size="60.0" />
                                 </font>
