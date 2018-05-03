@@ -1,4 +1,4 @@
-# Team Phat Phoenix Brigham & Women's Kiosk Application Final Iteration
+# Team Phat Phoenix Kiosk Application
 
 A project for WPI's CS3733-D02 for Brigham & Women's Hospital pathfinding kiosk, created by Team P.
 
